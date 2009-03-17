@@ -1,0 +1,12 @@
+<%%= error_messages_for '<%= singular_name %>' %>
+<% for attribute in attributes -%>
+
+<% if attribute.field_type.to_s == "date_select" || attribute.field_type.to_s == "datetime_select" -%>
+  <p class="datetime">
+<% else -%>
+  <p>
+<% end -%>
+    <%%= form.label :<%= attribute.name %>, <%= class_name %>.human_attribute_name("<%= attribute.name %>") %>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.name %> %>
+  </p>
+<% end -%>

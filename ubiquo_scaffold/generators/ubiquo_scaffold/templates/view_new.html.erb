@@ -1,0 +1,18 @@
+<h1><%%= render :partial => 'title' %></h1>
+<h2>
+  <%%= render :partial => "submenu" %>
+</h2>
+<%%= render(:partial => "shared/ubiquo/feedback") %>
+
+<%% form_for([:ubiquo, @<%= singular_name %>]) do |form| %>
+  <%%= render :partial => 'form', :locals => {:form => form} %>
+    <p class="form_buttons">
+      <%%= form.submit t('ubiquo.create') %>
+      <%%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_<%= plural_name %>_path}'" %>
+    </p>
+<%% end %>
+
+<%% content_for :sidebar do %>
+  <h3><%%= t('ubiquo.help') %></h3>
+  <p><%%= t("ubiquo.<%= singular_name %>.new.help_message") %></p>
+<%% end %>

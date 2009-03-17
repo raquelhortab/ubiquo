@@ -1,0 +1,35 @@
+<h1><%= render :partial => 'title' %></h1>
+<h2>
+	<%= render :partial => 'submenu' %>
+</h2>
+<%= render :partial => "shared/ubiquo/feedback" %>
+
+<%= ubiquo_users_filters_info(params) %>
+
+<%= link_to t("ubiquo.auth.new_user"), new_ubiquo_ubiquo_user_path, :class => "new" %>
+
+<%= render(:partial => "shared/ubiquo/list", :locals=>{
+      :name=>'ubiquo_user',
+      :headers=>[:login],
+      :rows=>@ubiquo_users.collect{|ubiquo_user| 
+        {
+          :id=>ubiquo_user.id, 
+          :columns=>[
+						ubiquo_user.login,
+          ],
+          :actions=>[
+            link_to(t("ubiquo.edit"), [:edit, :ubiquo, ubiquo_user]),
+						link_to(t("ubiquo.auth.permissions"), permissions_ubiquo_ubiquo_user_path(ubiquo_user)),
+            link_to(t("ubiquo.remove"), [:ubiquo, ubiquo_user], :confirm => t("ubiquo.auth.confirm_user_removal"), :method => :delete)
+          ]
+        }
+      },
+      :pages=>@ubiquo_users_pages,
+			:actions_width => 160
+    }      
+) %>
+
+<% content_for :sidebar do %>
+  <%= ubiquo_users_filters %>
+  <%= help_block_sidebar(t("ubiquo.helpmsg.authentication.ubiquousers.index")) %>
+<% end %>

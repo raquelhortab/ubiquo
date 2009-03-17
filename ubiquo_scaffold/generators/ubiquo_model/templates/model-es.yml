@@ -1,0 +1,9 @@
+es:
+  activerecord:
+    models:
+      <%= singular_name %>: "<%= singular_name.capitalize %>"
+    attributes:
+      <%= singular_name %>:
+        <% for attribute in attributes -%>
+<%=        "#{attribute.name}:" %> <%- if field_translations[attribute.name] %> "<%= field_translations[attribute.name][:es] %>" <%- else %> "" <%- end %>
+        <% end -%>

@@ -1,0 +1,19 @@
+<%= error_messages_for 'role' %>
+<div class="form_box">
+	<h3><%= t('ubiquo.auth.role_new') %></h3>
+	<p>
+		<%= form.label :name, Role.human_attribute_name("name") %> 
+		<%= form.text_field :name %>
+	</p>
+	
+	<ul class="permissions">
+    <% fields_for 'permission' do |pf| %>
+      <% @permissions.each do |permission| %>
+        <li>
+          <%= check_box_tag("permissions[]", permission.key, @role.has_permission?(permission), {:id=>"permission_#{permission.key}"}) %>
+          <label for="<%= "permission_#{permission.key}" %>"><%= permission.name %></label>
+        </li>
+      <% end %>
+    <% end %>
+	</ul>
+</div>

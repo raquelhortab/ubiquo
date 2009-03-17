@@ -1,0 +1,38 @@
+<h1><%%= render :partial => 'title' %></h1>
+<h2>
+  <%%= render :partial => 'submenu' %>
+</h2>
+<%%= render :partial => "shared/ubiquo/feedback" %>
+
+<%%= link_to t("ubiquo.<%= singular_name %>.index.new"), new_ubiquo_<%= singular_name %>_path, :class => "new" %>
+<div style="clear:both"></div>
+<%%= <%= singular_name %>_filters_info(params) %>
+
+<%%= render(:partial => "shared/ubiquo/list", :locals=>{
+      :name=>'<%= singular_name%>',
+      :headers=>[<%= attributes.collect{|at| ":#{at.name}"}.join(", ") %>],
+      :rows=>@<%= plural_name%>.collect{|<%= singular_name%>| 
+        {
+          :id=><%= singular_name%>.id, 
+          :columns=>[
+            <% attributes.each do |at| %>
+              <%= "#{singular_name}.#{at.name}," -%>
+            <% end %>
+          ],
+          :actions=>[
+            link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>]),
+            link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)
+          ]
+        }
+      },
+      :pages=>@<%= plural_name%>_pages
+    }      
+) %>
+
+
+<%% content_for :sidebar do %>
+  <%%= <%= singular_name %>_filters %>
+
+  <h3><%%= t("ubiquo.help") %></h3>
+  <p><%%= t("ubiquo.<%= singular_name %>.index.help_message") %></p>
+<%% end %>

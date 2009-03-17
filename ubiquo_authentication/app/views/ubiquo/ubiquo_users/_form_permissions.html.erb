@@ -1,0 +1,13 @@
+<%= error_messages_for 'ubiquo_user' %>
+<div class="form_box">
+	<h3><%= t("ubiquo.auth.user_roles") %></h3>
+	<ul class="permissions">
+	<% @roles.each do |role| %>
+		<li>
+			<%= check_box_tag "ubiquo_user[role_ids][]", role.id, @ubiquo_user_roles.include?(role), {:id => "role"+role.id.to_s} %>
+			<%= form.label :role_ids, role.name, {:for => "role"+role.id.to_s} %>
+		</li>
+	<% end %>
+	</ul>
+</div>
+
