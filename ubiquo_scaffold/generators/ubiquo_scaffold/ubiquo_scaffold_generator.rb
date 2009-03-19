@@ -40,7 +40,7 @@
 # 
 #  <%= navigation :books %>
 # 
-#  At this moment the navigation is read from <tt>app/views/navigators/_books_navlinks.rhtml</tt>. Create the file and edit accordingly:
+#  At this moment the navigation is read from <tt>app/views/navigators/_books_navlinks.html.erb</tt>. Create the file and edit accordingly:
 #
 #  <%
 #      navigator_books = create_link_navigator(:id =>"general_configuration", :link_options => {}) do |navigator|
@@ -310,7 +310,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       
   - Add new permissions to fixture db/dev_bootstrap/permissions.yml if needed. 
   - Add tabs on app/views/navigators/_main_navtabs.html.erb
-  - Create app/views/navigators/_#{controller_file_name}_navtabs.rhtm tab file if needed.
+  - Create app/views/navigators/_#{controller_file_name}_navtabs.html.erb tab file if needed.
       "
     end
   end
