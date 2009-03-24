@@ -95,22 +95,6 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
       format.xml  { head :ok }
     end
   end
-
-  def permissions
-    @ubiquo_user = UbiquoUser.find(params[:id])
-    if @ubiquo_user.nil?
-      redirect_to ubiquo_ubiquo_users_path
-    else
-      @roles = Role.find(:all)
-      @ubiquo_user_roles = @ubiquo_user.ubiquo_user_roles.map(&:role)
-      respond_to do |format|
-        format.html
-        format.xml  {
-          render :xml => @ubiquo_user_roles
-        }
-      end
-    end
-  end
   
   private
   
