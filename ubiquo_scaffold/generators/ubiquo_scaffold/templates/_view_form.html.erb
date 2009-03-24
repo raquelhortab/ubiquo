@@ -1,6 +1,6 @@
 <%%= error_messages_for '<%= singular_name %>' %>
+<div class="form_box">
 <% for attribute in attributes -%>
-
 <% if attribute.field_type.to_s == "date_select" || attribute.field_type.to_s == "datetime_select" -%>
   <p class="datetime">
 <% else -%>
@@ -10,3 +10,4 @@
     <%%= form.<%= attribute.field_type %> :<%= attribute.name %> %>
   </p>
 <% end -%>
+</div>
