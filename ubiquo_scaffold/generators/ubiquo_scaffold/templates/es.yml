@@ -12,7 +12,7 @@ es:
         title: "Listado de <%= plural_name %>"
         help_message: "Aquí puedes ver el listado de <%= plural_name %>"
         new: "Nuevo <%= singular_name.capitalize %>"
-        confirm_removal: "Estas seguro de querer eliminar este entidad <%= singular_name %>?"
+        confirm_removal: "Estás seguro de querer eliminar este entidad <%= singular_name %>?"
       new:
         help_message: "Aquí puedes crear una nueva entidad <%= singular_name %>"
       edit:
