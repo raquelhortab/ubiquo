@@ -70,13 +70,6 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
     assert_redirected_to ubiquo_ubiquo_users_path
   end
   
-  def test_should_get_permissions
-    get :permissions, :id => ubiquo_users(:josep).id
-    assert_not_nil assigns(:ubiquo_user)
-    assert_not_nil assigns(:roles)
-    assert_not_nil assigns(:ubiquo_user_roles)
-  end
-  
   def test_should_update_permissions
     
     put :update, :id => ubiquo_users(:josep).id, :ubiquo_user => {:role_ids => Role.find(:all).map(&:id)}

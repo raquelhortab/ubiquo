@@ -6,5 +6,5 @@ map.namespace :ubiquo do |ubiquo|
   end
   ubiquo.resource :session
   ubiquo.resource :password
-  ubiquo.resources :ubiquo_users, :member => {:permissions => :get}
+  ubiquo.resources :ubiquo_users
 end

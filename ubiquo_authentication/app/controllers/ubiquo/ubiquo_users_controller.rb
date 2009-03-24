@@ -2,6 +2,8 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
   
   ubiquo_config_call(:user_access_control, {:context => :ubiquo_authentication})
   
+  before_filter :load_roles
+  
   # GET /ubiquo_users
   # GET /ubiquo_users.xml
   def index
@@ -108,5 +110,11 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
         }
       end
     end
+  end
+  
+  private
+  
+  def load_roles 
+    @roles = Role.all
   end
 end
