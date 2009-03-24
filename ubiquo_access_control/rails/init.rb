@@ -1,6 +1,5 @@
 require 'ubiquo_access_control'
 
-default_per_page = Ubiquo::Config.get(:elements_per_page)
 Ubiquo::Plugin.register(:ubiquo_access_control, directory, config) do |config|
   
   config.add :role_access_control, lambda{
@@ -10,7 +9,9 @@ Ubiquo::Plugin.register(:ubiquo_access_control, directory, config) do |config|
     permit?("role_management")
   }
   
-  config.add :roles_elements_per_page, default_per_page
+  config.add :roles_elements_per_page
+  config.add_inheritance :roles_elements_per_page, :elements_per_page
+  
   config.add :roles_default_order_field, 'id'
   config.add :roles_default_sort_order, 'desc'
   
