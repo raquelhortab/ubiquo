@@ -41,3 +41,8 @@ es:
       forgotted_password: "Recuperar contraseña"
       forgotted_password_notice: "Escribe aqui tu e-mail"
       password_reset: "La nueva contraseña se ha enviado por e-mail"
+      superadmin_welcome: "Bienvenido a la página de inicio para superadministradores"
+      go_to_superadmin_mode: "Entrar en modo superadministrador"
+      back_from_superadmin_mode: "Salir del modo superadministrador"
+      superadmin_home: "Inicio de superadmintrador"
+      superadmin_home_title: "Ir a la pantalla de inicio de superadministradores"

@@ -5,6 +5,8 @@ map.namespace :ubiquo do |ubiquo|
     s.logout 'logout', :action => "destroy", :conditions => {:method => :delete}
   end
   ubiquo.resource :session
+  ubiquo.resource :superadmin_mode
+  ubiquo.resource :superadmin_home
   ubiquo.resource :password
   ubiquo.resources :ubiquo_users
 end

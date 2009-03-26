@@ -41,3 +41,8 @@ ca:
       forgotted_password: "Recuperar contrasenya"
       forgotted_password_notice: "Escriu aqui el teu e-mail"
       password_reset: "La nova contrasenya s'ha enviat per e-mail"
+      superadmin_welcome: "Benvingut a la pàgina d'inici per a superadministradors"
+      go_to_superadmin_mode: "Anar al mode superadministrador"
+      back_from_superadmin_mode: "Sortir del mode superadministrador"
+      superadmin_home: "Inici de superadmintrador"
+      superadmin_home_title: "Anar a la pantalla d'inici de superadministradors"

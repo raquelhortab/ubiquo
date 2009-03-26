@@ -50,8 +50,13 @@ module UbiquoAuthentication
     #
     #   skip_before_filter :login_required
     #
+    
     def login_required
       authorized? || access_denied
+    end
+
+    def superadmin_required
+      (authorized? && current_ubiquo_user.is_superadmin?) || access_denied
     end
 
     # Redirect as appropriate when an access request fails.

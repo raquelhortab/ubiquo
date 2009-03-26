@@ -24,6 +24,7 @@ admin:
   created_at: <%= 90.days.ago.to_s :db %>
   is_active: t
   is_admin: t
+  is_superadmin: t
 
 inactive:
   login: inactive

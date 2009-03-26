@@ -24,6 +24,33 @@ module UbiquoAuthentication
           link.class = "ubiquo_user"
         end
       end
+      
+      def superadmin_home_tab(tabnav)
+        tabnav.add_tab do |tab|
+          tab.text =  I18n.t("ubiquo.auth.superadmin_home")
+          tab.title =  I18n.t("ubiquo.auth.superadmin_home_title")
+          tab.highlights_on({:controller => "ubiquo/superadmin_homes"})
+          tab.link = ubiquo_superadmin_home_path  
+        end
+      end
+      
+      def toggle_superadmin_mode_link(navigator)
+        if superadmin_mode?
+          navigator.add_link(:method => :delete) do |link|
+            link.text = t("ubiquo.auth.back_from_superadmin_mode")
+            link.url = ubiquo_superadmin_mode_path
+          end
+        else
+          navigator.add_link(:method => :post) do |link|
+            link.text = t("ubiquo.auth.go_to_superadmin_mode")
+            link.url = ubiquo_superadmin_mode_path
+          end
+        end
+      end
+      
+      def superadmin_mode?
+        session[:superadmin_mode]==true
+      end
     end
   end
 end
