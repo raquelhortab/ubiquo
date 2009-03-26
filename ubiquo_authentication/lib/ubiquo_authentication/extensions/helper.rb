@@ -35,6 +35,7 @@ module UbiquoAuthentication
       end
       
       def toggle_superadmin_mode_link(navigator)
+        return unless current_ubiquo_user.is_superadmin?
         if superadmin_mode?
           navigator.add_link(:method => :delete) do |link|
             link.text = t("ubiquo.auth.back_from_superadmin_mode")
