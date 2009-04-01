@@ -8,7 +8,7 @@
 <%= job_filters_info(params) %>
 
 <%= render(:partial => "shared/ubiquo/list", :locals=>{
-      :name=>@jobs.first.class.to_s,
+      :name=>UbiquoJobs.manager.job_class.to_s,
       :headers=>[:name, :state, :planified_at, :created_at] + (permit?({:admin => true}) ? [:priority] : []),
       :rows=>@jobs.collect{|job| 
         {
