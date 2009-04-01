@@ -1,0 +1,9 @@
+<h3><%= t("ubiquo.jobs.job_output") %></h3>
+<a rel="deactivate" class="lightwindow_action" href="#"><div class="close">tancar</div></a>
+<br/>
+<div id="system_output">
+  <textarea rows="5" readonly="readonly"><%= @job.output_log %></textarea>
+  <br/>
+  <h4><%= t("ubiquo.jobs.job_error_channel") %></h4>
+  <textarea rows="5" readonly="readonly"><%= @job.error_log %></textarea>
+</div>

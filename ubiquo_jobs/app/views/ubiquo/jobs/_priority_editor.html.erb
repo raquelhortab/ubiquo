@@ -1,0 +1,5 @@
+<div id="job_status_<%= job.id %>" class="job_status">
+  <% (1..5).to_a.map do |i| %>
+    <%= link_to_remote "<span class='prior#{i==(job.priority.to_i) ? " prior#{i}" : ""}'></span>", :url => ubiquo_job_path(job, :job => {:priority => (i)}), :method => :put, :html => {:title => priority_name(i)} %>
+  <% end %>
+</div>

@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'daemons'
+
+starter = File.join(File.dirname(__FILE__), '..', 'lib', 'ubiquo_worker', 'starter.rb')
+  
+options = {
+  :ontop => true,
+  :app_name => 'ubiquo_worker',
+  :multiple => true,
+  :monitor => true,
+  :log_output => true,
+  :keep_pid_files => true,
+  :dir_mode   => :normal,
+  :dir        => File.join(File.dirname(__FILE__), '..', 'log'),
+}
+
+Daemons.run(starter, options)

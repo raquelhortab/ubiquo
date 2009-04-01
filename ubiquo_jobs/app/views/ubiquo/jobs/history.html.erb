@@ -1,0 +1,33 @@
+<h1><%= render :partial => 'title' %></h1>
+<h2>
+  <%= render :partial => 'submenu' %>
+</h2>
+<%= render :partial => "shared/ubiquo/feedback" %>
+
+<div style="clear:both"></div>
+<%= job_filters_info(params) %>
+
+<%= render(:partial => "shared/ubiquo/list", :locals=>{
+      :name=>@jobs.first.class.to_s,
+      :headers=>[:name, :created_at, :ended_at],
+      :rows=>@jobs.collect{|job| 
+        {
+          :id=>job.id, 
+          :columns=>[
+            job.name,
+            short_date(job.created_at),
+            short_date(job.ended_at)
+          ],
+          :actions=> job_actions(job, 'history')
+        }
+      },
+      :pages=>@jobs_pages,
+      :actions_width => 270
+    }      
+) %>
+
+
+<% content_for :sidebar do %>
+  <%= job_filters %>
+  <%= help_block_sidebar(t("ubiquo.helpmsg.jobs.history")) %>
+<% end %>
