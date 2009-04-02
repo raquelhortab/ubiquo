@@ -6,7 +6,7 @@ en:
       job_removed: Job removed
       cant_remove: "Can't remove job"
       job_edited: "Job successfully updated"
-      cant_edit: 'Can't edit job'
+      cant_edit: "Can't edit job"
       job_repeated: "Job successfully planified to be repeated"
       jobs: "Jobs"
       job_output: "Job output"
