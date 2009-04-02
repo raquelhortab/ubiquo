@@ -1,6 +1,8 @@
 ca:
   ubiquo:
     jobs:
+      tab_name: Tasques
+      tab_title: Vés al llistat de tasques
       job_removed: "Tasca eliminada"
       cant_remove: 'Hi ha hagut un error eliminant la tasca'
       job_edited: "S'ha editat la tasca"

@@ -1,3 +1,5 @@
+require 'ubiquo_jobs/extensions.rb'
+
 module UbiquoJobs
 
   # Return the manager class to use. You can override the default by setting
