@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../test_helper.rb"
 require 'mocha'
 require 'daemons'
 
-UBIQUO_TASKS_ROOT = File.dirname(__FILE__) + "/../.."
+UBIQUO_JOBS_ROOT = File.dirname(__FILE__) + "/../.."
 
 class WorkerTest < ActiveSupport::TestCase
     
@@ -52,11 +52,11 @@ class WorkerTest < ActiveSupport::TestCase
   end
 
   def run_daemon()
-    eval File.read(File.join(UBIQUO_TASKS_ROOT, 'script', 'ubiquo_worker'))
+    eval File.read(File.join(UBIQUO_JOBS_ROOT, 'install', 'script', 'ubiquo_worker'))
   end
   
   def run_starter()
-    eval File.read(File.join(UBIQUO_TASKS_ROOT, 'lib', 'ubiquo_worker', 'starter.rb'))
+    eval File.read(File.join(UBIQUO_JOBS_ROOT, 'lib', 'ubiquo_worker', 'starter.rb'))
   end
 
   def start_worker(options = {})
