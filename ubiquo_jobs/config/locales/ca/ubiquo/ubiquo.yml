@@ -12,6 +12,7 @@ ca:
       job_output: "Resposta del sistema"
       job_error_channel: "Canal d'error"
       job_list: "Llista de tasques"
+      job_history: "Històric de tasques"
       creation_date: "data de creació"
       text: "text"
       state:
