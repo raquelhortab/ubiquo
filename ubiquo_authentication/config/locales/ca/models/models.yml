@@ -1,7 +1,7 @@
 ca:
   activerecord:
     models:
-      "ubiquo user": "usuari"
+      ubiquo_user: "usuari"
       role: "rol"
     attributes:
       ubiquo_user:
