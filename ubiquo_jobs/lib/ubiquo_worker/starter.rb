@@ -4,7 +4,7 @@ raise ArgumentError, "A worker name is required as an application option" if ARG
 
 puts '=> Loading Rails...'
 
-require File.dirname(__FILE__) + '/../../config/environment' unless Object.const_defined? 'RAILS_ENV'
+require File.dirname(__FILE__) + '/../../../../../config/environment' unless Object.const_defined? 'RAILS_ENV'
 
 puts '** Rails loaded.'
 puts "** Starting UbiquoWorker..."

@@ -2,7 +2,7 @@
 require 'rubygems'
 require 'daemons'
 
-starter = File.join(File.dirname(__FILE__), '..', 'lib', 'ubiquo_worker', 'starter.rb')
+starter = File.join(File.dirname(__FILE__), '..', 'vendor', 'plugins', 'ubiquo_jobs', 'lib', 'ubiquo_worker', 'starter.rb')
   
 options = {
   :ontop => true,
