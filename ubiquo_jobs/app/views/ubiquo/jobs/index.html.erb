@@ -7,7 +7,7 @@
 <div style="clear:both"></div>
 <%= job_filters_info(params) %>
 
-<%= stylesheet_link_tag 'ubiquo_jobs_priority.css' %>
+<%= stylesheet_link_tag 'ubiquo_jobs.css' %>
 <%= render(:partial => "shared/ubiquo/list", :locals=>{
       :name=>UbiquoJobs.manager.job_class.to_s,
       :headers=>[:name, :state, :planified_at, :created_at] + (permit?({:admin => true}) ? [:priority] : []),
