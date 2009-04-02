@@ -3,7 +3,7 @@
       navigator.add_link do |link|
         link.text = (t("ubiquo.jobs.job_list"))
         link.url = ubiquo_jobs_path    
-        link.highlights_on({:controller => "ubiquo/jobs"})
+        link.highlights_on({:controller => "ubiquo/jobs", :action => 'index'})
       end
       
       navigator.add_link do |link|
