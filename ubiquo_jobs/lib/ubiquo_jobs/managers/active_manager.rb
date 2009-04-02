@@ -4,8 +4,6 @@ module UbiquoJobs
   module Managers
     class ActiveManager < UbiquoJobs::Managers::Base
 
-      ActiveJob = UbiquoJobs::Jobs::ActiveJob
-
       # Get the most appropiate job to run, depending job priorities, states
       # dependencies and planification dates
       # 
@@ -13,7 +11,7 @@ module UbiquoJobs
       #
       def self.get(runner)
         recovery(runner)
-        candidate_jobs = ActiveJob.all(
+        candidate_jobs = job_class.all(
           :conditions => [
             'planified_at <= ? AND state = ?', 
             Time.now.utc,
@@ -34,7 +32,7 @@ module UbiquoJobs
       #   job_id: job identifier
       #
       def self.get_by_id(job_id)
-        ActiveJob.find(job_id)
+        job_class.find(job_id)
       end
 
       # Get an array of jobs matching filters
@@ -49,8 +47,8 @@ module UbiquoJobs
       # Returns an array with the format [pages_information, list_of_jobs]
       #
       def self.list(filters = {})
-        ActiveJob.paginate(:page => filters[:page], :per_page => filters[:per_page] || 10) do
-          ActiveJob.filtered_search filters, :order => filters[:order]
+        job_class.paginate(:page => filters[:page], :per_page => filters[:per_page] || 10) do
+          job_class.filtered_search filters, :order => filters[:order]
         end
       end
       
@@ -61,7 +59,7 @@ module UbiquoJobs
       #   runner: name of the worker that is asking for a job
       #
       def self.get_assigned(runner)
-        ActiveJob.first(
+        job_class.first(
           :conditions => [
             "runner = ? AND state NOT IN (%i,%i)" %
             [
@@ -92,7 +90,7 @@ module UbiquoJobs
       #   job_id: job identifier
       #
       def self.delete(job_id)
-        ActiveJob.find(job_id).destroy
+        job_class.find(job_id).destroy
       end
 
       # Updates the existing job that has the given identifier
@@ -102,7 +100,7 @@ module UbiquoJobs
       #   options: a hash with the changed properties
       #
       def self.update(job_id, options)
-        ActiveJob.find(job_id).update_attributes(options)
+        job_class.find(job_id).update_attributes(options)
       end
 
       # Marks the job with the given identifier to be repeated
@@ -110,7 +108,7 @@ module UbiquoJobs
       #   job_id: job identifier
       #
       def self.repeat(job_id)
-        ActiveJob.find(job_id).reset!
+        job_class.find(job_id).reset!
       end
 
       # Return the job class that the manager is using, as a constant
