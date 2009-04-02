@@ -17,5 +17,3 @@ ca:
         created_at: "Creat"
         updated_at: "Actualitzat"
         notify_to: "Notificar a"
-      role:
-        name: "Nom"

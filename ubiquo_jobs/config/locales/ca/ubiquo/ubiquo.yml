@@ -30,3 +30,4 @@ ca:
       read_output: "Veure la resposta del sistema"
       remove_confirmation: "Esteu segur que voleu eliminar aquesta tasca?"
       repeat_confirmation: "Esteu segur que voleu repetir aquesta tasca?"
+      close: tancar
