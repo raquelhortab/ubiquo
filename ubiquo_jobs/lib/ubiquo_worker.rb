@@ -1,5 +1,6 @@
 #This module provides a simple way to create jobs and workers that will execute them
-#A _job_ is mainly a command that can be modeled and parameterized by creating new subclasses 
+#A _job_ is mainly a piece of work that usually require some time and is not suitable
+# for synchronous execution, and that can be modeled and parameterized by creating new subclasses 
 #
 #A _worker_ will look for planified jobs and execute them considering the priority. 
 #
@@ -24,19 +25,19 @@
 #
 #  script/ubiquo_worker stop
 #
-#TODO: needs review
 #== Creating job types
-#Creating new job types -and using them instead of the Base Job class- is useful to limit the commands that can be executed, parameterize them, perform validations, etc.
-#Basicly you have to override the set_command function to set the command attribute as desired
-#You can use virtual attributes to get parameters for set_command
-#See ExampleJob for a basic example of job subclassing
+#For every different kind of work that needs to be done you need to create a new job type. You can then parameterize the options, perform validations, etc.
+#Basicly you have to override the do_job_work function and place there the work that will be performed when the worker starts the job
+#You can use virtual attributes to get parameters for do_job_work, but every thing that is not stored in the options hash will likely be lost at runtime, since only the options hash has the persistence guaranteed.
+#See ExampleJob for a very basic example of a job type subclass
 #
 #== Other features
-#* Command result code and output is stored in the DB
+#* Use ShellJob to easily wrap commands in jobs and store the command result code and output in the DB
+#* You can specify dependencies between jobs (X will not be run before Y and Z are done, etc)
 #* If a worker is killed while running job, restart it with the same id and the job will be planified again
-#* A failing job command (with a result code != 0) will be automatically rerun for 3 times, not necessarily by the same worker, to circumvent potential environment or circumstantial issues. You can set 
+#* A failing job command (with a result code != 0) will be automatically rerun for 3 times, not necessarily by the same worker, to circumvent potential environment or circumstantial issues.
 #* You can customize this retry interval using Job.retry_interval
-#* Use Job::STATES to know the state of a job
+#* Use UbiquoJobs::Jobs::Base::STATES to know the state of a job
 #* Jobs will be executed using the priority order (priority => 1 > 2 > 3 etc) 
 #* Jobs will not be executed until their planified_at (utc) time 
 #
