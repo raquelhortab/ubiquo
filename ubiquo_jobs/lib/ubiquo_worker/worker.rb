@@ -17,7 +17,7 @@ module UbiquoWorker
           job.run!
         else
           puts "#{Time.now} - no job available"
-          sleep 30
+          sleep 5
         end
       end
     end
