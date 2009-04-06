@@ -8,3 +8,4 @@ es:
         description: "Descripción"
         resource: "Recurso"
         asset_type_id: "Tipo de recurso"
+        is_protected: "Es un fichero protegido?"
