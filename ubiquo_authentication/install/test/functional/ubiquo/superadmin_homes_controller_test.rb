@@ -3,7 +3,7 @@ class Ubiquo::SuperadminHomesControllerTest < ActionController::TestCase
   
   def test_should_get_show_if_superadmin
     
-    user = UbiquoUser.find(login_as(:admin))
+    user = UbiquoUser.find(login_as(:superadmin))
 
     assert user.is_superadmin?
     
