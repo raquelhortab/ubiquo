@@ -7,14 +7,14 @@ UBIQUO_JOBS_ROOT = File.dirname(__FILE__) + "/../.."
 class WorkerTest < ActiveSupport::TestCase
     
   def test_should_start_daemon
-    Daemons.expects(:run).with() {|file, options| file =~ /starter.rb/ && options[:log_output]}
+    Process.expects(:fork)
     run_daemon
   end
   
   def test_should_start_worker
     old_argv = ARGV[0]
     ARGV[0] = 'name'
-    UbiquoWorker.expects(:init).with('name').returns(nil)
+    UbiquoWorker.expects(:init).with('name', nil).returns(nil)
     run_starter
     ARGV[0] = old_argv
   end
