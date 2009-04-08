@@ -52,7 +52,10 @@ class WorkerTest < ActiveSupport::TestCase
   end
 
   def run_daemon()
+    old_argv = ARGV[0]
+    ARGV[0] = 'name'
     eval File.read(File.join(UBIQUO_JOBS_ROOT, 'install', 'script', 'ubiquo_worker'))
+    ARGV[0] = old_argv    
   end
   
   def run_starter()
