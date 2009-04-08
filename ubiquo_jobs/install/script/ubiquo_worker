@@ -56,7 +56,7 @@ end
 # Start daemons with the required parameters
 options[:num_workers].times do |i|
   Process.fork do
-    worker_id = ARGV[0] + (options[:num_workers] > 1 ? i.to_s : '')
+    worker_id = ARGV[0].to_s + (options[:num_workers] > 1 ? i.to_s : '')
     daemon_options = {
       :ontop => options[:on_top],
       :ARGV => [options[:command] || 'start', '--', worker_id, options[:delay]],
