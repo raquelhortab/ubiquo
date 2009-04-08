@@ -1,11 +1,12 @@
 module UbiquoWorker
 
   class Worker
-    attr_accessor :name, :shutdown
+    attr_accessor :name, :sleep_time, :shutdown
 
-    def initialize(name) 
+    def initialize(name, sleep_time) 
       raise ArgumentError, "A worker name is required" if name.blank?
       self.name = name
+      self.sleep_time = sleep_time
       self.shutdown = false
     end
 
@@ -17,7 +18,7 @@ module UbiquoWorker
           job.run!
         else
           puts "#{Time.now} - no job available"
-          sleep 5
+          sleep self.sleep_time
         end
       end
     end

@@ -45,8 +45,8 @@ module UbiquoWorker
   
   autoload :Worker, 'ubiquo_worker/worker'
 
-  def self.init(name)
-    worker = Worker.new(name)
+  def self.init(name, sleep_time)
+    worker = Worker.new(name, sleep_time)
     worker.run!
   end
 end

@@ -9,4 +9,4 @@ require File.dirname(__FILE__) + '/../../../../../config/environment' unless Obj
 puts '** Rails loaded.'
 puts "** Starting UbiquoWorker..."
 
-UbiquoWorker.init(ARGV[0])
+UbiquoWorker.init(ARGV[0], ARGV[1])
