@@ -10,5 +10,6 @@ ca:
         password_confirmation: "Confirmació de contrasenya"
         is_admin: "Administrador"
         is_active: "Actiu"
+        photo: "Foto"
       role:
         name: "Nom"

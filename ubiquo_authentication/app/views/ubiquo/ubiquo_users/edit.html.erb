@@ -4,7 +4,7 @@
 </h2>
 <%= render(:partial => "shared/ubiquo/feedback") %>
 
-<% form_for([:ubiquo, @ubiquo_user]) do |form| %>
+<% form_for([:ubiquo, @ubiquo_user], :html => {:multipart => true}) do |form| %>
 	<%= render :partial => 'form', :locals => {:form => form} %>
 	  <p class="form_buttons">
 	    <%= form.submit t("ubiquo.save") %>

@@ -10,5 +10,6 @@ es:
         password_confirmation: "Confirmación de contraseña"
         is_admin: "Administrador"
         is_active: "Activo"
+        photo: "Foto"
       role:
         name: "Nombre"

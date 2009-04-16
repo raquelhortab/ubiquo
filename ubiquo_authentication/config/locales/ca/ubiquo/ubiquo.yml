@@ -46,3 +46,4 @@ ca:
       back_from_superadmin_mode: "Sortir del mode superadministrador"
       superadmin_home: "Inici de superadmintrador"
       superadmin_home_title: "Anar a la pantalla d'inici de superadministradors"
+      current_file: "Fitxer actual"

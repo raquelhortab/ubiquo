@@ -17,6 +17,18 @@
     <%= form.label :password_confirmation, UbiquoUser.human_attribute_name("password_confirmation") %> 
     <%= form.password_field :password_confirmation %>
   </p>
+  <fieldset>
+    <legend><%= UbiquoUser.human_attribute_name("photo") %></legend>
+    <% if form.object.photo.original_filename -%>
+      <%= image_tag(form.object.photo.url(:thumb)) %>
+    <% end %>
+    <p>
+      <%= form.file_field :photo %> 
+      <% if form.object.photo.original_filename -%>
+	<%= link_to t('ubiquo.auth.current_file'), form.object.photo.url %>
+      <% end %>
+    </p>
+  </fieldset>
   <p>
     <%= form.check_box :is_admin %><%= form.label :is_admin, UbiquoUser.human_attribute_name("is_admin") %>
   </p>

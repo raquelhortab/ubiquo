@@ -9,6 +9,10 @@ class CreateUbiquoUsers < ActiveRecord::Migration
       t.string :salt, :limit => 40
       t.string :remember_token
       t.datetime :remember_token_expires_at
+      
+      t.string :photo_file_name
+      t.integer :photo_file_size
+      t.string :photo_content_type
 
       t.timestamps
     end

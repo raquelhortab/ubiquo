@@ -46,3 +46,4 @@ es:
       back_from_superadmin_mode: "Salir del modo superadministrador"
       superadmin_home: "Inicio de superadmintrador"
       superadmin_home_title: "Ir a la pantalla de inicio de superadministradores"
+      current_file: "Fichero actual"
