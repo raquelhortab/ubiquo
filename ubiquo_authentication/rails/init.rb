@@ -10,8 +10,8 @@ Ubiquo::Plugin.register(:ubiquo_authentication, directory, config) do |config|
     access_control :DEFAULT => "ubiquo_user_management"
   }
   
-  config.add :ubiquo_users_elements_per_page
-  config.add_inheritance :ubiquo_users_elements_per_page, :elements_per_page
+  config.add :ubiquo_users_elements_per_page, 24
+# config.add_inheritance :ubiquo_users_elements_per_page, :elements_per_page
   
   config.add :ubiquo_users_admin_filter_enabled, true
 
