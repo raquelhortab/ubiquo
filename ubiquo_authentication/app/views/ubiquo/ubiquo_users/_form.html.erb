@@ -20,7 +20,7 @@
   <fieldset>
     <legend><%= UbiquoUser.human_attribute_name("photo") %></legend>
     <% if form.object.photo.original_filename -%>
-      <%= image_tag(form.object.photo.url(:thumb)) %>
+      <%= image_tag(url_for_file_attachment(form.object, :photo, :thumb)) %>
     <% end %>
     <p>
       <%= form.file_field :photo %> 
