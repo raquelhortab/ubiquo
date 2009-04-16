@@ -6,7 +6,7 @@ class UbiquoUser < ActiveRecord::Base
   
   file_attachment(:photo, :visibility => "protected",
     :styles => { 
-      :thumb => "100x100>" 
+      :thumb => "66x66>" 
     })
 
   # Virtual attribute for the unencrypted password
