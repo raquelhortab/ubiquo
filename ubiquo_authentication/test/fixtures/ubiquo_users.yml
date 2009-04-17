@@ -4,8 +4,8 @@ josep:
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 5.days.ago.to_s :db %>
-  is_admin: f
-  is_active: t
+  is_admin: false
+  is_active: true
 
 eduard:
   login: eduard
@@ -13,8 +13,8 @@ eduard:
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
-  is_active: t
-  is_admin: f
+  is_active: true
+  is_admin: false
 
 admin:
   login: admin
@@ -22,15 +22,15 @@ admin:
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 90.days.ago.to_s :db %>
-  is_active: t
-  is_admin: t
-  is_superadmin: t
+  is_active: true
+  is_admin: true
+  is_superadmin: true
 
 inactive:
   login: inactive
   email: test4@test.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  is_admin: f
+  is_admin: false
   created_at: <%= 91.days.ago.to_s :db %>
-  is_active: f
+  is_active: false
