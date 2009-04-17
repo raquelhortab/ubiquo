@@ -4,7 +4,7 @@ class CreateActiveJobs < ActiveRecord::Migration
       t.string :runner
       t.string :command
       t.integer :tries, :default => 0
-      t.integer :priority
+      t.integer :priority, :null => false
       t.integer :lock_version, :default => 0
       t.datetime :planified_at
       t.datetime :started_at

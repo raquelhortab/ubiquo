@@ -46,7 +46,7 @@ module UbiquoJobs
         scopes = create_scopes(filters) do |filter, value|
           case filter
           when :text
-            {:conditions => ["name ILIKE ?", "%#{value}%"]}
+            {:conditions => ["upper(name) LIKE upper(?)", "%#{value}%"]}
           when :date_start
             {:conditions => ["created_at > ?", "#{value}"]}
           when :date_end

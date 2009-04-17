@@ -49,6 +49,7 @@ class Ubiquo::JobsControllerTest < ActionController::TestCase
 
   def job_attributes(options = {})
     default_options = {
+      :priority => 1000 # Default value when using run_async
     }
     default_options.merge(options)  
   end

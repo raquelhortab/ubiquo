@@ -211,7 +211,7 @@
 #    def self.filtered_search(filters = {}, options = {})
 #      filter_text = unless filters[:text].blank?
 #        args = ["%#{filters[:text]}%"] * 2
-#        condition = "books.name ILIKE ? OR books.description ILIKE ?"
+#        condition = "upper(books.name) ILIKE upper(?) OR upper(books.description) ILIKE upper(?)"
 #        {:find => {:conditions => [condition] + args}}
 #      else
 #        {}

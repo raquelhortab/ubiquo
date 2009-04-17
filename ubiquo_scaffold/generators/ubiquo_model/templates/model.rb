@@ -11,7 +11,7 @@ class <%= class_name %> < ActiveRecord::Base
       case filter
       <%- if !ton.nil? -%>
       when :text
-        {:conditions => ["<%= file_name.pluralize %>.<%= ton %> ILIKE ?", "%#{value}%"]}
+        {:conditions => ["upper(<%= file_name.pluralize %>.<%= ton %>) LIKE upper(?)", "%#{value}%"]}
       <%- end -%>
       <%- if has_published_at -%>
       when :publish_start

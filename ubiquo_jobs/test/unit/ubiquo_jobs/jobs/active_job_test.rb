@@ -130,7 +130,8 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
   end
   
   def test_should_store_options
-    options = {:a => 'a', :one => 1, :time => Time.now, :model => ActiveJob.create, :h => {:h => 'Hash'} }
+    anymodel = create_job(:planified_at => nil)
+    options = {:a => 'a', :one => 1, :time => Time.now, :model => anymodel, :h => {:h => 'Hash'} }
     job = create_job({:options => options})
     assert_equal options, job.options 
     assert_equal options.to_yaml, job.stored_options
@@ -141,6 +142,7 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
 
   def create_job(options = {})
     default_options = {
+      :priority => 1000, # Default value when using run_async
       :command => 'ls',
       :planified_at => Time.now.utc,
     }

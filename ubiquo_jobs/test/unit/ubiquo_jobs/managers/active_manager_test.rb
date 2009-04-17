@@ -10,16 +10,18 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     job = create_job
     assert_equal job, ActiveManager.get('me')
   end
-      
+
+  def test_should_not_be_able_to_create_a_nil_priority_job
+    assert_raise(ActiveRecord::StatementInvalid) { create_job(:priority => nil) }
+  end
+  
   def test_should_get_job_higher_priority_first
     job_1 = create_job(:priority => 5)
     job_2 = create_job(:priority => 1)
     job_3 = create_job(:priority => 2)
-    job_4 = create_job(:priority => nil)
     assert_equal job_2, ActiveManager.get('me')
     assert_equal job_3, ActiveManager.get('you')
-    assert_equal job_1, ActiveManager.get('him')
-    assert_equal job_4, ActiveManager.get('her')
+    assert_equal job_1, ActiveManager.get('hi')
   end
 
   def test_should_not_get_job_until_planified
@@ -71,7 +73,7 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
   
   def test_should_add_job
     assert_difference 'ActiveJob.count' do
-      ActiveManager.add(ActiveJob)
+      ActiveManager.add(ActiveJob, :priority => 1000)
     end
   end
 
@@ -79,6 +81,7 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
 
   def create_job(options = {})
     default_options = {
+      :priority => 1000, # Default value when using run_async
       :command => 'ls',
       :planified_at => Time.now.utc,
     }
