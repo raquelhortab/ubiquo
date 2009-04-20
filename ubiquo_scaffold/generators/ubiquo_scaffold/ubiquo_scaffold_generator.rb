@@ -328,6 +328,12 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
              "Don't add timestamps to the migration file for this model") { |v| options[:skip_timestamps] = v }
       opt.on("--skip-migration",
              "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
+      opt.on("--versionable",
+             "Creates a versionable model") { |v| options[:versionable] = v}
+      opt.on("--max-versions-amount [N]", Integer,
+             "Set max versions amount for versionable models") { |v| options[:versions_amount] = v}
+      opt.on("--translatable f1,f2...", Array,
+        "Creates a translatable model") { |v| options[:translatable] = v}
     end
 
     def scaffold_views
