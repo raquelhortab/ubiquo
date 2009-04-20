@@ -1,9 +1,17 @@
 class <%= class_name %> < ActiveRecord::Base
   
+  <%- if options[:versionable] -%>
+  versionable <%= options[:versions_amount] ? " :max_amount => #{options[:versions_amount]}" : "" %>
+  
+  <%- end -%>
+  <%- if options[:translatable] -%>
+  translatable <%= options[:translatable].map{|i| ":#{i}"}.join(", ") %>
+  
+  <%- end -%>
   <%- unless ton.nil? -%>
   validates_presence_of :<%= ton %>
   <%- end -%>
-  
+    
   # See vendor/plugins/ubiquo_base/lib/extensions/active_record.rb to see an example of usage.
   def self.filtered_search(filters = {}, options = {})
     
