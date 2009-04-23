@@ -9,6 +9,9 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
         
         filters = {
           :text => params[:filter_text],
+          <%- if options[:translatable] -%>
+          :locale => params[:filter_locale],
+          <%- end -%>
           <%- if has_published_at -%>
           :publish_start => parse_date(params[:filter_publish_start]),
           :publish_end => parse_date(params[:filter_publish_end], :time_offset => 1.day),

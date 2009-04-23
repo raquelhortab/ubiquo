@@ -21,6 +21,10 @@ class <%= class_name %> < ActiveRecord::Base
       when :text
         {:conditions => ["upper(<%= file_name.pluralize %>.<%= ton %>) LIKE upper(?)", "%#{value}%"]}
       <%- end -%>
+      <%- if options[:translatable] -%>
+      when :locale
+        {:conditions => {:locale => value}}
+      <%- end -%>
       <%- if has_published_at -%>
       when :publish_start
         {:conditions => ["<%= file_name.pluralize %>.published_at >= ?", value]}
