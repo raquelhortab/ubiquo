@@ -14,13 +14,22 @@
       :rows=>@<%= plural_name%>.collect{|<%= singular_name%>| 
         {
           :id=><%= singular_name%>.id, 
-          :columns=>[
-            <% attributes.each do |at| %>
+          :columns=>[<%- attributes.each do |at| %>
               <%= "#{singular_name}.#{at.name}," -%>
-            <% end %>
+            <%- end %>
           ],
           :actions=>[
-            link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>]),
+            <%- edit_link = %{link_to(t("ubiquo.edit"), [:edit, :ubiquo, #{singular_name}])} -%>
+            <%- translate_link = %{link_to(t("ubiquo.translate"), [:edit, :ubiquo, #{singular_name}])} -%>
+            <%- if options[:translatable] -%>
+            if <%= singular_name%>.locale == Locale.current
+              <%= edit_link %>
+            else
+              <%= translate_link %>
+            end,
+            <%- else -%>
+            <%= edit_link %>,
+            <%- end -%>
             link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)
           ]
         }

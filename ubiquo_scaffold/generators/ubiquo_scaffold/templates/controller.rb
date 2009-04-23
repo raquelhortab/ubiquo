@@ -17,11 +17,11 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
         @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %>.paginate(:page => params[:page]) do
           # remove this find and add something like this:
           # <%= class_name %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
-          <%= class_name %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
+          <%= class_name %><%= options[:translatable] ? ".locale(Locale.current, :ALL)" : "" %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
         end
       } # index.html.erb  
       format.xml  {
-        @<%= table_name %> = <%= class_name %>.find(:all)
+        @<%= table_name %> = <%= class_name %><%= options[:translatable] ? ".locale" : "" %>.all
         render :xml => @<%= table_name %>
       }
     end
@@ -41,6 +41,9 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>/1/edit
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
+    <%- if options[:translatable] %>
+      redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == Locale.current
+    <%- end %>
   end
 
   # POST /<%= table_name %>
