@@ -30,7 +30,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>/new
   # GET /<%= table_name %>/new.xml
   def new
-    @<%= file_name %> = <%= class_name %>.new
+    @<%= file_name %> = <%= class_name %><%= options[:translatable] ? ".translate(params[:from])" : ".new" %>
 
     respond_to do |format|
       format.html # new.html.erb

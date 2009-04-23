@@ -20,7 +20,7 @@
           ],
           :actions=>[
             <%- edit_link = %{link_to(t("ubiquo.edit"), [:edit, :ubiquo, #{singular_name}])} -%>
-            <%- translate_link = %{link_to(t("ubiquo.translate"), [:edit, :ubiquo, #{singular_name}])} -%>
+            <%- translate_link = %{link_to(t("ubiquo.translate"), new_ubiquo_#{singular_name}_path(:locale => Locale.current, :from => #{singular_name}.content_id ))} -%>
             <%- if options[:translatable] -%>
             if <%= singular_name%>.locale == Locale.current
               <%= edit_link %>
