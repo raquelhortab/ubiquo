@@ -34,8 +34,18 @@ module UbiquoVersions
               end
             )
           end
-          
+
+          named_scope :versions, lambda{ |version|
+            @find_versions_from_version = version
+            {}
+          }
+          # Instance method to find translations
+          define_method('translations') do
+            self.class.translations(self)
+          end
+
           define_method("versions") do
+            self.class.versions(self)
             self.class.all({:conditions => [
                   "#{self.class.table_name}.content_id = ? AND #{self.class.table_name}.id != ? AND #{self.class.table_name}.parent_version = ?", 
                   self.content_id, 
@@ -49,9 +59,10 @@ module UbiquoVersions
 
         # Adds :current_version => true to versionable models unless explicitly said :version option
         def find_with_current_version(*args)
-          if self.instance_variable_get('@versionable')
+          if @versionable
             options = args.extract_options!
-            prepare_options_for_version!(options)
+            from_version = self.instance_variable_get('@find_versions_from_versions')
+            prepare_options_for_version!(options, from_version)
             
             find_without_current_version(args.first, options)
           else
@@ -109,6 +120,8 @@ module UbiquoVersions
         def self.included(klass)
           klass.alias_method_chain :create, :version_info
           klass.alias_method_chain :update, :version
+          klass.alias_method_chain :delete, :all_versions
+          klass.alias_method_chain :destroy, :all_versions
         end
         
         # proxy to add a new content_id if empty on creation
@@ -175,6 +188,20 @@ module UbiquoVersions
                 versions_by_number[i].delete
               end
             end
+          end
+          
+          def destroy_with_all_versions
+            if self.class.instance_variable_get('@versionable') && self.is_current_version
+              self.versions.destroy_all
+            end
+            destroy_without_all_versions
+          end
+        
+          def delete_with_all_versions
+            if self.class.instance_variable_get('@versionable') && self.is_current_version
+              self.versions.delete_all
+            end
+            delete_without_all_versions
           end
         
           def disable_versionable_once          
