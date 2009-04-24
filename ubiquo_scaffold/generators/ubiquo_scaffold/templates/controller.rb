@@ -45,7 +45,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-      redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == Locale.current
+    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == Locale.current
     <%- end %>
   end
 
@@ -71,9 +71,18 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # PUT /<%= table_name %>/1.xml
   def update
     @<%= file_name %> = <%= class_name %>.find(params[:id])
+    <%- if options[:translatable] -%>
+    ok = if params[:restore_from_version]
+           @<%= file_name %>.restore params[:restore_from_version]
+         else
+           @<%= file_name %>.update_attributes(params[:<%= file_name %>])
+         end
+    <%- else -%>
+    ok = @<%= file_name %>.update_attributes(params[:<%= file_name %>])
+    <%- end -%>
 
     respond_to do |format|
-      if @<%= file_name %>.update_attributes(params[:<%= file_name %>])
+      if ok
         flash[:notice] = t("ubiquo.<%= singular_name %>.edited")
         format.html { redirect_to(ubiquo_<%= table_name %>_path) }
         format.xml  { head :ok }

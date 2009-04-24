@@ -20,10 +20,10 @@
 
 <%% content_for :sidebar do %>
   <%- if options[:translatable] -%>
-  <%%= show_translations(@dog) %>
+  <%%= show_translations(@<%= singular_name %>) %>
   <%- end -%>
   <%- if options[:versionable] -%>
-  <%%= show_versions(@dog) %>
+  <%%= show_versions(@<%= singular_name %>) %>
   <%- end -%>
   <h3><%%= t('ubiquo.help') %></h3>
   <p><%%= t("ubiquo.<%= singular_name %>.edit.help_message") %></p>
