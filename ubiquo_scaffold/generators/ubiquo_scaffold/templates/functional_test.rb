@@ -42,7 +42,7 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
   def <%= file_name %>_attributes(options = {})
     default_options = {
       <% for attribute in attributes -%>
-        :<%= attribute.name %> => "", # <%= attribute.type.to_s %>
+        :<%= attribute.name %> => '<%= attribute.default %>', # <%= attribute.type.to_s %>
       <% end -%>
     }
     default_options.merge(options)  

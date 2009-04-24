@@ -56,7 +56,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   def create_<%= file_name %>(options = {})
     default_options = {
       <% for attribute in attributes -%>
-        :<%= attribute.name %> => "", # <%= attribute.type.to_s %>
+        :<%= attribute.name %> => '<%= attribute.default %>', # <%= attribute.type.to_s %>
       <% end -%>
     }
     <%= class_name %>.create(default_options.merge(options))

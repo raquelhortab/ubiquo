@@ -71,7 +71,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # PUT /<%= table_name %>/1.xml
   def update
     @<%= file_name %> = <%= class_name %>.find(params[:id])
-    <%- if options[:translatable] -%>
+    <%- if options[:versionable] -%>
     ok = if params[:restore_from_version]
            @<%= file_name %>.restore params[:restore_from_version]
          else
