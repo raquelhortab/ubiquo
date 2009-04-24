@@ -4,6 +4,12 @@
 </h2>
 <%%= render(:partial => "shared/ubiquo/feedback") %>
 
+<%% show_preview(<%= class_name %><%= options[:versionable] ? ", :version => :all" : "" %>) do |<%= singular_name %>| %>
+  <%% form_for([:ubiquo, <%= singular_name %>]) do |form| %>
+    <%%= render :partial => 'form', :locals => {:form => form} %>
+  <%% end %>
+<%% end %>
+
 <%% form_for([:ubiquo, @<%= singular_name %>]) do |form| %>
   <%%= render :partial => 'form', :locals => {:form => form} %>
     <p class="form_buttons">
@@ -15,6 +21,9 @@
 <%% content_for :sidebar do %>
   <%- if options[:translatable] -%>
   <%%= show_translations(@dog) %>
+  <%- end -%>
+  <%- if options[:versionable] -%>
+  <%%= show_versions(@dog) %>
   <%- end -%>
   <h3><%%= t('ubiquo.help') %></h3>
   <p><%%= t("ubiquo.<%= singular_name %>.edit.help_message") %></p>

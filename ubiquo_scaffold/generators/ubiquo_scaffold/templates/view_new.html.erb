@@ -4,6 +4,12 @@
 </h2>
 <%%= render(:partial => "shared/ubiquo/feedback") %>
 
+<%% show_preview(<%= class_name %><%= options[:versionable] ? ", :version => :all" : "" %>) do |<%= singular_name %>| %>
+  <%% form_for([:ubiquo, <%= singular_name %>]) do |form| %>
+    <%%= render :partial => 'form', :locals => {:form => form} %>
+  <%% end %>
+<%% end %>
+
 <%% form_for([:ubiquo, @<%= singular_name %>]) do |form| %>
   <%%= render :partial => 'form', :locals => {:form => form} %>
     <p class="form_buttons">
