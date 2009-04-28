@@ -1,6 +1,11 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::TestCase
+  <%- if options[:versionable] -%>
+  def setup
+    session[:locale] = "en_US"
+  end
+  <%- end -%>
   def test_should_get_index
     get :index
     assert_response :success
