@@ -20,7 +20,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
         @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %>.paginate(:page => params[:page]) do
           # remove this find and add something like this:
           # <%= class_name %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
-          <%= class_name %><%= options[:translatable] ? ".locale(Locale.current, :ALL)" : "" %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
+          <%= class_name %><%= options[:translatable] ? ".locale(current_locale, :ALL)" : "" %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
         end
       } # index.html.erb  
       format.xml  {
@@ -34,7 +34,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def show
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == Locale.current
+    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == current_locale
     <%- end %>
   end
 
@@ -42,7 +42,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>/new
   # GET /<%= table_name %>/new.xml
   def new
-    @<%= file_name %> = <%= class_name %><%= options[:translatable] ? ".translate(params[:from])" : ".new" %>
+    @<%= file_name %> = <%= class_name %><%= options[:translatable] ? ".translate(params[:from], current_locale)" : ".new" %>
 
     respond_to do |format|
       format.html # new.html.erb
@@ -54,7 +54,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == Locale.current
+    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == current_locale
     <%- end %>
   end
 
@@ -62,6 +62,9 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # POST /<%= table_name %>.xml
   def create
     @<%= file_name %> = <%= class_name %>.new(params[:<%= file_name %>])
+    <%- if options[:translatable] %>
+    @<%= file_name %>.locale = current_locale
+    <%- end %>
 
     respond_to do |format|
       if @<%= file_name %>.save

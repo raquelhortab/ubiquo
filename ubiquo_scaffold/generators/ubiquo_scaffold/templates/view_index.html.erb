@@ -21,15 +21,15 @@
             :actions=>[
               <%- view_link = %{link_to(t("ubiquo.view"), [:ubiquo, #{singular_name}])} -%>
               <%- edit_link = %{link_to(t("ubiquo.edit"), [:edit, :ubiquo, #{singular_name}])} -%>
-              <%- translate_link = %{link_to(t("ubiquo.translate"), new_ubiquo_#{singular_name}_path(:locale => Locale.current, :from => #{singular_name}.content_id ))} -%>
+              <%- translate_link = %{link_to(t("ubiquo.translate"), new_ubiquo_#{singular_name}_path(:locale => current_locale, :from => #{singular_name}.content_id ))} -%>
               <%- if options[:translatable] -%>
-              if <%= singular_name%>.locale == Locale.current
+              if <%= singular_name%>.locale == current_locale
                 [<%= view_link %>,
                  <%= edit_link %>]
-              elsif <%= singular_name%>_cur_locale = <%= singular_name%>.translations.find_by_locale(Locale.current)
+              elsif <%= singular_name%>_cur_locale = <%= singular_name%>.translations.find_by_locale(current_locale)
                 link_to(t("ubiquo.translate"), [:edit, :ubiquo, <%= singular_name%>_cur_locale])
               else
-                link_to(t("ubiquo.translate"), new_ubiquo_<%= singular_name %>_path(:locale => Locale.current, :from => <%= singular_name %>.content_id, :preview_id => <%= singular_name %>.id))
+                link_to(t("ubiquo.translate"), new_ubiquo_<%= singular_name %>_path(:locale => current_locale, :from => <%= singular_name %>.content_id, :preview_id => <%= singular_name %>.id))
               end,
               <%- else -%>
               <%= view_link %>,
