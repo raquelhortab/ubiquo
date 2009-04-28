@@ -5,5 +5,5 @@ es:
     attributes:
       <%= singular_name %>:
         <% for attribute in attributes -%>
-<%=        "#{attribute.name}:" %> <%- if field_translations[attribute.name] %> "<%= field_translations[attribute.name][:es] %>" <%- else %> "" <%- end %>
+<%=        "#{attribute.name}:" %> <%- if field_translations[attribute.name] %> "<%= field_translations[attribute.name][:es] %>" <%- else %> "<%= attribute.name %>" <%- end %>
         <% end -%>

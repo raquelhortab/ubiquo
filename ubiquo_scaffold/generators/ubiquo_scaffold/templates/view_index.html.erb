@@ -19,21 +19,24 @@
               <%- end %>
             ],
             :actions=>[
+              <%- view_link = %{link_to(t("ubiquo.view"), [:ubiquo, #{singular_name}])} -%>
               <%- edit_link = %{link_to(t("ubiquo.edit"), [:edit, :ubiquo, #{singular_name}])} -%>
               <%- translate_link = %{link_to(t("ubiquo.translate"), new_ubiquo_#{singular_name}_path(:locale => Locale.current, :from => #{singular_name}.content_id ))} -%>
               <%- if options[:translatable] -%>
               if <%= singular_name%>.locale == Locale.current
-                <%= edit_link %>
+                [<%= view_link %>,
+                 <%= edit_link %>]
               elsif <%= singular_name%>_cur_locale = <%= singular_name%>.translations.find_by_locale(Locale.current)
                 link_to(t("ubiquo.translate"), [:edit, :ubiquo, <%= singular_name%>_cur_locale])
               else
                 link_to(t("ubiquo.translate"), new_ubiquo_<%= singular_name %>_path(:locale => Locale.current, :from => <%= singular_name %>.content_id, :preview_id => <%= singular_name %>.id))
               end,
               <%- else -%>
+              <%= view_link %>,
               <%= edit_link %>,
               <%- end -%>
               link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)
-            ]
+            ].flatten
           }
         },
         :pages=>@<%= plural_name%>_pages

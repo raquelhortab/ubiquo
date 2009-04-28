@@ -10,6 +10,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       # TODO: Move this to yaml file if if grows to big overtime
       @field_translations = { 
         'title' => { :ca => 'Títol', :es => 'Título'},
+        'name' => { :ca => 'Nom', :es => 'Nombre'},
         'published_at' => { :ca => 'Data de publicació', :es => 'Fecha de publicación' }
       }
       

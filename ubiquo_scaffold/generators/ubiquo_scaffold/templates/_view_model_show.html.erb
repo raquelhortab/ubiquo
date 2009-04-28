@@ -1,0 +1,8 @@
+<div class="view_box">
+<%- for attribute in attributes -%>
+  <p>
+    <b><%%= <%= class_name %>.human_attribute_name("<%= attribute.name %>") %>:</b>
+    <%%=h <%= singular_name %>.<%= attribute.name %> %>
+  </p>
+<%- end -%>
+</div>

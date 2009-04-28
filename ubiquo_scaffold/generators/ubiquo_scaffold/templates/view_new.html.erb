@@ -5,9 +5,7 @@
 <%%= render(:partial => "shared/ubiquo/feedback") %>
 
 <%% show_preview(<%= class_name %><%= options[:versionable] ? ", :version => :all" : "" %>) do |<%= singular_name %>| %>
-  <%% form_for([:ubiquo, <%= singular_name %>]) do |form| %>
-    <%%= render :partial => 'form', :locals => {:form => form} %>
-  <%% end %>
+  <%%= render :partial => '<%= singular_name %>', :object => <%= singular_name %> %>
 <%% end %>
 
 <%% form_for([:ubiquo, @<%= singular_name %>]) do |form| %>

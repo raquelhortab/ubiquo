@@ -283,6 +283,10 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
           File.join('app/views/ubiquo', controller_class_path, controller_file_name, "_#{partial}.html.erb")
         )
       end
+      m.template(
+        "_view_model_show.html.erb",
+        File.join('app/views/ubiquo', controller_class_path, controller_file_name, "_#{singular_name}.html.erb")
+        )
       
       for locale in Ubiquo::Config.get(:supported_locales)
         m.template(
@@ -337,7 +341,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
     end
 
     def scaffold_views
-      %w[ index new edit ]
+      %w[ index new edit show ]
     end
     def scaffold_partials
       %w[ form submenu title ]

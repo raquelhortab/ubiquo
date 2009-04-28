@@ -30,6 +30,15 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     end
   end
 
+  # GET /<%= table_name %>/1
+  def show
+    @<%= file_name %> = <%= class_name %>.find(params[:id])
+    <%- if options[:translatable] %>
+    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == Locale.current
+    <%- end %>
+  end
+
+
   # GET /<%= table_name %>/new
   # GET /<%= table_name %>/new.xml
   def new
