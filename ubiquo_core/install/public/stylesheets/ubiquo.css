@@ -66,8 +66,13 @@ table, th, td { border: none;}
 		height: 6.4em;
 		padding: .7em 2em 1em;
 	}
+		#header_central	form {
+			float: right;
+		}
 		#header_central	h1 {
 			font-size: 3.6em;
+                        width: 50%;
+                        float: left;
 		}
 			#header_central	h1 img {
 				vertical-align: middle;
