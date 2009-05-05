@@ -6,7 +6,7 @@
 
 <%= link_to t('ubiquo.auth.role_new'), new_ubiquo_role_path, :class => "new" %>
 
-<%= render(:partial => "shared/ubiquo/list", :locals=>{
+<%= render(:partial => "shared/ubiquo/lists/standard", :locals=>{
       :name=>'role',
       :headers=>[:name],
       :rows=>@roles.collect{|role| 
