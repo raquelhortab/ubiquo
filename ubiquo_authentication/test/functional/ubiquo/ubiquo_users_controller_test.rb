@@ -37,7 +37,7 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   def test_should_create_ubiquo_user
     UbiquoUsersNotifier.expects(:deliver_confirm_creation).once.returns(nil)
     assert_difference('UbiquoUser.count') do
-      post :create, :ubiquo_user => { :login => 'ubiquo_userlogin', :email => "test@test.com", :password => '123456', :password_confirmation => '123456', :is_admin => false, :is_active => false}
+      post :create, :ubiquo_user => { :name => "name", :surname => "surname", :login => 'ubiquo_userlogin', :email => "test@test.com", :password => '123456', :password_confirmation => '123456', :is_admin => false, :is_active => false}
     end
 
     assert_redirected_to ubiquo_ubiquo_users_path
@@ -53,7 +53,7 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   end
 
   def test_should_update_ubiquo_user
-    put :update, :id => ubiquo_users(:josep).id, :ubiquo_user => { :login => 'newlogin', :email => "test@test.com", :password => 'newpass', :password_confirmation => 'newpass', :is_admin => false, :is_active => false}
+    put :update, :id => ubiquo_users(:josep).id, :ubiquo_user => { :name => "name", :surname => "surname", :login => 'newlogin', :email => "test@test.com", :password => 'newpass', :password_confirmation => 'newpass', :is_admin => false, :is_active => false}
     assert_redirected_to ubiquo_ubiquo_users_path
   end
   

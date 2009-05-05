@@ -23,6 +23,7 @@ ca:
       user_removed: "Usuari eliminat"
       user_remove_error: "Error a l'eliminar usuario"
       access_data: "Dades d'acces"
+      user_data: "Dades d'usuari"
       permissions: "Permisos"
       user_roles: "Permisos d'usuari"
       roles_list: "Llistat de rols"

@@ -6,6 +6,8 @@ es:
     attributes:
       ubiquo_user:
         login: "Login"
+        name: "Nombre"
+        surname: "Apellidos"
         password: "Contraseña"
         password_confirmation: "Confirmación de contraseña"
         is_admin: "Administrador"

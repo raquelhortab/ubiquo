@@ -13,6 +13,8 @@ class UbiquoUser < ActiveRecord::Base
   attr_accessor :password
 
   validates_presence_of     :login
+  validates_presence_of     :name
+  validates_presence_of     :surname
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
   validates_length_of       :password, :within => 4..40, :if => :password_required?
@@ -27,7 +29,7 @@ class UbiquoUser < ActiveRecord::Base
 
   # prevents a ubiquo_user from submitting a crafted form that bypasses activation
   # anything else you want your ubiquo_user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :is_admin, :is_active, :role_ids, :photo
+  attr_accessible :login, :email, :password, :password_confirmation, :is_admin, :is_active, :role_ids, :photo, :name, :surname
 
   # Magic finder. It's like find_by_if_or_login
   def self.gfind(something, options={})
@@ -139,6 +141,10 @@ class UbiquoUser < ActiveRecord::Base
       return true if role.has_permission?(permission)
     end
     false
+  end
+  
+  def full_name
+    "#{self.surname}, #{self.name}"
   end
 
 

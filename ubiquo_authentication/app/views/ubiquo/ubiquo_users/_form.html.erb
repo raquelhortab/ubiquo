@@ -1,5 +1,15 @@
 <%= error_messages_for 'ubiquo_user' %>
 <div class="form_box">
+  <h3><%= t("ubiquo.auth.user_data") %></h3>
+  
+  <p>
+    <%= form.label :name, UbiquoUser.human_attribute_name("name") %> 
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <%= form.label :surname, UbiquoUser.human_attribute_name("surname") %> 
+    <%= form.text_field :surname %>
+  </p>
   <h3><%= t("ubiquo.auth.access_data") %></h3>
   <p>
     <%= form.label :login, UbiquoUser.human_attribute_name("login") %> 

@@ -8,40 +8,14 @@
 
 <%= link_to t("ubiquo.auth.new_user"), new_ubiquo_ubiquo_user_path, :class => "new" %>
 
-<% if @ubiquo_users.size > 0 %>
-  <br style="clear: both;"/>
-  <div class="box_list">
-    <% @ubiquo_users.each do |user| %>
-      <div id="ubiquo_user_<%= user.id %>" class="box <%= cycle('even', 'odd') %>">
-        <% if user.photo.original_filename %>
-          <div class="photo">
-            <%= image_tag(url_for_file_attachment(user, :photo, :thumb)) %>
-          </div>
-        <% end %>
-
-        <div class="login"><%= user.login %></div>
-
-        <div class="actions">
-          <%= link_to(t("ubiquo.edit"), [:edit, :ubiquo, user], :class => "edit") %>
-          <%= link_to(t("ubiquo.remove"), [:ubiquo, user], :confirm => t("ubiquo.auth.confirm_user_removal"), :method => :delete, :class => "delete") %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-  <br style="clear: both;"/>
-
-
-  <% if !@ubiquo_users_pages.nil? %>
-    <%= render :partial => "shared/ubiquo/pagination", :locals => { :item_pages => @ubiquo_users_pages } %>
+<% ubiquo_user_list(@ubiquo_users, @ubiquo_users_pages) do |user| %>
+  <% if user.photo.original_filename %>
+    <div class="photo">
+      <%= image_tag(url_for_file_attachment(user, :photo, :thumb)) %>
+    </div>
   <% end %>
-<% else %>
-  <p id="empty">
-    <%= t 'ubiquo.empty', :thing => UbiquoUser.human_name.downcase %>
-  </p>
+  <div class="login"><%= user.full_name %></div>
 <% end %>
-
-
-
 
 <% content_for :sidebar do %>
   <%= ubiquo_users_filters %>

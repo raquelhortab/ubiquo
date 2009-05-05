@@ -23,6 +23,7 @@ en:
       user_removed: "Removed user"
       user_remove_error: "Error removing user"
       access_data: "Access Data"
+      user_data: "User Data"
       permissions: "Permissions"
       user_roles: "User permissions"
       roles_list: "Roles list"

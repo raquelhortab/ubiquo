@@ -23,6 +23,7 @@ es:
       user_removed: "Usuario eliminado"
       user_remove_error: "Error al eliminar usuario"
       access_data: "Datos de acceso"
+      user_data: "Datos de usuario"
       permissions: "Permisos"
       user_roles: "Permisos de usuario"
       roles_list: "Listado de roles"

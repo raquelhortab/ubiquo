@@ -26,5 +26,29 @@ module Ubiquo::UbiquoUsersHelper
     end
     admin_filter
   end
+  
+  def ubiquo_user_list(collection, pages, options = {}, &block)
+    concat render(:partial => "shared/ubiquo/lists/boxes", :locals => {
+        :name => 'ubiquo_user',
+        :rows => collection.collect do |ubiquo_user| 
+          {
+            :id => ubiquo_user.id, 
+            :content => capture(ubiquo_user, &block),
+            :actions => ubiquo_user_actions(ubiquo_user)
+          }
+        end,
+        :pages => pages
+      })
+  end
+    
+  private
+    
+  def ubiquo_user_actions(ubiquo_user, options = {})
+    actions = []
+    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, ubiquo_user], :class => "edit")
+    actions << link_to(t("ubiquo.remove"), [:ubiquo, ubiquo_user], 
+      :confirm => t("ubiquo.auth.confirm_user_removal"), :method => :delete, :class => "delete")
+    actions
+  end
 
 end

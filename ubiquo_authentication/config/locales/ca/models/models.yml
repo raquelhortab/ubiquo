@@ -6,6 +6,8 @@ ca:
     attributes:
       ubiquo_user:
         login: "Login"
+        name: "Nom"
+        surname: "Cognoms"
         password: "Contrasenya"
         password_confirmation: "Confirmació de contrasenya"
         is_admin: "Administrador"

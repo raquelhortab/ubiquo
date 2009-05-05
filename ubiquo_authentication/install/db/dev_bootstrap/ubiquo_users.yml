@@ -8,6 +8,8 @@ ubiquo_users_001:
   id: "113326033"
   is_active: true
   remember_token: 
+  name: gnuine
+  surname: gnuine
   login: gnuine
   email: test@gnuine.com
   created_at: 2008-07-24 08:33:33
@@ -21,6 +23,8 @@ ubiquo_users_002:
   id: "113326034"
   is_active: true
   remember_token: 
+  name: test
+  surname: test
   login: test
   email: test2@gnuine.com
   created_at: 2008-07-25 08:04:17

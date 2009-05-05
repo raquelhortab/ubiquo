@@ -11,6 +11,20 @@ class UbiquoUserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_should_require_name
+    assert_no_difference 'UbiquoUser.count' do
+      u = create_ubiquo_user(:name => nil)
+      assert u.errors.on(:name)
+    end
+  end
+
+  def test_should_require_surname
+    assert_no_difference 'UbiquoUser.count' do
+      u = create_ubiquo_user(:surname => nil)
+      assert u.errors.on(:surname)
+    end
+  end
+
   def test_should_require_login
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:login => nil)
@@ -187,7 +201,14 @@ class UbiquoUserTest < ActiveSupport::TestCase
   protected
   
   def create_ubiquo_user(options = {})
-    UbiquoUser.create({:login => 'quire', :email => "quire@quire.com", :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    UbiquoUser.create({
+        :name => "name",
+        :surname => "surname",
+        :login => 'quire', 
+        :email => "quire@quire.com", 
+        :password => 'quire', 
+        :password_confirmation => 'quire' 
+      }.merge(options))
   end
 
 end

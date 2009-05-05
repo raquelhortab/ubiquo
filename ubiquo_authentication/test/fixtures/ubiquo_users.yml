@@ -1,4 +1,6 @@
 josep:
+  name: Josep
+  surname: Josep
   login: josep
   email: test1@test.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
@@ -8,6 +10,8 @@ josep:
   is_active: true
 
 eduard:
+  name: Eduard
+  surname: Eduard
   login: eduard
   email: test2@test.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
@@ -17,6 +21,8 @@ eduard:
   is_admin: false
 
 admin:
+  name: Admin
+  surname: Admin
   login: admin
   email: test3@test.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
@@ -27,6 +33,8 @@ admin:
   is_superadmin: true
 
 inactive:
+  name: Inactive
+  surname: Inactive
   login: inactive
   email: test4@test.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
