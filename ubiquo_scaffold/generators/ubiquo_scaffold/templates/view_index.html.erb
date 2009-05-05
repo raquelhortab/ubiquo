@@ -1,48 +1,18 @@
-<h1><%%= render :partial => 'title' %></h1>
+<h1>
+  <%%= render :partial => 'title' %>
+</h1>
+
 <h2>
   <%%= render :partial => 'submenu' %>
 </h2>
+
 <%%= render :partial => "shared/ubiquo/feedback" %>
 
 <%%= link_to t("ubiquo.<%= singular_name %>.index.new"), new_ubiquo_<%= singular_name %>_path, :class => "new" %>
-<div style="clear:both"></div>
+
 <%%= <%= singular_name %>_filters_info(params) %>
 
-<%%= render(:partial => "shared/ubiquo/list", :locals=>{
-        :name=>'<%= singular_name%>',
-        :headers=>[<%= attributes.collect{|at| ":#{at.name}"}.join(", ") %>],
-        :rows=>@<%= plural_name%>.collect{|<%= singular_name%>| 
-          {
-            :id=><%= singular_name%>.id, 
-            :columns=>[<%- attributes.each do |at| %>
-              <%= "#{singular_name}.#{at.name}," -%>
-              <%- end %>
-            ],
-            :actions=>[
-              <%- view_link = %{link_to(t("ubiquo.view"), [:ubiquo, #{singular_name}])} -%>
-              <%- edit_link = %{link_to(t("ubiquo.edit"), [:edit, :ubiquo, #{singular_name}])} -%>
-              <%- translate_link = %{link_to(t("ubiquo.translate"), new_ubiquo_#{singular_name}_path(:locale => current_locale, :from => #{singular_name}.content_id ))} -%>
-              <%- if options[:translatable] -%>
-              if <%= singular_name%>.locale == current_locale
-                [<%= view_link %>,
-                 <%= edit_link %>]
-              elsif <%= singular_name%>_cur_locale = <%= singular_name%>.translations.find_by_locale(current_locale)
-                link_to(t("ubiquo.translate"), [:edit, :ubiquo, <%= singular_name%>_cur_locale])
-              else
-                link_to(t("ubiquo.translate"), new_ubiquo_<%= singular_name %>_path(:locale => current_locale, :from => <%= singular_name %>.content_id, :preview_id => <%= singular_name %>.id))
-              end,
-              <%- else -%>
-              <%= view_link %>,
-              <%= edit_link %>,
-              <%- end -%>
-              link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)
-            ].flatten
-          }
-        },
-        :pages=>@<%= plural_name%>_pages
-      }      
-) %>
-
+<%%= <%= singular_name %>_list(@<%= plural_name%>, @<%= plural_name%>_pages) %>
 
 <%% content_for :sidebar do %>
   <%%= <%= singular_name %>_filters %>

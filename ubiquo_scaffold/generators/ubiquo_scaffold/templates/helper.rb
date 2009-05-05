@@ -39,4 +39,33 @@ module Ubiquo::<%= controller_class_name %>Helper
     <%- end -%>
     filters.join
   end
+
+  def <%= singular_name %>_list(collection, pages, options = {})
+    render(:partial => "shared/ubiquo/lists/standard", :locals => {
+        :name => '<%= singular_name%>',
+        :headers => [<%= attributes.collect{|at| ":#{at.name}"}.join(", ") %>],
+        :rows => collection.collect do |<%= singular_name%>| 
+          {
+            :id => <%= singular_name%>.id, 
+            :columns => [
+              <%- attributes.each do |at| -%>
+              <%= "#{singular_name}.#{at.name}," %>
+              <%- end -%>
+            ],
+            :actions => <%= singular_name %>_actions(<%= singular_name%>)
+          }
+        end,
+        :pages => pages
+      })
+  end
+    
+  private
+    
+  def <%= singular_name %>_actions(<%= singular_name%>, options = {})
+    actions = []
+    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])
+    actions << link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], 
+      :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)
+    actions
+  end
 end
