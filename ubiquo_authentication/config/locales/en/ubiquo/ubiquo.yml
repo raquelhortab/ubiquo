@@ -23,6 +23,7 @@ en:
       user_removed: "Removed user"
       user_remove_error: "Error removing user"
       access_data: "Access Data"
+      extra_data: "Extra Data"
       user_data: "User Data"
       permissions: "Permissions"
       user_roles: "User permissions"
@@ -48,3 +49,5 @@ en:
       superadmin_home: "Superadmin home"
       superadmin_home_title: "Go to superadmin home"
       current_file: "Current file"
+      send_confirm_creation: "Send user data by mail"
+      welcome_message_title: "Welcome message"

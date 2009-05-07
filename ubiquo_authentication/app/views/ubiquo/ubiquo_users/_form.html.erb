@@ -10,6 +10,18 @@
     <%= form.label :surname, UbiquoUser.human_attribute_name("surname") %> 
     <%= form.text_field :surname %>
   </p>
+  <fieldset>
+    <legend><%= UbiquoUser.human_attribute_name("photo") %></legend>
+    <% if form.object.photo.original_filename -%>
+      <%= image_tag(url_for_file_attachment(form.object, :photo, :thumb)) %>
+    <% end %>
+    <p>
+      <%= form.file_field :photo %> 
+      <% if form.object.photo.original_filename -%>
+	<%= link_to t('ubiquo.auth.current_file'), form.object.photo.url %>
+      <% end %>
+    </p>
+  </fieldset>
   <h3><%= t("ubiquo.auth.access_data") %></h3>
   <p>
     <%= form.label :login, UbiquoUser.human_attribute_name("login") %> 
@@ -27,24 +39,25 @@
     <%= form.label :password_confirmation, UbiquoUser.human_attribute_name("password_confirmation") %> 
     <%= form.password_field :password_confirmation %>
   </p>
-  <fieldset>
-    <legend><%= UbiquoUser.human_attribute_name("photo") %></legend>
-    <% if form.object.photo.original_filename -%>
-      <%= image_tag(url_for_file_attachment(form.object, :photo, :thumb)) %>
-    <% end %>
-    <p>
-      <%= form.file_field :photo %> 
-      <% if form.object.photo.original_filename -%>
-	<%= link_to t('ubiquo.auth.current_file'), form.object.photo.url %>
-      <% end %>
-    </p>
-  </fieldset>
   <p>
-    <%= form.check_box :is_admin %><%= form.label :is_admin, UbiquoUser.human_attribute_name("is_admin") %>
+    <%= form.check_box :is_admin %>
+    <%= form.label :is_admin, UbiquoUser.human_attribute_name("is_admin") %>
   </p>
   <p>
-    <%= form.check_box :is_active %><%= form.label :is_active, UbiquoUser.human_attribute_name("is_active") %>
+    <%= form.check_box :is_active %>
+    <%= form.label :is_active, UbiquoUser.human_attribute_name("is_active") %>
   </p>
-  
   <%= user_permission_fields(form) if respond_to?(:user_permission_fields) %>
+  
+  <% if form.object.new_record? %>
+    <h3><%= t("ubiquo.auth.extra_data") %></h3>
+    <p>
+      <%= check_box_tag(:send_confirm_creation, 1, true)%>
+      <%= label_tag :send_confirm_creation, t("ubiquo.auth.send_confirm_creation") %>
+    </p>
+    <p id="welcome_message_block">
+      <%= label_tag :welcome_message, t("ubiquo.auth.welcome_message_title") %>
+      <%= text_area_tag :welcome_message %>
+    </p>
+  <% end %>
 </div>

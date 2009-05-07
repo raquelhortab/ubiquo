@@ -23,6 +23,7 @@ ca:
       user_removed: "Usuari eliminat"
       user_remove_error: "Error a l'eliminar usuario"
       access_data: "Dades d'acces"
+      extra_data: "Altres dades"
       user_data: "Dades d'usuari"
       permissions: "Permisos"
       user_roles: "Permisos d'usuari"
@@ -48,3 +49,5 @@ ca:
       superadmin_home: "Inici superadmin"
       superadmin_home_title: "Anar a la pantalla d'inici de superadministadors"
       current_file: "Fitxer actual"
+      send_confirm_creation: "Enviar correu amb les dades de l'usuari"
+      welcome_message_title: "Missatge de benvinguda"

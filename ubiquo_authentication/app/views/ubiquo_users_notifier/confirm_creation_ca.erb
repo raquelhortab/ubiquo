@@ -2,3 +2,9 @@ Se ha creado un nuevo usuario para acceder a <%= Ubiquo::Config.get(:app_title) 
 
 Login: <%= @user.login %>
 Password: <%= @user.password %>
+
+<% unless @welcome_message.blank? -%>
+L'usuari que l'ha donat d'alta li ha escrit el seguent missatge de benvinguda:
+
+<%= @welcome_message %>
+<% end -%>

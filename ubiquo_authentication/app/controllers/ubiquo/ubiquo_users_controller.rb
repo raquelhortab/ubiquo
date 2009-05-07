@@ -48,7 +48,13 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
 
     respond_to do |format|
       if @ubiquo_user.save
-        UbiquoUsersNotifier.deliver_confirm_creation(@ubiquo_user, request.host_with_port)
+        if params[:send_confirm_creation]
+          UbiquoUsersNotifier.deliver_confirm_creation(
+            @ubiquo_user, 
+            params[:welcome_message], 
+            request.host_with_port
+            )
+        end
         flash[:notice] = t("ubiquo.auth.user_created")
         format.html { redirect_to(ubiquo_ubiquo_users_path) }
         format.xml  { render :xml => @ubiquo_user, :status => :created, :location => @ubiquo_user }

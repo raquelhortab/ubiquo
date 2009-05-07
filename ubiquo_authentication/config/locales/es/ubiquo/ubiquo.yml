@@ -23,6 +23,7 @@ es:
       user_removed: "Usuario eliminado"
       user_remove_error: "Error al eliminar usuario"
       access_data: "Datos de acceso"
+      extra_data: "Otros datos"
       user_data: "Datos de usuario"
       permissions: "Permisos"
       user_roles: "Permisos de usuario"
@@ -48,3 +49,5 @@ es:
       superadmin_home: "Inicio superadmin"
       superadmin_home_title: "Ir a la pantalla de inicio de superadministradores"
       current_file: "Fichero actual"
+      send_confirm_creation: "Enviar correo con los datos del usuario"
+      welcome_message_title: "Mensaje de bienvenida"
