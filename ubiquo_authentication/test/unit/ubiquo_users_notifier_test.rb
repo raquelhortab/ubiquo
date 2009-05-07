@@ -24,15 +24,16 @@ class UbiquoUsersNotifierTest < ActionMailer::TestCase
     ubiquo_user.reset_password!
     
     assert ActionMailer::Base.deliveries.empty? 
-    email = UbiquoUsersNotifier.deliver_confirm_creation(ubiquo_user, "localhost:3000")
+    email = UbiquoUsersNotifier.deliver_confirm_creation(ubiquo_user, "Welcome message", "localhost:3000")
     assert !ActionMailer::Base.deliveries.empty? 
     
     assert_equal [ubiquo_user.email], email.to
     assert_match ubiquo_user.password , email.body
     assert_match /#{ubiquo_user.login}/ , email.body
     assert_match /#{Ubiquo::Config.get(:app_title)}/ , email.subject
+    assert_match /Welcome message/ , email.body
   end
-  
+    
 #   test "forgot_password" do
 #     @expected.subject = 'UbiquoUsersNotifier#forgot_password'
 #     @expected.body    = read_fixture('forgot_password')
