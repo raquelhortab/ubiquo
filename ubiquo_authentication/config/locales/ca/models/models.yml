@@ -13,5 +13,6 @@ ca:
         is_admin: "Administrador"
         is_active: "Actiu"
         photo: "Foto"
+        locale: "Idioma"
       role:
         name: "Nom"

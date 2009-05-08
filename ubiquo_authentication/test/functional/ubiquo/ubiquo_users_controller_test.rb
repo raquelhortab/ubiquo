@@ -8,6 +8,27 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:ubiquo_users)
   end
+  
+  def test_should_get_index_with_custom_i18n_locale
+    user = ubiquo_users(:admin)
+    login_as user
+    assert_not_equal I18n.locale, user.locale
+    assert_not_equal 'es', I18n.locale
+    user.update_attribute :locale, 'es'
+    get :index
+    assert_response :success
+    assert_equal 'es', I18n.locale
+  end
+  
+  def test_should_get_index_with_default_i18n_locale
+    user = ubiquo_users(:admin)
+    login_as user
+    assert_nil user.locale
+    assert_not_equal Ubiquo.default_locale, I18n.locale
+    get :index
+    assert_response :success
+    assert_equal Ubiquo.default_locale, I18n.locale
+  end
 
   def test_shouldnt_get_index_without_permission
     login_as :josep

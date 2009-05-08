@@ -51,3 +51,5 @@ ca:
       current_file: "Fitxer actual"
       send_confirm_creation: "Enviar correu amb les dades de l'usuari"
       welcome_message_title: "Missatge de benvinguda"
+      locale_name: "Català"
+      default_locale: "Idioma per defecte"

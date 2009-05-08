@@ -51,3 +51,5 @@ en:
       current_file: "Current file"
       send_confirm_creation: "Send user data by mail"
       welcome_message_title: "Welcome message"
+      locale_name: "English"
+      default_locale: "Default locale"

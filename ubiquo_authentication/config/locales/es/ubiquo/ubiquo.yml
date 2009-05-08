@@ -51,3 +51,5 @@ es:
       current_file: "Fichero actual"
       send_confirm_creation: "Enviar correo con los datos del usuario"
       welcome_message_title: "Mensaje de bienvenida"
+      locale_name: "Castellano"
+      default_locale: "Idioma por defecto"

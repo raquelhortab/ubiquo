@@ -10,6 +10,15 @@
     <%= form.label :surname, UbiquoUser.human_attribute_name("surname") %> 
     <%= form.text_field :surname %>
   </p>
+  <p>
+    <%= form.label :locale, UbiquoUser.human_attribute_name("locale") %> 
+    <%= form.select(
+          :locale, 
+          [[t("ubiquo.auth.default_locale"), nil]] + Ubiquo.supported_locales.map{|locale| 
+            [t("ubiquo.auth.locale_name", :locale => locale), locale]
+          }
+          ) %>
+  </p>
   <fieldset>
     <legend><%= UbiquoUser.human_attribute_name("photo") %></legend>
     <% if form.object.photo.original_filename -%>
