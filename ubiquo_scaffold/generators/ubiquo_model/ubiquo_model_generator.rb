@@ -25,7 +25,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       m.directory File.join('test/unit', class_path)
       m.directory File.join('test/fixtures', class_path)
 
-      for locale in Ubiquo::Config.get(:supported_locales)
+      for locale in Ubiquo.supported_locales
         m.directory(File.join('config/locales', locale, 'models'))
       end
 
@@ -37,7 +37,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
        	m.template 'fixtures.yml',  File.join('test/fixtures', "#{table_name}.yml")
       end
       
-      for locale in Ubiquo::Config.get(:supported_locales)
+      for locale in Ubiquo.supported_locales
         m.template(
           "model-#{locale}.yml",
           File.join('config/locales', locale, 'models', "#{file_name}.yml")

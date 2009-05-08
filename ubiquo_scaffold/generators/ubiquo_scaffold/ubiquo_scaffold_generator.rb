@@ -288,7 +288,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
         File.join('app/views/ubiquo', controller_class_path, controller_file_name, "_#{singular_name}.html.erb")
         )
       
-      for locale in Ubiquo::Config.get(:supported_locales)
+      for locale in Ubiquo.supported_locales
         m.template(
           "#{locale}.yml",
           File.join('config/locales', locale, 'ubiquo', "#{singular_name}.yml")
