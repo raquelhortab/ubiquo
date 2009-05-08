@@ -2,6 +2,8 @@ ca:
   ubiquo:
     helpmsg:
       authentication:
+        ubiquouserprofile:
+          edit: "Aquí pots modificar la teva informació de l'usuari d'ubiquo."
         ubiquousers:
           edit: "Aquí pots modificar l'informació de l'usuari d'ubiquo."
           new: "Aquí pots donar d'alta nous usuaris d'ubiquo."

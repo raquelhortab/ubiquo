@@ -9,6 +9,7 @@ es:
       login_invalid: "Usuario o contraseña invalidos"
       logout: "Logout exitoso"
       users: "Usuarios ubiquo"
+      user_profile: "Perfil del usuario de ubiquo"
       users_list: "Listado de usuarios"
       users_remove_filter:
         one: "eliminar filtro"

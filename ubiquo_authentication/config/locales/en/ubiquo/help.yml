@@ -3,6 +3,8 @@ en:
     helpmsg:
       authentication:
         permissions: "Here you can edit ubiquo user roles."
+        ubiquouserprofile:
+          edit: "Here you can edit your ubiquo user information."
         ubiquousers:
           edit: "Here you can edit ubiquo user information."
           new: "Here you can edit ubiquo user information."

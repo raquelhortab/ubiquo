@@ -8,5 +8,6 @@ map.namespace :ubiquo do |ubiquo|
   ubiquo.resource :superadmin_mode
   ubiquo.resource :superadmin_home
   ubiquo.resource :password
+  ubiquo.resource :ubiquo_user_profile
   ubiquo.resources :ubiquo_users
 end

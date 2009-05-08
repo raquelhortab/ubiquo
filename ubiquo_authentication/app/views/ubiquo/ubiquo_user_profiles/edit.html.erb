@@ -1,0 +1,16 @@
+<h1><%= render :partial => 'title' %></h1>
+<h2>
+  <%= render :partial => "submenu" %>
+</h2>
+<%= render(:partial => "shared/ubiquo/feedback") %>
+
+<% form_for(ubiquo_ubiquo_user_profile_path, @ubiquo_user, :html => {:method => :put, :multipart => true}) do |form| %>
+	<%= render :partial => 'form', :locals => {:form => form} %>
+	  <p class="form_buttons">
+	    <%= form.submit t("ubiquo.save") %>
+	  </p>
+<% end %>
+
+<% content_for :sidebar do %>
+	<%= help_block_sidebar(t("ubiquo.helpmsg.authentication.ubiquouserprofile.edit")) %>
+<% end %>

@@ -9,6 +9,7 @@ ca:
       login_invalid: "Usuari o contrasenya invàlids"
       logout: "Logout efectuat amb èxit"
       users: "Usuaris ubiquo"
+      user_profile: "Perfil de l'usuari d'ubiquo"
       users_list: "Llistat d'usuaris"
       users_remove_filter:
         one: "eliminar filtre"

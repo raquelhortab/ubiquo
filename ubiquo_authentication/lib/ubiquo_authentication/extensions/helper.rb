@@ -20,8 +20,9 @@ module UbiquoAuthentication
       def ubiquo_user_name_link(navigator)
         navigator.add_link do |link|
           link.text = current_ubiquo_user.full_name
-          link.disabled = true
           link.class = "ubiquo_user"
+          link.url = edit_ubiquo_ubiquo_user_profile_path
+          link.highlights << {:controller => "ubiquo/ubiquo_user_profiles"}
         end
       end
       
