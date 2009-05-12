@@ -1,8 +1,11 @@
 class Ubiquo::UbiquoUserProfilesController < UbiquoAreaController
+  
+  #shows the user profile
   def edit
     @ubiquo_user = current_ubiquo_user
   end
   
+  #updates the user profile. It's like ubiquo_user update 
   def update
     @ubiquo_user = current_ubiquo_user
     %w{password password_confirmation}.each do |atr|

@@ -1,8 +1,10 @@
 class Ubiquo::PasswordsController < ApplicationController
-  
+
+  #shows the request pasword recovering form.
   def new
   end
 
+  #resets the password of the user(finded by e-mail)
   def create
     @user = UbiquoUser.find_by_email(params[:email])
     if(@user)

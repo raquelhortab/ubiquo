@@ -3,7 +3,8 @@ class UbiquoUser < ActiveRecord::Base
 
   has_many :ubiquo_user_roles
   has_many :roles, :through => :ubiquo_user_roles
-  
+
+  # Creates the photo attachment to the user and a resized thumbnail
   file_attachment(:photo, :visibility => "protected",
     :styles => { 
       :thumb => "66x66>" 
@@ -31,7 +32,7 @@ class UbiquoUser < ActiveRecord::Base
   # anything else you want your ubiquo_user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :is_admin, :is_active, :role_ids, :photo, :name, :surname, :locale
 
-  # Magic finder. It's like find_by_if_or_login
+  # Magic finder. It's like find_by_id_or_login
   def self.gfind(something, options={})
     case something
     when Fixnum
@@ -143,6 +144,7 @@ class UbiquoUser < ActiveRecord::Base
     false
   end
   
+  #gives the full name of the user, with name and surname.
   def full_name
     "#{self.surname}, #{self.name}"
   end

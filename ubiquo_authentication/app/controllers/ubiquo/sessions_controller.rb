@@ -1,12 +1,13 @@
 class Ubiquo::SessionsController < ApplicationController
-  
+
+  #shows the login form
   def new
     if logged_in?
       redirect_to ubiquo_home_path
     end
   end
 
-  # login method. If OK, redirects to ubiquo_home.
+  # login method. If OK, redirects to expected path or ubiquo_home.
   def create
     self.current_ubiquo_user = UbiquoUser.authenticate(params[:login], params[:password])
     if logged_in?
