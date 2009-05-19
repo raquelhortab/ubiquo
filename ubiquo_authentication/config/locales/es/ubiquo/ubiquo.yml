@@ -54,3 +54,8 @@ es:
       welcome_message_title: "Mensaje de bienvenida"
       locale_name: "Castellano"
       default_locale: "Idioma por defecto"
+      new_pass_generated: "[{{app_title}}] Nueva contraseña generada"
+      new_user_created: "[{{app_title}}] Nuevo usuario creado"
+      confirm_creation_message: "Se ha creado un nuevo usuario para acceder a {{app_title}}( {{url}} ) con los siguientes datos de entrada:"
+      confirm_creation_welcome_message: "El usuario que le ha dado de alta le ha escrito el siguiente mensaje de bienvenida:\n\n{{welcome_message}}"
+      forgot_password_message: "Los nuevos datos para acceder a {{app_title}}( {{url}} ) son los siguientes"

@@ -54,3 +54,8 @@ en:
       welcome_message_title: "Welcome message"
       locale_name: "English"
       default_locale: "Default locale"
+      new_pass_generated: "[{{app_title}}] New password generated"
+      new_user_created: "[{{app_title}}] New user created"
+      confirm_creation_message: "A new user has been created to access in {{app_title}}( {{url}} ) with this login data:"
+      confirm_creation_welcome_message: "The user that has created your account has written this welcome message:\n\n{{welcome_message}}"
+      forgot_password_message: "The new login data to acces in {{app_title}}( {{url}} ) are that:"
