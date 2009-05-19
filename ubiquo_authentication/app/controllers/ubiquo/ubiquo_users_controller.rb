@@ -12,7 +12,8 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
     sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_default_sort_order)
     per_page = Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_elements_per_page)
     filters = {
-      :filter_admin => (params[:filter_admin].blank? ? nil : params[:filter_admin].to_s=="1")
+      :filter_admin => (params[:filter_admin].blank? ? nil : params[:filter_admin].to_s=="1"),
+      :filter_text => params[:filter_text]
     }
     @ubiquo_users_pages, @ubiquo_users = UbiquoUser.paginate(:page => params[:page], :per_page => per_page) do
       UbiquoUser.filtered_search(filters, :order => order_by + " " + sort_order)

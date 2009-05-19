@@ -193,6 +193,43 @@ class UbiquoUserTest < ActiveSupport::TestCase
     assert UbiquoUser.filtered_search({:filter_admin => false}).to_set == non_admin_ubiquo_users.to_set      
   end
   
+  def test_should_filter_by_active
+    active_ubiquo_users = [ubiquo_users(:admin)]
+    non_active_ubiquo_users = [ubiquo_users(:josep), ubiquo_users(:inactive), ubiquo_users(:eduard)]
+    active_ubiquo_users.each{|u| u.update_attribute :is_active, true}
+    non_active_ubiquo_users.each{|u| u.update_attribute :is_active, false}
+    
+    assert UbiquoUser.filtered_search({:filter_active => true}).to_set == active_ubiquo_users.to_set
+    assert UbiquoUser.filtered_search({:filter_active => false}).to_set == non_active_ubiquo_users.to_set      
+  end
+  
+  def test_should_filter_by_name
+    users = [
+      create_ubiquo_user(:login => 'log1', :email => '1@prova.com', :name => "find me"),
+      create_ubiquo_user(:login => 'log2', :email => '2@prova.com', :name => "FiNdMe"),
+      create_ubiquo_user(:login => 'log3', :email => '3@prova.com', :name => "hide me"),
+    ]
+    assert_equal_set users[0..1], UbiquoUser.filtered_search({:filter_text => "find"})
+  end
+  
+  def test_should_filter_by_surname
+    users = [
+      create_ubiquo_user(:login => 'log1', :email => '1@prova.com', :surname => "find me"),
+      create_ubiquo_user(:login => 'log2', :email => '2@prova.com', :surname => "FiNdMe"),
+      create_ubiquo_user(:login => 'log3', :email => '3@prova.com', :surname => "hide me"),
+    ]
+    assert_equal_set users[0..1], UbiquoUser.filtered_search({:filter_text => "find"})
+  end
+  
+  def test_should_filter_by_login
+    users = [
+      create_ubiquo_user(:login => 'findme',      :email => '1@prova.com'),
+      create_ubiquo_user(:login => 'findmeagain', :email => '2@prova.com'),
+      create_ubiquo_user(:login => 'hideme',      :email => '3@prova.com'),
+    ]
+    assert_equal_set users[0..1], UbiquoUser.filtered_search({:filter_text => "find"})
+  end
+  
   def test_should_generate_random_password
     password = ubiquo_users(:josep).reset_password!
     assert_equal ubiquo_users(:josep), UbiquoUser.authenticate('josep', password)

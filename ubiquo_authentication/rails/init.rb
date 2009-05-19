@@ -20,6 +20,8 @@ Ubiquo::Plugin.register(:ubiquo_authentication, directory, config) do |config|
   
   #Configuration for toggle admin filter in ubiquo users list
   config.add :ubiquo_users_admin_filter_enabled, true
+  #Configuration for toggle string filter in ubiquo users list
+  config.add :ubiquo_users_string_filter_enabled, true
 
   #Configuration for modify default order field for ubiquo users list
   config.add :ubiquo_users_default_order_field, 'ubiquo_users.id'

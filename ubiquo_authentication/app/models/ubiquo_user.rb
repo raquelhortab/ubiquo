@@ -50,13 +50,24 @@ class UbiquoUser < ActiveRecord::Base
   # 
   # Available filters: filter_admin: true|false|nil
   def self.filtered_search(filters = {}, options = {})
-    filter_admin = filters[:filter_admin].nil? ? {} :
-      {:find => {:conditions => {:is_admin => filters[:filter_admin]}}}
-    with_scope(filter_admin) do
-      with_scope(:find => options) do      
-        UbiquoUser.find(:all)
+    scopes = create_scopes(filters) do |filter, value|
+      case filter
+      when :filter_text
+        {:conditions => [
+            "((upper(ubiquo_users.name)    LIKE upper(?)) OR "+
+            " (upper(ubiquo_users.surname) LIKE upper(?)) OR "+
+            " (upper(ubiquo_users.login)   LIKE upper(?)))",
+            "%#{value}%", "%#{value}%", "%#{value}%"]}
+      when :filter_admin
+        {:conditions => {:is_admin => value}}
+      when :filter_active
+        {:conditions => {:is_active => value}}
       end
-    end    
+    end
+    
+    apply_find_scopes(scopes) do
+      find(:all, options)
+    end  
   end
 
   # Authenticates a ubiquo_user by their login name and unencrypted password.  Returns the ubiquo_user or nil.
