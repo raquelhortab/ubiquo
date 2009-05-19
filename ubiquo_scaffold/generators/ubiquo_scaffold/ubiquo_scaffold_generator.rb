@@ -267,8 +267,12 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       m.directory(File.join('app/controllers/ubiquo', controller_class_path))
       m.directory(File.join('app/helpers/ubiquo', controller_class_path))
       m.directory(File.join('app/views/ubiquo', controller_class_path, controller_file_name))
+      m.directory(File.join('app/views/navigators'))
       m.directory(File.join('test/functional/ubiquo', controller_class_path))
       m.directory(File.join('test/unit', class_path))
+      for locale in Ubiquo.supported_locales
+        m.directory(File.join('config/locales', locale, 'ubiquo'))
+      end
 
       for action in scaffold_views
         m.template(
