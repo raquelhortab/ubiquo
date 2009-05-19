@@ -63,6 +63,7 @@ module Ubiquo::<%= controller_class_name %>Helper
     
   def <%= singular_name %>_actions(<%= singular_name%>, options = {})
     actions = []
+    actions << link_to(t("ubiquo.view"), [:ubiquo, <%= singular_name%>])
     actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])
     actions << link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], 
       :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)

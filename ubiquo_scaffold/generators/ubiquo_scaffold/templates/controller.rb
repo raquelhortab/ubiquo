@@ -2,40 +2,47 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
+    
+    order_by = params[:order_by] || '<%=plural_name%>.id'
+    sort_order = params[:sort_order] || 'desc'
+    
+    filters = {
+      :text => params[:filter_text],
+      <%- if options[:translatable] -%>
+      :locale => params[:filter_locale],
+      <%- end -%>
+      <%- if has_published_at -%>
+      :publish_start => parse_date(params[:filter_publish_start]),
+      :publish_end => parse_date(params[:filter_publish_end], :time_offset => 1.day),
+      <%- end -%>
+    }
+    @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %>.paginate(:page => params[:page]) do
+      # remove this find and add something like this:
+      # <%= class_name %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
+      <%= class_name %><%= options[:translatable] ? ".locale(current_locale, :ALL)" : "" %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
+    end
+    
     respond_to do |format|
-      format.html {
-        order_by = params[:order_by] || '<%=plural_name%>.id'
-        sort_order = params[:sort_order] || 'desc'
-        
-        filters = {
-          :text => params[:filter_text],
-          <%- if options[:translatable] -%>
-          :locale => params[:filter_locale],
-          <%- end -%>
-          <%- if has_published_at -%>
-          :publish_start => parse_date(params[:filter_publish_start]),
-          :publish_end => parse_date(params[:filter_publish_end], :time_offset => 1.day),
-          <%- end -%>
-        }
-        @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %>.paginate(:page => params[:page]) do
-          # remove this find and add something like this:
-          # <%= class_name %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
-          <%= class_name %><%= options[:translatable] ? ".locale(current_locale, :ALL)" : "" %>.filtered_search filters, :order => "#{order_by} #{sort_order}"
-        end
-      } # index.html.erb  
+      format.html # index.html.erb  
       format.xml  {
-        @<%= table_name %> = <%= class_name %><%= options[:translatable] ? ".locale" : "" %>.all
         render :xml => @<%= table_name %>
       }
     end
   end
 
   # GET /<%= table_name %>/1
+  # GET /<%= table_name %>/1.xml
   def show
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
     redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == current_locale
     <%- end %>
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @<%= file_name %> }
+    end
+
   end
 
 

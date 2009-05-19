@@ -16,6 +16,11 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
     get :new
     assert_response :success
   end
+  
+  def test_should_get_show
+    get :show, :id => <%= table_name %>(:one).id
+    assert_response :success
+  end
 
   def test_should_create_<%= file_name %>
     assert_difference('<%= class_name %>.count') do
