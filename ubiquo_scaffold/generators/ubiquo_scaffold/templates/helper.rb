@@ -64,7 +64,22 @@ module Ubiquo::<%= controller_class_name %>Helper
   def <%= singular_name %>_actions(<%= singular_name%>, options = {})
     actions = []
     actions << link_to(t("ubiquo.view"), [:ubiquo, <%= singular_name%>])
-    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])
+    <%- if options[:translatable] -%>
+    if <%= singular_name%>.locale == current_locale
+      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])
+    else
+      actions << link_to(
+        t("ubiquo.translate"), 
+        new_ubiquo_<%= singular_name%>_path(
+          :from => <%= singular_name%>.id, 
+          :locale => current_locale, 
+          :preview_id => <%= singular_name%>.id
+        )
+      )
+    end
+    <%- else -%>
+    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])  
+    <%- end -%>
     actions << link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>], 
       :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete)
     actions

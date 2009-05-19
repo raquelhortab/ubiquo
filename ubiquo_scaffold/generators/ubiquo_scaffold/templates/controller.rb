@@ -35,9 +35,11 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def show
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == current_locale
+    unless @<%= file_name %>.locale == current_locale
+      redirect_to(ubiquo_<%= table_name %>_path)
+      return
+    end
     <%- end %>
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @<%= file_name %> }
@@ -61,7 +63,10 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    redirect_to(ubiquo_<%= table_name %>_path) unless @<%= file_name %>.locale == current_locale
+    unless @<%= file_name %>.locale == current_locale
+      redirect_to(ubiquo_<%= table_name %>_path)
+      return
+    end
     <%- end %>
   end
 
