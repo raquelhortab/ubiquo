@@ -7,7 +7,7 @@ class UbiquoUsersNotifier < ActionMailer::Base
       :app_title => Ubiquo::Config.get(:app_title), 
       :locale => user.locale || Ubiquo.default_locale)
     recipients user.email
-    from EMAIL_FROM
+    from Ubiquo::Config.get(:notifier_email_from)
     body :user => user, :host => host
   end
   
@@ -18,7 +18,7 @@ class UbiquoUsersNotifier < ActionMailer::Base
       :app_title => Ubiquo::Config.get(:app_title), 
       :locale => user.locale || Ubiquo.default_locale)
     recipients user.email
-    from EMAIL_FROM
+    from Ubiquo::Config.get(:notifier_email_from)
     
     body :user => user, :host => host, :welcome_message => welcome_message
   end
