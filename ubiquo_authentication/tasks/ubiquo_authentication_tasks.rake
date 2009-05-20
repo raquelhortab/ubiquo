@@ -12,15 +12,20 @@ namespace :ubiquo do
     password              = ask("Enter user password: ") { |q| q.echo = "*" }
     password_confirmation = ask("Enter password again: ") { |q| q.echo = "*" }
     email                 = ask("Enter user e-mail: ")
+    name                  = ask("Enter your name: ")
+    surname               = ask("Enter your surname: ")
     is_active             = agree("Should this user be active? ")
     is_admin              = agree("Should this user have admin privileges? ")
     is_superadmin         = agree("Should this user have superadmin privileges? ")
-    UbiquoUser.create!(:login                 => login, 
-                       :password              => password, 
-                       :password_confirmation => password_confirmation,
-                       :email                 => email,
-                       :is_active             => is_active,
-                       :is_admin              => is_admin,
-                       :is_superadmin         => is_superadmin)
+    UbiquoAuthentication::UbiquoUserConsoleCreator.create!(
+      :login                 => login, 
+      :password              => password, 
+      :password_confirmation => password_confirmation,
+      :email                 => email,
+      :name                  => name,
+      :surname               => surname,                         
+      :is_active             => is_active,
+      :is_admin              => is_admin,
+      :is_superadmin         => is_superadmin)
   end
 end
