@@ -72,8 +72,7 @@ module Ubiquo::<%= controller_class_name %>Helper
         t("ubiquo.translate"), 
         new_ubiquo_<%= singular_name%>_path(
           :from => <%= singular_name%>.id, 
-          :locale => current_locale, 
-          :preview_id => <%= singular_name%>.id
+          :locale => current_locale
         )
       )
     end

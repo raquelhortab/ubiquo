@@ -17,6 +17,9 @@
 <%% end %>
 
 <%% content_for :sidebar do %>
+  <%- if options[:translatable] -%>
+  <%%= show_translations(@<%= singular_name %>) %>
+  <%- end -%>
   <h3><%%= t('ubiquo.help') %></h3>
   <p><%%= t("ubiquo.<%= singular_name %>.new.help_message") %></p>
 <%% end %>
