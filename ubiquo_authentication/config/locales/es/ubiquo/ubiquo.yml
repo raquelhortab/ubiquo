@@ -19,6 +19,7 @@ es:
       user_admin: "Admin"
       user_non_admin: "Regular"
       user_created: "Usuario creado"
+      user_create_error: "Error al crear usuario"
       user_edited: "Usuario editado"
       user_edit_error: "Error al editar usuario"
       user_removed: "Usuario eliminado"

@@ -61,6 +61,7 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
         format.html { redirect_to(ubiquo_ubiquo_users_path) }
         format.xml  { render :xml => @ubiquo_user, :status => :created, :location => @ubiquo_user }
       else
+        flash[:error] = t("ubiquo.auth.user_create_error")
         format.html { render :action => "new" }
         format.xml  { render :xml => @ubiquo_user.errors, :status => :unprocessable_entity }
       end
@@ -81,7 +82,7 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
         format.html { redirect_to(ubiquo_ubiquo_users_path) }
         format.xml  { head :ok }
       else
-        flash[:error] = t("ubiquo.auth.user_edited_error")
+        flash[:error] = t("ubiquo.auth.user_edit_error")
         format.html { render :action => "edit" }
         format.xml  { render :xml => @ubiquo_user.errors, :status => :unprocessable_entity }
       end

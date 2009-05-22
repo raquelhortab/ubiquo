@@ -19,6 +19,7 @@ ca:
       user_admin: "Admin"
       user_non_admin: "Regular"
       user_created: "Usuari creat"
+      user_create_error: "Error al crear l'usuari"
       user_edited: "Usuari editat"
       user_edit_error: "Error a l'editar l'usuari"
       user_removed: "Usuari eliminat"
