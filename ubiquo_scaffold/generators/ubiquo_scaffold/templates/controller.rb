@@ -35,7 +35,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def show
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    unless @<%= file_name %>.locale == current_locale
+    unless @<%= file_name %>.locale?(current_locale)
       redirect_to(ubiquo_<%= table_name %>_path)
       return
     end
@@ -63,7 +63,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    unless @<%= file_name %>.locale == current_locale
+    unless @<%= file_name %>.locale?(current_locale)
       redirect_to(ubiquo_<%= table_name %>_path)
       return
     end
@@ -122,7 +122,15 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # DELETE /<%= table_name %>/1.xml
   def destroy
     @<%= file_name %> = <%= class_name %>.find(params[:id])
-    if @<%= file_name %>.destroy
+    
+    destroyed = false
+    if params[:destroy_content]
+      destroyed = @<%= file_name %>.destroy_content
+    else
+      destroyed = @<%= file_name %>.destroy
+    end
+    
+    if destroyed
       flash[:notice] = t("ubiquo.<%= singular_name %>.destroyed")
     else
       flash[:error] = t("ubiquo.<%= singular_name %>.destroy_error")
