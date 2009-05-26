@@ -5,5 +5,5 @@ module UbiquoAccessControl
   end
 end
 
-ActionController::Base.helper(UbiquoAccessControl::Extensions::Helper)
+Ubiquo::Extensions::UbiquoAreaController.append_helper(UbiquoAccessControl::Extensions::Helper)
 ActionController::TestCase.send(:include, UbiquoAccessControl::Extensions::TestCase)

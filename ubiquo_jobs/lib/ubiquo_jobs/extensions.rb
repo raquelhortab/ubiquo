@@ -4,4 +4,4 @@ module UbiquoJobs
   end
 end
 
-ActionController::Base.helper(UbiquoJobs::Extensions::Helper)
+Ubiquo::Extensions::UbiquoAreaController.append_helper(UbiquoJobs::Extensions::Helper)

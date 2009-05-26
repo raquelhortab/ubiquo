@@ -1,5 +1,7 @@
 class Ubiquo::SessionsController < ApplicationController
-
+  
+  include Ubiquo::Extensions::UbiquoAreaController
+  
   #shows the login form
   def new
     if logged_in?

@@ -6,7 +6,7 @@ module UbiquoAuthentication
   end
 end
 
-ActionController::Base.helper(UbiquoAuthentication::Extensions::Helper)
-ActionController::Base.send(:include, UbiquoAuthentication::Extensions::Controller)
+Ubiquo::Extensions::UbiquoAreaController.append_helper(UbiquoAuthentication::Extensions::Helper)
+Ubiquo::Extensions::UbiquoAreaController.append_include(UbiquoAuthentication::Extensions::Controller)
 ActionController::TestCase.send(:include, UbiquoAuthentication::Extensions::TestCase)
 ActionController::TestCase.setup(:login_as)
