@@ -12,7 +12,7 @@ class <%= class_name %> < ActiveRecord::Base
   validates_presence_of :<%= ton %>
   <%- end -%>
     
-  # See vendor/plugins/ubiquo_base/lib/extensions/active_record.rb to see an example of usage.
+  # See vendor/plugins/ubiquo_core/lib/ubiquo/extensions/active_record.rb to see an example of usage.
   def self.filtered_search(filters = {}, options = {})
     
     scopes = create_scopes(filters) do |filter, value|
