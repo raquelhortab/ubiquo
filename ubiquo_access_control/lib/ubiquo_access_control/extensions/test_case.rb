@@ -1,6 +1,7 @@
 module UbiquoAccessControl
   module Extensions
     module TestCase
+      # Test helper. will log a user with the given permission keys 
       def login_with_permission(*permission_keys)
         ubiquo_user = ubiquo_users(:eduard)
         ubiquo_user.roles.clear

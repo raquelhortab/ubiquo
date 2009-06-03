@@ -47,6 +47,29 @@ module UbiquoAccessControl
 
     module ClassMethods
 
+      # Function to regulate the required permissions for actions in a controller
+      # 
+      # Examples:
+      #   for the key in "actions":
+      #     access_control {
+      #      :DEFAULT => ... # control all actions 
+      #      :index => .... #control index action 
+      #      [:new, :create] => .... #control new and create actions 
+      #     }
+      #     
+      #   for the value:
+      #     - one permission
+      #       access_control :DEFAULT => 'permission_key' 
+      #       access_control :DEFAULT => :permission_key   
+      #       
+      #     - more permissions
+      #       access_control :DEFAULT => ['permission_key_1', 'permission_key_2'] 
+      #       access_control :DEFAULT => [:permission_key_1, :permission_key_2] 
+      #       access_control :DEFAULT => %w{permission_key_1 permission_key_2}
+      #       
+      #     - only admins
+      #       access_control :DEFAULT => nil 
+      #
       def access_control(actions={})
         # Add class-wide permission callback to before_filter
         defaults = {}
@@ -95,13 +118,21 @@ module UbiquoAccessControl
       @default_access_context = defaults
     end
 
+    # Returns true if the current user has the permissions in auth
+    # auth can be either a single value, an array or nil
+    # (See the access_control method for examples of auth values)
     def permit?(auth=nil, context = {})
       access_handler.process(UbiquoAccessControl::AccessControl::Parser.parse(auth), access_context(context))
     end
 
-    # restrict_to "admin | moderator" do
-    #   link_to "foo"
-    # end
+    # Used to restrict a block to users matching certain permissions
+    # Used mainly in views, will return an empty string if the permission is not matched
+    # 
+    # Example:
+    #   restrict_to "admin" do
+    #     link_to "foo"
+    #   end
+    #   
     def restrict_to(auth = nil, context = {})
       result = ''
       if permit?(UbiquoAccessControl::AccessControl::Parser.parse(auth), context)
@@ -137,6 +168,11 @@ module UbiquoAccessControl
 
     class RoleHandler
 
+      # Main permission validator
+      # Returns false on lack of permission or an error, 
+      #   true if the user has the enough permissions - this includes being superadmin.
+      # Will use an :ubiquo_user from the context hash to do the checks.
+      #
       def process(auth, context)
         return false if context[:ubiquo_user].nil?
         return true if context[:ubiquo_user].is_superadmin?
@@ -148,21 +184,28 @@ module UbiquoAccessControl
         false
       end
 
-    end # End RoleHandler
+    end # RoleHandler
 
     class Parser
-      def self.parse(cur)
-        [cur].flatten.collect do |last|
-          permission = case last
+      # parses a list of permissions that can be strings, symbols, etc. 
+      # (see access_control for the permission formats)
+      # 
+      # Returns an array where each element is a hash with the following keys:
+      #   :permission => name of the permission as a string
+      #   :admin => true if this permission requires to be an admin
+      def self.parse(permissions)
+        [permissions].flatten.collect do |current|
+          permission = case current
                        when String,Symbol
-                         {:permission => last.to_s}
+                         {:permission => current.to_s}
                        when NilClass
                          {:permission => nil, :admin => true}
                        else
-                         last
+                         current
                        end
         end.reject(&:blank?)
       end
-    end
+    end # Parser
+    
   end # AccessControl
 end

@@ -1,6 +1,7 @@
 module UbiquoAccessControl
   module Extensions
     module Helper
+      # Add a link to the roles section
       def roles_link(navigator)
         navigator.add_link do |link|
           link.text = I18n.t("ubiquo.auth.roles")
@@ -9,6 +10,7 @@ module UbiquoAccessControl
         end if ubiquo_config_call(:role_permit, {:context => :ubiquo_access_control})
       end
       
+      # Add a set of checkboxes to select/unselect roles
       def user_permission_fields(form)
         ubiquo_user_roles = form.object.ubiquo_user_roles.map(&:role)
         content_tag("h3", t("ubiquo.auth.roles")) + content_tag("ul", :class => "permissions") do 
