@@ -1,6 +1,7 @@
 module UbiquoJobs
   module Extensions
     module Helper
+      # Adds a "Jobs" tab into the superadmin area
       def superadmin_jobs_tab(tabnav)
         tabnav.add_tab do |tab|
           tab.text =  I18n.t("ubiquo.jobs.tab_name")

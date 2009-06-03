@@ -10,6 +10,8 @@ module UbiquoWorker
       self.shutdown = false
     end
 
+    # This method will start executing the planified jobs.
+    # If no job is available, the worker will sleep for sleep_time sec.
     def run!
       while (!shutdown) do
         job = UbiquoJobs.manager.get(name)

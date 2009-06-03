@@ -33,14 +33,18 @@ module UbiquoJobs
         update_attribute property, value
       end
       
+      # Returns the outputted results of the job execution, if any
       def output_log
         self.result_output
       end
     
+      # Returns the error messages produced by the job execution, if any
       def error_log
         self.result_error
       end
     
+      # Ubiquo finder method
+      # See vendor/plugins/ubiquo_core/lib/extensions/active_record.rb to see an example of usage.
       def self.filtered_search(filters = {}, options = {})
       
         scopes = create_scopes(filters) do |filter, value|
@@ -63,6 +67,9 @@ module UbiquoJobs
         end
       end
 
+      # Set a job to be executed (again), giving it a planification time
+      # Useful e.g. for a stopped job or a job that has not had a succesful
+      # execution (is in error state) but you want a retry.
       def reset!
         update_attributes(
           :runner => nil, 
@@ -73,10 +80,13 @@ module UbiquoJobs
   
       protected
     
+      # Set the waiting state as default
       def set_default_state
         self.state ||= STATES[:waiting]
       end
       
+      # Using the configured notifier, send a "finished job" email,
+      # if a receiver has been set in notify_to
       def notify_finished
         UbiquoJobs.notifier.deliver_finished_job self unless notify_to.blank?
       end
@@ -85,11 +95,13 @@ module UbiquoJobs
         errors.add_on_blank(:command)
         false unless errors.empty?
       end
-    
+
+      # Store the options hash in the stored_options field, in yaml format
       def store_options
         write_attribute :stored_options, self.options.to_yaml
       end
-    
+
+      # Load the stored options (which are stored in yaml) into the options hash
       def after_find
         self.options = YAML::load(self.stored_options.to_s)
       end

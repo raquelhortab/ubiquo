@@ -18,6 +18,9 @@ module UbiquoJobs
       protected
       
     
+      # Overrides the do_job_work method of a normal Job
+      # Executes the command, the before_ and after_execution callbacks,
+      # and manages the results
       def do_job_work
         before_execution if self.respond_to?(:before_execution)
         output = %x{#{command}}
@@ -26,10 +29,12 @@ module UbiquoJobs
         $?
       end
   
+      # Method used to set the command to be executed
       def set_command
         raise NotImplementedError.new("Implement set_command() in your Job subclass") unless command
       end
 
+      # Validates that the set command is correct
       def validate_command
         errors.add_on_blank(:command)
         false unless errors.empty?
