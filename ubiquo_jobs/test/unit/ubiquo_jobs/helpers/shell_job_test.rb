@@ -36,7 +36,7 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
     assert_equal old_job, UbiquoJobs.manager.get('me')
     old_job.reload.run!
     assert_nil UbiquoJobs.manager.get('me')
-    sleep 1
+    sleep 2
     assert_equal old_job, UbiquoJobs.manager.get('me')
 
     restore_retry_interval
