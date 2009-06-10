@@ -36,7 +36,8 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
     assert_equal old_job, UbiquoJobs.manager.get('me')
     old_job.reload.run!
     assert_nil UbiquoJobs.manager.get('me')
-    sleep 2
+    future = Time.now.utc + 2.seconds
+    Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_equal old_job, UbiquoJobs.manager.get('me')
 
     restore_retry_interval
@@ -57,7 +58,8 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
     assert_equal job, UbiquoJobs.manager.get('me')
     job.reload.run!
     assert_nil UbiquoJobs.manager.get('me')
-    sleep 1
+    future = Time.now.utc + 2.seconds
+    Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_nil UbiquoJobs.manager.get('me')
     assert_equal UbiquoJobs::Jobs::Base::STATES[:error], job.state
 

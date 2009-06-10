@@ -50,7 +50,8 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     assert_nil ActiveManager.get('me')
     assert_nil old_job.reload.runner
     assert_equal UbiquoJobs::Jobs::Base::STATES[:waiting], old_job.state
-    sleep 2
+    future = Time.now.utc + 2.seconds
+    Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_equal old_job, ActiveManager.get('me')
     restore_retry_interval
   end
@@ -63,7 +64,8 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     job_2 = create_job(:priority => 1)
     assert_equal job_2, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
-    sleep 1
+    future = Time.now.utc + 3.seconds
+    Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_equal job_1, ActiveManager.get('you')
     assert_nil ActiveManager.get('him')
 
