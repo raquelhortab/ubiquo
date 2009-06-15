@@ -3,8 +3,9 @@
 class Asset < ActiveRecord::Base
   belongs_to :asset_type
 
-  validates_presence_of :name, :asset_type_id, :type
+  has_many :asset_relations, :dependent => :destroy
 
+  validates_presence_of :name, :asset_type_id, :type
   before_validation_on_create :set_asset_type
 
   # Generic find (ID, key or record)
