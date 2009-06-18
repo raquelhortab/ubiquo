@@ -12,6 +12,7 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   def test_should_get_index_with_custom_i18n_locale
     user = ubiquo_users(:admin)
     login_as user
+    I18n.locale = 'invalid_locale'
     assert_not_equal I18n.locale, user.locale
     assert_not_equal 'es', I18n.locale
     user.update_attribute :locale, 'es'
@@ -24,6 +25,7 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
     user = ubiquo_users(:admin)
     login_as user
     assert_nil user.locale
+    I18n.locale = 'invalid_locale'
     assert_not_equal Ubiquo.default_locale, I18n.locale
     get :index
     assert_response :success
