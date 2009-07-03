@@ -86,7 +86,11 @@ module UbiquoAccessControl
             if c.respond_to?:permission_denied
               c.send(:permission_denied)
             else
-              c.send(:render, {:text => "Access denied",:status => 403})
+              if File.exists?("#{RAILS_ROOT}/public/403.html")
+                c.send(:render, {:file => "#{RAILS_ROOT}/public/403.html",:status => 403})
+              else
+                c.send(:render, { :text => "Access denied", :status => 403})
+              end
             end
           end
         end
