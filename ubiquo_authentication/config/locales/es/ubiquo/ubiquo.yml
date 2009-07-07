@@ -1,6 +1,9 @@
 es:
   ubiquo:
     auth:
+      enter: "Entrar"
+      send: "Enviar"
+      email_invalid: "Email no válido"
       welcome: "Bienvenido. Introduce tu usuario y contraseña."
       login: "Usuario"
       password: "Contraseña"

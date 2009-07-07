@@ -33,7 +33,9 @@
 	        <label for="ubiquo_user_login"><%= UbiquoUser.human_attribute_name("email") %>:</label>
 	        <%= text_field_tag 'email', nil, :class => 'text', :id=>'ubiquo_user_login' %>
 	      </p>
-	      <p class="form_buttons"><%= image_submit_tag ubiquo_image_path('button_enviar.png'), :class => 'image' %></p>
+	      <p class="form_buttons">
+                <%= submit_tag t("ubiquo.auth.send"), :class => 'buttons' %>
+              </p>
 	    <% end %>
 	  </div>
 	</div>

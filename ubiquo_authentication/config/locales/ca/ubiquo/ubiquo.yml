@@ -1,6 +1,9 @@
 ca:
   ubiquo:
     auth:
+      enter: "Entrar"
+      send: "Enviar"
+      email_invalid: "Email no vàlid"
       welcome: "Benvingut. Introdueix el teu usuari i contrasenya"
       login: "Usuari"
       password: "Contrasenya"
