@@ -43,6 +43,7 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
   
   def test_should_recover_from_failure
     short_retry_interval
+    ActiveJob.delete_all
     old_job = create_job(
       :state => UbiquoJobs::Jobs::Base::STATES[:started],
       :runner => 'me'
