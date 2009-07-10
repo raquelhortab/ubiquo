@@ -2,9 +2,11 @@ require File.dirname(__FILE__) + "/../../../test_helper.rb"
 require 'ubiquo_jobs/managers/active_manager'
 require 'ubiquo_jobs/jobs/base'
 
-ActiveJob = UbiquoJobs::Jobs::ActiveJob
 
 class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
+  
+  ActiveJob = UbiquoJobs::Jobs::ActiveJob
+  ActiveManager = UbiquoJobs::Managers::ActiveManager
   
   def test_should_get_job
     job = create_job

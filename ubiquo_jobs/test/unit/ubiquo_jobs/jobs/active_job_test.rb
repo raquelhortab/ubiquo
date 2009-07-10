@@ -1,9 +1,10 @@
 require File.dirname(__FILE__) + "/../../../test_helper.rb"
-#require 'ubiquo_jobs/managers'
-#ActiveJob = UbiquoJobs::Jobs::ActiveJob
-ActiveManager = UbiquoJobs::Managers::ActiveManager
 
 class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
+  
+  ActiveJob = UbiquoJobs::Jobs::ActiveJob
+  ActiveManager = UbiquoJobs::Managers::ActiveManager
+  
   def test_should_create_job
     assert_difference 'ActiveJob.count' do
       job = create_job
