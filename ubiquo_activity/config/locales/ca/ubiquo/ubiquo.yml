@@ -1,0 +1,16 @@
+ca:
+  ubiquo:
+    activity_info:
+      tab_name: "Registre d'activitat"
+      activity_list: "Llistat d'activitats"
+      title: "Registre d'activitat"
+      controller: "Controlador"
+      action: "Acció"
+      status: "Estat"
+      successful_create_message: "L'usuari '{{user}}' ha creat amb éxit {{object_name}}"
+      error_create_message: "Ha hagut un error i l'usuari '{{user}}' no ha pogut crear {{object_name}}"
+      show_it: "Mostrar"
+      successful_update_message: "L'usuari '{{user}}' ha actualitzat amb éxit {{object_name}}"
+      error_update_message: "Ha hagut un error i l'usuari '{{user}}' no ha pogut actualitzar {{object_name}}"
+      successful_destroy_message: "L'usuari '{{user}}' ha eliminat amb éxit {{object_name}}"
+      error_destroy_message: "Ha hagut un error i l'usuari '{{user}}' no ha pogut eliminar {{object_name}}"

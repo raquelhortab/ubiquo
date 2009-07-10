@@ -1,0 +1,17 @@
+en:
+  ubiquo:
+    activity_info:
+      tab_name: "Activities list"
+      activity_list: "Activities list"
+      title: "Activities list"
+      controller: "Controller"
+      action: "Action"
+      status: "Status"
+      successful_create_message: "User {{user}} has been created {{object_name}} successfully"
+      error_create_message: "An error has ocurred and user {{user}} couldn't create {{object_name}}"
+      show_it: "Show it"
+      successful_update_message: "User {{user}} has been updated {{object_name}} successfully"
+      error_update_message: "An error has ocurred and user {{user}} couldn't update {{object_name}}"
+      successful_destroy_message: "User {{user}} has been destroyed {{object_name}} successfully"
+      error_destroy_message: "An error has occurred and user {{user}} couldn't remove {{object_name}}"
+      help_message: "hola"

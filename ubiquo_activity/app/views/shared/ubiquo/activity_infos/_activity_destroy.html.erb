@@ -1,0 +1,8 @@
+<p><%= l(activity.updated_at) %></p>
+<p>
+  <%= t("ubiquo.activity_info.#{activity.status}_destroy_message",
+        :user => activity.ubiquo_user.login,
+        :object_name => t("ubiquo.book.book_entity"),
+        :object_id => activity.related_object_id,
+        :action => activity.action) %>
+</p>

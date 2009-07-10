@@ -1,0 +1,14 @@
+<p><%= l(activity.created_at) %></p>
+<p>
+  <%= t("ubiquo.activity_info.#{activity.status}_create_message",
+        :user => activity.ubiquo_user.login,
+        :object_name => t("ubiquo.book.book_entity"),
+        :object_id => activity.related_object_id,
+        :action => activity.action) %>
+</p>
+<% if activity.status != "error" && activity.related_object %>
+  <p>
+    <%= link_to t("ubiquo.activity_info.show_it"),
+          :action => 'show', :controller => activity.controller, :id => activity.related_object_id  %>
+  </p>
+<% end %>
