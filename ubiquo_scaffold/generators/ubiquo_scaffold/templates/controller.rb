@@ -1,8 +1,10 @@
 class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
+  <%- if options[:store_activity] -%>
+  register_activity :create, :update, :destroy
+  <% end %>
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
-  def index
-    
+  def index   
     order_by = params[:order_by] || '<%=plural_name%>.id'
     sort_order = params[:sort_order] || 'desc'
     
@@ -44,7 +46,6 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
       format.html # show.html.erb
       format.xml  { render :xml => @<%= file_name %> }
     end
-
   end
 
 
@@ -62,21 +63,21 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>/1/edit
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
-    <%- if options[:translatable] %>
+    <%- if options[:translatable] -%>
     unless @<%= file_name %>.locale?(current_locale)
       redirect_to(ubiquo_<%= table_name %>_path)
       return
     end
-    <%- end %>
+    <%- end -%>
   end
 
   # POST /<%= table_name %>
   # POST /<%= table_name %>.xml
   def create
     @<%= file_name %> = <%= class_name %>.new(params[:<%= file_name %>])
-    <%- if options[:translatable] %>
+    <%- if options[:translatable] -%>
     @<%= file_name %>.locale = current_locale
-    <%- end %>
+    <%- end -%>
 
     respond_to do |format|
       if @<%= file_name %>.save
@@ -128,8 +129,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
       destroyed = @<%= file_name %>.destroy_content
     else
       destroyed = @<%= file_name %>.destroy
-    end
-    
+    end    
     if destroyed
       flash[:notice] = t("ubiquo.<%= singular_name %>.destroyed")
     else

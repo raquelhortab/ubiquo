@@ -111,11 +111,13 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       opt.on("--skip-migration",
              "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
       opt.on("--versionable",
-             "Creates a versionable model") { |v| options[:versionable] = v}
+             "Creates a versionable model") { |v| options[:versionable] = v }
       opt.on("--max-versions-amount [N]", Integer,
-             "Set max versions amount for versionable models") { |v| options[:versions_amount] = v}
+             "Set max versions amount for versionable models") { |v| options[:versions_amount] = v }
       opt.on("--translatable f1,f2...", Array,
-        "Creates a translatable model") { |v| options[:translatable] = v}
+             "Creates a translatable model") { |v| options[:translatable] = v }
+      opt.on("--store-activity",
+             "Creates scaffold actions adding store-activity statement") { |v| options[:store_activity] = v }
     end
 
     def scaffold_views
