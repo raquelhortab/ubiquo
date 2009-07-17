@@ -6,7 +6,15 @@ es:
       title: "Registro de actividad"
       controller: "Controlador"
       action: "Acción"
+      actions:
+        create: "Crear"
+        update: "Actualizar"
+        destroy: "Borrar"
       status: "Estado"
+      statuses:
+        successful: "Correcto"
+        info: "Informativo"
+        error: "Con errores"
       successful_create_message: "El usuario '{{user}}' ha creado con éxito {{object_name}}"
       error_create_message: "Ha habido un error y el usuario '{{user}}' no ha podido crear {{object_name}}"
       show_it: "Mostrar"

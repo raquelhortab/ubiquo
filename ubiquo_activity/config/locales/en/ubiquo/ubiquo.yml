@@ -6,7 +6,15 @@ en:
       title: "Activities list"
       controller: "Controller"
       action: "Action"
+        actions: 
+          create: "Create"
+          update: "Update"
+          destroy: "Destroy"
       status: "Status"
+      statuses:
+        successful: "Successful"
+        info: "Information"
+        error: "Error"
       successful_create_message: "User {{user}} has been created {{object_name}} successfully"
       error_create_message: "An error has ocurred and user {{user}} couldn't create {{object_name}}"
       show_it: "Show it"
@@ -14,4 +22,3 @@ en:
       error_update_message: "An error has ocurred and user {{user}} couldn't update {{object_name}}"
       successful_destroy_message: "User {{user}} has been destroyed {{object_name}} successfully"
       error_destroy_message: "An error has occurred and user {{user}} couldn't remove {{object_name}}"
-      help_message: "hola"

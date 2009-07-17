@@ -4,9 +4,17 @@ ca:
       tab_name: "Registre d'activitat"
       activity_list: "Llistat d'activitats"
       title: "Registre d'activitat"
-      controller: "Controlador"
+      controller: "Secció"
       action: "Acció"
+      actions:
+        create: "Crear"
+        update: "Actualitzar"
+        destroy: "Esborrar"
       status: "Estat"
+      statuses: 
+        successful: "Correcte"
+        info: "Informatiu"
+        error: "Amb errors"
       successful_create_message: "L'usuari '{{user}}' ha creat amb éxit {{object_name}}"
       error_create_message: "Ha hagut un error i l'usuari '{{user}}' no ha pogut crear {{object_name}}"
       show_it: "Mostrar"
