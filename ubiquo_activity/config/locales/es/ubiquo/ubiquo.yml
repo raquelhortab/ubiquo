@@ -6,6 +6,7 @@ es:
       title: "Registro de actividad"
       controller: "Controlador"
       action: "Acción"
+      date: "Fecha"
       actions:
         create: "Crear"
         update: "Actualizar"

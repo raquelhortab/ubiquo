@@ -6,12 +6,13 @@ ca:
       title: "Registre d'activitat"
       controller: "Secció"
       action: "Acció"
+      date: "Data"
       actions:
         create: "Crear"
         update: "Actualitzar"
         destroy: "Esborrar"
       status: "Estat"
-      statuses: 
+      statuses:
         successful: "Correcte"
         info: "Informatiu"
         error: "Amb errors"

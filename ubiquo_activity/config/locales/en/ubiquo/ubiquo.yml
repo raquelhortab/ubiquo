@@ -6,10 +6,11 @@ en:
       title: "Activities list"
       controller: "Controller"
       action: "Action"
-        actions: 
-          create: "Create"
-          update: "Update"
-          destroy: "Destroy"
+      date: "Date"
+      actions: 
+        create: "Create"
+        update: "Update"
+        destroy: "Destroy"
       status: "Status"
       statuses:
         successful: "Successful"
