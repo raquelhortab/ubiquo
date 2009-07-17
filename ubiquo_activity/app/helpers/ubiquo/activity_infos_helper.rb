@@ -1,6 +1,11 @@
 module Ubiquo::ActivityInfosHelper
   def activity_info_filters_info(params)
     filters = []
+    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_date_filter_enabled)
+      filters << filter_info(:date, params,
+             :caption => t("ubiquo.activity_info.date"),
+             :field => [:filter_date_start, :filter_date_end])
+    end    
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)
       filters << filter_info(:links, params,
              :field => :filter_controller,
@@ -22,7 +27,7 @@ module Ubiquo::ActivityInfosHelper
              :field => :filter_status,
              :name_field => :status,
              :id_field => :status,
-             :collection => @actions,
+             :collection => @statuses,
              :caption => t("ubiquo.activity_info.status"))    
     end
     build_filter_info(*filters)
@@ -30,6 +35,11 @@ module Ubiquo::ActivityInfosHelper
 
   def activity_info_filters(url_for_options = {})
     filters = []
+    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_date_filter_enabled)
+      filters << render_filter(:date, url_for_options,
+          :caption => t("ubiquo.activity_info.date"),
+          :field => [:filter_date_start, :filter_date_end])
+    end
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)    
       filters << render_filter(:links, url_for_options,
           :field => :filter_controller,

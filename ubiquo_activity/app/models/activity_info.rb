@@ -13,6 +13,10 @@ class ActivityInfo < ActiveRecord::Base
         { :conditions => ["activity_infos.action = ?", value] }
       when :status
         { :conditions => ["activity_infos.status = ?", value] }
+      when :date_start
+        { :conditions => ["activity_infos.created_at >= ?", value]}
+      when :date_end
+        { :conditions => ["activity_infos.created_at <= ?", value]}        
       end
     end
     

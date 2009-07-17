@@ -9,6 +9,7 @@ Ubiquo::Plugin.register(:ubiquo_activity, directory, config) do |config|
   config.add :activity_info_permit, lambda {
     permit?('actitivy_info_management')
   }
+  config.add :activities_date_filter_enabled, true  
   config.add :activities_controller_filter_enabled, true
   config.add :activities_action_filter_enabled, true
   config.add :activities_status_filter_enabled, true

@@ -9,6 +9,8 @@ class Ubiquo::ActivityInfosController < UbiquoAreaController
     sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_activity).get(:activities_default_sort_order)
     
     filters = {
+      :date_start => parse_date(params[:filter_date_start]),
+      :date_end => parse_date(params[:filter_date_end]),
       :controller => params[:filter_controller],
       :action => params[:filter_action],
       :status => params[:filter_status]
