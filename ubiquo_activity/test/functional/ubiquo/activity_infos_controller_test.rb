@@ -34,6 +34,7 @@ class Ubiquo::ActivityInfosControllerTest < ActionController::TestCase
 
   def test_should_not_get_index_without_permission
     login_with_permission
+
     get :index
     assert_response :forbidden
   end  
@@ -47,6 +48,7 @@ class Ubiquo::ActivityInfosControllerTest < ActionController::TestCase
       :action => "create",
       :status => "successful",
       :ubiquo_user_id => user.id,
+      :related_object => UbiquoUser.first,
     }
     ActivityInfo.create(default_options.merge(options))
   end
