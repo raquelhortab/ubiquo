@@ -2,7 +2,7 @@
 <p>
   <%= t("ubiquo.activity_info.#{activity.status}_destroy_message",
         :user => activity.ubiquo_user.login,
-        :object_name => t("ubiquo.book.book_entity"),
+        :object_name => t("ubiquo.#{activity.related_object.class.human_name.underscore}.entity"),
         :object_id => activity.related_object_id,
         :action => activity.action) %>
 </p>
