@@ -1,8 +1,6 @@
 class Ubiquo::ActivityInfosController < UbiquoAreaController
   ubiquo_config_call :activity_info_access_control, { :context => :ubiquo_activity }
-  before_filter :load_controllers
-  before_filter :load_actions
-  before_filter :load_status
+  before_filter :load_vars_for_filters
   
   # GET /activity_infos
   # GET /activity_infos.xml
@@ -67,21 +65,21 @@ class Ubiquo::ActivityInfosController < UbiquoAreaController
   
   private
   
-  def load_controllers
-    @controllers = ActivityInfo.find(:all, 
-                                     :select => :controller, 
-                                     :group => :controller)
-  end
-  
-  def load_actions
-    @actions = ActivityInfo.find(:all,
-                                 :select => :action,
-                                 :group => :action)
-  end
-  
-  def load_status
-    @status = ActivityInfo.find(:all,
-                                :select => :status,
-                                :group => :status)
+  def load_vars_for_filters
+    ["controller", "action", "status"].each do |var_name|
+      collection = ActivityInfo.find(:all,
+                                     :select => var_name.to_sym,
+                                     :group => var_name.to_sym)
+      translated_collection = collection.collect do |elem|
+        name = if var_name == "controller"
+          t("ubiquo.#{elem.send(var_name).gsub('ubiquo/', '').singularize}.title")
+        else
+          t("ubiquo.activity_info.#{var_name.pluralize}.#{elem.send(var_name)}")                 
+        end
+        OpenStruct.new(:id => elem.send(var_name),
+                       :name => name)
+      end
+      self.instance_variable_set "@#{var_name.pluralize}", translated_collection
+    end
   end
 end
