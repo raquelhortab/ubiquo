@@ -14,9 +14,6 @@ ca:
       users: "Usuaris ubiquo"
       user_profile: "Perfil de l'usuari d'ubiquo"
       users_list: "Llistat d'usuaris"
-      users_remove_filter:
-        one: "eliminar filtre"
-        other:  "eliminar filtres"
       new_user: "Nou usuari"
       user_type: "usuari"
       user_admin: "Admin"

@@ -14,9 +14,6 @@ es:
       users: "Usuarios ubiquo"
       user_profile: "Perfil del usuario de ubiquo"
       users_list: "Listado de usuarios"
-      users_remove_filter:
-        one: "eliminar filtro"
-        other:  "eliminar filtros"
       new_user: "Nuevo usuario"
       user_type: "usuario"
       user_admin: "Admin"
