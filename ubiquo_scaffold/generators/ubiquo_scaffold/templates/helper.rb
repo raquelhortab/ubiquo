@@ -3,7 +3,7 @@ module Ubiquo::<%= controller_class_name %>Helper
     filters = []
     filters <<  filter_info(:string, params,
            :field => :filter_text,
-           :caption => t('ubiquo.text'))
+           :caption => t('ubiquo.filters.text'))
 
     <%- if options[:translatable] -%>
     filters << filter_info(:string, params,
@@ -22,7 +22,7 @@ module Ubiquo::<%= controller_class_name %>Helper
     filters = []
     filters << render_filter(:string, url_for_options,
         :field => :filter_text,
-        :caption => t('ubiquo.text'))
+        :caption => t('ubiquo.filters.text'))
         
     <%- if options[:translatable] -%>
     filters << render_filter(:links, url_for_options,
