@@ -9,12 +9,21 @@
 <%= link_to t("ubiquo.auth.new_user"), new_ubiquo_ubiquo_user_path, :class => "new" %>
 
 <% ubiquo_user_list(@ubiquo_users, @ubiquo_users_pages) do |user| %>
-  <% if user.photo.original_filename %>
-    <div class="photo">
+  <div class="user-icon">
+    <% if user.photo.original_filename %>
       <%= image_tag(url_for_file_attachment(user, :photo, :thumb)) %>
-    </div>
-  <% end %>
-  <div class="login"><%= user.full_name %></div>
+    <% else %>
+      <%= image_tag('ubiquo/ico-user.png') %>
+    <% end %>
+  </div>
+  <h3>
+    <%= user.full_name %>
+    <span class="user-status status-<%= t("ubiquo.auth.is_active.#{user.is_active}", :locale => 'en') %>">
+      [<%= t("ubiquo.auth.is_active.#{user.is_active}") %>]
+    </span>
+  </h3>
+  <p class="user-role"><%= user.roles.map(&:name).join(', ') %></p>
+  <p class="user-mail"><%= user.email %></p>
 <% end %>
 
 <% content_for :sidebar do %>
