@@ -241,7 +241,7 @@ lightwindow.prototype = {
 			galleryAnimationHandler : false,
 			showGalleryCount : true
 		}, options || {});
-		this.duration = ((11-this.options.resizeSpeed)*0.15);
+		this.duration = 0;
 		this._setupLinks();
 		this._getScroll();
 		this._getPageDimensions();
@@ -1707,8 +1707,8 @@ lightwindow.prototype = {
 			this._setStatus(false);
 		} else {
 			Effect.Fade('lightwindow_loading', {
-				duration: 0.75,
-				delay: 1.0, 
+				duration: 0,
+				delay: 0, 
 				afterFinish: function() {
 					// Just in case we need some scroll goodness (this also avoids the swiss cheese effect)
 					if (this.windowType != 'image' && this.windowType != 'media' && this.windowType != 'external') {
