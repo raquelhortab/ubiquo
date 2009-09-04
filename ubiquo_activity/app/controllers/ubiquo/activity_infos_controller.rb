@@ -78,7 +78,7 @@ class Ubiquo::ActivityInfosController < UbiquoAreaController
         else
           t("ubiquo.activity_info.#{var_name.pluralize}.#{elem.send(var_name)}")                 
         end
-        OpenStruct.new(:id => elem.send(var_name),
+        OpenStruct.new(:key => elem.send(var_name),
                        :name => name)
       end
       self.instance_variable_set "@#{var_name.pluralize}", translated_collection

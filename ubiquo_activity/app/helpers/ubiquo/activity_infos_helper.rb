@@ -43,7 +43,7 @@ module Ubiquo::ActivityInfosHelper
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)    
       filters << render_filter(:links, url_for_options,
           :field => :filter_controller,
-          :id_field => :id,
+          :id_field => :key,
           :name_field => :name,
           :collection => @controllers,
           :caption => t("ubiquo.activity_info.controller"))
@@ -51,7 +51,7 @@ module Ubiquo::ActivityInfosHelper
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_action_filter_enabled)
       filters << render_filter(:links, url_for_options,
           :field => :filter_action,
-          :id_field => :id,
+          :id_field => :key,
           :name_field => :name,
           :collection => @actions,
           :caption => t("ubiquo.activity_info.action"))
@@ -59,7 +59,7 @@ module Ubiquo::ActivityInfosHelper
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_status_filter_enabled)
       filters << render_filter(:links, url_for_options,
           :field => :filter_status,
-          :id_field => :id,
+          :id_field => :key,
           :name_field => :name,
           :collection => @statuses,
           :caption => t("ubiquo.activity_info.status"))
