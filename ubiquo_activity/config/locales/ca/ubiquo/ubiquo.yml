@@ -23,3 +23,5 @@ ca:
       error_update_message: "Ha hagut un error i l'usuari '{{user}}' no ha pogut actualitzar {{object_name}}"
       successful_destroy_message: "L'usuari '{{user}}' ha eliminat amb éxit {{object_name}}"
       error_destroy_message: "Ha hagut un error i l'usuari '{{user}}' no ha pogut eliminar {{object_name}}"
+      empty_list_title: "Registre d'activitat"
+      empty_list_message: "Des d'aquest apartat pots veure una llista amb totes les accions que s'han realitzat a l'Ubiquo. Pots veure el detall de l'acció o esborrar el registre."

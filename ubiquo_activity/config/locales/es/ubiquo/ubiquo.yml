@@ -23,3 +23,5 @@ es:
       error_update_message: "Ha habido un error y el usuario '{{user}}' no ha podido actualizar {{object_name}}"
       successful_destroy_message: "El usuario '{{user}}' ha eliminado con éxito {{object_name}}"
       error_destroy_message: "Ha habido un error y el usuario '{{user}}' no ha podido eliminar {{object_name}}"
+      empty_list_title: "Registro de actividad"
+      empty_list_message: "Desde este apartado puedes ver una lista de todos las acciones que se realizan en Ubiquo. Puedes ver el detalle de la acción o borrar el registro."
