@@ -8,8 +8,6 @@
 
 <%%= render :partial => "shared/ubiquo/feedback" %>
 
-<%%= link_to t("ubiquo.<%= singular_name %>.index.new"), new_ubiquo_<%= singular_name %>_path, :class => "new" %>
-
 <%%= <%= singular_name %>_filters_info(params) %>
 
 <%%= <%= singular_name %>_list(@<%= plural_name%>, @<%= plural_name%>_pages) %>

@@ -55,7 +55,9 @@ module Ubiquo::<%= controller_class_name %>Helper
             :actions => <%= singular_name %>_actions(<%= singular_name%>)
           }
         end,
-        :pages => pages
+        :pages => pages,
+        :link_to_new => link_to(t("ubiquo.<%= singular_name %>.index.new"),
+                                new_ubiquo_<%= singular_name %>_path, :class => 'new')
       })
   end
     

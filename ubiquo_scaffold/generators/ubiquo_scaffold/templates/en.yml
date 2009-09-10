@@ -17,3 +17,5 @@ en:
         help_message: "Here you can create a new <%= singular_name %>"
       edit:
         help_message: "Here you can edit a new <%= singular_name %>"
+      empty_list_title: "<%= plural_name %> list"
+      empty_list_message: "You can see all records. You can create it, edit or delete."

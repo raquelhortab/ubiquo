@@ -17,3 +17,5 @@ ca:
         help_message: "Aquí pots crear la nova entitat <%= singular_name %>"
       edit:
         help_message: "Aquí pots editar la nova entitat <%= singular_name %>"
+      empty_list_title: "Llistat de <%= plural_name %>"
+      empty_list_message: "Des d’aquest apartat pots veure una llista de tots els recursos existents. Podràs crear-los, editar-los o esborrar-los."
