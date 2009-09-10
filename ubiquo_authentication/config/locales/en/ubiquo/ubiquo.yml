@@ -63,3 +63,5 @@ en:
       is_active:
         "true": 'active'
         "false": 'inactive'
+      empty_list_title: "Ubiquo users list"
+      empty_list_message: "You can see all records. You can create it, edit or delete."

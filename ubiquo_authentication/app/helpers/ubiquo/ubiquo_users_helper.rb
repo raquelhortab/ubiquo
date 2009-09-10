@@ -49,7 +49,9 @@ module Ubiquo::UbiquoUsersHelper
             :actions => ubiquo_user_actions(ubiquo_user)
           }
         end,
-        :pages => pages
+        :pages => pages,
+        :link_to_new => link_to(t("ubiquo.auth.new_user"),
+                        new_ubiquo_ubiquo_user_path, :class => 'new')
       })
   end
     
