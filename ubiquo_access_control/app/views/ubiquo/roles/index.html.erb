@@ -4,8 +4,6 @@
 </h2>
 <%= render :partial => "shared/ubiquo/feedback" %>
 
-<%= link_to t('ubiquo.auth.role_new'), new_ubiquo_role_path, :class => "new" %>
-
 <%= render(:partial => "shared/ubiquo/lists/standard", :locals=>{
       :name=>'role',
       :headers=>[:name],
@@ -21,7 +19,8 @@
           ]
         }
       },
-      :pages=>@roles_pages
+      :pages=>@roles_pages,
+      :link_to_new => link_to(t('ubiquo.auth.role_new'), new_ubiquo_role_path, :class => "new")
     }      
 ) %>
 
