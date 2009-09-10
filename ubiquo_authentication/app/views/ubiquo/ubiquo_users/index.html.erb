@@ -6,8 +6,6 @@
 
 <%= ubiquo_users_filters_info(params) %>
 
-<%= link_to t("ubiquo.auth.new_user"), new_ubiquo_ubiquo_user_path, :class => "new" %>
-
 <% ubiquo_user_list(@ubiquo_users, @ubiquo_users_pages) do |user| %>
   <div class="user-icon">
     <% if user.photo.original_filename %>
