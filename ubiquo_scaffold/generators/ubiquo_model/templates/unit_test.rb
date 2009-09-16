@@ -44,8 +44,8 @@ class <%= class_name %>Test < ActiveSupport::TestCase
     assert_equal_set [<%= file_name %>_1, <%= file_name %>_2, <%= file_name %>_3], <%= class_name %>.filtered_search({:publish_start => 12.day.ago})
      
     assert_equal_set [], <%= class_name %>.filtered_search({:publish_end => 12.day.ago})
-    assert_equal_set [<%= file_name %>_3], <%= class_name %>.filtered_search({:publish_end => 7.day.ago})
-    assert_equal_set [<%= file_name %>_1, <%= file_name %>_3], <%= class_name %>.filtered_search({:publish_end => 3.day.ago})
+    assert_equal_set [<%= file_name %>_2], <%= class_name %>.filtered_search({:publish_end => 7.day.ago})
+    assert_equal_set [<%= file_name %>_1, <%= file_name %>_2], <%= class_name %>.filtered_search({:publish_end => 3.day.ago})
     assert_equal_set [<%= file_name %>_1, <%= file_name %>_2, <%= file_name %>_3], <%= class_name %>.filtered_search({:publish_end => 10.day.from_now})
      
     assert_equal_set [<%= file_name %>_1], <%= class_name %>.filtered_search({:publish_start => 7.day.ago, :publish_end => 3.day.ago})
