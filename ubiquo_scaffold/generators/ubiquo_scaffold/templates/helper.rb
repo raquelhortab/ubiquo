@@ -88,7 +88,7 @@ module Ubiquo::<%= controller_class_name %>Helper
       :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete
       )
     
-    if <%= singular_name%>.locale?(current_locale, :skip_any => true)
+    if <%= singular_name%>.locale?(current_locale, :skip_any => true) && !<%= singular_name%>.translations.empty?
       actions << link_to(t("ubiquo.remove_translation"), [:ubiquo, <%= singular_name%>], 
         :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete
         )
