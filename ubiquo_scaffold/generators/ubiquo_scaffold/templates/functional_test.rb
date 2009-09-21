@@ -60,7 +60,7 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
   end
 
   def create_<%= file_name %>(options = {})
-    <%= name.classify %>.create(<%= name %>_attributes(options))
+    <%= name.classify %>.create(<%= file_name %>_attributes(options))
   end
       
 end
