@@ -49,10 +49,10 @@ class ActivityInfoTest < ActiveSupport::TestCase
   test "should filter by date" do
     ActivityInfo.delete_all
     activity1 = create_activity_info :created_at => 4.days.ago
-    activity2 = create_activity_info :created_at => 3.days.ago
+    activity2 = create_activity_info :created_at => 2.days.ago
     fake_activity = create_activity_info
-    searched_activities = ActivityInfo.filtered_search({ :date_start => 4.days.ago,
-                                                       :date_end => 2.days.ago,
+    searched_activities = ActivityInfo.filtered_search({ :date_start => 3.days.ago,
+                                                       :date_end => 1.days.ago,
                                                      })                                       
     assert_equal_set [activity2], searched_activities
   end
