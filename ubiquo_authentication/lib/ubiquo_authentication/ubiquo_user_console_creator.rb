@@ -14,8 +14,9 @@ module UbiquoAuthentication
                :name                  => options[:name],
                :surname               => options[:surname],
                :is_active             => options[:is_active],
-               :is_admin              => options[:is_admin],
-               :is_superadmin         => options[:is_superadmin])
+               :is_admin              => options[:is_admin])
+      user.is_superadmin = options[:is_superadmin]
+      user.save!
       I18n.locale = old_locale
       user
     end
