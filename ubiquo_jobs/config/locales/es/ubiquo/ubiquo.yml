@@ -1,8 +1,11 @@
 es:
   ubiquo:
+    "UbiquoJobs::Jobs::ActiveJob":
+      empty_list_title: "Tareas"
+      empty_list_message: "Aquí podrás ver la lista de tareas pendientes de ejecutar. Actualmente no hay tareas pendientes."
     jobs:
-      tab_name: Tareas
-      tab_title: Ir al listado de tareas
+      tab_name: "Tareas"
+      tab_title: "Ir al listado de tareas"
       job_removed: "Tarea eliminada"
       cant_remove: 'Ha ocurrido un error eliminando la tarea'
       job_edited: "La tarea ha sido editada"
@@ -30,4 +33,4 @@ es:
       read_output: "Ver la respuesta del sistema"
       remove_confirmation: "¿Está seguro de que quiere eliminar esta tarea?"
       repeat_confirmation: "¿Está seguro de que quiere repetir esta tarea?"
-      close: cerrar
+      close: "cerrar"

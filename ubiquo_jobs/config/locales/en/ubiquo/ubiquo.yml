@@ -1,9 +1,12 @@
 en:
   ubiquo:
+    "UbiquoJobs::Jobs::ActiveJob":
+      empty_list_title: "Jobs"
+      empty_list_message: "Here you can see the list of pending jobs. Right now there are no pending jobs."
     jobs:
       tab_name: Jobs
-      tab_title: Go to the jobs list
-      job_removed: Job removed
+      tab_title: "Go to the jobs list"
+      job_removed: "Job removed"
       cant_remove: "Can't remove job"
       job_edited: "Job successfully updated"
       cant_edit: "Can't edit job"
@@ -30,4 +33,4 @@ en:
       read_output: "Read system output"
       remove_confirmation: "Are you sure that you want to remove this job?"
       repeat_confirmation: "Are you sure that you want to repeat this job?"
-      close: close
+      close: "close"
