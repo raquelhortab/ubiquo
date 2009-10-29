@@ -52,10 +52,12 @@
     <%= form.label :password_confirmation, UbiquoUser.human_attribute_name("password_confirmation") %> 
     <%= form.password_field :password_confirmation %>
   </p>
-  <p>
-    <%= form.check_box :is_admin %>
-    <%= form.label :is_admin, UbiquoUser.human_attribute_name("is_admin") %>
-  </p>
+  <% if current_ubiquo_user.is_admin? %>
+    <p>
+      <%= form.check_box :is_admin %>
+      <%= form.label :is_admin, UbiquoUser.human_attribute_name("is_admin") %>
+    </p>
+  <% end %>
   <p>
     <%= form.check_box :is_active %>
     <%= form.label :is_active, UbiquoUser.human_attribute_name("is_active") %>
