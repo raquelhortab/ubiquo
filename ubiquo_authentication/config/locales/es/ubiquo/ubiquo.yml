@@ -64,4 +64,4 @@ es:
         "true": "activo"
         "false": "inactivo"
       empty_list_title: "Listado de usuarios de Ubiquo"
-      empty_list_message: "Desde este apartado puedes ver una lista de todos los recursos existentes. Podras crear nuevos, editar o borrarlos."      
+      empty_list_message: "Desde este apartado puedes ver una lista de todos los recursos existentes. Podras crear nuevos, editar o borrarlos."
