@@ -123,7 +123,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # DELETE /<%= table_name %>/1.xml
   def destroy
     @<%= file_name %> = <%= class_name %>.find(params[:id])
-    
+    <%- if options[:translatable] -%>
     destroyed = false
     if params[:destroy_content]
       destroyed = @<%= file_name %>.destroy_content
@@ -135,7 +135,13 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     else
       flash[:error] = t("ubiquo.<%= singular_name %>.destroy_error")
     end
-
+    <%- else -%>
+    if @<%= file_name %>.destroy
+      flash[:notice] = t("ubiquo.<%= singular_name %>.destroyed")
+    else
+      flash[:error] = t("ubiquo.<%= singular_name %>.destroy_error")
+    end
+    <%- end -%>
     respond_to do |format|
       format.html { redirect_to(ubiquo_<%= table_name %>_path) }
       format.xml  { head :ok }
