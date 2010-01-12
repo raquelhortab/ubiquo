@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + "/../../../test_helper.rb"
+require 'mocha'
 
 class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
   
@@ -131,8 +132,14 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
   end
   
   def test_should_store_options
-    anymodel = create_job(:planified_at => nil)
-    options = {:a => 'a', :one => 1, :time => Time.now, :model => anymodel, :h => {:h => 'Hash'} }
+    create_job(:planified_at => nil)
+    options = {
+      :string => 'String',
+      :number => 1,
+      :time => Time.now,
+      :model => ActiveJob.first,
+      :hash => {:hash => 'Hash'}
+    }
     job = create_job({:options => options})
     assert_equal options, job.options 
     assert_equal options.to_yaml, job.stored_options
