@@ -16,12 +16,12 @@ module UbiquoAccessControl
         content_tag("h3", t("ubiquo.auth.roles")) + content_tag("ul", :class => "permissions") do 
           @roles.map do |role|
             content_tag("li") do 
-              check_box_tag("ubiquo_user[role_ids][]", role.id, ubiquo_user_roles.include?(role), {:id => "role"+role.id.to_s}) +
+              check_box_tag("ubiquo_user[role_ids][]", role.id, ubiquo_user_roles.include?(role), {:id => "role"+role.id.to_s}) + ' ' +
                 label_tag("role"+role.id.to_s, role.name)
-              
+
             end
           end
-        end
+        end + hidden_field_tag("ubiquo_user[role_ids][]", '')
       end
     end
   end
