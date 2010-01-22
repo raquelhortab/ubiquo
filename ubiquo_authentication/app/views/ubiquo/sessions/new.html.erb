@@ -17,45 +17,56 @@
 
 </head>
 <body id="login">
-	<div id="wrapper">
-		<div id="central">
-			<div class="form_box">
-				<div class="inner_form_box">
-	      			<% if flash[:notice] %>
-				        <p id='feedback_notice'><%= flash[:notice] %></p>
-				      <% elsif flash[:error] %>
-				        <p id='feedback_error'><%= flash[:error] %></p>
-				      <% else %>
-				        <p id='feedback_notice'><%= t 'ubiquo.auth.welcome' %></p>
-				      <% end %>
-				      <% form_tag ubiquo_login_path do -%>
-				           	<p>
-								<label for="ubiquo_user_login"><%= t("ubiquo.auth.login") %>:</label>
-				            	<%= text_field_tag 'login', nil, :class => 'text', :id=>'ubiquo_user_login' %>
-							</p>
-				            <p>
-								<label for="ubiquo_user_password"><%= t("ubiquo.auth.password") %>:</label>
-				            	<%= password_field_tag 'password', nil, :class => 'text', :id=>'ubiquo_user_password' %>
-							</p>
-					        <p class="remember">
-								<%= check_box_tag 'remember_me', '', false %>
-								<label for="remember_me"><%= t 'ubiquo.auth.rememberme' %></label>
-							</p>
-                                                <p class="forgot">
-                                                  <%= link_to t('ubiquo.auth.forgotted_password'), new_ubiquo_password_path %>
-                                                </p>
-				            <p class="form_buttons">
-                                              <%= submit_tag t("ubiquo.auth.enter"), :class => 'buttons' %>
-                                            </p>
-				      <% end %>
-				</div>
-			</div>
-		</div>
-	   <div id="footer">       
-		 <%= link_to ubiquo_image_tag("app_logo_grey.png"), "http://www.ubiquo.me" %>® 2009 ubiquo <br/>
-         <%= link_to 'MIT license', 'http://www.opensource.org/licenses/mit-license.php' %>
-         <%= link_to 'ubiquo website', 'http://www.ubiquo.me' %>
-	   </div>
-	</div>
+  <div id="wrapper">
+    <div id="central">
+      <div class="form_box">
+        <div class="inner_form_box">
+          <% if flash[:notice] %>
+            <p id='feedback_notice'><%= flash[:notice] %></p>
+          <% elsif flash[:error] %>
+            <p id='feedback_error'><%= flash[:error] %></p>
+          <% else %>
+            <p id='feedback_notice'><%= t 'ubiquo.auth.welcome' %></p>
+          <% end %>
+          <% form_tag ubiquo_login_path do -%>
+            <p>
+              <label for="ubiquo_user_login">
+                <%= t("ubiquo.auth.login") %>:
+              </label>
+              <%= text_field_tag 'login', 
+                                 nil,
+                                 :class => 'text',
+                                 :id => 'ubiquo_user_login' %>
+            </p>
+            <p>
+              <label for="ubiquo_user_password">
+                <%= t("ubiquo.auth.password") %>:
+              </label>
+              <%= password_field_tag 'password', 
+                                     nil,
+                                     :class => 'text',
+                                     :id => 'ubiquo_user_password' %>
+            </p>
+            <p class="remember">
+              <%= check_box_tag 'remember_me', 1, false %>
+              <label for="remember_me"><%= t 'ubiquo.auth.rememberme' %></label>
+            </p>
+            <p class="forgot">
+              <%= link_to t('ubiquo.auth.forgotted_password'), 
+                          new_ubiquo_password_path %>
+            </p>
+            <p class="form_buttons">
+              <%= submit_tag t("ubiquo.auth.enter"), :class => 'buttons' %>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div id="footer">       
+      <%= link_to ubiquo_image_tag("app_logo_grey.png"), "http://www.ubiquo.me" %>® 2009 ubiquo <br/>
+      <%= link_to 'MIT license', 'http://www.opensource.org/licenses/mit-license.php' %>
+      <%= link_to 'ubiquo website', 'http://www.ubiquo.me' %>
+    </div>
+  </div>
 </body>
 </html>
