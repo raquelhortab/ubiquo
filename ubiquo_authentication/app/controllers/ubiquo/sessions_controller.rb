@@ -22,7 +22,6 @@ class Ubiquo::SessionsController < ApplicationController
         }
       end
       redirect_back_or_default(ubiquo_home_path)
-      flash[:notice] = t 'ubiquo.auth.login_success'
     else
       flash[:error] = t 'ubiquo.auth.login_invalid'
       render :action => 'new'
