@@ -8,25 +8,22 @@
 <%= job_filters_info(params) %>
 
 <%= stylesheet_link_tag 'ubiquo_jobs.css' %>
-<%= render(:partial => "shared/ubiquo/lists/standard", :locals=>{
-      :name=>UbiquoJobs.manager.job_class.to_s,
-      :headers=>[:name, :created_at, :ended_at],
-      :rows=>@jobs.collect{|job| 
-        {
-          :id=>job.id, 
-          :columns=>[
-            job.name,
-            short_date(job.created_at),
-            short_date(job.ended_at)
-          ],
-          :actions=> job_actions(job, 'history')
-        }
-      },
-      :pages=>@jobs_pages,
-      :actions_width => 270
-    }      
-) %>
-
+<%= render :partial => "shared/ubiquo/lists/standard",
+           :locals => {
+             :name => UbiquoJobs.manager.job_class.to_s,
+             :headers => [:name, :created_at, :ended_at],
+             :rows => @jobs.collect { |job|
+               {
+                 :id =>job.id, 
+                 :columns => [
+                   job.name,
+                   short_date(job.created_at),
+                   short_date(job.ended_at)
+                 ],
+                 :actions => job_actions(job, 'history')
+               }
+             },
+             :pages => @jobs_pages } %>
 
 <% content_for :sidebar do %>
   <%= job_filters %>
