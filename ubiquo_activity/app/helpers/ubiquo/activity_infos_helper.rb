@@ -68,11 +68,26 @@ module Ubiquo::ActivityInfosHelper
   end
 
   def activity_info_list(collection, pages, options = {}, &block)
-    concat render(:partial => "shared/ubiquo/lists/boxes", :locals => {
+    list_partial = Ubiquo::Config.context(:ubiquo_activity).get(:info_list_partial)
+    concat render(:partial => "shared/ubiquo/lists/#{list_partial}", :locals => {
         :name => 'activity_info',
+        :headers => [
+          ActivityInfo.human_attribute_name(:user),
+          :controller,
+          :action,
+          :status,
+          :created_at
+        ],
         :rows => collection.collect do |activity_info|
           {
             :id => activity_info.id,
+            :columns => [
+              activity_info.ubiquo_user.name,
+              activity_info.controller,
+              t("ubiquo.activity_info.actions.#{activity_info.action}"),
+              t("ubiquo.activity_info.statuses.#{activity_info.status}"),
+              l(activity_info.created_at)
+            ],
             :content => capture(activity_info, &block),
             :actions => activity_info_actions(activity_info)
           }

@@ -15,4 +15,6 @@ Ubiquo::Plugin.register(:ubiquo_activity, directory, config) do |config|
   config.add :activities_status_filter_enabled, true
   config.add :activities_default_order_field, 'activity_infos.created_at'
   config.add :activities_default_sort_order, 'desc'
+  # partial name for the activity_info index list
+  config.add :info_list_partial, 'standard'
 end
