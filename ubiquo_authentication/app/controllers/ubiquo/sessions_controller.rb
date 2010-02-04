@@ -21,6 +21,7 @@ class Ubiquo::SessionsController < ApplicationController
           :expires => self.current_ubiquo_user.remember_token_expires_at
         }
       end
+      flash.discard
       redirect_back_or_default(ubiquo_home_path)
     else
       flash[:error] = t 'ubiquo.auth.login_invalid'
