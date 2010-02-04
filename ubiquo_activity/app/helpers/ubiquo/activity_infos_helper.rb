@@ -6,6 +6,14 @@ module Ubiquo::ActivityInfosHelper
              :caption => t("ubiquo.activity_info.date"),
              :field => [:filter_date_start, :filter_date_end])
     end    
+    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
+      filters << filter_info(:links_or_select, params,
+             :field => :filter_user,
+             :name_field => :full_name,
+             :id_field => :ubiquo_user_id,
+             :collection => @users,
+             :caption => ActivityInfo.human_attribute_name(:user))
+    end
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)
       filters << filter_info(:links, params,
              :field => :filter_controller,
@@ -39,6 +47,14 @@ module Ubiquo::ActivityInfosHelper
       filters << render_filter(:date, url_for_options,
           :caption => t("ubiquo.activity_info.date"),
           :field => [:filter_date_start, :filter_date_end])
+    end
+    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
+      filters << render_filter(:links_or_select, url_for_options,
+          :field => :filter_user,
+          :id_field => :ubiquo_user_id,
+          :name_field => :full_name,
+          :collection => @users,
+          :caption => ActivityInfo.human_attribute_name(:user))
     end
     if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)    
       filters << render_filter(:links, url_for_options,
@@ -83,7 +99,7 @@ module Ubiquo::ActivityInfosHelper
             :id => activity_info.id,
             :columns => [
               activity_info.ubiquo_user.name,
-              activity_info.controller,
+              t("ubiquo.#{activity_info.controller.gsub('ubiquo/', '').singularize}.title"),
               t("ubiquo.activity_info.actions.#{activity_info.action}"),
               t("ubiquo.activity_info.statuses.#{activity_info.status}"),
               l(activity_info.created_at)

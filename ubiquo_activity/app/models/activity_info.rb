@@ -17,6 +17,8 @@ class ActivityInfo < ActiveRecord::Base
         { :conditions => ["activity_infos.created_at >= ?", value]}
       when :date_end
         { :conditions => ["activity_infos.created_at <= ?", value]}        
+      when :user
+        { :conditions => ["activity_infos.ubiquo_user_id = ?", value]}
       end
     end
     

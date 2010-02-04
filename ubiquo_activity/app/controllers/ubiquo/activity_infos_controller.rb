@@ -13,7 +13,8 @@ class Ubiquo::ActivityInfosController < UbiquoAreaController
       :date_end => parse_date(params[:filter_date_end]),
       :controller => params[:filter_controller],
       :action => params[:filter_action],
-      :status => params[:filter_status]
+      :status => params[:filter_status],
+      :user => params[:filter_user]
     }
     per_page = Ubiquo::Config.context(:ubiquo_activity).get(:activities_elements_per_page)
     @activity_infos_pages, @activity_infos = ActivityInfo.paginate(:page => params[:page]) do
@@ -82,6 +83,18 @@ class Ubiquo::ActivityInfosController < UbiquoAreaController
                        :name => name)
       end
       self.instance_variable_set "@#{var_name.pluralize}", translated_collection
+    end
+
+    @users = ActivityInfo.find(
+      :all,
+      :select => 'ubiquo_user_id, ubiquo_users.name, ubiquo_users.surname',
+      :group => 'ubiquo_user_id, ubiquo_users.name, ubiquo_users.surname',
+      :joins => :ubiquo_user
+    ).collect do |user|
+      OpenStruct.new(
+        :full_name => "#{user.surname}, #{user.name}",
+        :ubiquo_user_id => user.ubiquo_user_id
+      )
     end
   end
 end
