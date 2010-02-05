@@ -38,7 +38,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
     unless @<%= file_name %>.locale?(current_locale)
-      redirect_to(ubiquo_<%= table_name %>_path)
+      redirect_to(ubiquo_<%= table_name %>_url)
       return
     end
     <%- end %>
@@ -65,7 +65,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] -%>
     unless @<%= file_name %>.locale?(current_locale)
-      redirect_to(ubiquo_<%= table_name %>_path)
+      redirect_to(ubiquo_<%= table_name %>_url)
       return
     end
     <%- end -%>
@@ -82,7 +82,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     respond_to do |format|
       if @<%= file_name %>.save
         flash[:notice] = t("ubiquo.<%= singular_name %>.created")
-        format.html { redirect_to(ubiquo_<%= table_name %>_path) }
+        format.html { redirect_to(ubiquo_<%= table_name %>_url) }
         format.xml  { render :xml => @<%= file_name %>, :status => :created, :location => @<%= file_name %> }
       else
         flash[:error] = t("ubiquo.<%= singular_name %>.create_error")
@@ -109,7 +109,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     respond_to do |format|
       if ok
         flash[:notice] = t("ubiquo.<%= singular_name %>.edited")
-        format.html { redirect_to(ubiquo_<%= table_name %>_path) }
+        format.html { redirect_to(ubiquo_<%= table_name %>_url) }
         format.xml  { head :ok }
       else
         flash[:error] = t("ubiquo.<%= singular_name %>.edit_error")
@@ -143,7 +143,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
     end
     <%- end -%>
     respond_to do |format|
-      format.html { redirect_to(ubiquo_<%= table_name %>_path) }
+      format.html { redirect_to(ubiquo_<%= table_name %>_url) }
       format.xml  { head :ok }
     end
   end

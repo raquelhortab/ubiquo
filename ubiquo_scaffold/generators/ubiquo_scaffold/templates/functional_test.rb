@@ -28,7 +28,7 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
       post :create, :<%= file_name %> => <%= file_name %>_attributes
     end
 
-    assert_redirected_to ubiquo_<%= table_name %>_path
+    assert_redirected_to ubiquo_<%= table_name %>_url
   end
 
   def test_should_get_edit
@@ -38,14 +38,14 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
 
   def test_should_update_<%= file_name %>
     put :update, :id => <%= table_name %>(:one).id, :<%= file_name %> => <%= file_name %>_attributes
-    assert_redirected_to ubiquo_<%= table_name %>_path
+    assert_redirected_to ubiquo_<%= table_name %>_url
   end
 
   def test_should_destroy_<%= file_name %>
     assert_difference('<%= class_name %>.count', -1) do
       delete :destroy, :id => <%= table_name %>(:one).id
     end
-    assert_redirected_to ubiquo_<%= table_name %>_path
+    assert_redirected_to ubiquo_<%= table_name %>_url
   end
   
   private
