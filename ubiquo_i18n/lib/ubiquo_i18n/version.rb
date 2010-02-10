@@ -1,4 +1,4 @@
-module UbiquoAuthentication
+module UbiquoI18n
   def self.version
     VERSION::STRING
   end

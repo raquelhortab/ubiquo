@@ -1,4 +1,4 @@
-module UbiquoAuthentication
+module UbiquoJobs
   def self.version
     VERSION::STRING
   end

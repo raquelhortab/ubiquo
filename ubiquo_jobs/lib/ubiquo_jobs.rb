@@ -1,4 +1,5 @@
 require 'ubiquo_jobs/extensions.rb'
+require 'ubiquo_jobs/version.rb'
 
 module UbiquoJobs
 
