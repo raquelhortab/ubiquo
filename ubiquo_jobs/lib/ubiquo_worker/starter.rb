@@ -1,10 +1,15 @@
 # Loads Rails and fires the worker
 
-raise ArgumentError, "A worker name is required as an application option" if ARGV.empty?
+if ARGV.empty?
+  raise ArgumentError, "A worker name is required as an application option"
+end
 
 puts '=> Loading Rails...'
 
-require File.dirname(__FILE__) + '/../../../../../config/environment' unless Object.const_defined? 'RAILS_ENV'
+Dir.chdir(File.dirname(__FILE__) + "/../../../../../")
+unless Object.const_defined? 'RAILS_ENV'
+  require File.dirname(__FILE__) + '/../../../../../config/environment'
+end
 
 puts '** Rails loaded.'
 puts "** Starting UbiquoWorker..."
