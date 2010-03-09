@@ -88,6 +88,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       m.template('helper.rb', File.join('app/helpers/ubiquo', controller_class_path, "#{controller_file_name}_helper.rb"))
 
       m.namespaced_route_resources "ubiquo", controller_file_name
+      m.ubiquo_tab controller_file_name
       puts "Notes:
       
   - Add new permissions to fixture db/dev_bootstrap/permissions.yml if needed. 
