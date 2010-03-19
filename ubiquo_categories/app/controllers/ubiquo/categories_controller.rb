@@ -68,6 +68,7 @@ class Ubiquo::CategoriesController < UbiquoAreaController
   def create
     @category = Category.new(params[:category])
     @category.locale = current_locale
+    @category.category_set = @category_set
 
     respond_to do |format|
       if @category.save

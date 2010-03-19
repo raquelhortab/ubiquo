@@ -30,6 +30,13 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
     assert_redirected_to ubiquo_category_set_categories_url
   end
 
+  def test_should_create_category_from_current_category_set
+    category_set = category_sets(:one)
+    post :create, :category => category_attributes, :category_set_id => category_set.id
+
+    assert_equal category_set, Category.last.category_set
+  end
+
   def test_should_get_edit
     get :edit, :id => categories(:one).id, :category_set_id => category_sets(:one).id
     assert_response :success

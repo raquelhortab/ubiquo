@@ -4,11 +4,13 @@
 one:
   name: MyString
   description: MyText
+  category_set: one
   content_id: 1
   locale: 'en_US'
 
 two:
   name: MyString
   description: MyText
+  category_set: two
   content_id: 1
   locale: 'en_US'

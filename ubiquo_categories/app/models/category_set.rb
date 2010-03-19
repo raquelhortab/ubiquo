@@ -1,5 +1,7 @@
 class CategorySet < ActiveRecord::Base
-  
+
+  has_many :categories
+
   validates_presence_of :name
     
   # See vendor/plugins/ubiquo_core/lib/ubiquo/extensions/active_record.rb to see an example of usage.
