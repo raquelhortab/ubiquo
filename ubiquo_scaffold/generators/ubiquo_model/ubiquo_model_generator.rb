@@ -26,7 +26,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       m.directory File.join('test/fixtures', class_path)
 
       for locale in Ubiquo.supported_locales
-        m.directory(File.join('config/locales', locale,to_s, 'models'))
+        m.directory(File.join('config/locales', locale.to_s, 'models'))
       end
 
       # Model class, unit test, and fixtures.
