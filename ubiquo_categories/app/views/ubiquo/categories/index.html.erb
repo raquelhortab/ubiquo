@@ -10,7 +10,7 @@
 
 <%= category_filters_info(params) %>
 
-<%= category_list(@categories, @categories_pages) %>
+<%= category_list(@categories, @categories_pages, :category_set => @category_set) %>
 
 <% content_for :sidebar do %>
   <%= category_filters %>

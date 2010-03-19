@@ -41,6 +41,7 @@ module Ubiquo::CategorySetsHelper
     
   def category_set_actions(category_set, options = {})
     actions = []
+    actions << link_to(t("ubiquo.categories.categories"), [:ubiquo, category_set, :categories])
     actions << link_to(t("ubiquo.view"), [:ubiquo, category_set])
     actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set])  
     actions << link_to(t("ubiquo.remove"), [:ubiquo, category_set], 

@@ -8,11 +8,11 @@
   <%= render :partial => 'category', :object => category %>
 <% end %>
 
-<% form_for([:ubiquo, @category]) do |form| %>
+<% form_for([:ubiquo, @category_set, @category]) do |form| %>
   <%= render :partial => 'form', :locals => {:form => form} %>
     <p class="form_buttons">
       <%= form.submit t('ubiquo.save') %>
-      <%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_categories_path}'" %>
+      <%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_category_set_categories_path}'" %>
     </p>
 <% end %>
 

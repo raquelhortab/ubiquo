@@ -1,8 +1,10 @@
 class Ubiquo::CategoriesController < UbiquoAreaController
 
+  before_filter :load_category_set
+
   # GET /categories
   # GET /categories.xml
-  def index   
+  def index
     order_by = params[:order_by] || 'categories.id'
     sort_order = params[:sort_order] || 'desc'
     
@@ -70,7 +72,7 @@ class Ubiquo::CategoriesController < UbiquoAreaController
     respond_to do |format|
       if @category.save
         flash[:notice] = t("ubiquo.category.created")
-        format.html { redirect_to(ubiquo_categories_url) }
+        format.html { redirect_to(ubiquo_category_set_categories_url) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
       else
         flash[:error] = t("ubiquo.category.create_error")
@@ -89,7 +91,7 @@ class Ubiquo::CategoriesController < UbiquoAreaController
     respond_to do |format|
       if ok
         flash[:notice] = t("ubiquo.category.edited")
-        format.html { redirect_to(ubiquo_categories_url) }
+        format.html { redirect_to(ubiquo_category_set_categories_url) }
         format.xml  { head :ok }
       else
         flash[:error] = t("ubiquo.category.edit_error")
@@ -115,8 +117,14 @@ class Ubiquo::CategoriesController < UbiquoAreaController
       flash[:error] = t("ubiquo.category.destroy_error")
     end
     respond_to do |format|
-      format.html { redirect_to(ubiquo_categories_url) }
+      format.html { redirect_to(ubiquo_category_set_categories_url) }
       format.xml  { head :ok }
     end
+  end
+
+  protected
+
+  def load_category_set
+    @category_set = CategorySet.find(params[:category_set_id])
   end
 end

@@ -1,21 +1,21 @@
 es:
   ubiquo:
     category:
-      title: "Categories"
-      created: "Entidad Category creada con éxito"
-      create_error: "Error al crear la entidad category"
-      edited: "Entidad Category editada con éxito"
-      edit_error: "Error al editar la entidad category"
-      destroyed: "Entidad Category eliminada con éxito"
-      destroy_error: "Error al eliminar la entidad category"
+      title: "Categorías"
+      created: "Categoría creada con éxito"
+      create_error: "Error al crear la categoría "
+      edited: "Categoría editada con éxito"
+      edit_error: "Error al editar la categoría "
+      destroyed: "Categoría eliminada con éxito"
+      destroy_error: "Error al eliminar la categoría "
       index:
-        title: "Listado de categories"
-        help_message: "Aquí puedes ver el listado de categories"
-        new: "Nuevo Category"
-        confirm_removal: "Estás seguro de querer eliminar esta entidad category?"
+        title: "Listado de categorías"
+        help_message: "Aquí puedes ver el listado de categorías"
+        new: "Nueva categoría"
+        confirm_removal: "¿Estás seguro de querer eliminar esta categoría?"
       new:
-        help_message: "Aquí puedes crear una nueva entidad category"
+        help_message: "Aquí puedes crear una nueva categoría"
       edit:
-        help_message: "Aquí puedes editar la entidad category"
-      empty_list_title: "Listado de categories"
-      empty_list_message: "Desde este apartado puedes ver una lista de todos los recursos existentes. Podras crear nuevos, editar o borrarlos."
+        help_message: "Aquí puedes editar la categoría"
+      empty_list_title: "Listado de categorías"
+      empty_list_message: "Desde este apartado puedes ver una lista de todas las categorías existentes dentro de este conjunto. Puedes crear nuevas, editar o borrarlas."

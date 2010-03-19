@@ -37,43 +37,43 @@ module Ubiquo::CategoriesHelper
               category.name,
               category.description,
             ],
-            :actions => category_actions(category)
+            :actions => category_actions(options[:category_set], category)
           }
         end,
         :pages => pages,
         :link_to_new => link_to(t("ubiquo.category.index.new"),
-                                new_ubiquo_category_path, :class => 'new')
+                                new_ubiquo_category_set_category_path, :class => 'new')
       })
   end
     
   private
     
-  def category_actions(category, options = {})
+  def category_actions(category_set, category, options = {})
     actions = []
     if category.locale?(current_locale)
-      actions << link_to(t("ubiquo.view"), [:ubiquo, category])
+      actions << link_to(t("ubiquo.view"), [:ubiquo, category_set, category])
     end
    
     if category.locale?(current_locale)
-      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category])
+      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set, category])
     end
   
     unless category.locale?(current_locale)
       actions << link_to(
         t("ubiquo.translate"), 
-        new_ubiquo_category_path(
+        new_ubiquo_category_set_category_path(
           :from => category.content_id
           )
         )
     end
   
     actions << link_to(t("ubiquo.remove"), 
-      ubiquo_category_path(category, :destroy_content => true), 
+      ubiquo_category_set_category_path(category_set, category, :destroy_content => true),
       :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
       )
     
     if category.locale?(current_locale, :skip_any => true) && !category.translations.empty?
-      actions << link_to(t("ubiquo.remove_translation"), [:ubiquo, category], 
+      actions << link_to(t("ubiquo.remove_translation"), [:ubiquo, category_set, category],
         :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
         )
     end
