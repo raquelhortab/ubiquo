@@ -41,7 +41,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
         m.template(
           "model-#{locale}.yml",
           File.join('config/locales', locale.to_s, 'models', "#{file_name}.yml")
-        ) unless locale.to_s == 'en'
+        )
       end
       
       unless options[:skip_migration]
