@@ -9,9 +9,7 @@
 <%= render :partial => "shared/ubiquo/feedback" %>
 
 <%= activity_info_filters_info(params) %>
-<% activity_info_list(@activity_infos, @activity_infos_pages) do |activity| %>
-  <%= activity_info_box(activity) %>
-<% end %>
+<% activity_info_list(@activity_infos, @activity_infos_pages) %>
 
 <% content_for :sidebar do %>
   <%= activity_info_filters %>

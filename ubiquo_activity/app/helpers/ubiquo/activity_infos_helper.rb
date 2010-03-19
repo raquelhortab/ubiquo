@@ -83,7 +83,7 @@ module Ubiquo::ActivityInfosHelper
     filters.join
   end
 
-  def activity_info_list(collection, pages, options = {}, &block)
+  def activity_info_list(collection, pages, options = {})
     list_partial = Ubiquo::Config.context(:ubiquo_activity).get(:info_list_partial)
     concat render(:partial => "shared/ubiquo/lists/#{list_partial}", :locals => {
         :name => 'activity_info',
@@ -104,7 +104,6 @@ module Ubiquo::ActivityInfosHelper
               t("ubiquo.activity_info.statuses.#{activity_info.status}"),
               l(activity_info.created_at)
             ],
-            :content => capture(activity_info, &block),
             :actions => activity_info_actions(activity_info)
           }
         end,
@@ -128,8 +127,14 @@ module Ubiquo::ActivityInfosHelper
   def activity_info_actions(activity_info, options = {})
     actions = []
     actions << link_to(t("ubiquo.remove"), [:ubiquo, activity_info], 
-      :confirm => t("ubiquo.activity_info.index.confirm_removal"), :method => :delete
-      )
+                       :confirm => t("ubiquo.activity_info.confirm_removal"),
+                       :method => :delete)
+    if activity_info.status != "error" && activity_info.related_object
+      actions << link_to(t("ubiquo.activity_info.show_it"),
+                         :action => 'show',
+                         :controller => activity_info.controller,
+                         :id => activity_info.related_object_id)
+    end
     actions
   end
 end
