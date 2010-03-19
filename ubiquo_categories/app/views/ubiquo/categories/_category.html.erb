@@ -1,0 +1,11 @@
+<div class="view_box preview">
+  <dl>
+    <dt><%= Category.human_attribute_name("locale") %>:</dt>
+    <dd><%= Locale.find_by_iso_code(category.locale).native_name %></dd>
+    <dt><%= Category.human_attribute_name("name") %>:</dt>
+    <dd><%=h category.name %></dd>
+    <dt><%= Category.human_attribute_name("description") %>:</dt>
+    <dd><%=h category.description %></dd>
+  </dl>
+</div>
+

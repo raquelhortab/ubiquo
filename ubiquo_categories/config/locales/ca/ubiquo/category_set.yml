@@ -1,0 +1,21 @@
+ca:
+  ubiquo:
+    category_set:
+      title: "Category_sets"
+      created: "Entitat Category_set creada amb èxit"
+      create_error: "Error al crear l'entitat category_set"
+      edited: "Entitat Category_set editada amb èxit"
+      edit_error: "Error a l'editar l'entitat category_set"
+      destroyed: "Entitat Category_set eliminada amb èxit"
+      destroy_error: "Error al eliminar la entitat category_set"
+      index:
+        title: "Llistat de category_sets"
+        help_message: "Aquí pots veure el llistat de category_sets"
+        new: "Nou Category_set"
+        confirm_removal: "Estàs segur de voler eliminar aquesta entitat category_set?"
+      new:
+        help_message: "Aquí pots crear la nova entitat category_set"
+      edit:
+        help_message: "Aquí pots editar la nova entitat category_set"
+      empty_list_title: "Llistat de category_sets"
+      empty_list_message: "Des d’aquest apartat pots veure una llista de tots els recursos existents. Podràs crear-los, editar-los o esborrar-los."

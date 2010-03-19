@@ -1,0 +1,9 @@
+ca:
+  activerecord:
+    models:
+      category_set: "Category_set"
+    attributes:
+      category_set:
+        name:  "Nom" 
+        key:  "key" 
+        

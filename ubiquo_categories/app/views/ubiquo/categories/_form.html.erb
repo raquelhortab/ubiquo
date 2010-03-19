@@ -1,0 +1,12 @@
+<%= error_messages_for 'category' %>
+<div class="form_box">
+  <%= form.hidden_field :content_id %>
+  <p>
+    <%= form.label :name, Category.human_attribute_name("name") %>
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <%= form.label :description, Category.human_attribute_name("description") %>
+    <%= form.text_area :description %>
+  </p>
+</div>

@@ -1,0 +1,11 @@
+<%= error_messages_for 'category_set' %>
+<div class="form_box">
+  <p>
+    <%= form.label :name, CategorySet.human_attribute_name("name") %>
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <%= form.label :key, CategorySet.human_attribute_name("key") %>
+    <%= form.text_field :key %>
+  </p>
+</div>

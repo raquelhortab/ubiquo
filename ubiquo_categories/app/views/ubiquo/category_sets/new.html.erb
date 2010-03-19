@@ -1,0 +1,22 @@
+<h1><%= render :partial => 'title' %></h1>
+<h2>
+  <%= render :partial => "submenu" %>
+</h2>
+<%= render(:partial => "shared/ubiquo/feedback") %>
+
+<% show_preview(CategorySet) do |category_set| %>
+  <%= render :partial => 'category_set', :object => category_set %>
+<% end %>
+
+<% form_for([:ubiquo, @category_set]) do |form| %>
+  <%= render :partial => 'form', :locals => {:form => form} %>
+    <p class="form_buttons">
+      <%= form.submit t('ubiquo.create') %>
+      <%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_category_sets_path}'" %>
+    </p>
+<% end %>
+
+<% content_for :sidebar do %>
+  <h3><%= t('ubiquo.help') %></h3>
+  <p><%= t("ubiquo.category_set.new.help_message") %></p>
+<% end %>
