@@ -1,0 +1,23 @@
+UbiquoCategories
+==============
+
+This plugin adds categorization and tagging support to ubiquo
+
+Example
+=======
+
+In your model:
+
+  categorized_with :city
+
+In your form:
+
+  <%= form.category_selector :city %>
+
+Create a dictionary:
+
+CategorySet.create(:key => 'cities', :categories => ['Barcelona', 'Tokyo'])
+
+The 'cities' dictionary will be displayed as a selector in your form with the categories you created.
+
+Copyright (c) 2010 International Product Design S.L. - gnuine (http://www.gnuine.com)
