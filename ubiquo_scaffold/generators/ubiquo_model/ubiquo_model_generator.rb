@@ -26,7 +26,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       m.directory File.join('test/fixtures', class_path)
 
       for locale in Ubiquo.supported_locales
-        m.directory(File.join('config/locales', locale, 'models'))
+        m.directory(File.join('config/locales', locale,to_s, 'models'))
       end
 
       # Model class, unit test, and fixtures.
@@ -40,8 +40,8 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       for locale in Ubiquo.supported_locales
         m.template(
           "model-#{locale}.yml",
-          File.join('config/locales', locale, 'models', "#{file_name}.yml")
-        ) unless locale == 'en'
+          File.join('config/locales', locale.to_s, 'models', "#{file_name}.yml")
+        ) unless locale.to_s == 'en'
       end
       
       unless options[:skip_migration]

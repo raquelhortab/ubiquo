@@ -45,7 +45,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       m.directory(File.join('test/functional/ubiquo', controller_class_path))
       m.directory(File.join('test/unit', class_path))
       for locale in Ubiquo.supported_locales
-        m.directory(File.join('config/locales', locale, 'ubiquo'))
+        m.directory(File.join('config/locales', locale.to_s, 'ubiquo'))
       end
 
       for action in scaffold_views
@@ -69,7 +69,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       for locale in Ubiquo.supported_locales
         m.template(
           "#{locale}.yml",
-          File.join('config/locales', locale, 'ubiquo', "#{singular_name}.yml")
+          File.join('config/locales', locale.to_s, 'ubiquo', "#{singular_name}.yml")
          )
       end
       
