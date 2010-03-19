@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'rubygems'
 require 'rake'
 
@@ -5,12 +6,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "ubiquo"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{TODO: gem for building ubiquo based applications.}
+    gem.description = %Q{TODO: This gem provides a command-line application to make the creation of ubiquo based applications fast and easy.}
     gem.email = "rsalvado@gnuine.com"
-    gem.homepage = "http://github.com/gnuine/ubiquo"
+    gem.homepage = "http://www.ubiquo.me"
     gem.authors = ["Ramon Salvadó"]
-    gem.add_development_dependency "test-spec", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -21,7 +21,7 @@ end
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
+  test.pattern = 'test/**/test_*.rb'
   test.verbose = true
 end
 
@@ -29,7 +29,7 @@ begin
   require 'rcov/rcovtask'
   Rcov::RcovTask.new do |test|
     test.libs << 'test'
-    test.pattern = 'test/**/*_test.rb'
+    test.pattern = 'test/**/test_*.rb'
     test.verbose = true
   end
 rescue LoadError

@@ -1,6 +1,9 @@
 = ubiquo
 
-Description goes here.
+This gem provides a command-line based to create ubiquo based apps.
+
+Ubiquo is a Ruby on Rails based custom CMS development framework.
+Check the website for more information: http://www.ubiquo.me
 
 == Note on Patches/Pull Requests
  
