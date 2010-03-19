@@ -9,9 +9,9 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
     record do |m|
       # TODO: Move this to yaml file if if grows to big overtime
       @field_translations = { 
-        'title' => { :ca => 'Títol', :es => 'Título'},
-        'name' => { :ca => 'Nom', :es => 'Nombre'},
-        'published_at' => { :ca => 'Data de publicació', :es => 'Fecha de publicación' }
+        'title' => { :ca => 'Títol', :es => 'Título', :en => 'Title'},
+        'name' => { :ca => 'Nom', :es => 'Nombre', :en => 'Name'},
+        'published_at' => { :ca => 'Data de publicació', :es => 'Fecha de publicación', :en => 'Published at' }
       }
       
       @ton = attributes.map(&:name).find{|a|a.to_s == 'title' || a.to_s == 'name'}
