@@ -30,7 +30,7 @@ module UbiquoCategories
         #                  
         
         def categorized_with(field, options = {})
-          options.reverse_merge!(DEFAULT_OPTIONS)
+          options.reverse_merge!(DEFAULT_CATEGORIZED_OPTIONS)
         end
 
       end
