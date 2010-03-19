@@ -1,21 +1,21 @@
 en:
   ubiquo:
-    category_set:
-      title: "Category_sets"
-      created: "Category_set created succesfully"
-      create_error: "Error creating category_set"
-      edited: "Category_set updated succesfully"
-      edit_error: "Error updating category_set"
-      destroyed: "Category_set removed succesfully"
-      destroy_error: "Error removing category_set"
+    category set:
+      title: "Category sets"
+      created: "Category set created succesfully"
+      create_error: "Error creating category set"
+      edited: "Category set updated succesfully"
+      edit_error: "Error updating category set"
+      destroyed: "Category set removed succesfully"
+      destroy_error: "Error removing category set"
       index:
-        title: "category_sets list"
-        help_message: "Here you can see the category_sets list."
-        new: "New Category_set"
-        confirm_removal: "Are you sure you want to remove this category_set?"
+        title: "category sets list"
+        help_message: "Here you can see the category sets list."
+        new: "New Category set"
+        confirm_removal: "Are you sure you want to remove this category set?"
       new:
-        help_message: "Here you can create a new category_set"
+        help_message: "Here you can create a new category set"
       edit:
-        help_message: "Here you can edit a new category_set"
-      empty_list_title: "category_sets list"
+        help_message: "Here you can edit a new category set"
+      empty_list_title: "category sets list"
       empty_list_message: "You can see all records. You can create it, edit or delete."
