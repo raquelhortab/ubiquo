@@ -1,4 +1,8 @@
 module Ubiquo
+  # TODO: Add a devel flag (git repos access)
+  # TODO: Add fields to configure e-mails for exception_notification
+  # TODO: Improve banner to inform of UBIQUO_OPTS env var merging
+  # TODO: Add git needed params for repo creation on github
   class Options < Hash
     
     attr_reader :opts, :orig_args
