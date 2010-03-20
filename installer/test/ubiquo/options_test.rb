@@ -15,7 +15,7 @@ class TestOptions < Test::Unit::TestCase
   
   def test_should_set_the_default_options
     opts = Options.new(["appname"])
-    @defaults.each { |k,v| assert_equal opts[k], v}
+    @defaults.each { |k,v| assert_equal v, opts[k] }
   end
 
   def test_should_be_able_to_set_options
@@ -35,4 +35,10 @@ class TestOptions < Test::Unit::TestCase
     assert_equal :complete, options[:profile]
     assert_equal "myapp",   options[:app_name]
   end
+
+  def test_should_detect_invalid_arguments
+    opts = Options.new(%w[ --wrong ])
+    assert_equal "invalid option: --wrong", opts[:invalid_argument]
+  end
+
 end

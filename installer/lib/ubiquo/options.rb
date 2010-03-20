@@ -1,8 +1,6 @@
 module Ubiquo
   class Options < Hash
     
-    class MissingApplicationName < StandardError ; end
-    
     attr_reader :opts, :orig_args
     
     def initialize(args)
