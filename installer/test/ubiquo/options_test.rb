@@ -14,12 +14,12 @@ class TestOptions < Test::Unit::TestCase
   end
   
   def test_should_set_the_default_options
-    opts = Options.new(["appname"])
+    opts = Options.new(%w[ appname ])
     @defaults.each { |k,v| assert_equal v, opts[k] }
   end
 
   def test_should_be_able_to_set_options
-    opts = Options.new(["--mysql", "--edge", "--minimal", "myapp"])
+    opts = Options.new(%w[ --mysql --edge --minimal myapp ])
     assert_equal :mysql,   opts[:database]
     assert_equal :edge,    opts[:template]
     assert_equal :minimal, opts[:profile]
