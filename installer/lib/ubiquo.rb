@@ -3,7 +3,8 @@ $:.unshift File.dirname(__FILE__)
 
 module Ubiquo
   autoload :Options, 'ubiquo/options'
-
+  autoload :Generator, 'ubiquo/generator'
+  
   class App
     class << self
       def run!(arguments)
@@ -25,6 +26,12 @@ module Ubiquo
           $stderr.puts options.opts
           return 1
         end
+      end
+
+      # TODO: finish checking git pre-requisites (version must support submodules)
+      def git?
+        git =  `which git`.strip
+        `#{git} version | cut -d ' ' -f 3`.strip unless git == ""
       end
     end
   end
