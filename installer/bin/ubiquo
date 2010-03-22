@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-require File.join('lib', 'ubiquo.rb')
+#require File.join('lib', 'ubiquo.rb')
+require 'ubiquo'
 Ubiquo::App.run!(ARGV)

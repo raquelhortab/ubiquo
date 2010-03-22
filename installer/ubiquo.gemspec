@@ -33,7 +33,8 @@ Gem::Specification.new do |s|
      "test/fixtures/template.erb",
      "test/helper.rb",
      "test/ubiquo/generator_test.rb",
-     "test/ubiquo/options_test.rb"
+     "test/ubiquo/options_test.rb",
+     "ubiquo.gemspec"
   ]
   s.homepage = %q{http://www.ubiquo.me}
   s.rdoc_options = ["--charset=UTF-8"]
