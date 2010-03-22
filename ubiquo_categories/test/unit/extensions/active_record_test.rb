@@ -210,6 +210,14 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal first, model.reload.category_relations.last
   end
 
+  def test_categorize_options
+    categorize :cities, :size => :many
+    categorize :genders, :size => 2, :separator => '/'
+    assert_equal :many, CategoryTestModel.categorize_options(:cities)[:size]
+    assert_equal 2, CategoryTestModel.categorize_options(:genders)[:size]
+    assert_equal '/', CategoryTestModel.categorize_options(:genders)[:separator]
+  end
+
   protected
 
   def categorize attr, options = {}

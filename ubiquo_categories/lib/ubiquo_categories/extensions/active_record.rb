@@ -34,6 +34,9 @@ module UbiquoCategories
 
         def categorized_with(field, options = {})
           options.reverse_merge!(DEFAULT_CATEGORIZED_OPTIONS)
+          
+          @categorized_with_options ||= {}
+          @categorized_with_options[field.to_sym] = options
 
           self.has_many(:category_relations, {
               :as => :related_object,
@@ -82,7 +85,7 @@ module UbiquoCategories
             end
           end
 
-          self.has_many(association_name, {
+          self.has_many(association_name.to_sym, {
               :through => :category_relations,
               :class_name => "::Category",
               :source => :category,
@@ -100,6 +103,11 @@ module UbiquoCategories
             alias_method "#{field}=", "#{association_name}="
           end
           
+        end
+        
+        # Returns the associated options for the categorized +field+
+        def categorize_options(field)
+          @categorized_with_options[field.to_sym]
         end
 
       end
