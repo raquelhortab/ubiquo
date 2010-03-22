@@ -13,10 +13,11 @@ module Ubiquo
       self[:database] = :sqlite
       self[:template] = :stable
       self[:profile]  = :complete
+      self[:devel]    = false
+      self[:gnuine]   = args.delete('--gnuine') || false
       
       @opts = OptionParser.new do |o|
-        o.banner = "Usage: #{File.basename($0)} [options] application_name"
-        
+        o.banner = """Usage: #{File.basename($0)} [options] application_name"        
         o.separator ""
         
         suported_databases.each do |db,msg|
@@ -33,6 +34,10 @@ module Ubiquo
         
         suported_profiles.each do |profile, msg|
           o.on("--#{profile.to_s}", msg) { self[:profile] = profile }
+        end
+
+        o.on("--devel", 'For ubiquo developers (ssh acces to github repos)') do
+          self[:devel] = true
         end
         
         o.separator ""

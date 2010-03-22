@@ -1,27 +1,28 @@
 external_plugins = %w[
-  calendar_date_select,
-  exception_notification,
-  responds_to_parent,
-  tiny_mce,
+  calendar_date_select
+  exception_notification
+  responds_to_parent
+  tiny_mce
   paperclip
 ]
-minimal_plugins = %w[ ubiquo_core, ubiquo_authentication ]
+minimal_plugins = %w[ ubiquo_core ubiquo_authentication ]
 rest_plugins = %w[
-  ubiquo_access_control,
-  ubiquo_media,
-  ubiquo_scaffold,
-  ubiquo_jobs,
-  ubiquo_i18n,
-  ubiquo_activity,
-  ubiquo_version,
+  ubiquo_access_control
+  ubiquo_media
+  ubiquo_scaffold
+  ubiquo_jobs
+  ubiquo_i18n
+  ubiquo_activity
+  ubiquo_versions
   ubiquo_guides
+  <%= "ubiquo_design" if @opts[:gnuine] %>
 ]
 
 choosen_plugin_set = "<%= @opts[:profile].to_s %>"
 
 case choosen_plugin_set
   when "minimal" then selected_plugins = minimal_plugins
-  else "complete" then selected_plugins = minimal_plugins + rest_plugins
+  else selected_plugins = minimal_plugins + rest_plugins
 end
 
 # File railties/lib/rails_generator/generators/applications/app/template_runner.rb, line 69
@@ -47,7 +48,7 @@ def add_plugins(plugin_names, options={})
   plugin_names.each { |name| plugin name, :git => "#{git_root}/#{name}.git", :branch => options[:branch], :submodule => true }
 end
 # To ask needed settings when boostraping the app
-appname             = <%= @opts[:app_name] %>
+appname             = "<%= @opts[:app_name] %>"
 exception_recipient = "programadors@gnuine.com"
 sender_address      = "errors@gnuine.com"
 # Remove rails temporary directories
@@ -187,7 +188,7 @@ case choosen_adapter
 end
 # gnuine routes.rb
 ubiquo_routes = selected_plugins.map do |plugin|
-  "  map.from_plugin #{plugin.to_sym}"
+  "  map.from_plugin :#{plugin}"
 end.join("\n")
 file 'config/routes.rb', <<-CODE
 ActionController::Routing::Routes.draw do |map|
@@ -202,6 +203,7 @@ ActionController::Routing::Routes.draw do |map|
   #map.connect ':controller/:action/:id.:format'
 end
 CODE
+puts "here we go"
 # default rails environment.rb
 file 'config/environment.rb', <<-CODE
 # Be sure to restart your server when you modify this file
@@ -218,7 +220,6 @@ Rails::Initializer.run do |config|
   # -- all .rb files in that directory are automatically loaded.
 
   # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
   
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
@@ -249,17 +250,30 @@ Rails::Initializer.run do |config|
   config.i18n.default_locale = :ca
 end
 CODE
-
+puts "out of here"
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
-add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch)
-#plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => '0.7-stable'
+add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:gnuine] ? true : false %>)
+
+<% if @opts[:gnuine] %>
+plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => ubiquo_branch
+<% end %>
 
 rake("rails:update")
 rake("calendardateselect:install")
 rake("ubiquo:install")
+
+<% if @opts[:gnuine] %>
 rake("db:create:all")
 rake("ubiquo:db:reset")
+<% end %>
 
 git :add => "."
 git :commit => "-a -m 'Initial #{appname} commit'"
 
+<% unless @opts[:gnuine] %>
+puts "1.- You must configure your database using config/database.yml"
+puts "2.- You must create your databases. rake db:create:all"
+puts "3.- You must initialize your database. rake ubiquo:db:init"
+puts "4.- You must create the admin user. rake ubiquo:create_user"
+puts "5.- scrip/server and point your browser to http://localhost:3000/ubiquo"
+<% end %>

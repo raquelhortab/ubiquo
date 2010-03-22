@@ -1,5 +1,5 @@
 $:.unshift File.dirname(__FILE__)
-%w[ rubygems optparse ].each { |f| require f }
+%w[ rubygems optparse erb tempfile ].each { |f| require f }
 
 module Ubiquo
   autoload :Options, 'ubiquo/options'
@@ -12,6 +12,12 @@ module Ubiquo
         options = Options.new(arguments)
         options = options.merge(env_opts) if env_opts
 
+
+        if `which git` == ''
+          $stderr.puts "Sorry you need to install git (> 1.5.3). See http://git-scm.com/"
+          options[:show_help] = true
+        end
+        
         if options[:invalid_argument]
           $stderr.puts options[:invalid_argument]
           options[:show_help] = true
@@ -26,12 +32,14 @@ module Ubiquo
           $stderr.puts options.opts
           return 1
         end
-      end
 
-      # TODO: finish checking git pre-requisites (version must support submodules)
-      def git?
-        git =  `which git`.strip
-        `#{git} version | cut -d ' ' -f 3`.strip unless git == ""
+        skeleton = File.dirname(__FILE__) + "/ubiquo/template.erb"
+        tpl = Tempfile.new('tmp')
+        File.open(tpl.path, 'w') do |file|
+          file.write Generator.build_template(options, skeleton) 
+        end
+        tpl.sync=true
+        system("rails -m #{tpl.path} #{options[:app_name]}")
       end
     end
   end

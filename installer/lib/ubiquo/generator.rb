@@ -8,16 +8,12 @@ module Ubiquo
   # TODO: IMPROVEMENT RAILS_GEM_VERSION could be set in options
   # -- :branch parameter in add_plugins should be set using opts[:template]
   class Generator
-
-    attr_reader :opts, :tpl_skeleton, :rails_template
-    
-    def initialize(opts, tpl_skeleton)
-      @opts, @tpl_skeleton = opts, tpl_skeleton
-    end
-
-    def build_rails_template
-      template = ERB.new(File.read(@tpl_skeleton), 0, "%<>")
-      @rails_template = template.result(binding)
+    class << self
+      def build_template(opts, skeleton)
+        @opts = opts
+        template = ERB.new(File.read(skeleton), 0, "%<>")
+        template.result(binding)
+      end
     end
   end
 end
