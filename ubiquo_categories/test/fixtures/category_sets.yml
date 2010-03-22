@@ -12,3 +12,4 @@ two:
 cities:
   name: Cities
   key: cities
+  is_editable: true

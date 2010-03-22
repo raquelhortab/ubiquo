@@ -42,13 +42,63 @@ class CategorySetTest < ActiveSupport::TestCase
     
     assert_equal_set [category_set_1,category_set_2], CategorySet.filtered_search({:text => "find"})
   end
+
+  def test_should_allow_creation_by_default
+    set = CategorySet.create(:name => 'name', :key => 'key')
+    assert set.is_editable?
+  end
+
+  def test_should_not_allow_creation
+    set = create_category_set
+    set.is_not_editable!
+    assert_raise UbiquoCategories::CreationNotAllowed do
+      set.categories << 'Category'
+    end
+  end
   
+  def test_should_allow_creation
+    set = create_category_set
+    set.is_editable!
+    assert_nothing_raised do
+      set.categories << 'Category'
+    end
+  end
+
+  def test_is_editable_method
+    set = create_category_set :is_editable => true
+    assert set.is_editable?
+    set.update_attribute :is_editable, false
+    assert !set.is_editable?
+  end
+
+  def test_only_one_category_with_same_name_coexist_in_the_same_set
+    set = create_category_set
+    assert_difference 'Category.count' do
+      set.categories << 'Unique'
+    end
+    assert_no_difference 'Category.count' do
+      set.categories << 'Unique'
+    end
+  end
+
+  def test_multiple_categories_with_same_name_can_coexist_in_different_sets
+    set_1 = create_category_set
+    set_2 = create_category_set
+    assert_difference 'Category.count' do
+      set_1.categories << 'Unique'
+    end
+    assert_difference 'Category.count' do
+      set_2.categories << 'Unique'
+    end
+  end
+
   private
   
   def create_category_set(options = {})
     default_options = {
       :name => 'MyString', # string
       :key => 'MyString', # string
+      :is_editable => true
     }
     CategorySet.create(default_options.merge(options))
   end

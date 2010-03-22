@@ -3,6 +3,7 @@ class CreateCategorySets < ActiveRecord::Migration
     create_table :category_sets do |t|
       t.string :name
       t.string :key
+      t.boolean :is_editable
       
       t.timestamps
 

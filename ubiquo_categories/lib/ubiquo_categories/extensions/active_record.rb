@@ -45,30 +45,24 @@ module UbiquoCategories
           association_name = field.to_s.pluralize
 
           proc = Proc.new do
-
+            
             define_method "<<" do |categories|
               set = CategorySet.find_by_key association_name
               raise UbiquoCategories::SetNotFoundError unless set
 
+              set.categories << categories
+              
               [categories].flatten.each do |category|
-                raise UbiquoCategories::LimitError if is_full?
-                
-                case category
-                when String
-                  unless set.categories.map(&:name).include? category
-                    set.categories << category
-                  end
-                when Category
-                  unless set.categories.include? category
-                    set.categories << category
-                  end
+                unless has_category? category.to_s
+                  raise UbiquoCategories::LimitError if is_full?
+                  @reflection.through_reflection.klass.create(
+                    :attr_name => association_name,
+                    :related_object => proxy_owner,
+                    :category => set.categories.select{|c| c.name == category.to_s}.first
+                  )
                 end
-                @reflection.through_reflection.klass.create(
-                  :attr_name => association_name,
-                  :related_object => proxy_owner,
-                  :category => set.categories.select{|c| c.name == category.to_s}.first
-                )
               end
+              reset
             end
 
             if options[:size] == 1
@@ -78,9 +72,13 @@ module UbiquoCategories
               end
             end
             
-            define_method('is_full?') do
+            define_method 'is_full?' do
               return false if options[:size].to_sym == :many
-              self.size >= options[:size]
+              [self].flatten.size >= options[:size]
+            end
+
+            define_method 'has_category?' do |category|
+              [self].flatten.map(&:to_s).include? category.to_s
             end
           end
 

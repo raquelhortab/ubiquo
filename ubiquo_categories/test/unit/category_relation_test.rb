@@ -39,6 +39,24 @@ class CategoryRelationTest < ActiveSupport::TestCase
     end
   end
 
+  def test_should_create_position
+    relation = create_category_relation(:position => nil)
+    assert_not_nil relation.position
+  end
+
+  def test_should_create_position_at_the_end
+    create_category_relation(:position => 100)
+    relation = create_category_relation(:position => nil)
+    assert_equal 101, relation.position
+  end
+
+  def test_last_position
+    create_category_relation(:position => 10, :attr_name => 'one')
+    create_category_relation(:position => 100, :attr_name => 'two')
+    assert_equal 10, CategoryRelation.last_position('one')
+    assert_equal 100, CategoryRelation.last_position('two')
+  end
+
   private
   
   def create_category_relation(options = {})

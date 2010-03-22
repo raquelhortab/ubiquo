@@ -52,6 +52,16 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     end
   end
 
+  def test_is_full_method
+    categorize :cities, :size => 2
+    model = create_category_model
+    assert !model.cities.is_full?
+    model.cities << 'London'
+    assert !model.cities.is_full?
+    model.cities << 'Tokyo'
+    assert model.cities.is_full?
+  end
+
   def test_categorized_store_one_string_element
     categorize :city
     model = create_category_model
@@ -89,31 +99,30 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model.cities = 'city' # maintains cities
   end
 
-#  def test_categorized_creates_category_inside_proper_set
-#    categorize :city
-#    set = category_sets(:cities)
-#    set.allow_creation!
-#    assert_equal [], set.categories
-#    assert_difference 'CategorySet.count', 2 do
-#      model = create_category_model
-#      model.cities = 'Barcelona##Athens'
-#    end
-#    assert_equal 2, set.reload.categories.count
-#  end
-#
-#  def test_categorized_retrieves_category_inside_proper_set
-#    categorize :city
-#    set = category_sets(:cities)
-#    set.allow_creation!
-#    set.categories = Category.create(:name => 'Barcelona'), Category.create(:name => 'Athens')
-#    assert_equal [], set.categories
-#    assert_no_difference 'CategorySet.count' do
-#      model = create_category_model
-#      model.cities = 'Barcelona##Athens'
-#    end
-#    assert_equal set, model.cities.first.category_set
-#    assert_equal 2, set.reload.categories.count
-#  end
+  def test_categorized_creates_category_inside_proper_set
+    categorize :city, :size => :many
+    set = category_sets(:cities)
+    assert_equal [], set.categories
+    assert_difference 'Category.count', 2 do
+      model = create_category_model
+      model.cities = 'Barcelona##Athens'
+    end
+    assert_equal 2, set.reload.categories.count
+  end
+
+  def test_categorized_retrieves_category_inside_proper_set
+    categorize :city, :size => :many, :separator => '##'
+    set = category_sets(:cities)
+    assert_equal [], set.categories
+    set.categories = Category.create(:name => 'Barcelona'), Category.create(:name => 'Athens')
+    model = create_category_model
+    assert_no_difference 'Category.count' do
+#      require 'ruby-debug';debugger
+      model.cities = 'Barcelona##Athens'
+    end
+    assert_equal set, model.cities.first.category_set
+    assert_equal 2, set.reload.categories.count
+  end
 
   def test_should_raise_if_set_does_not_exist
     categorize :unknown
@@ -142,6 +151,63 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal 1, model.countries.count
     assert_equal 'Barcelona', model.cities.first.name
     assert_equal 'Japan', model.countries.first.name
+  end
+
+  def test_has_category_in_plural_categorizations
+    categorize :cities, :size => :many, :separator => ','
+    model = create_category_model
+    model.cities = ['Barcelona', 'Athens']
+    tokyo_model = create_category_model
+    tokyo_model.cities = 'Tokyo'
+
+    assert model.cities.has_category?('Barcelona')
+    assert !model.cities.has_category?('Tokyo')
+    
+    barcelona = Category.find_by_name('Barcelona')
+    tokyo = Category.find_by_name('Tokyo')
+    assert model.cities.has_category?(barcelona)
+    assert !model.cities.has_category?(tokyo)
+  end
+
+  def test_has_category_in_singular_categorizations
+    categorize :city
+    model = create_category_model
+    model.city = 'Barcelona'
+    tokyo_model = create_category_model
+    tokyo_model.city = 'Tokyo'
+
+    assert_equal 'Barcelona', model.city.to_s
+    assert model.city.has_category?('Barcelona')
+    assert !model.city.has_category?('Tokyo')
+
+    barcelona = Category.find_by_name('Barcelona')
+    tokyo = Category.find_by_name('Tokyo')
+    assert model.city.has_category? barcelona
+    assert !model.cities.has_category?(tokyo)
+  end
+
+  def test_updating_relation_does_not_create_unneeded_instances
+    categorize :cities, :size => :many, :separator => ','
+    model = create_category_model
+    model.cities << 'Barcelona'
+    original_id = model.category_relations.first.id
+    assert_difference 'CategoryRelation.count', 1 do
+      model.cities = 'Barcelona,Athens'
+    end
+    assert_equal original_id, model.reload.category_relations.first.id
+    assert_equal original_id + 1, model.category_relations.last.id
+  end
+
+  def test_categorizations_are_sorted_by_position
+    categorize :cities, :size => :many, :separator => ','
+    model = create_category_model
+    model.cities = 'Barcelona,Athens'
+    assert_equal 2, model.category_relations.count
+    first = model.category_relations.first
+    first.update_attribute :position, 2
+    model.category_relations.last.update_attribute :position, 1
+    assert_not_equal first, model.reload.category_relations.first
+    assert_equal first, model.reload.category_relations.last
   end
 
   protected

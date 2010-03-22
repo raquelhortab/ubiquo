@@ -3,6 +3,7 @@ class CategoryRelation < ActiveRecord::Base
   belongs_to :category
   belongs_to :related_object, :polymorphic => true
 
+  before_create :create_position
   validates_presence_of :category, :related_object
     
   # See vendor/plugins/ubiquo_core/lib/ubiquo/extensions/active_record.rb to see an example of usage.
@@ -17,6 +18,20 @@ class CategoryRelation < ActiveRecord::Base
     
     apply_find_scopes(scopes) do
       find(:all, options)
+    end
+  end
+
+  def self.last_position attr_name
+    self.maximum("#{table_name}.position", :conditions => {:attr_name => attr_name.to_s})
+  end
+
+  protected
+
+  def create_position
+    if !read_attribute(:position)
+      last_position = CategoryRelation.last_position read_attribute(:attr_name)
+      last_position ||= 0
+      write_attribute :position, last_position+1
     end
   end
   
