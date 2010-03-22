@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://www.ubiquo.me}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{command line application for building ubiquo based applications.}
   s.test_files = [
     "test/ubiquo/generator_test.rb",
