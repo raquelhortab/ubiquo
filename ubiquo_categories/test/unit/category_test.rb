@@ -46,6 +46,10 @@ class CategoryTest < ActiveSupport::TestCase
     assert_equal_set [category_1,category_2], Category.filtered_search({:category_set => category_sets(:one).id})
   end
 
+  def test_to_s
+    assert_equal 'my_name', create_category(:name => 'my_name').to_s
+  end
+
   private
   
   def create_category(options = {})

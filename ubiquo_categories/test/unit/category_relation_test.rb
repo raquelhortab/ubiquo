@@ -47,6 +47,8 @@ class CategoryRelationTest < ActiveSupport::TestCase
       :category_id => categories(:one).id, # integer
       :related_object_id => related.id, # integer
       :related_object_type => related.class.to_s, # string
+      :position => 1,
+      :attr_name => 'attr'
     }
     CategoryRelation.create(default_options.merge(options))
   end

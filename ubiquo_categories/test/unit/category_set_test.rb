@@ -21,6 +21,16 @@ class CategorySetTest < ActiveSupport::TestCase
     category_set = create_category_set
     assert_equal [], category_set.categories
   end
+
+  def test_should_allow_add_string_categories
+    category_set = create_category_set
+    category_set.categories << 'category'
+    assert_equal 1, category_set.categories.size
+    assert_equal 'category', category_set.categories.first.name
+    assert_raise ActiveRecord::AssociationTypeMismatch do
+      category_set.categories << 1
+    end
+  end
   
   def test_should_filter_by_name
     CategorySet.destroy_all

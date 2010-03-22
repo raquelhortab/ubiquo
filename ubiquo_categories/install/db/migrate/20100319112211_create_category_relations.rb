@@ -4,6 +4,8 @@ class CreateCategoryRelations < ActiveRecord::Migration
       t.integer :category_id
       t.integer :related_object_id
       t.string :related_object_type
+      t.integer :position
+      t.string :attr_name
       t.timestamps
 
       t.index :category_id

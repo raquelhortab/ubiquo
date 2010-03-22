@@ -24,5 +24,9 @@ class Category < ActiveRecord::Base
       find(:all, options)
     end
   end
+
+  def to_s
+    name
+  end
   
 end

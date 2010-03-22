@@ -1,6 +1,18 @@
 class CategorySet < ActiveRecord::Base
 
-  has_many :categories
+  has_many :categories do
+    def << categories
+      categories = [categories] unless categories.is_a? Array
+      categories.each do |category|
+        case category
+        when String
+          self.concat(Category.new(:name => category))
+        else
+          self.concat(category)
+        end
+      end
+    end
+  end
 
   validates_presence_of :name
     
@@ -18,5 +30,5 @@ class CategorySet < ActiveRecord::Base
       find(:all, options)
     end
   end
-  
+
 end

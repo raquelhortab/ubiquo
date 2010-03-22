@@ -8,3 +8,7 @@ one:
 two:
   name: MyString
   key: MyString
+
+cities:
+  name: Cities
+  key: cities

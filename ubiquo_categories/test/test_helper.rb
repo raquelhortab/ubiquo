@@ -23,3 +23,7 @@ end
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
+
+def create_category_model
+  CategoryTestModel.create
+end
