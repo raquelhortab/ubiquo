@@ -1,24 +1,29 @@
-
-UBIQUO_PLUGINS = [
-  'ubiquo_core',
-  'ubiquo_authentication',
-  'ubiquo_access_control',
-  'ubiquo_media',
-  'ubiquo_scaffold',
-  'ubiquo_jobs',
-  'ubiquo_i18n',
-  'ubiquo_activity',
-  'ubiquo_versions',
-  'ubiquo_guides'
+external_plugins = %w[
+  calendar_date_select,
+  exception_notification,
+  responds_to_parent,
+  tiny_mce,
+  paperclip
+]
+minimal_plugins = %w[ ubiquo_core, ubiquo_authentication ]
+rest_plugins = %w[
+  ubiquo_access_control,
+  ubiquo_media,
+  ubiquo_scaffold,
+  ubiquo_jobs,
+  ubiquo_i18n,
+  ubiquo_activity,
+  ubiquo_version,
+  ubiquo_guides
 ]
 
-EXTERNAL_PLUGINS = [
-   'calendar_date_select',
-   'exception_notification',
-   'responds_to_parent',
-   'tiny_mce',
-   'paperclip'
-]
+choosen_plugin_set = "<%= @opts[:profile].to_s %>"
+
+case choosen_plugin_set
+  when "minimal" then selected_plugins = minimal_plugins
+  else "complete" then selected_plugins = minimal_plugins + rest_plugins
+end
+
 # File railties/lib/rails_generator/generators/applications/app/template_runner.rb, line 69
 def plugin(name, options)
   log 'plugin', name
@@ -42,7 +47,7 @@ def add_plugins(plugin_names, options={})
   plugin_names.each { |name| plugin name, :git => "#{git_root}/#{name}.git", :branch => options[:branch], :submodule => true }
 end
 # To ask needed settings when boostraping the app
-appname             = ask("Please enter your application name, it will be used in database.yml and several other places: ")
+appname             = <%= @opts[:app_name] %>
 exception_recipient = "programadors@gnuine.com"
 sender_address      = "errors@gnuine.com"
 # Remove rails temporary directories
@@ -174,49 +179,32 @@ production:
   dbfile: db/#{appname}_production.db
 CODE
 
-adapter_message = <<-CODE
-
-
-Avaliable database adapters: 
-
-1.- postgresql
-2.- mysql
-3.- sqlite3
-
-Please choose one(1/2/3):
-CODE
-
-choosen_adapter = ask(adapter_message)
+choosen_adapter = "<%= @opts[:database] %>"
 case choosen_adapter
-  when "2" then file 'config/database.yml', mysql
-  when "3" then file 'config/database.yml', sqlite3
+  when "mysql" then file 'config/database.yml', mysql
+  when "sqlite" then file 'config/database.yml', sqlite3
   else file 'config/database.yml', postgresql
 end
 # gnuine routes.rb
-file 'config/routes.rb',
-%q{ActionController::Routing::Routes.draw do |map|
+ubiquo_routes = selected_plugins.map do |plugin|
+  "  map.from_plugin #{plugin.to_sym}"
+end.join("\n")
+file 'config/routes.rb', <<-CODE
+ActionController::Routing::Routes.draw do |map|
 
   map.namespace :ubiquo do |ubiquo|
   end
 
   # Ubiquo plugins routes. See routes.rb from each plugin path.
-  map.from_plugin :ubiquo_core
-  map.from_plugin :ubiquo_authentication
-  map.from_plugin :ubiquo_access_control
-  map.from_plugin :ubiquo_media
-  map.from_plugin :ubiquo_jobs
-  map.from_plugin :ubiquo_i18n
-  map.from_plugin :ubiquo_activity
-  map.from_plugin :ubiquo_design
- 
+#{ubiquo_routes}
   ############# default routes
   #map.connect ':controller/:action/:id'
   #map.connect ':controller/:action/:id.:format'
 end
-}
+CODE
 # default rails environment.rb
-file 'config/environment.rb',
-%q{# Be sure to restart your server when you modify this file
+file 'config/environment.rb', <<-CODE
+# Be sure to restart your server when you modify this file
 
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
@@ -260,10 +248,11 @@ Rails::Initializer.run do |config|
   config.i18n.load_path += Dir.glob(File.join("config", "locales", "**","*.{rb,yml}"))
   config.i18n.default_locale = :ca
 end
-}
+CODE
 
-add_plugins(EXTERNAL_PLUGINS + UBIQUO_PLUGINS + ['ubiquo_design'], :branch => "0.7-stable")
-plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => '0.7-stable'
+ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
+add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch)
+#plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => '0.7-stable'
 
 rake("rails:update")
 rake("calendardateselect:install")
