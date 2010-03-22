@@ -14,11 +14,11 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
     login_as user
     I18n.locale = 'invalid_locale'
     assert_not_equal I18n.locale, user.locale
-    assert_not_equal :es, I18n.locale
+    assert_not_equal 'es', I18n.locale
     user.update_attribute :locale, 'es'
     get :index
     assert_response :success
-    assert_equal :es, I18n.locale
+    assert_equal 'es', I18n.locale
   end
   
   def test_should_get_index_with_default_i18n_locale

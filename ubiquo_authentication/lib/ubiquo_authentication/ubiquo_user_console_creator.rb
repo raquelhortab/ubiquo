@@ -4,8 +4,6 @@ module UbiquoAuthentication
     
     # Creates a new ubiquo user accepts required fields as parameters.
     def self.create!(options = {})
-      old_locale = I18n.locale
-      I18n.locale = :en
       user = UbiquoUser.create(
                :login                 => options[:login], 
                :password              => options[:password], 
@@ -16,8 +14,8 @@ module UbiquoAuthentication
                :is_active             => options[:is_active],
                :is_admin              => options[:is_admin])
       user.is_superadmin = options[:is_superadmin]
+      user.locale = I18n.locale.to_s
       user.save!
-      I18n.locale = old_locale
       user
     end
     
