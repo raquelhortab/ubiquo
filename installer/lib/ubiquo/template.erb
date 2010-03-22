@@ -250,7 +250,7 @@ Rails::Initializer.run do |config|
 end
 CODE
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
-add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:gnuine] ? true : false %>)
+add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
 
 <% if @opts[:gnuine] %>
 plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => ubiquo_branch
