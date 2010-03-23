@@ -74,19 +74,30 @@ module UbiquoCategories
 
             if options[:size] == 1
               # Returns directly the instance if only one category is allowed
-              def find_target
-                super.first
-              end
-
-              def locale
-                load_target
-                super
+              def method_missing(method, *args)
+                if load_target
+                  if @target.first.respond_to?(method)
+                    if block_given?
+                      @target.first.send(method, *args)  { |*block_args| yield(*block_args) }
+                    else
+                      @target.first.send(method, *args)
+                    end
+                  else
+                    super
+                  end
+                end
               end
             end
             
             define_method 'is_full?' do
               return false if options[:size].to_sym == :many
               [self].flatten.size >= options[:size]
+            end
+
+            define_method 'will_be_full?' do |categories|
+              return false if options[:size].to_sym == :many
+              new_categories = categories.select{|c| ![self].map(&:to_s).include? c.to_s }
+              [self].flatten.size + new_categories.size > options[:size]
             end
 
             define_method 'has_category?' do |category|
@@ -100,13 +111,34 @@ module UbiquoCategories
               :source => :category,
               :conditions => ["category_relations.attr_name = ?", association_name],
               :order => "category_relations.position ASC",
-              :translation_shared => true
             },&proc)
 
-          define_method "#{association_name}=" do |categories|
-            categories = categories.split(options[:separator]) if categories.is_a? String
-            self.send(association_name) << categories
+          if self.is_translatable?
+            self.reflections[association_name.to_sym].options[:translation_shared] = true
           end
+
+          define_method "#{association_name}_with_categories=" do |categories|
+            categories = categories.split(options[:separator]) if categories.is_a? String
+            categories = [categories].flatten
+
+            set = CategorySet.find_by_key association_name
+            raise UbiquoCategories::SetNotFoundError unless set
+
+            locale = self.locale if self.class.is_translatable?
+            categories_options = {}
+            categories_options.merge!(:locale => locale)
+
+            set.categories << [categories, categories_options]
+            raise UbiquoCategories::LimitError if send(association_name).will_be_full? categories
+            categories = categories.map{|c| set.select_fittest(c, locale)}.compact
+
+            CategoryRelation.send(:with_scope, :create => {:attr_name => association_name}) do
+              self.send("#{association_name}_without_categories=", categories)
+            end
+
+          end
+          
+          alias_method_chain "#{association_name}=", 'categories'
 
           if field != association_name
             alias_method field, association_name

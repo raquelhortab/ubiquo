@@ -218,6 +218,23 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal '/', CategoryTestModel.categorize_options(:genders)[:separator]
   end
 
+  def test_assignation_deletes_old_relations
+    categorize :cities, :size => :many
+    model = create_category_model
+    model.cities = ['Barcelona', 'Tokyo']
+    model.cities = ['Barcelona']
+    assert_equal ['Barcelona'], model.cities.map(&:name)
+    assert_equal 1, model.category_relations.count
+  end
+
+  def test_will_be_full
+    categorize :cities, :size => 2
+    model = create_category_model
+    model.cities = ['Barcelona']
+    assert model.cities.will_be_full?(['Tokyo', 'London'])
+    assert !model.cities.will_be_full?(['Tokyo', 'Barcelona'])
+  end
+
   ### i18n-related tests ###
 
   def test_category_adopts_object_locale
