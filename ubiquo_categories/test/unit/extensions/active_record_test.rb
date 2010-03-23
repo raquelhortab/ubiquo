@@ -231,7 +231,8 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     categorize :cities, :size => 2
     model = create_category_model
     model.cities = ['Barcelona']
-    assert model.cities.will_be_full?(['Tokyo', 'London'])
+    assert model.cities.will_be_full?(['Tokyo', 'London', 'Paris'])
+    assert !model.cities.will_be_full?(['Tokyo', 'London'])
     assert !model.cities.will_be_full?(['Tokyo', 'Barcelona'])
   end
 

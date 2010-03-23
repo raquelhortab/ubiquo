@@ -96,8 +96,7 @@ module UbiquoCategories
 
             define_method 'will_be_full?' do |categories|
               return false if options[:size].to_sym == :many
-              new_categories = categories.select{|c| ![self].map(&:to_s).include? c.to_s }
-              [self].flatten.size + new_categories.size > options[:size]
+              categories.size > options[:size]
             end
 
             define_method 'has_category?' do |category|
