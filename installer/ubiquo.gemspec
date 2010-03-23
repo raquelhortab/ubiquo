@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ubiquo}
-  s.version = "0.1.5"
+  s.version = "0.1.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ramon Salvad\303\263"]
@@ -53,16 +53,13 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rails>, ["= 2.3.5"])
-      s.add_runtime_dependency(%q<rmagick>, [">= 1.15.9"])
       s.add_runtime_dependency(%q<highline>, [">= 0"])
     else
       s.add_dependency(%q<rails>, ["= 2.3.5"])
-      s.add_dependency(%q<rmagick>, [">= 1.15.9"])
       s.add_dependency(%q<highline>, [">= 0"])
     end
   else
     s.add_dependency(%q<rails>, ["= 2.3.5"])
-    s.add_dependency(%q<rmagick>, [">= 1.15.9"])
     s.add_dependency(%q<highline>, [">= 0"])
   end
 end
