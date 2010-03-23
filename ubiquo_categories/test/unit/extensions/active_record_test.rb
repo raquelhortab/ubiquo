@@ -182,7 +182,7 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
 
     barcelona = Category.find_by_name('Barcelona')
     tokyo = Category.find_by_name('Tokyo')
-    assert model.city.has_category? barcelona
+    assert model.city.has_category?(barcelona)
     assert !model.cities.has_category?(tokyo)
   end
 
@@ -218,10 +218,36 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal '/', CategoryTestModel.categorize_options(:genders)[:separator]
   end
 
+  ### i18n-related tests ###
+
+  def test_category_adopts_object_locale
+    i18n_categorize :city
+    model = create_i18n_category_model
+    model.city = 'Barcelona'
+    assert_equal model.locale, model.city.locale
+  end
+
+  def test_categories_can_be_translation_shared
+    i18n_categorize :city, :translation_shared => true
+    model = create_i18n_category_model
+    model.city = 'Barcelona'
+    translation = model.translate('ca', :copy_all => true)
+    assert_kind_of Category, translation.city
+    assert_equal 'Barcelona', translation.city.to_s
+    assert_equal model.city.content_id, translation.city.content_id
+    assert_equal 'ca', translation.city.locale
+  end
+
   protected
 
   def categorize attr, options = {}
     CategoryTestModel.class_eval do
+      categorized_with attr, options
+    end
+  end
+
+  def i18n_categorize attr, options = {}
+    CategoryTranslatableTestModel.class_eval do
       categorized_with attr, options
     end
   end

@@ -53,7 +53,11 @@ module UbiquoCategories
               set = CategorySet.find_by_key association_name
               raise UbiquoCategories::SetNotFoundError unless set
 
-              set.categories << categories
+              locale = proxy_owner.locale if proxy_owner.class.is_translatable?
+              categories_options = {}
+              categories_options.merge!(:locale => locale)
+
+              set.categories << [categories, categories_options]
               
               [categories].flatten.each do |category|
                 unless has_category? category.to_s
@@ -61,7 +65,7 @@ module UbiquoCategories
                   @reflection.through_reflection.klass.create(
                     :attr_name => association_name,
                     :related_object => proxy_owner,
-                    :category => set.categories.select{|c| c.name == category.to_s}.first
+                    :category => set.select_fittest(category, locale)
                   )
                 end
               end
@@ -72,6 +76,11 @@ module UbiquoCategories
               # Returns directly the instance if only one category is allowed
               def find_target
                 super.first
+              end
+
+              def locale
+                load_target
+                super
               end
             end
             
@@ -90,7 +99,8 @@ module UbiquoCategories
               :class_name => "::Category",
               :source => :category,
               :conditions => ["category_relations.attr_name = ?", association_name],
-              :order => "category_relations.position ASC"
+              :order => "category_relations.position ASC",
+              :translation_shared => true
             },&proc)
 
           define_method "#{association_name}=" do |categories|

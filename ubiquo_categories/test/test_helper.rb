@@ -18,6 +18,10 @@ def create_categories_test_model_backend
   %w{CategoryTestModel CategoryTranslatableTestModel}.each do |klass|
     Object.const_set(klass, Class.new(ActiveRecord::Base)) unless Object.const_defined? klass
   end
+
+  CategoryTranslatableTestModel.class_eval do
+    translatable :field
+  end
 end
 
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
@@ -26,4 +30,8 @@ end
 
 def create_category_model
   CategoryTestModel.create
+end
+
+def create_i18n_category_model
+  CategoryTranslatableTestModel.create(:locale => 'en')
 end
