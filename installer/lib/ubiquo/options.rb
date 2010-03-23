@@ -13,6 +13,7 @@ module Ubiquo
       self[:database] = :sqlite
       self[:template] = :stable
       self[:profile]  = :complete
+      self[:locale] = :en
       self[:devel]    = false
       self[:gnuine]   = args.delete('--gnuine') || false
       
@@ -36,6 +37,12 @@ module Ubiquo
           o.on("--#{profile.to_s}", msg) { self[:profile] = profile }
         end
 
+        o.separator "\nSelects ubiquo default locale (defaults to english): "
+
+        suported_locales.each do |locale, msg|
+          o.on("--#{locale.to_s}", msg) { self[:locale] = locale }
+        end
+        
         o.separator "\nExtra options:"
 
         o.on("--devel", 'For ubiquo developers (ssh acces to github repos)') do
@@ -85,6 +92,14 @@ module Ubiquo
       {
         :minimal  => "Includes minimal set of ubiquo plugins.",
         :complete => "Includes all avaliable ubiquo core plugins."
+      }
+    end
+
+    def suported_locales
+      {
+        :ca => "Selects catalan.",
+        :es => "Selects spanish.",
+        :en => "Selects english."
       }
     end
     

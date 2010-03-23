@@ -13,7 +13,6 @@ rest_plugins = %w[
   ubiquo_activity
   ubiquo_versions
   ubiquo_guides
-  <%= "ubiquo_design" if @opts[:gnuine] %>
 ]
 
 choosen_plugin_set = "<%= @opts[:profile].to_s %>"
@@ -163,19 +162,19 @@ base_config: &base_config
 
 development:
   <<: *base_config  
-  dbfile: db/#{appname}_development.db
+  database: db/#{appname}_development.db
   
 test:
   <<: *base_config
-  dbfile: db/#{appname}_test.db
+  database: db/#{appname}_test.db
 
 preproduction:
   <<: *base_config
-  dbfile: db/#{appname}_preproduction.db
+  database: db/#{appname}_preproduction.db
 
 production:
   <<: *base_config
-  dbfile: db/#{appname}_production.db
+  database: db/#{appname}_production.db
 CODE
 
 choosen_adapter = "<%= @opts[:database] %>"
@@ -196,6 +195,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Ubiquo plugins routes. See routes.rb from each plugin path.
 #{ubiquo_routes}
+<%= "map.from_plugin :ubiquo_design" if opts[:gnuine] %>
   ############# default routes
   #map.connect ':controller/:action/:id'
   #map.connect ':controller/:action/:id.:format'
@@ -244,13 +244,13 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de  
   config.i18n.load_path += Dir.glob(File.join("config", "locales", "**","*.{rb,yml}"))
-  config.i18n.default_locale = :en
+  config.i18n.default_locale = :<%= @opts[:locale] %>
 end
 CODE
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
 add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
 
-<% if @opts[:gnuine] %>
+<% if @opts[:gnuine] && opts[:profile] == :complete %>
 plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => ubiquo_branch
 <% end %>
 
