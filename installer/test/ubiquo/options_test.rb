@@ -41,4 +41,11 @@ class TestOptions < Test::Unit::TestCase
     assert_equal "invalid option: --wrong", opts[:invalid_argument]
   end
 
+  def test_should_have_a_version
+    opts = Options.new(%w[ --version myapp])
+    version_file = File.dirname(__FILE__) + "/../../VERSION"
+    version = File.read(version_file).strip
+    assert_equal version, opts[:version]
+  end
+  
 end

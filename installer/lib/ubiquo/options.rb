@@ -18,29 +18,33 @@ module Ubiquo
       
       @opts = OptionParser.new do |o|
         o.banner = """Usage: #{File.basename($0)} [options] application_name"        
-        o.separator ""
+        o.separator "\nSelect a database (defaults to postgresql if not specified):"
         
         suported_databases.each do |db,msg|
           o.on("--#{db.to_s}", msg) { self[:database] = db }
         end
         
-        o.separator ""
+        o.separator "\nSelect a template (defaults to stable if not specified):"
         
         suported_templates.each do |tpl, msg|
           o.on("--#{tpl.to_s}", msg) { self[:template] = tpl }
         end
         
-        o.separator ""
+        o.separator "\nSelect a profile (defaults to complete if not specified):"
         
         suported_profiles.each do |profile, msg|
           o.on("--#{profile.to_s}", msg) { self[:profile] = profile }
         end
 
+        o.separator "\nExtra options:"
+
         o.on("--devel", 'For ubiquo developers (ssh acces to github repos)') do
           self[:devel] = true
         end
-        
-        o.separator ""
+
+        o.on("-v", '--version', "Displays this gem version.") do
+          self[:version] = File.read(File.dirname(__FILE__) + "/../../VERSION").strip
+        end
         
         o.on_tail('-h', '--help', 'displays this help and exit') do
           self[:show_help] = true
@@ -79,7 +83,7 @@ module Ubiquo
     
     def suported_profiles
       {
-        :minimal  => "Includes minimal set of ubiquo plugins: ubiquo_core, ubiquo_authentication and ubiquo_scaffold.",
+        :minimal  => "Includes minimal set of ubiquo plugins.",
         :complete => "Includes all avaliable ubiquo core plugins."
       }
     end

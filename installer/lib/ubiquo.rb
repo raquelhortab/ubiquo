@@ -12,10 +12,14 @@ module Ubiquo
         options = Options.new(arguments)
         options = options.merge(env_opts) if env_opts
 
-
         if `which git` == ''
           $stderr.puts "Sorry you need to install git (> 1.5.3). See http://git-scm.com/"
           options[:show_help] = true
+        end
+
+        if options[:version]
+          $stdout.puts options[:version]
+          return 0
         end
         
         if options[:invalid_argument]
@@ -33,6 +37,7 @@ module Ubiquo
           return 1
         end
 
+        
         skeleton = File.dirname(__FILE__) + "/ubiquo/template.erb"
         tpl = Tempfile.new('tmp')
         File.open(tpl.path, 'w') do |file|
