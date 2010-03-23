@@ -11,6 +11,7 @@ class Ubiquo::CategoriesController < UbiquoAreaController
     filters = {
       :text => params[:filter_text],
       :locale => params[:filter_locale],
+      :category_set => params[:category_set_id]
     }
     @categories_pages, @categories = Category.paginate(:page => params[:page]) do
       # remove this find and add something like this:

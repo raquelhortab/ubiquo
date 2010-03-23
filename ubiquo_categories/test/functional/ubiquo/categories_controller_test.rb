@@ -12,6 +12,14 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:categories)
   end
 
+  def test_index_should_be_filtered_by_category_set
+    category_sets(:one).categories << 'One'
+    category_sets(:two).categories << 'Two'
+    get :index, :category_set_id => category_sets(:one).id
+    assert assigns(:categories).map(&:name).include?('One')
+    assert !assigns(:categories).map(&:name).include?('Two')
+  end
+
   def test_should_get_new
     get :new, :category_set_id => category_sets(:one).id
     assert_response :success
