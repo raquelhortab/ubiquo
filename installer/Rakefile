@@ -10,7 +10,15 @@ begin
     gem.description = %Q{This gem provides a command-line application to make the creation of ubiquo based applications fast and easy.}
     gem.email = "rsalvado@gnuine.com"
     gem.homepage = "http://www.ubiquo.me"
-    gem.authors = ["Ramon Salvadó"]
+    gem.authors = [
+                   "Albert Callarisa",
+                   "Bernat Foj",
+                   "Eric García",
+                   "Felip Ladrón",
+                   "Antoni Reina",
+                   "Ramon Salvadó",
+                   "Arnau Sánchez"
+                  ]
     gem.add_dependency(%q<rails>, '= 2.3.5')
     gem.add_dependency(%q<rmagick>, '>= 1.15.9')
     gem.add_dependency(%q<highline>)

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version = "0.1.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Ramon Salvad\303\263"]
+  s.authors = ["Albert Callarisa", "Bernat Foj", "Eric Garc\303\255a", "Felip Ladr\303\263n", "Antoni Reina", "Ramon Salvad\303\263", "Arnau S\303\241nchez"]
   s.date = %q{2010-03-23}
   s.default_executable = %q{ubiquo}
   s.description = %q{This gem provides a command-line application to make the creation of ubiquo based applications fast and easy.}
