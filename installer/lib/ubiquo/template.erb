@@ -46,8 +46,8 @@ def add_plugins(plugin_names, options={})
 end
 # To ask needed settings when boostraping the app
 appname             = "<%= @opts[:app_name] %>"
-exception_recipient = "programadors@gnuine.com"
-sender_address      = "errors@gnuine.com"
+exception_recipient = "<%= @opts[:exception_recipient] %>"
+sender_address      = "<%= @opts[:sender_address] %>"
 # Remove rails temporary directories
 ["./tmp/pids", "./tmp/sessions", "./tmp/sockets", "./tmp/cache"].each do |f|
   run("rmdir ./#{f}")

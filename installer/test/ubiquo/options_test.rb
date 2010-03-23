@@ -47,5 +47,16 @@ class TestOptions < Test::Unit::TestCase
     version = File.read(version_file).strip
     assert_equal version, opts[:version]
   end
+
+  def test_should_be_able_to_set_default_locale
+    opts = Options.new(%w[ --ca myaapp ])
+    assert_equal :ca, opts[:locale]
+  end
+
+  def test_should_be_able_to_set_exception_notification_options
+    opts = Options.new(%w[ --recipient r@r.com --sender s@s.com myapp])
+    assert_equal "r@r.com", opts[:exception_recipient]
+    assert_equal "s@s.com", opts[:sender_address]
+  end
   
 end

@@ -1,6 +1,4 @@
 module Ubiquo
-  # TODO: Add a devel flag (git repos access)
-  # TODO: Add fields to configure e-mails for exception_notification
   # TODO: Improve banner to inform of UBIQUO_OPTS env var merging
   # TODO: Add git needed params for repo creation on github
   class Options < Hash
@@ -16,6 +14,9 @@ module Ubiquo
       self[:locale] = :en
       self[:devel]    = false
       self[:gnuine]   = args.delete('--gnuine') || false
+      self[:exception_recipient] = "chan@ge.me"
+      self[:sender_address] = "chan@ge.me"
+      
       
       @opts = OptionParser.new do |o|
         o.banner = """Usage: #{File.basename($0)} [options] application_name"        
@@ -41,6 +42,16 @@ module Ubiquo
 
         suported_locales.each do |locale, msg|
           o.on("--#{locale.to_s}", msg) { self[:locale] = locale }
+        end
+
+        o.separator "\nException notification options: "
+
+        o.on("--recipient [EMAIL]", "E-mail for exception notifications.") do |recipient|
+          self[:exception_recipient] = recipient
+        end
+
+        o.on("--sender [EMAIL]", "E-mail to use in from.") do |sender|
+          self[:sender_address] = sender
         end
         
         o.separator "\nExtra options:"
