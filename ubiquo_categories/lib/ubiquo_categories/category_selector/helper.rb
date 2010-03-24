@@ -12,9 +12,10 @@ module UbiquoCategories
           categories = categories.locale(object.locale, :ALL)
         end
         selector_type = options[:type]
+        categorize_size = object.class.categorize_options(key)[:size]
         selector_type ||= case categories.size
           when 0..6
-            object.class.categorize_options(key)[:size] > 1 ? :checkbox : :select
+            (categorize_size == :many || categorize_size > 1) ? :checkbox : :select
           else
             :autocomplete
         end
@@ -42,7 +43,7 @@ module UbiquoCategories
         output << select(object_name, 
           key, 
           options_for_select(categories.collect { |cat| [cat.name, cat.name]},
-                             :selected => object.send(key, true).name),
+                             :selected => object.send(key).name),
           { :include_blank => true }
         )
       end
