@@ -47,25 +47,32 @@ module UbiquoCategories
 
           association_name = field.to_s.pluralize
 
+          assign_to_set = Proc.new do |categories, object|
+            set = CategorySet.find_by_key association_name
+            raise UbiquoCategories::SetNotFoundError unless set
+
+            locale = object.locale if object.class.is_translatable?
+            categories_options = {}
+            categories_options.merge!(:locale => locale)
+
+            set.categories << [categories, categories_options]
+            categories = Array(categories).reject(&:blank?)
+            categories = categories.map{|c| set.select_fittest(c, locale)}.uniq.compact
+            [set, categories]
+          end
+
           proc = Proc.new do
-            
+
             define_method "<<" do |categories|
-              set = CategorySet.find_by_key association_name
-              raise UbiquoCategories::SetNotFoundError unless set
-
-              locale = proxy_owner.locale if proxy_owner.class.is_translatable?
-              categories_options = {}
-              categories_options.merge!(:locale => locale)
-
-              set.categories << [categories, categories_options]
+              set, categories = assign_to_set.call(categories, proxy_owner)
               
-              Array(categories).each do |category|
+              categories.each do |category|
                 unless has_category? category.to_s
                   raise UbiquoCategories::LimitError if is_full?
                   @reflection.through_reflection.klass.create(
                     :attr_name => association_name,
                     :related_object => proxy_owner,
-                    :category => set.select_fittest(category, locale)
+                    :category => category
                   )
                 end
               end
@@ -124,18 +131,10 @@ module UbiquoCategories
           
           define_method "#{association_name}_with_categories=" do |categories|
             categories = categories.split(options[:separator]) if categories.is_a? String
-            categories = Array(categories)
 
-            set = CategorySet.find_by_key association_name
-            raise UbiquoCategories::SetNotFoundError unless set
+            set, categories = assign_to_set.call(categories, self)
 
-            locale = self.locale if self.class.is_translatable?
-            categories_options = {}
-            categories_options.merge!(:locale => locale)
-
-            set.categories << [categories, categories_options]
             raise UbiquoCategories::LimitError if send(association_name).will_be_full? categories
-            categories = categories.map{|c| set.select_fittest(c, locale)}.compact
 
             CategoryRelation.send(:with_scope, :create => {:attr_name => association_name}) do
               self.send("#{association_name}_without_categories=", categories)

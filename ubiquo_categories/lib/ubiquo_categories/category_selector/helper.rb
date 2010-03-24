@@ -35,6 +35,7 @@ module UbiquoCategories
                                   :id => "#{object_name}_#{key}_#{category.id}")
           output << label_tag("#{object_name}_#{key}_#{category.id}", category)
         end
+        output << hidden_field_tag("#{object_name}[#{key}][]", '')
         output
       end
       

@@ -245,6 +245,22 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal 'cities', model.category_relations.first.attr_name
   end
 
+  def test_should_not_assign_blank_category
+    categorize :cities, :size => 2
+    model = create_category_model
+    model.cities = ['', 'Barcelona']
+    assert_equal ['Barcelona'], model.cities.map(&:name)
+    assert_equal 1, model.category_relations.count
+  end
+
+  def test_should_not_assign_repeated_category
+    categorize :cities, :size => 2
+    model = create_category_model
+    model.cities = ['Barcelona', 'Barcelona']
+    assert_equal ['Barcelona'], model.cities.map(&:name)
+    assert_equal 1, model.category_relations.count
+  end
+
   ### i18n-related tests ###
 
   def test_category_adopts_object_locale
