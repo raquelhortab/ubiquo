@@ -50,6 +50,11 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  def test_edit_should_redirect_to_correct_locale
+    get :edit, :id => categories(:one).id, :category_set_id => category_sets(:one).id, :locale => 'jp'
+    assert_redirected_to ubiquo_category_set_categories_url
+  end
+
   def test_should_update_category
     put :update, :id => categories(:one).id, :category => category_attributes, :category_set_id => category_sets(:one).id
     assert_redirected_to ubiquo_category_set_categories_url

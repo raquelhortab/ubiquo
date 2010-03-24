@@ -59,7 +59,7 @@ class Ubiquo::CategoriesController < UbiquoAreaController
   def edit
     @category = Category.find(params[:id])
     unless @category.locale?(current_locale)
-      redirect_to(ubiquo_categories_url)
+      redirect_to(ubiquo_category_set_categories_url)
       return
     end
   end
