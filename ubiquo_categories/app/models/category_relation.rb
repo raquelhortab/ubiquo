@@ -4,7 +4,7 @@ class CategoryRelation < ActiveRecord::Base
   belongs_to :related_object, :polymorphic => true
 
   before_create :create_position
-  validates_presence_of :category, :related_object
+  validates_presence_of :category, :related_object, :attr_name
     
   # See vendor/plugins/ubiquo_core/lib/ubiquo/extensions/active_record.rb to see an example of usage.
   def self.filtered_search(filters = {}, options = {})

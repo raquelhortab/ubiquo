@@ -59,7 +59,7 @@ module UbiquoCategories
 
               set.categories << [categories, categories_options]
               
-              [categories].flatten.each do |category|
+              Array(categories).each do |category|
                 unless has_category? category.to_s
                   raise UbiquoCategories::LimitError if is_full?
                   @reflection.through_reflection.klass.create(
@@ -91,7 +91,7 @@ module UbiquoCategories
             
             define_method 'is_full?' do
               return false if options[:size].to_sym == :many
-              [self].flatten.size >= options[:size]
+              Array(self).size >= options[:size]
             end
 
             define_method 'will_be_full?' do |categories|
@@ -100,8 +100,14 @@ module UbiquoCategories
             end
 
             define_method 'has_category?' do |category|
-              [self].flatten.map(&:to_s).include? category.to_s
+              Array(self).map(&:to_s).include? category.to_s
             end
+
+            # Automatically set the required attr_name when creating through the through
+            define_method 'construct_owner_attributes' do |reflection|
+              super.merge(:attr_name => association_name.to_s)
+            end
+
           end
 
           self.has_many(association_name.to_sym, {
@@ -115,10 +121,10 @@ module UbiquoCategories
           if self.is_translatable?
             self.reflections[association_name.to_sym].options[:translation_shared] = true
           end
-
+          
           define_method "#{association_name}_with_categories=" do |categories|
             categories = categories.split(options[:separator]) if categories.is_a? String
-            categories = [categories].flatten
+            categories = Array(categories)
 
             set = CategorySet.find_by_key association_name
             raise UbiquoCategories::SetNotFoundError unless set

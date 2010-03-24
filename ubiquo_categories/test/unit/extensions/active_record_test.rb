@@ -236,6 +236,15 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert !model.cities.will_be_full?(['Tokyo', 'Barcelona'])
   end
 
+  def test_assign_categories_when_new_record
+    categorize :cities, :size => 2
+    model = CategoryTestModel.new
+    model.cities = ['Barcelona']
+    model.save
+    assert_equal ['Barcelona'], model.cities.map(&:name)
+    assert_equal 'cities', model.category_relations.first.attr_name
+  end
+
   ### i18n-related tests ###
 
   def test_category_adopts_object_locale
