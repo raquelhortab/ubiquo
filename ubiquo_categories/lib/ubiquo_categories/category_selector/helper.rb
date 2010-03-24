@@ -8,6 +8,9 @@ module UbiquoCategories
         object = options[:object]
         key = key.to_s.pluralize
         categories = category_set(key).categories
+        if object.class.is_translatable?
+          categories = categories.locale(object.locale, :ALL)
+        end
         selector_type = options[:type]
         selector_type ||= case categories.size
           when 0..6
