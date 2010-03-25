@@ -12,6 +12,11 @@ module Ubiquo
         options = Options.new(arguments)
         options = options.merge(env_opts) if env_opts
 
+        if `rails -v`.strip != "Rails 2.3.5"
+          $stderr.puts "Sorry ubiquo needs rails 2.3.5 to work properly."
+          options[:show_help] = true
+        end
+        
         if `which git` == ''
           $stderr.puts "Sorry you need to install git (> 1.5.3). See http://git-scm.com/"
           options[:show_help] = true
