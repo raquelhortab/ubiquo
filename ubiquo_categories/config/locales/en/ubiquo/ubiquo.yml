@@ -3,3 +3,6 @@ en:
     categories:
       categories: "Categories"
       categories_title: "Go to categories"
+    category_selector:
+      new_element: "New element"
+      add_element: "Add"
