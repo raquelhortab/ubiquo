@@ -30,14 +30,11 @@ module UbiquoCategories
         #   :separator => The char(s) that delimite the different categories when
         #                 creating them from a string. Defaults to double hash (##)
         #
-        #                  
+        #
 
         def categorized_with(field, options = {})
           options.reverse_merge!(DEFAULT_CATEGORIZED_OPTIONS)
           
-          @categorized_with_options ||= {}
-          @categorized_with_options[field.to_sym] = options
-
           self.has_many(:category_relations, {
               :as => :related_object,
               :class_name => "::CategoryRelation",
@@ -46,6 +43,9 @@ module UbiquoCategories
           }) unless self.respond_to?(:category_relations)
 
           association_name = field.to_s.pluralize
+
+          @categorized_with_options ||= {}
+          @categorized_with_options[association_name.to_sym] = options
 
           assign_to_set = Proc.new do |categories, object|
             set = CategorySet.find_by_key association_name
@@ -148,12 +148,36 @@ module UbiquoCategories
             alias_method field, association_name
             alias_method "#{field}=", "#{association_name}="
           end
+
+          named_scope "with_#{association_name}_in", lambda{ |*values|
+            category_conditions_for field, values
+          }
           
         end
         
         # Returns the associated options for the categorized +field+
         def categorize_options(field)
-          @categorized_with_options[field.to_sym]
+          association_name = field.to_s.pluralize.to_sym
+          @categorized_with_options[association_name]
+        end
+
+        def category_conditions_for field, category_names
+          association_name = field.to_s.pluralize.to_sym
+          raise UbiquoCategories::CategorizationNotFoundError unless categorize_options(association_name)
+
+          set = CategorySet.find_by_key association_name.to_s
+          raise UbiquoCategories::SetNotFoundError unless set
+
+          value = Array(category_names).map do |category_name|
+            value = set.select_fittest(category_name).content_id rescue 0
+          end.compact
+
+          value = [0] if value.blank? # to prevent rails sql bad formation
+
+          {
+            :conditions => ['categories.content_id IN (?)', value],
+            :include => association_name
+          }
         end
 
       end

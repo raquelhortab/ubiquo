@@ -218,6 +218,12 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal '/', CategoryTestModel.categorize_options(:genders)[:separator]
   end
 
+  def test_categorize_options_works_for_singular_and_plural
+    categorize :genre, :size => 2, :separator => '/'
+    assert_not_nil CategoryTestModel.categorize_options(:genre)
+    assert_not_nil CategoryTestModel.categorize_options(:genres)
+  end
+
   def test_assignation_deletes_old_relations
     categorize :cities, :size => :many
     model = create_category_model
@@ -259,6 +265,56 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model.cities = ['Barcelona', 'Barcelona']
     assert_equal ['Barcelona'], model.cities.map(&:name)
     assert_equal 1, model.category_relations.count
+  end
+
+  def test_category_conditions_for_is_a_hash
+    categorize :genre
+    create_set :genres
+    assert_kind_of Hash, CategoryTestModel.category_conditions_for('genre', 'value')
+    assert_kind_of Hash, CategoryTestModel.category_conditions_for(:genre, 'value')
+  end
+
+  def test_category_conditions_for_existent_category
+    categorize :cities
+    set = category_sets(:cities)
+    set.categories << 'Barcelona' # ensure there is one
+    category = set.categories.last
+    
+    assert_equal(
+      {:conditions => ['categories.content_id IN (?)', [category.content_id]], :include => :cities},
+      CategoryTestModel.category_conditions_for(:cities, category.name)
+      )
+  end
+
+  def test_category_conditions_for_inexistent_category
+    categorize :genre
+    create_set :genres
+    assert_equal(
+      {:conditions => ['categories.content_id IN (?)', [0]], :include => :genres},
+      CategoryTestModel.category_conditions_for(:genre, 'value')
+      )
+  end
+
+  def test_with_field_in_scope
+    create_set :cities
+    categorize :cities, :size => 2
+    model_1 = create_category_model
+    model_1.cities = ['Barcelona', 'Tokyo']
+    model_2 = create_category_model
+    model_2.cities = ['Barcelona', 'London']
+    model_3 = create_category_model
+    model_3.cities = []
+
+    assert_equal_set([model_1, model_2], CategoryTestModel.with_cities_in('Barcelona'))
+    assert_equal_set([model_2], CategoryTestModel.with_cities_in('London'))
+    assert_equal_set [], CategoryTestModel.with_cities_in()
+  end
+
+  def test_with_field_no_set
+    categorize :things, :size => 2
+    assert_raise UbiquoCategories::SetNotFoundError do
+      CategoryTestModel.with_things_in []
+    end
   end
 
   ### i18n-related tests ###
