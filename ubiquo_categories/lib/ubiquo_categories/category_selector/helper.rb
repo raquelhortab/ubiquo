@@ -59,8 +59,14 @@ module UbiquoCategories
         output
       end
       
-      def category_autocomplete_selector
-        "autocomplete"
+      def category_autocomplete_selector(object, object_name, key, categories)
+        category_set = CategorySet.find_by_key(key)
+        autocomplete_options = { 
+          :url => ubiquo_category_set_categories_path(:category_set_id => category_set.id, :format => :js),
+          :current_values => object.send(key).to_json(:only => [:id, :name]),
+        }
+        javascript_tag("document.observe('dom:loaded', function() { var autocomplete = new AutoCompleteSelector('#{autocomplete_options[:url]}','#{object_name}','#{key}', #{autocomplete_options[:current_values]})})") +
+        text_field_tag("#{object_name}[#{key}][]", "", :id => "#{object_name}_#{key}_autocomplete")
       end
       
       def new_category_controls(type, object_name, key)
