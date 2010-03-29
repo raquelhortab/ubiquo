@@ -18,9 +18,11 @@ class Ubiquo::CategoriesController < UbiquoAreaController
       # Category.filtered_search filters, :order => "#{order_by} #{sort_order}"
       Category.locale(current_locale, :ALL).filtered_search filters, :order => "#{order_by} #{sort_order}"
     end
-    
     respond_to do |format|
-      format.html # index.html.erb  
+      format.html # index.html.erb
+      format.js {
+        render :js => @categories.to_json(:only => [:id,:name])
+      }
       format.xml  {
         render :xml => @categories
       }
