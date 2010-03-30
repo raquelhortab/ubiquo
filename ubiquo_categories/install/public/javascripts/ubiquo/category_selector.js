@@ -56,7 +56,7 @@ document.observe("dom:loaded", function() {
 });
 
 var AutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection) {
+  initialize: function(url, object_name, key, initial_collection, style) {
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
@@ -73,16 +73,16 @@ var AutoCompleteSelector = Class.create({
       searchingText: "Searching..."
     },
     this.CLASSES = {
-      tokenList: "token-input-list",
-      token: "token-input-token",
-      tokenDelete: "token-input-delete-token",
-      selectedToken: "token-input-selected-token",
-      highlightedToken: "token-input-highlighted-token",
-      dropdown: "token-input-dropdown",
-      dropdownItem: "token-input-dropdown-item",
-      dropdownItem2: "token-input-dropdown-item2",
-      selectedDropdownItem: "token-input-selected-dropdown-item",
-      inputToken: "token-input-input-token"
+      tokenList: style + "-token-input-list",
+      token: style + "-token-input-token",
+      tokenDelete: style + "-token-input-delete-token",
+      selectedToken: style + "-token-input-selected-token",
+      highlightedToken: style + "-token-input-highlighted-token",
+      dropdown: style + "-token-input-dropdown",
+      dropdownItem: style + "-token-input-dropdown-item",
+      dropdownItem2: style + "-token-input-dropdown-item2",
+      selectedDropdownItem: style + "-token-input-selected-dropdown-item",
+      inputToken: style + "-token-input-input-token"
     },
     this.POSITIONS = {
       BEFORE: 0,

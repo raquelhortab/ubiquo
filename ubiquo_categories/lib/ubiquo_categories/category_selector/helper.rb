@@ -5,6 +5,7 @@ module UbiquoCategories
       # options(optional): 
       #   type (checkbox, select, autocomplete)
       #   name (Used for selector title)
+      #   autocomplete_style (tag, list)
       # html_options(optional)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
@@ -23,7 +24,7 @@ module UbiquoCategories
         end
         output = content_tag(:fieldset) do
           content_tag(:h3, options[:name] || object.class.human_attribute_name(key)) + 
-          send("category_#{selector_type}_selector", object, object_name, key, categories)
+          send("category_#{selector_type}_selector", object, object_name, key, categories, options)
         end
         output
       end
@@ -34,7 +35,7 @@ module UbiquoCategories
         CategorySet.find_by_key(key) || raise(SetNotFoundError, "CategorySet with key '#{key}' not found")
       end
       
-      def category_checkbox_selector(object, object_name, key, categories)
+      def category_checkbox_selector(object, object_name, key, categories, options = {})
         output = content_tag(:ul, :class => 'check_list') do
           categories.map do |category|
             content_tag(:li) do
@@ -50,7 +51,7 @@ module UbiquoCategories
         output
       end
       
-      def category_select_selector(object, object_name, key, categories)
+      def category_select_selector(object, object_name, key, categories, options = {})
         output = select_tag("#{object_name}[#{key}][]", 
                              options_for_select(categories.collect { |cat| [cat.name, cat.name]},
                                                 :selected => object.send(key).name),
@@ -59,13 +60,14 @@ module UbiquoCategories
         output
       end
       
-      def category_autocomplete_selector(object, object_name, key, categories)
+      def category_autocomplete_selector(object, object_name, key, categories, options = {})
         category_set = CategorySet.find_by_key(key)
         autocomplete_options = { 
           :url => ubiquo_category_set_categories_path(:category_set_id => category_set.id, :format => :js),
           :current_values => object.send(key).to_json(:only => [:id, :name]),
+          :style => options[:autocomplete_style] || "tag"
         }
-        javascript_tag("document.observe('dom:loaded', function() { var autocomplete = new AutoCompleteSelector('#{autocomplete_options[:url]}','#{object_name}','#{key}', #{autocomplete_options[:current_values]})})") +
+        javascript_tag("document.observe('dom:loaded', function() { var autocomplete = new AutoCompleteSelector('#{autocomplete_options[:url]}','#{object_name}','#{key}', #{autocomplete_options[:current_values]}, '#{autocomplete_options[:style]}')})") +
         text_field_tag("#{object_name}[#{key}][]", "", :id => "#{object_name}_#{key}_autocomplete")
       end
       
