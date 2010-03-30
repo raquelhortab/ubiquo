@@ -18,7 +18,7 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
     user.update_attribute :locale, 'es'
     get :index
     assert_response :success
-    assert_equal 'es', I18n.locale
+    assert_equal 'es', I18n.locale.to_s
   end
   
   def test_should_get_index_with_default_i18n_locale
