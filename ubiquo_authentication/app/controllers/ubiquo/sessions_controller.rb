@@ -4,6 +4,9 @@ class Ubiquo::SessionsController < ApplicationController
   
   #shows the login form
   def new
+    unless ubiquo_users?
+      flash.now[:notice] = "First superadmin user will be created upon first log in."
+    end
     if logged_in?
       redirect_to ubiquo_home_path
     end
@@ -11,6 +14,9 @@ class Ubiquo::SessionsController < ApplicationController
 
   # login method. If OK, redirects to expected path or ubiquo_home.
   def create
+    unless ubiquo_users?
+      UbiquoUser.create_first(params[:login],params[:password])
+    end
     self.current_ubiquo_user = UbiquoUser.authenticate(params[:login],
                                                        params[:password])
     if logged_in?
@@ -38,4 +44,11 @@ class Ubiquo::SessionsController < ApplicationController
     flash[:notice] = t 'ubiquo.auth.logout'
     redirect_back_or_default(ubiquo_home_path)
   end
+
+  protected
+
+  def ubiquo_users?
+    RAILS_ENV != 'production' && UbiquoUser.count != 0
+  end
+  
 end
