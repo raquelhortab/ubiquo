@@ -48,7 +48,7 @@ class Ubiquo::SessionsController < ApplicationController
   protected
 
   def ubiquo_users?
-    RAILS_ENV != 'production' && UbiquoUser.count != 0
+    Rails.env.production? || UbiquoUser.count > 0
   end
   
 end

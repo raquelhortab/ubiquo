@@ -20,7 +20,15 @@ class UbiquoUserTest < ActiveSupport::TestCase
   end
 
   def test_should_not_be_able_to_create_first_user_when_other_users
-    ubiquo_user = create_ubiquo_user
+    create_ubiquo_user
+    assert_no_difference 'UbiquoUser.count' do
+      assert_nil UbiquoUser.create_first('mylogin','mypassword')
+    end
+  end
+
+  def test_should_not_be_able_to_create_first_user_in_production
+    Rails.env.stubs(:production?).returns(true)
+    UbiquoUser.destroy_all
     assert_no_difference 'UbiquoUser.count' do
       assert_nil UbiquoUser.create_first('mylogin','mypassword')
     end

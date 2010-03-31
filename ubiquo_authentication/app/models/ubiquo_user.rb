@@ -72,7 +72,7 @@ class UbiquoUser < ActiveRecord::Base
 
   # Creates first user. Used when installing ubiquo. It shouldn't work in production mode.
   def self.create_first(login,password)
-    if RAILS_ENV != 'production' && self.count == 0
+    unless Rails.env.production? || self.count > 0
       admin_user = {
         :login => login,
         :password => password,

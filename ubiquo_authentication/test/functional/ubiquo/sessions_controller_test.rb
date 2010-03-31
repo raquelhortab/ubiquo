@@ -32,6 +32,14 @@ class Ubiquo::SessionsControllerTest < ActionController::TestCase
     assert session[:ubiquo_user_id]
     assert_response :redirect
   end
+
+  def test_should_not_be_able_to_login_when_first_user_in_production
+    Rails.env.stubs(:production?).returns(true)
+    UbiquoUser.destroy_all
+    post :create, :login => 'josep', :password => 'test'
+    assert_nil session[:ubiquo_user_id]
+    assert_response :success
+  end
   
   def test_should_fail_login_and_not_redirect
     post :create, :login => 'josep', :password => 'bad password'
