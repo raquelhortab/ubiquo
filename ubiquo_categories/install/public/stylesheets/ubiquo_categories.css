@@ -27,6 +27,7 @@ fieldset input.text {
 }
 
 a.add_new_category_link {
+    margin-left: 4px;
     display:inline-block;
     padding:4px 8px;
     font-size:1.3em;

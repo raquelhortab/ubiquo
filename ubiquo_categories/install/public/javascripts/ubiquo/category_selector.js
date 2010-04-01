@@ -1,10 +1,10 @@
 var CategorySelector = Class.create({
   initialize: function(link) {
     this.new_element_link = link;
-    var link_id = link.id.gsub('link_new_', '');
-    this.type = link_id.split('_')[0];
-    this.object_name = link_id.split('_')[1];
-    this.key = link_id.split('_')[2];
+    var link_id = link.id.gsub('link_new__', '').split('__');
+    this.type = link_id[0];
+    this.object_name = link_id[1];
+    this.key = link_id[2];
   },
   counter: function() {
     return this.new_element_link.up().previous('ul').select('li').size();
@@ -34,12 +34,13 @@ var CategorySelector = Class.create({
   }
 });
 document.observe("dom:loaded", function() {
-  $$('.category_selector_new').each(function(link) {
-    var selector = new CategorySelector(link);
+  var selectors = {};
+  $$('.category_selector_new').each(function(link, index) {
+    selectors[index] = new CategorySelector(link);
     link.observe(
       "click",
       function(event) {
-        selector.toggle_new_category_input(link);
+        selectors[index].toggle_new_category_input(link);
         event.stop();
       }
     );
@@ -47,7 +48,7 @@ document.observe("dom:loaded", function() {
       add_link.observe(
         "click",
         function(event) {
-          selector.add_element("new_" + selector.object_name + "_" + selector.key);
+          selectors[index].add_element("new_" + selectors[index].object_name + "_" + selectors[index].key);
           event.stop();
         }
       );

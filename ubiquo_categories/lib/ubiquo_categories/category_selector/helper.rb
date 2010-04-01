@@ -23,7 +23,7 @@ module UbiquoCategories
             :autocomplete
         end
         output = content_tag(:fieldset) do
-          content_tag(:h3, options[:name] || object.class.human_attribute_name(key)) + 
+          content_tag(:legend, options[:name] || object.class.human_attribute_name(key)) + 
           send("category_#{selector_type}_selector", object, object_name, key, categories, options)
         end
         output
@@ -74,7 +74,7 @@ module UbiquoCategories
       def new_category_controls(type, object_name, key)
         output = content_tag(:div, :class => "new_category_controls") do
           link_to(t("ubiquo.category_selector.new_element"), '#', 
-                  :id => "link_new_#{type}_#{object_name}_#{key}",
+                  :id => "link_new__#{type}__#{object_name}__#{key}",
                   :class => "category_selector_new") +
           content_tag(:div, :class => "add_new_category", :style => "display:none") do
             text_field_tag("new_#{object_name}_#{key}", "", :id => "new_#{object_name}_#{key}") +
