@@ -86,7 +86,7 @@ module Ubiquo
     
     def suported_databases
       {
-        :postgresql => "Uses postresql database.",
+        :postgresql => "Uses postgresql database.",
         :mysql      => "Uses mysql database.",
         :sqlite     => "Uses sqlite database."
       }
