@@ -267,9 +267,5 @@ git :add => "."
 git :commit => "-a -m 'Initial #{appname} commit'"
 
 <% unless @opts[:gnuine] %>
-puts "1.- You must configure your database using config/database.yml"
-puts "2.- You must create your databases. rake db:create:all"
-puts "3.- You must initialize your database. rake ubiquo:db:init"
-puts "4.- You must create the admin user. rake ubiquo:create_user"
-puts "5.- scrip/server and point your browser to http://localhost:3000/ubiquo"
+puts "Run script/server and go to http://localhost:3000/ and follow the instructions there."
 <% end %>
