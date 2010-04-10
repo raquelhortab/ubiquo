@@ -59,9 +59,9 @@ class ActivityInfoTest < ActiveSupport::TestCase
   
   test "should filter by user" do
     ActivityInfo.delete_all
-    searched_user = UbiquoUser.first
+    searched_user = UbiquoUser.find_by_login("josep")
     activity1 = create_activity_info :ubiquo_user => searched_user
-    activity2 = create_activity_info :ubiquo_user => UbiquoUser.last
+    activity2 = create_activity_info :ubiquo_user => UbiquoUser.find_by_login("eduard")
     searched_activities = ActivityInfo.filtered_search(:user => searched_user.id)
     assert_equal_set [activity1], searched_activities
     assert_equal_set [], ActivityInfo.filtered_search(:user => '100')
