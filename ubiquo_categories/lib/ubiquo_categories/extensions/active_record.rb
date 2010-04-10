@@ -43,12 +43,13 @@ module UbiquoCategories
           }) unless self.respond_to?(:category_relations)
 
           association_name = field.to_s.pluralize
+          set_key = (options[:from] || association_name).to_s
 
           @categorized_with_options ||= {}
           @categorized_with_options[association_name.to_sym] = options
 
           assign_to_set = Proc.new do |categories, object|
-            set = CategorySet.find_by_key association_name
+            set = CategorySet.find_by_key set_key
             raise UbiquoCategories::SetNotFoundError unless set
 
             locale = object.locale if object.class.is_translatable?
@@ -163,9 +164,11 @@ module UbiquoCategories
 
         def category_conditions_for field, category_names
           association_name = field.to_s.pluralize.to_sym
-          raise UbiquoCategories::CategorizationNotFoundError unless categorize_options(association_name)
 
-          set = CategorySet.find_by_key association_name.to_s
+          options = categorize_options(association_name)
+          raise UbiquoCategories::CategorizationNotFoundError unless options
+
+          set = CategorySet.find_by_key "#{options[:from] || association_name}"
           raise UbiquoCategories::SetNotFoundError unless set
 
           value = Array(category_names).map do |category_name|

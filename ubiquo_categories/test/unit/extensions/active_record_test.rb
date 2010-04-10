@@ -132,6 +132,27 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     end
   end
 
+  def test_from_option_has_preference
+    create_set :cities
+    categorize :cities, :from => :group_of_cities
+    model = create_category_model
+    assert_raise UbiquoCategories::SetNotFoundError do
+      model.cities = 'Barcelona'
+    end
+  end
+
+  def test_from_option_retrieves_from_correct_set
+    set = create_set :group_of_cities
+    categories = ['Barcelona', 'Athens']
+    categorize :cities, :from => :group_of_cities, :size => :many
+    model = create_category_model
+    assert_nothing_raised UbiquoCategories::SetNotFoundError do
+      model.cities = categories
+      assert_equal categories, model.cities.map(&:name)
+      assert_equal categories, set.categories.map(&:name)
+    end
+  end
+
   def test_assignation_accepts_strings_and_category_instances
     categorize :cities, :size => :many
     model = create_category_model
