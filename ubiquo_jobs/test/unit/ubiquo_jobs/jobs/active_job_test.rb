@@ -157,12 +157,4 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
     ActiveJob.create(default_options.merge(options))
   end
   
-  def short_retry_interval
-    @default_interval = UbiquoJobs::Jobs::Base.retry_interval
-    UbiquoJobs::Jobs::Base.retry_interval = 1.second
-  end
-
-  def restore_retry_interval
-    UbiquoJobs::Jobs::Base.retry_interval = @default_interval
-  end
 end

@@ -30,17 +30,15 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
   end
 
   def test_should_delay_error_job
-    short_retry_interval
 
     old_job = create_job(:command => 'errorize')
     assert_equal old_job, UbiquoJobs.manager.get('me')
     old_job.reload.run!
     assert_nil UbiquoJobs.manager.get('me')
-    future = Time.now.utc + 2.seconds
+    future = Time.now.utc + 2.hours
     Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_equal old_job, UbiquoJobs.manager.get('me')
 
-    restore_retry_interval
   end
 
   def test_should_run_valid_job
@@ -52,18 +50,16 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
   end
   
   def test_should_discard_after_three_attempts
-    short_retry_interval
 
     job = create_job(:command => 'errorize', :tries => 2)
     assert_equal job, UbiquoJobs.manager.get('me')
     job.reload.run!
     assert_nil UbiquoJobs.manager.get('me')
-    future = Time.now.utc + 2.seconds
+    future = Time.now.utc + 2.hours
     Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_nil UbiquoJobs.manager.get('me')
     assert_equal UbiquoJobs::Jobs::Base::STATES[:error], job.state
 
-    restore_retry_interval
   end
     
   def test_should_get_output_log
@@ -119,12 +115,4 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
     shell_job_class.run_async(default_options.merge(options))
   end
   
-  def short_retry_interval
-    @default_interval = UbiquoJobs::Jobs::Base.retry_interval
-    UbiquoJobs::Jobs::Base.retry_interval = 1.second
-  end
-
-  def restore_retry_interval
-    UbiquoJobs::Jobs::Base.retry_interval = @default_interval
-  end
 end

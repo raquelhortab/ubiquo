@@ -44,7 +44,6 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
   end
   
   def test_should_recover_from_failure
-    short_retry_interval
     ActiveJob.delete_all
     old_job = create_job(
       :state => UbiquoJobs::Jobs::Base::STATES[:started],
@@ -53,26 +52,21 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     assert_nil ActiveManager.get('me')
     assert_nil old_job.reload.runner
     assert_equal UbiquoJobs::Jobs::Base::STATES[:waiting], old_job.state
-    future = Time.now.utc + 2.seconds
+    future = Time.now.utc + 2.hours
     Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_equal old_job, ActiveManager.get('me')
-    restore_retry_interval
   end
 
   def test_should_recover_from_not_started
-    short_retry_interval
-
     job_1 = create_job(:priority => 2)
     assert_equal job_1, ActiveManager.get('me')
     job_2 = create_job(:priority => 1)
     assert_equal job_2, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
-    future = Time.now.utc + 3.seconds
+    future = Time.now.utc + 2.hours
     Time.any_instance.expects(:utc).at_least(1).returns(future)
     assert_equal job_1, ActiveManager.get('you')
     assert_nil ActiveManager.get('him')
-
-    restore_retry_interval
   end
   
   def test_should_add_job
@@ -92,12 +86,4 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     ActiveJob.create(default_options.merge(options))
   end
   
-  def short_retry_interval
-    @default_interval = UbiquoJobs::Jobs::Base.retry_interval
-    UbiquoJobs::Jobs::Base.retry_interval = 1.second
-  end
-
-  def restore_retry_interval
-    UbiquoJobs::Jobs::Base.retry_interval = @default_interval
-  end
 end
