@@ -55,7 +55,7 @@ module UbiquoJobs
         set_property :ended_at, Time.now.utc
         set_property :state, new_state
         set_property :result_code, result
-        set_property :result_error, (IO.read($stderr.path) rescue "Can't read error log")
+        set_property :result_error, (IO.read(new_stderr.path) rescue "Can't read error log")
         
         # Reset to the original error out
         STDERR.reopen(orig_stderr)
