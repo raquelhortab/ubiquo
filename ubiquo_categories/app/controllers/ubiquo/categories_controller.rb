@@ -1,5 +1,6 @@
 class Ubiquo::CategoriesController < UbiquoAreaController
 
+  ubiquo_config_call :categories_access_control, {:context => :ubiquo_categories}
   before_filter :load_category_set
 
   # GET /categories
@@ -13,7 +14,9 @@ class Ubiquo::CategoriesController < UbiquoAreaController
       :locale => params[:filter_locale],
       :category_set => params[:category_set_id]
     }
-    @categories_pages, @categories = Category.paginate(:page => params[:page]) do
+
+    per_page = Ubiquo::Config.context(:ubiquo_categories).get(:categories_per_page)
+    @categories_pages, @categories = Category.paginate(:page => params[:page], :per_page => per_page) do
       # remove this find and add something like this:
       # Category.filtered_search filters, :order => "#{order_by} #{sort_order}"
       Category.locale(current_locale, :ALL).filtered_search filters, :order => "#{order_by} #{sort_order}"

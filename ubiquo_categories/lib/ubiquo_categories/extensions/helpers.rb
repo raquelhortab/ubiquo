@@ -10,7 +10,7 @@ module UbiquoCategories
           tab.highlights_on "ubiquo/category_sets"
           tab.highlights_on "ubiquo/categories"
           tab.link = ubiquo_category_sets_path
-        end if ubiquo_config_call(:assets_permit, {:context => :ubiquo_media})
+        end if ubiquo_config_call(:categories_permit, {:context => :ubiquo_categories})
       end
 
       # prepares a collection

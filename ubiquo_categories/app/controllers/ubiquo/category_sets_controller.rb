@@ -1,5 +1,7 @@
 class Ubiquo::CategorySetsController < UbiquoAreaController
 
+  ubiquo_config_call :categories_access_control, {:context => :ubiquo_categories}
+
   # GET /category_sets
   # GET /category_sets.xml
   def index   
@@ -9,7 +11,9 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
     filters = {
       :text => params[:filter_text],
     }
-    @category_sets_pages, @category_sets = CategorySet.paginate(:page => params[:page]) do
+
+    per_page = Ubiquo::Config.context(:ubiquo_categories).get(:category_sets_per_page)
+    @category_sets_pages, @category_sets = CategorySet.paginate(:page => params[:page], :per_page => per_page) do
       # remove this find and add something like this:
       # CategorySet.filtered_search filters, :order => "#{order_by} #{sort_order}"
       CategorySet.filtered_search filters, :order => "#{order_by} #{sort_order}"
