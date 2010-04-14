@@ -108,9 +108,9 @@ module Ubiquo
 
     def suported_locales
       {
-        :ca => "Selects catalan.",
-        :es => "Selects spanish.",
-        :en => "Selects english."
+        :ca => "Selects Catalan.",
+        :es => "Selects Spanish.",
+        :en => "Selects English."
       }
     end
     
