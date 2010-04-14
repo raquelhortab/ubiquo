@@ -13,6 +13,7 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
   end
 
   def test_index_should_be_filtered_by_category_set
+    Category.delete_all
     category_sets(:one).categories << 'One'
     category_sets(:two).categories << 'Two'
     get :index, :category_set_id => category_sets(:one).id

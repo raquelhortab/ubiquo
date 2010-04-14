@@ -225,8 +225,9 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model.cities = 'Barcelona,Athens'
     assert_equal 2, model.category_relations.count
     first = model.category_relations.first
+    last = model.category_relations.last
     first.update_attribute :position, 2
-    model.category_relations.last.update_attribute :position, 1
+    last.update_attribute :position, 1
     assert_not_equal first, model.reload.category_relations.first
     assert_equal first, model.reload.category_relations.last
   end
