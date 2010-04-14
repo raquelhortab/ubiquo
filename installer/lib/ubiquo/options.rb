@@ -8,7 +8,7 @@ module Ubiquo
     def initialize(args)
       @orig_args = args.clone
       
-      self[:database] = :sqlite
+      self[:database] = :postgresql
       self[:template] = :stable
       self[:profile]  = :complete
       self[:locale] = :en
