@@ -13,4 +13,7 @@ Ubiquo::Plugin.register(:ubiquo_categories, directory, config) do |config|
   config.add :categories_permit, lambda{
    permit?('categories_management')
   }
+
+  # Set to false to avoid displaying editing options in Ubiquo
+  config.add :administrable_category_sets, true
 end

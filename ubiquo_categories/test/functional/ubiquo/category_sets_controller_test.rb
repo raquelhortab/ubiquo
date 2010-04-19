@@ -6,8 +6,16 @@ class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:category_sets)
+    assert assigns(:can_manage), 'Category sets should be administrable by default'
   end
 
+  def test_should_not_see_actions_if_not_manageable
+    Ubiquo::Config.context(:ubiquo_categories).set(:administrable_category_sets, false)
+    get :index
+    assert_response :success
+    assert !assigns(:can_manage)
+  end
+  
   def test_should_get_new
     get :new
     assert_response :success

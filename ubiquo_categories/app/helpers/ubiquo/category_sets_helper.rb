@@ -28,7 +28,7 @@ module Ubiquo::CategorySetsHelper
               category_set.name,
               category_set.key,
             ],
-            :actions => category_set_actions(category_set)
+            :actions => category_set_actions(category_set, options)
           }
         end,
         :pages => pages,
@@ -41,12 +41,11 @@ module Ubiquo::CategorySetsHelper
     
   def category_set_actions(category_set, options = {})
     actions = []
-    actions << link_to(t("ubiquo.categories.categories"), [:ubiquo, category_set, :categories])
-    actions << link_to(t("ubiquo.view"), [:ubiquo, category_set])
-    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set])  
+    actions << link_to(t("ubiquo.category_set.see_categories"), [:ubiquo, category_set, :categories])
+    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set]) if options[:can_manage]
     actions << link_to(t("ubiquo.remove"), [:ubiquo, category_set], 
       :confirm => t("ubiquo.category_set.index.confirm_removal"), :method => :delete
-      )
+      ) if options[:can_manage]
     actions
   end
 end

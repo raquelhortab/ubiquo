@@ -10,7 +10,11 @@
 
 <%= category_set_filters_info(params) %>
 
-<%= category_set_list(@category_sets, @category_sets_pages) %>
+<%= category_set_list(
+  @category_sets,
+  @category_sets_pages,
+  :can_manage => @can_manage
+) %>
 
 <% content_for :sidebar do %>
   <%= category_set_filters %>

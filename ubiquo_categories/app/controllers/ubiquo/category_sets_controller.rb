@@ -4,7 +4,7 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
 
   # GET /category_sets
   # GET /category_sets.xml
-  def index   
+  def index
     order_by = params[:order_by] || 'category_sets.id'
     sort_order = params[:sort_order] || 'desc'
     
@@ -18,6 +18,8 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
       # CategorySet.filtered_search filters, :order => "#{order_by} #{sort_order}"
       CategorySet.filtered_search filters, :order => "#{order_by} #{sort_order}"
     end
+
+    @can_manage = Ubiquo::Config.context(:ubiquo_categories).get(:administrable_category_sets)
     
     respond_to do |format|
       format.html # index.html.erb  
