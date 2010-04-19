@@ -17,5 +17,6 @@ es:
         help_message: "Aquí puedes crear un nuevo conjunto de categorías"
       edit:
         help_message: "Aquí puedes editar el conjunto de categorías"
+      see_categories: "Ver categorías"
       empty_list_title: "Listado de conjunto de categorías"
       empty_list_message: "Desde este apartado puedes ver una lista de todos los conjuntos de categorías existentes. Podras crear nuevos, editar o borrarlos."

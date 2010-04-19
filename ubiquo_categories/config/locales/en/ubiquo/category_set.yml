@@ -17,5 +17,6 @@ en:
         help_message: "Here you can create a new category set"
       edit:
         help_message: "Here you can edit a new category set"
+      see_categories: "See categories"
       empty_list_title: "category sets list"
       empty_list_message: "You can see all records. You can create it, edit or delete."

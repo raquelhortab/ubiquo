@@ -17,5 +17,6 @@ ca:
         help_message: "Aquí pots crear el nou conjunt de categories"
       edit:
         help_message: "Aquí pots editar el nou conjunt de categories"
+      see_categories: "Veure categories"
       empty_list_title: "Llistat de conjunts de categories"
       empty_list_message: "Des d’aquest apartat pots veure una llista de tots els conjunt de categories existents. Podràs crear-los, editar-los o esborrar-los."

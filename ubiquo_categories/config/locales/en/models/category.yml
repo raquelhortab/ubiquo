@@ -4,5 +4,6 @@ ca:
       category: "Category"
     attributes:
       category:
-        name:  "Nom" 
-        description:  "Descripció"
+        name:  "Name"
+        description:  "Description"
+        

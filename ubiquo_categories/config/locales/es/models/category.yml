@@ -1,9 +1,9 @@
 es:
   activerecord:
     models:
-      category: "Category"
+      category: "Categoría"
     attributes:
       category:
         name:  "Nombre" 
-        description:  "description" 
+        description:  "Descripción"
         

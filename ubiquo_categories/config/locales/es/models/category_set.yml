@@ -1,9 +1,9 @@
 es:
   activerecord:
     models:
-      category_set: "Category_set"
+      category_set: "Conjunto de categorías"
     attributes:
       category_set:
-        name:  "Nombre" 
-        key:  "key" 
+        name:  "Nombre"
+        key:  "Clave"
         
