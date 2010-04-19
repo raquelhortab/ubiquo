@@ -65,3 +65,4 @@ en:
         "false": 'inactive'
       empty_list_title: "Ubiquo users list"
       empty_list_message: "You can see all records. You can create it, edit or delete."
+      create_superadmin: "First superadmin user will be created upon first log in."

@@ -65,3 +65,4 @@ ca:
         "false": "inactiu"
       empty_list_title: "Llistat d'usuaris d'Ubiquo"
       empty_list_message: "Des d'aquest apartat pots veure una llista de tots els recursos existents. Podràs crear-los, editar-los o esborrar-los."
+      create_superadmin: "El primer usuari superadmin es crearà al fer login."

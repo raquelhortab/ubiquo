@@ -5,7 +5,7 @@ class Ubiquo::SessionsController < ApplicationController
   #shows the login form
   def new
     unless ubiquo_users?
-      flash.now[:notice] = "First superadmin user will be created upon first log in."
+      flash.now[:notice] = t 'ubiquo.auth.create_superadmin'
     end
     if logged_in?
       redirect_to ubiquo_home_path
@@ -34,7 +34,6 @@ class Ubiquo::SessionsController < ApplicationController
       render :action => 'new'
     end
   end
-
   # logout method. Destroy all ubiquo_user data and send ubiquo_user
   # to ubiquo_home (which commonly is login_required)
   def destroy

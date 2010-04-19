@@ -56,10 +56,10 @@ class Ubiquo::SessionsControllerTest < ActionController::TestCase
 
   def test_should_display_user_creation_message_when_no_users
     get :new
-    assert_no_match /First superadmin user/, flash[:notice]
+    assert_no_match /superadmin/, flash[:notice]
     UbiquoUser.destroy_all
     get :new
-    assert_match /First superadmin user/, flash[:notice] 
+    assert_match /superadmin/, flash[:notice] 
   end
 
   def test_should_remember_me
