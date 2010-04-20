@@ -1,9 +1,7 @@
-UbiquoJobs
-===========
+= UbiquoJobs
 
 This plugin provides a simple way to create jobs and workers that will execute them
-A _job_ is mainly a piece of work that usually require some time and is not suitable
- for synchronous execution, and that can be modeled and parameterized
+A _job_ is mainly a piece of work that usually require some time and is not suitable for synchronous execution, and that can be modeled and parameterized
 
 A _worker_ will look for planified jobs and execute them considering the priority. 
 
