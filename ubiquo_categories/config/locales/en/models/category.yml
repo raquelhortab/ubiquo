@@ -1,9 +1,10 @@
-ca:
+en:
   activerecord:
     models:
       category: "Category"
     attributes:
       category:
+        locale: "Language"
         name:  "Name"
         description:  "Description"
         

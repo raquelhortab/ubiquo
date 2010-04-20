@@ -1,4 +1,4 @@
-es:
+en:
   activerecord:
     models:
       category_set: "Category Set"

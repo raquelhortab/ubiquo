@@ -41,8 +41,12 @@ module Ubiquo::CategoriesHelper
           }
         end,
         :pages => pages,
-        :link_to_new => link_to(t("ubiquo.category.index.new"),
-                                new_ubiquo_category_set_category_path, :class => 'new')
+        :hide_actions => !options[:category_set].is_editable?,
+        :link_to_new => (
+          link_to(
+            t("ubiquo.category.index.new"),
+            new_ubiquo_category_set_category_path, :class => 'new'
+          ) if options[:category_set].is_editable?)
       })
   end
     

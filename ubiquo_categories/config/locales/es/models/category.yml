@@ -4,6 +4,6 @@ es:
       category: "Categoría"
     attributes:
       category:
+        locale: "Idioma"
         name:  "Nombre" 
         description:  "Descripción"
-        
