@@ -43,9 +43,6 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       m.directory(File.join('app/views/navigators'))
       m.directory(File.join('test/functional/ubiquo', controller_class_path))
       m.directory(File.join('test/unit', class_path))
-      for locale in Ubiquo.supported_locales
-        m.directory(File.join('config/locales', locale.to_s, 'ubiquo'))
-      end
 
       for action in scaffold_views
         m.template(
@@ -65,12 +62,7 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
         File.join('app/views/ubiquo', controller_class_path, controller_file_name, "_#{singular_name}.html.erb")
         )
       
-      for locale in Ubiquo.supported_locales
-        m.template(
-          "#{locale}.yml",
-          File.join('config/locales', locale.to_s, 'ubiquo', "#{singular_name}.yml")
-         )
-      end
+      m.update_ubiquo_locales
       
       m.template(
         "_navlinks.html.erb",
@@ -133,4 +125,5 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
     def model_name
       class_name.demodulize
     end
+
 end

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class UbiquoModelGenerator < Rails::Generator::NamedBase
   
   # Abbreviation of Title or name. Contains 'title', 'name', or nil depending on attributes
@@ -7,7 +8,7 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
 
   def manifest
     record do |m|
-      # TODO: Move this to yaml file if if grows to big overtime
+      # TODO: Move this to a yaml file if if grows too big overtime
       @field_translations = { 
         'title' => { :ca => 'Títol', :es => 'Título', :en => 'Title'},
         'name' => { :ca => 'Nom', :es => 'Nombre', :en => 'Name'},
@@ -25,10 +26,6 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       m.directory File.join('test/unit', class_path)
       m.directory File.join('test/fixtures', class_path)
 
-      for locale in Ubiquo.supported_locales
-        m.directory(File.join('config/locales', locale.to_s, 'models'))
-      end
-
       # Model class, unit test, and fixtures.
       m.template 'model.rb',      File.join('app/models', class_path, "#{file_name}.rb")
       m.template 'unit_test.rb',  File.join('test/unit', class_path, "#{file_name}_test.rb")
@@ -36,14 +33,8 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
       unless options[:skip_fixture] 
        	m.template 'fixtures.yml',  File.join('test/fixtures', "#{table_name}.yml")
       end
-      
-      for locale in Ubiquo.supported_locales
-        m.template(
-          "model-#{locale}.yml",
-          File.join('config/locales', locale.to_s, 'models', "#{file_name}.yml")
-        )
-      end
-      
+
+      m.update_locale_models
       unless options[:skip_migration]
         m.migration_template 'migration.rb', 'db/migrate', :assigns => {
           :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}"
@@ -74,4 +65,3 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
         "Creates a translatable model") { |v| options[:translatable] = v}
     end
 end
-
