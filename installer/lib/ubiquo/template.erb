@@ -55,6 +55,8 @@ end
 # Hold empty dirs by adding .gitignore to each (to avoid git missing needed empty dirs)
 run("find . \\( -type d -empty \\) -and \\( -not -regex ./\\.git.* \\) -exec touch {}/.gitignore \\;")
 
+db_prefix = RUBY_PLATFORM =~ /java/ ? 'jdbc' : ''
+
 # git:rails:new_app
 git :init
 
@@ -107,13 +109,13 @@ CODE
 postgresql =  <<-CODE
 base_config: &base_config
     encoding: unicode
-    adapter:  postgresql
+    adapter:  #{db_prefix}postgresql
     host: localhost
 
 development:
-  <<: *base_config  
+  <<: *base_config
   database: #{appname}_development
-  
+
 test:
   <<: *base_config
   database: #{appname}_test
@@ -130,16 +132,16 @@ CODE
 mysql = <<-CODE
 base_config: &base_config
   encoding: utf8
-  adapter:  mysql
+  adapter:  {#db_prefix}mysql
   pool: 5
   username: root
   password:
   socket: /var/run/mysqld/mysqld.sock
 
 development:
-  <<: *base_config  
+  <<: *base_config
   database: #{appname}_development
-  
+
 test:
   <<: *base_config
   database: #{appname}_test
@@ -156,14 +158,14 @@ CODE
 sqlite3 = <<-CODE
 base_config: &base_config
   encoding: unicode
-  adapter:  sqlite3
+  adapter:  #{db_prefix}sqlite3
   pool: 5
   timeout: 5000
 
 development:
-  <<: *base_config  
+  <<: *base_config
   database: db/#{appname}_development.db
-  
+
 test:
   <<: *base_config
   database: db/#{appname}_test.db
@@ -217,14 +219,14 @@ Rails::Initializer.run do |config|
   # -- all .rb files in that directory are automatically loaded.
 
   # Add additional load paths for your own custom dirs
-  
-  # Specify gems that this application depends on. 
+
+  # Specify gems that this application depends on.
   # They can then be installed with "rake gems:install" on new installations.
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
   # config.gem "rmagick", :lib => 'RMagick'
-  
+
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   config.plugins = [ :ubiquo_core, :all ]
@@ -242,7 +244,7 @@ Rails::Initializer.run do |config|
 
 # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
-  # config.i18n.default_locale = :de  
+  # config.i18n.default_locale = :de
   config.i18n.load_path += Dir.glob(File.join("config", "locales", "**","*.{rb,yml}"))
   config.i18n.default_locale = :<%= @opts[:locale] %>
 end
@@ -257,6 +259,10 @@ plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', 
 rake("rails:update")
 rake("calendardateselect:install")
 rake("ubiquo:install")
+
+<% if RUBY_PLATFORM =~ /java/ %>
+generate(:jdbc)
+<% end %>
 
 <% if @opts[:gnuine] %>
 rake("db:create:all")
