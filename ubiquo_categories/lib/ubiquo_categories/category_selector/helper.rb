@@ -1,7 +1,8 @@
 module UbiquoCategories
   module CategorySelector
     module Helper
-      # 
+      # object_name (required)
+      # key: CategorySet key (required)
       # options(optional): 
       #   type (checkbox, select, autocomplete)
       #   name (Used for selector title)
@@ -24,7 +25,8 @@ module UbiquoCategories
         end
         output = content_tag(:fieldset) do
           content_tag(:legend, options[:name] || object.class.human_attribute_name(key)) + 
-          send("category_#{selector_type}_selector", object, object_name, key, categories, options)
+            send("category_#{selector_type}_selector",
+                 object, object_name, key, categories, options)
         end
         output
       end
@@ -52,8 +54,9 @@ module UbiquoCategories
       end
       
       def category_select_selector(object, object_name, key, categories, options = {})
+        categories_for_select = categories.collect { |cat| [cat.name, cat.name] }
         output = select_tag("#{object_name}[#{key}][]", 
-                             options_for_select(categories.collect { |cat| [cat.name, cat.name]},
+                             options_for_select(categories_for_select,
                                                 :selected => object.send(key).name),
                              { :id => "#{object_name}_#{key}_select" })
         output << new_category_controls("select", object_name, key)
@@ -62,13 +65,24 @@ module UbiquoCategories
       
       def category_autocomplete_selector(object, object_name, key, categories, options = {})
         category_set = CategorySet.find_by_key(key)
+        url_params = { :category_set_id => category_set.id, :format => :js }
         autocomplete_options = { 
-          :url => ubiquo_category_set_categories_path(:category_set_id => category_set.id, :format => :js),
+          :url => ubiquo_category_set_categories_path(url_params),
           :current_values => object.send(key).to_json(:only => [:id, :name]),
           :style => options[:autocomplete_style] || "tag"
         }
-        javascript_tag("document.observe('dom:loaded', function() { var autocomplete = new AutoCompleteSelector('#{autocomplete_options[:url]}','#{object_name}','#{key}', #{autocomplete_options[:current_values]}, '#{autocomplete_options[:style]}')})") +
-        text_field_tag("#{object_name}[#{key}][]", "", :id => "#{object_name}_#{key}_autocomplete")
+        js_code =<<EOF
+document.observe('dom:loaded', function() {
+  var autocomplete = new AutoCompleteSelector('#{autocomplete_options[:url]}',
+                                              '#{object_name}',
+                                              '#{key}',
+                                              #{autocomplete_options[:current_values]},
+                                              '#{autocomplete_options[:style]}')
+});
+EOF
+        javascript_tag(js_code) +
+          text_field_tag("#{object_name}[#{key}][]", "",
+                         :id => "#{object_name}_#{key}_autocomplete")
       end
       
       def new_category_controls(type, object_name, key)
@@ -92,7 +106,8 @@ module ActionView
   module Helpers
     class FormBuilder
       def category_selector(key, options = {}, html_options = {})
-        @template.category_selector(@object_name, key, options.merge(:object => @object), html_options)
+        options = options.merge(:object => @object)
+        @template.category_selector(@object_name, key, options, html_options)
       end
     end
   end
