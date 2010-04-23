@@ -20,7 +20,9 @@ begin
                    "Arnau Sánchez"
                   ]
     gem.add_dependency(%q<rails>, '= 2.3.5')
-    gem.add_dependency(%q<highline>)
+
+    gem.add_development_dependency(%q<highline>, '>= 1.5.2')
+    gem.add_development_dependency(%q<ya2yaml>, '>= 0.26')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
