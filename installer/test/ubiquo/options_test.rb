@@ -4,7 +4,7 @@ class TestOptions < Test::Unit::TestCase
 
   def setup
     @defaults = {
-      :database => :sqlite,
+      :database => :postgresql,
       :template => :stable,
       :profile  => :complete,
     }
