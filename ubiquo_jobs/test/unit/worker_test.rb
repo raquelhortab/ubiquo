@@ -5,25 +5,6 @@ require 'daemons'
 UBIQUO_JOBS_ROOT = File.dirname(__FILE__) + "/../.."
 
 class WorkerTest < ActiveSupport::TestCase
-    
-  def test_should_start_daemon
-    Process.expects(:fork)
-    run_daemon
-  end
-  
-  def test_should_start_worker
-    old_argv = ARGV[0]
-    ARGV[0] = 'name'
-    UbiquoWorker.expects(:init).with('name', nil).returns(nil)
-    run_starter
-    ARGV[0] = old_argv
-  end
-
-  def test_starter_should_be_called_correctly
-    assert_raise ArgumentError do
-      run_starter(:name => 'start -- ')
-    end
-  end
 
   def test_should_build_worker
     UbiquoWorker::Worker.expects(:new)
@@ -49,17 +30,6 @@ class WorkerTest < ActiveSupport::TestCase
       :planified_at => Time.now.utc,
     }
     Task.create(default_options.merge(options))
-  end
-
-  def run_daemon()
-    old_argv = ARGV[0]
-    ARGV[0] = 'name'
-    eval File.read(File.join(UBIQUO_JOBS_ROOT, 'install', 'script', 'ubiquo_worker'))
-    ARGV[0] = old_argv    
-  end
-  
-  def run_starter()
-    eval File.read(File.join(UBIQUO_JOBS_ROOT, 'lib', 'ubiquo_worker', 'starter.rb'))
   end
 
   def start_worker(options = {})
