@@ -498,7 +498,7 @@ var AutoCompleteSelector = Class.create({
       for(var i in results) {
         if (results.hasOwnProperty(i)) {
           var this_li = document.createElement('li');
-          this_li.insert(this.highlight_term(eval(this.queryParam, results[i]), query));
+          this_li.insert(this.highlight_term(results[i][this.queryParam], query));
           dropdown_ul.insert(this_li);
           if(i%2) {
             this_li.addClassName(this.CLASSES.dropdownItem);
