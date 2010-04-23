@@ -1,29 +1,30 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::TestCase
+
   <%- if options[:translatable] -%>
   def setup
     session[:locale] = "en_US"
   end
   
   <%- end -%>
-  def test_should_get_index
+  test "should get index" do
     get :index
     assert_response :success
     assert_not_nil assigns(:<%= table_name %>)
   end
 
-  def test_should_get_new
+  test "should get new" do
     get :new
     assert_response :success
   end
   
-  def test_should_get_show
+  test "should get show" do
     get :show, :id => <%= table_name %>(:one).id
     assert_response :success
   end
 
-  def test_should_create_<%= file_name %>
+  test "should create <%= file_name %>" do
     assert_difference('<%= class_name %>.count') do
       post :create, :<%= file_name %> => <%= file_name %>_attributes
     end
@@ -31,17 +32,17 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
     assert_redirected_to ubiquo_<%= table_name %>_url
   end
 
-  def test_should_get_edit
+  test "should get edit" do
     get :edit, :id => <%= table_name %>(:one).id
     assert_response :success
   end
 
-  def test_should_update_<%= file_name %>
+  test "should update <%= file_name %>" do
     put :update, :id => <%= table_name %>(:one).id, :<%= file_name %> => <%= file_name %>_attributes
     assert_redirected_to ubiquo_<%= table_name %>_url
   end
 
-  def test_should_destroy_<%= file_name %>
+  test "should destroy <%= file_name %>" do
     assert_difference('<%= class_name %>.count', -1) do
       delete :destroy, :id => <%= table_name %>(:one).id
     end

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class <%= class_name %>Test < ActiveSupport::TestCase
 
-  def test_should_create_<%= file_name %>
+  test "should create <%= file_name %>" do
     assert_difference '<%= class_name %>.count' do
       <%= file_name %> = create_<%= file_name %>
       assert !<%= file_name %>.new_record?, "#{<%= file_name %>.errors.full_messages.to_sentence}"
@@ -10,14 +10,14 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   end
 
   <%- unless ton.nil? -%>
-  def test_should_require_<%= ton %>
+  test "should require <%= ton %>" do
     assert_no_difference '<%= class_name %>.count' do
       <%= file_name %> = create_<%= file_name %>(:<%= ton %> => "")
       assert <%= file_name %>.errors.on(:<%= ton %>)
     end
   end
   
-  def test_should_filter_by_<%= ton %>
+  test "should filter by <%= ton %>" do
     <%= class_name %>.destroy_all
     <%= file_name %>_1,<%= file_name %>_2,<%= file_name %>_3 = [
       create_<%= file_name %>(:<%= ton %> => "try to find me"),
@@ -30,7 +30,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   <% end -%>
 
   <%- if has_published_at -%>
-  def test_should_filter_by_publish_date
+  test "should filter by publish_date" do
     <%= class_name %>.destroy_all
     <%= file_name %>_1,<%= file_name %>_2,<%= file_name %>_3 = [
       create_<%= file_name %>(:published_at => 5.day.ago),
