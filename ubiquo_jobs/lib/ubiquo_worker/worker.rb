@@ -16,10 +16,10 @@ module UbiquoWorker
       while (!shutdown) do
         job = UbiquoJobs.manager.get(name)
         if job
-          puts "#{Time.now} - executing job #{job.id}"
+          puts "#{Time.now} [#{name}] - executing job #{job.id}"
           job.run!
         else
-          puts "#{Time.now} - no job available"
+          puts "#{Time.now} [#{name}] - no job available"
           sleep self.sleep_time
         end
       end
