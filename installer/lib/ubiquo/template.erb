@@ -55,8 +55,6 @@ end
 # Hold empty dirs by adding .gitignore to each (to avoid git missing needed empty dirs)
 run("find . \\( -type d -empty \\) -and \\( -not -regex ./\\.git.* \\) -exec touch {}/.gitignore \\;")
 
-db_prefix = RUBY_PLATFORM =~ /java/ ? 'jdbc' : ''
-
 # git:rails:new_app
 git :init
 
@@ -109,7 +107,7 @@ CODE
 postgresql =  <<-CODE
 base_config: &base_config
     encoding: unicode
-    adapter:  #{db_prefix}postgresql
+    adapter:  postgresql
     host: localhost
 
 development:
@@ -132,7 +130,7 @@ CODE
 mysql = <<-CODE
 base_config: &base_config
   encoding: utf8
-  adapter:  {#db_prefix}mysql
+  adapter:  mysql
   pool: 5
   username: root
   password:
@@ -158,7 +156,7 @@ CODE
 sqlite3 = <<-CODE
 base_config: &base_config
   encoding: unicode
-  adapter:  #{db_prefix}sqlite3
+  adapter:  sqlite3
   pool: 5
   timeout: 5000
 
@@ -273,5 +271,8 @@ git :add => "."
 git :commit => "-a -m 'Initial #{appname} commit'"
 
 <% unless @opts[:gnuine] %>
+<% if RUBY_PLATFORM =~ /java/ %>
+puts "Please remember to run script/generate jdbc task after configuring your database"
+<% end %>
 puts "Run script/server and go to http://localhost:3000/ and follow the instructions there."
 <% end %>
