@@ -109,6 +109,8 @@ base_config: &base_config
     encoding: unicode
     adapter:  postgresql
     host: localhost
+    username: #{ENV['USERNAME']}
+    password: 
 
 development:
   <<: *base_config
