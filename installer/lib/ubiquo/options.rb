@@ -8,19 +8,19 @@ module Ubiquo
     def initialize(args)
       @orig_args = args.clone
       
-      self[:database] = :postgresql
       self[:template] = :stable
       self[:profile]  = :complete
       self[:locale] = :en
       self[:devel]    = false
       self[:gnuine]   = args.delete('--gnuine') || false
+      self[:database] = self[:gnuine] ? :postgresql : :sqlite
       self[:exception_recipient] = "chan@ge.me"
       self[:sender_address] = "chan@ge.me"
       
       
       @opts = OptionParser.new do |o|
         o.banner = """Usage: #{File.basename($0)} [options] application_name"        
-        o.separator "\nSelect a database (defaults to postgresql if not specified):"
+        o.separator "\nSelect a database (defaults to sqlite if not specified):"
         
         suported_databases.each do |db,msg|
           o.on("--#{db.to_s}", msg) { self[:database] = db }

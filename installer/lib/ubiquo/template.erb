@@ -259,7 +259,7 @@ rake("calendardateselect:install")
 rake("ubiquo:install")
 
 <% if RUBY_PLATFORM =~ /java/ %>
-generate(:jdbc)
+  generate(:jdbc)
 <% end %>
 
 <% if @opts[:gnuine] %>
@@ -271,8 +271,5 @@ git :add => "."
 git :commit => "-a -m 'Initial #{appname} commit'"
 
 <% unless @opts[:gnuine] %>
-<% if RUBY_PLATFORM =~ /java/ %>
-puts "Please remember to run script/generate jdbc task after configuring your database"
-<% end %>
 puts "Run script/server and go to http://localhost:3000/ and follow the instructions there."
 <% end %>
