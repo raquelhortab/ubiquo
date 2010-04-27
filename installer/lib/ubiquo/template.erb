@@ -256,7 +256,7 @@ plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', 
 
 rake("rails:update")
 rake("calendardateselect:install")
-rake("ubiquo:install")
+rake("ubiquo:install OVERWRITE=yes")
 
 <% if RUBY_PLATFORM =~ /java/ %>
   generate(:jdbc)
