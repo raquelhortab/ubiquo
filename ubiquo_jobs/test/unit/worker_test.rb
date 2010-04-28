@@ -1,10 +1,7 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 require 'mocha'
-require 'daemons'
 
-UBIQUO_JOBS_ROOT = File.dirname(__FILE__) + "/../.."
-
-class WorkerTest < ActiveSupport::TestCase
+class UbiquoWorker::WorkerTest < ActiveSupport::TestCase
 
   def test_should_build_worker
     UbiquoWorker::Worker.expects(:new)
@@ -15,6 +12,11 @@ class WorkerTest < ActiveSupport::TestCase
     assert_raise ArgumentError do
       start_worker(:name => '')
     end
+  end
+
+  def test_should_set_sleep_time
+    UbiquoWorker::Worker.any_instance.expects(:sleep_time=).with(10.0)
+    start_worker :worker_options => {:sleep_time => 10.0}, :iterations => 1
   end
 
   def test_should_get_tasks
@@ -35,7 +37,8 @@ class WorkerTest < ActiveSupport::TestCase
   def start_worker(options = {})
     options = {
       :name => 'new_worker',
-      :iterations => 0
+      :iterations => 0,
+      :worker_options => {}
     }.merge(options)
     shutdown_values = ([false]*(options[:iterations] > 1 ? options[:iterations]-1 : 0)) << true
 
@@ -44,7 +47,7 @@ class WorkerTest < ActiveSupport::TestCase
 
     orig_stdout = $stdout
     $stdout = File.new('/dev/null', 'w')
-    UbiquoWorker.init(options[:name])
+    UbiquoWorker.init(options[:name], options[:worker_options])
     $stdout = orig_stdout
   end
   
