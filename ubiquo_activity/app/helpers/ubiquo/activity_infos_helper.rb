@@ -112,8 +112,8 @@ module Ubiquo::ActivityInfosHelper
   end
     
   def activity_info_box(activity)
-    custom_partial = File.join(RAILS_ROOT, "app", "views", activity.controller,
-                               "_activity_#{activity.action}.html.erb")
+    custom_partial = Rails.root.join("app", "views", activity.controller,
+                                     "_activity_#{activity.action}.html.erb")
     partial = if File.exist?(custom_partial)
       "#{activity.controller}/activity_#{activity.action}"
     else

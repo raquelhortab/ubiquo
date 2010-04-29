@@ -20,19 +20,19 @@
 #    ...
 #  end
 #
-#== Access control on views 
+#== Access control on views
 #
 #On the views, the actions or navigation tabs for which the current ubiquo user have no rights shouldn't be visible. Use _permit?_ in your views to check if an ubiquo_user has one permission or not:
 #
 #  if permit?('show')
 #    link_to(t('Show object'), ubiquo_object(object))
-#  end 
+#  end
 #
 #You can also use _restrict_to_ with a block:
 #
-#  restrict_to('show') do 
+#  restrict_to('show') do
 #    link_to(t('Show object'), ubiquo_object(object))
-#  end 
+#  end
 module UbiquoAccessControl
   module AccessControl
 
@@ -48,27 +48,27 @@ module UbiquoAccessControl
     module ClassMethods
 
       # Function to regulate the required permissions for actions in a controller
-      # 
+      #
       # Examples:
       #   for the key in "actions":
       #     access_control {
-      #      :DEFAULT => ... # control all actions 
-      #      :index => .... #control index action 
-      #      [:new, :create] => .... #control new and create actions 
+      #      :DEFAULT => ... # control all actions
+      #      :index => .... #control index action
+      #      [:new, :create] => .... #control new and create actions
       #     }
-      #     
+      #
       #   for the value:
       #     - one permission
-      #       access_control :DEFAULT => 'permission_key' 
-      #       access_control :DEFAULT => :permission_key   
-      #       
+      #       access_control :DEFAULT => 'permission_key'
+      #       access_control :DEFAULT => :permission_key
+      #
       #     - more permissions
-      #       access_control :DEFAULT => ['permission_key_1', 'permission_key_2'] 
-      #       access_control :DEFAULT => [:permission_key_1, :permission_key_2] 
+      #       access_control :DEFAULT => ['permission_key_1', 'permission_key_2']
+      #       access_control :DEFAULT => [:permission_key_1, :permission_key_2]
       #       access_control :DEFAULT => %w{permission_key_1 permission_key_2}
-      #       
+      #
       #     - only admins
-      #       access_control :DEFAULT => nil 
+      #       access_control :DEFAULT => nil
       #
       def access_control(actions={})
         # Add class-wide permission callback to before_filter
@@ -86,8 +86,8 @@ module UbiquoAccessControl
             if c.respond_to?:permission_denied
               c.send(:permission_denied)
             else
-              if File.exists?("#{RAILS_ROOT}/public/403.html")
-                c.send(:render, {:file => "#{RAILS_ROOT}/public/403.html",:status => 403})
+              if File.exists?(Rails.root.join('public', '403.html'))
+                c.send(:render, {:file => Rails.root.join('public','403.html'),:status => 403})
               else
                 c.send(:render, { :text => "Access denied", :status => 403})
               end
@@ -131,12 +131,12 @@ module UbiquoAccessControl
 
     # Used to restrict a block to users matching certain permissions
     # Used mainly in views, will return an empty string if the permission is not matched
-    # 
+    #
     # Example:
     #   restrict_to "admin" do
     #     link_to "foo"
     #   end
-    #   
+    #
     def restrict_to(auth = nil, context = {})
       result = ''
       if permit?(UbiquoAccessControl::AccessControl::Parser.parse(auth), context)
@@ -173,7 +173,7 @@ module UbiquoAccessControl
     class RoleHandler
 
       # Main permission validator
-      # Returns false on lack of permission or an error, 
+      # Returns false on lack of permission or an error,
       #   true if the user has the enough permissions - this includes being superadmin.
       # Will use an :ubiquo_user from the context hash to do the checks.
       #
@@ -191,9 +191,9 @@ module UbiquoAccessControl
     end # RoleHandler
 
     class Parser
-      # parses a list of permissions that can be strings, symbols, etc. 
+      # parses a list of permissions that can be strings, symbols, etc.
       # (see access_control for the permission formats)
-      # 
+      #
       # Returns an array where each element is a hash with the following keys:
       #   :permission => name of the permission as a string
       #   :admin => true if this permission requires to be an admin
@@ -210,6 +210,6 @@ module UbiquoAccessControl
         end.reject(&:blank?)
       end
     end # Parser
-    
+
   end # AccessControl
 end
