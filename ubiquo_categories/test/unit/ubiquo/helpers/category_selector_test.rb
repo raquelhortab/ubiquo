@@ -6,7 +6,9 @@ class Ubiquo::Helpers::CategorySelectorTest < ActionView::TestCase
   include Ubiquo::Extensions::FiltersHelper
   include UbiquoCategories::Extensions::Helpers
   ActionView::Base.send :include, Ubiquo::Extensions::FiltersHelper
-#  ActionView::Base.send :include, UbiquoCategories::Extensions::Helpers
+
+  connector = UbiquoCategories::Connectors::Base.current_connector
+  ActionView::TestCase.send(:include, connector::UbiquoHelpers::Helper)
     
   def setup
     category_set = CategorySet.create(:name => "Tags", :key => "tags")
@@ -54,7 +56,7 @@ class Ubiquo::Helpers::CategorySelectorTest < ActionView::TestCase
     ActionView::Base.any_instance.stubs(:link_to)
     set = CategorySet.create(:key => 'genres', :name => 'genres')
     CategorySet.expects(:find_by_key).with('genres').returns(set)
-    CategorySet.any_instance.expects(:categories).returns(Category)
+    CategorySet.any_instance.expects(:categories).returns(Category.all)
     render_category_filter({:aa => 'a'}, {:set => :genres})
   end
 

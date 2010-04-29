@@ -53,7 +53,11 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
 
   def test_edit_should_redirect_to_correct_locale
     get :edit, :id => categories(:one).id, :category_set_id => category_sets(:one).id, :locale => 'jp'
-    assert_redirected_to ubiquo_category_set_categories_url
+    if Ubiquo::Config.context(:ubiquo_categories).get(:connector).to_sym == :i18n
+      assert_redirected_to ubiquo_category_set_categories_url
+    else
+      assert_response :success
+    end
   end
 
   def test_should_update_category

@@ -1,6 +1,6 @@
 <%= error_messages_for 'category' %>
 <div class="form_box">
-  <%= form.hidden_field :content_id %>
+  <%= uhook_category_form form %>
   <p>
     <%= form.label :name, Category.human_attribute_name("name") %>
     <%= form.text_field :name %>

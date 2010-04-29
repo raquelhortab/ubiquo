@@ -1,6 +1,6 @@
 class CreateCategoryRelations < ActiveRecord::Migration
   def self.up
-    create_table :category_relations do |t|
+    uhook_create_category_relations_table do |t|
       t.integer :category_id
       t.integer :related_object_id
       t.string :related_object_type

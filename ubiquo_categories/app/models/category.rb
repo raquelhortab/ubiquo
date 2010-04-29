@@ -1,7 +1,5 @@
 class Category < ActiveRecord::Base
   
-  translatable :name, :description
-
   belongs_to :category_set
   
   validates_presence_of :name, :category_set
@@ -13,12 +11,12 @@ class Category < ActiveRecord::Base
       case filter
       when :text
         {:conditions => ["upper(categories.name) LIKE upper(?)", "%#{value}%"]}
-      when :locale
-        {:conditions => {:locale => value}}
       when :category_set
         {:conditions => {:category_set_id => value}}
       end
     end
+
+    scopes += uhook_filtered_search(filters)
     
     apply_find_scopes(scopes) do
       find(:all, options)

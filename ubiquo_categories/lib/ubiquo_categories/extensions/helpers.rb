@@ -15,7 +15,9 @@ module UbiquoCategories
 
       # prepares a collection
       def categories_for_select key
-        category_set(key).categories.locale(current_locale, :ALL)
+        uhook_categories_for_set category_set(key)
+#        .categories.locale(current_locale, :ALL)
+#        category_set(key).categories.locale(current_locale, :ALL)
       end
 
       def render_category_filter(url_for_options, options = {})

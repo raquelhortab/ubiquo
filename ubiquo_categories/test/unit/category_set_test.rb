@@ -106,39 +106,4 @@ class CategorySetTest < ActiveSupport::TestCase
     assert_equal category, set.select_fittest(category)
   end
 
-  ### i18n ###
-  def test_categories_are_created_with_locale_any_if_unspecified
-    set = create_category_set
-    set.categories << 'Category'
-    assert set.categories.first.locale?('any')
-  end
-
-  def test_categories_are_created_with_specified_locale
-    set = create_category_set
-    set.categories << ['Category', {:locale => :ca}]
-    assert set.categories.first.locale?('ca')
-  end
-
-  def test_select_fittest_with_locale
-    set = create_category_set
-    set.categories << 'Category'
-    category = Category.last
-    category.update_attribute :locale, 'en'
-    cat_category = category.translate('ca', :copy_all => true)
-    cat_category.save
-    assert_equal category, set.reload.select_fittest(category)
-    assert_equal cat_category, set.select_fittest(category, 'ca')
-    assert_equal cat_category, set.select_fittest('Category', 'ca')
-  end
-
-  private
-  
-  def create_category_set(options = {})
-    default_options = {
-      :name => 'MyString', # string
-      :key => 'MyString', # string
-      :is_editable => true
-    }
-    CategorySet.create(default_options.merge(options))
-  end
 end

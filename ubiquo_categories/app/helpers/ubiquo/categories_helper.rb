@@ -5,9 +5,7 @@ module Ubiquo::CategoriesHelper
            :field => :filter_text,
            :caption => t('ubiquo.filters.text'))
 
-    filters << filter_info(:string, params,
-           :field => :filter_locale,
-           :caption => Category.human_attribute_name("locale"))
+    filters += uhook_category_filters_info
     build_filter_info(*filters)
   end
 
@@ -17,12 +15,7 @@ module Ubiquo::CategoriesHelper
         :field => :filter_text,
         :caption => t('ubiquo.filters.text'))
         
-    filters << render_filter(:links, url_for_options,
-        :caption => Category.human_attribute_name("locale"),
-        :field => :filter_locale,
-        :collection => Locale.active,
-        :id_field => :iso_code,
-        :name_field => :native_name)
+    filters << uhook_category_filters(url_for_options)
     filters.join
   end
 
@@ -37,7 +30,7 @@ module Ubiquo::CategoriesHelper
               category.name,
               category.description,
             ],
-            :actions => category_actions(options[:category_set], category)
+            :actions => uhook_category_index_actions(options[:category_set], category)
           }
         end,
         :pages => pages,
@@ -49,39 +42,5 @@ module Ubiquo::CategoriesHelper
           ) if options[:category_set].is_editable?)
       })
   end
-    
-  private
-    
-  def category_actions(category_set, category, options = {})
-    actions = []
-    if category.locale?(current_locale)
-      actions << link_to(t("ubiquo.view"), [:ubiquo, category_set, category])
-    end
-   
-    if category.locale?(current_locale)
-      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set, category])
-    end
-  
-    unless category.locale?(current_locale)
-      actions << link_to(
-        t("ubiquo.translate"), 
-        new_ubiquo_category_set_category_path(
-          :from => category.content_id
-          )
-        )
-    end
-  
-    actions << link_to(t("ubiquo.remove"), 
-      ubiquo_category_set_category_path(category_set, category, :destroy_content => true),
-      :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
-      )
-    
-    if category.locale?(current_locale, :skip_any => true) && !category.translations.empty?
-      actions << link_to(t("ubiquo.remove_translation"), [:ubiquo, category_set, category],
-        :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
-        )
-    end
-    
-    actions
-  end
+
 end

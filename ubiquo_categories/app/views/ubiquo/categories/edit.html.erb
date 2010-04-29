@@ -17,7 +17,7 @@
 <% end %>
 
 <% content_for :sidebar do %>
-  <%= show_translations(@category) %>
+	<%= uhook_edit_category_sidebar @category %>
   <h3><%= t('ubiquo.help') %></h3>
   <p><%= t("ubiquo.category.edit.help_message") %></p>
 <% end %>

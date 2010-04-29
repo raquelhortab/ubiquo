@@ -5,7 +5,6 @@ module UbiquoCategories
       def self.append_features(base)
         super
         base.extend(ClassMethods)
-        base.send :include, InstanceMethods
       end
       
       module ClassMethods
@@ -52,13 +51,7 @@ module UbiquoCategories
             set = CategorySet.find_by_key set_key
             raise UbiquoCategories::SetNotFoundError unless set
 
-            locale = object.locale if object.class.is_translatable?
-            categories_options = {}
-            categories_options.merge!(:locale => locale)
-
-            set.categories << [categories, categories_options]
-            categories = Array(categories).reject(&:blank?)
-            categories = categories.map{|c| set.select_fittest(c, locale)}.uniq.compact
+            categories = uhook_assign_to_set set, categories, object
             [set, categories]
           end
 
@@ -172,22 +165,16 @@ module UbiquoCategories
           raise UbiquoCategories::SetNotFoundError unless set
 
           value = Array(category_names).map do |category_name|
-            value = set.select_fittest(category_name).content_id rescue 0
+            value = set.uhook_category_identifier_for_name category_name
+#            value = set.select_fittest(category_name).content_id rescue 0
           end.compact
 
           value = [0] if value.blank? # to prevent rails sql bad formation
 
           {
-            :conditions => ['categories.content_id IN (?)', value],
+            :conditions => Category.uhook_category_identifier_condition(value),
             :include => association_name
           }
-        end
-
-      end
-      
-      module InstanceMethods
-        
-        def self.included(klass)
         end
 
       end

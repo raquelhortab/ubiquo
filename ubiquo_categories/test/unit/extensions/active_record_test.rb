@@ -296,27 +296,6 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_kind_of Hash, CategoryTestModel.category_conditions_for(:genre, 'value')
   end
 
-  def test_category_conditions_for_existent_category
-    categorize :cities
-    set = category_sets(:cities)
-    set.categories << 'Barcelona' # ensure there is one
-    category = set.categories.last
-    
-    assert_equal(
-      {:conditions => ['categories.content_id IN (?)', [category.content_id]], :include => :cities},
-      CategoryTestModel.category_conditions_for(:cities, category.name)
-      )
-  end
-
-  def test_category_conditions_for_inexistent_category
-    categorize :genre
-    create_set :genres
-    assert_equal(
-      {:conditions => ['categories.content_id IN (?)', [0]], :include => :genres},
-      CategoryTestModel.category_conditions_for(:genre, 'value')
-      )
-  end
-
   def test_with_field_in_scope
     create_set :cities
     categorize :cities, :size => 2
@@ -339,43 +318,6 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     end
   end
 
-  ### i18n-related tests ###
-
-  def test_category_adopts_object_locale
-    i18n_categorize :city
-    model = create_i18n_category_model
-    model.city = 'Barcelona'
-    assert_equal model.locale, model.city.locale
-  end
-
-  def test_categories_can_be_translation_shared
-    i18n_categorize :city, :translation_shared => true
-    model = create_i18n_category_model
-    model.city = 'Barcelona'
-    translation = model.translate('ca', :copy_all => true)
-    assert_kind_of Category, translation.city
-    assert_equal 'Barcelona', translation.city.to_s
-    assert_equal model.city.content_id, translation.city.content_id
-    assert_equal 'ca', translation.city.locale
-  end
-
-  protected
-
-  def categorize attr, options = {}
-    CategoryTestModel.class_eval do
-      categorized_with attr, options
-    end
-  end
-
-  def i18n_categorize attr, options = {}
-    CategoryTranslatableTestModel.class_eval do
-      categorized_with attr, options
-    end
-  end
-
-  def create_set key
-    CategorySet.create(:key => key.to_s, :name => key.to_s)
-  end
 end
 
 create_categories_test_model_backend

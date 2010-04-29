@@ -1,5 +1,9 @@
 require 'ubiquo_categories'
 
+config.after_initialize do
+  UbiquoCategories::Connectors.load!
+end
+
 Ubiquo::Plugin.register(:ubiquo_categories, directory, config) do |config|
   config.add :category_sets_per_page
   config.add_inheritance :category_sets_per_page, :elements_per_page
@@ -16,4 +20,6 @@ Ubiquo::Plugin.register(:ubiquo_categories, directory, config) do |config|
 
   # Set to false to avoid displaying editing options in Ubiquo
   config.add :administrable_category_sets, true
+  
+  config.add :connector, :standard
 end
