@@ -18,13 +18,14 @@ module UbiquoCategories
         end
         selector_type = options[:type]
         categorize_size = object.class.categorize_options(key)[:size]
+        max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)
         selector_type ||= case categories.size
-          when 0..6
+          when 0..max
             (categorize_size == :many || categorize_size > 1) ? :checkbox : :select
           else
             :autocomplete
         end
-        output = content_tag(:fieldset) do
+        output = content_tag(:fieldset, html_options) do
           content_tag(:legend, options[:name] || object.class.human_attribute_name(key)) + 
             send("category_#{selector_type}_selector",
                  object, object_name, key, categories, options)

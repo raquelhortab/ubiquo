@@ -41,7 +41,9 @@ module UbiquoCategories
       protected
 
       def category_set(key)
-        CategorySet.find_by_key(key.to_s.pluralize) || raise(SetNotFoundError, "CategorySet with key '#{key.to_s.pluralize}' not found")
+        key = key.to_s.pluralize
+        CategorySet.find_by_key(key) ||
+          raise(SetNotFoundError, "CategorySet with key '#{key}' not found")
       end
 
     end

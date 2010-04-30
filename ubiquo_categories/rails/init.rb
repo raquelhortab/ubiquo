@@ -20,6 +20,9 @@ Ubiquo::Plugin.register(:ubiquo_categories, directory, config) do |config|
 
   # Set to false to avoid displaying editing options in Ubiquo
   config.add :administrable_category_sets, true
+
+  # Max number after which category_selector will render a autocomplete selector
+  config.add :max_categories_simple_selector, 6
   
   config.add :connector, :standard
 end

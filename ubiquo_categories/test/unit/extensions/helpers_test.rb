@@ -1,7 +1,6 @@
-require File.dirname(__FILE__) + "/../../../test_helper.rb"
-require 'mocha'
+require File.dirname(__FILE__) + "/../../test_helper.rb"
 
-class Ubiquo::Helpers::CategorySelectorTest < ActionView::TestCase
+class UbiquoCategories::Extensions::HelpersTest < ActionView::TestCase
 
   include Ubiquo::Extensions::FiltersHelper
   include UbiquoCategories::Extensions::Helpers
@@ -9,29 +8,6 @@ class Ubiquo::Helpers::CategorySelectorTest < ActionView::TestCase
 
   connector = UbiquoCategories::Connectors::Base.current_connector
   ActionView::TestCase.send(:include, connector::UbiquoHelpers::Helper)
-    
-  def setup
-    category_set = CategorySet.create(:name => "Tags", :key => "tags")
-    category_set.categories.build(:name => "Red")
-    category_set.categories.build(:name => "Blue")
-    category_set.save
-  end
-  
-#  def test_prints_selector_with_implicit_type
-#    form_for(:post, CategoryTestModel.new) do |f|
-#      concat f.category_selector(:tags, :type => 'checkbox')
-#      concat f.category_selector(:tags, :type => 'select')
-#    end
-#
-#    expected =
-#      "<form>" + category_checkbox_output + category_select_output + "</form>"
-#
-#    assert_dom_equal expected, output_buffer
-#  end
-  
-  def test_category_select_selector
-#    require 'ruby-debug';debugger
-  end
 
   def test_render_category_filter
     self.stubs(:params).returns({})
@@ -103,18 +79,6 @@ class Ubiquo::Helpers::CategorySelectorTest < ActionView::TestCase
     filter_category_info 'url', {:set => :genres}
   end
 
-  private
-  
-  def category_checkbox_output
-    "checkboxes"
-  end
-  
-  def category_select_output
-    "<select id=\"post_tags\" name=\"post[tags]\">" +
-    "<option value=\"Blue\">Blue</option>" +
-    "<option value=\"Red\">Red</option>" +      
-    "</select"
-  end
 end
 
 create_categories_test_model_backend

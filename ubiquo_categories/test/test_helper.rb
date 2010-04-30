@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + "/../../../../test/test_helper.rb"
+require 'mocha'
 
 def create_categories_test_model_backend
   # Creates a test table for AR things work properly
