@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../../test_helper"
 
 class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
-  
+
   I18n = UbiquoCategories::Connectors::I18n
 
   def setup
@@ -202,7 +202,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
     actions = I18n::UbiquoCategoriesController::Helper.uhook_category_index_actions set, category
     assert actions.is_a?(Array)
-    assert_equal 4, actions.size
+    assert_equal 3, actions.size
   end
 
   test 'uhook_category_form should return content_id field' do

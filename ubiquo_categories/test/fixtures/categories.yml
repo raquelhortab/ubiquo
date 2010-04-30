@@ -5,12 +5,16 @@ one:
   name: MyString
   description: MyText
   category_set: one
+<% if (Category.is_translatable? rescue false) %>
   content_id: 1
   locale: 'en_US'
+<% end %>
 
 two:
   name: MyString
   description: MyText
   category_set: two
+<% if (Category.is_translatable? rescue false) %>
   content_id: 1
   locale: 'en_US'
+<% end %>
