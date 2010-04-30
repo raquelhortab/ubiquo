@@ -1,13 +1,14 @@
 module UbiquoCategories
   module CategorySelector
     module Helper
-      # object_name (required)
-      # key: CategorySet key (required)
-      # options(optional): 
-      #   type (checkbox, select, autocomplete)
-      #   name (Used for selector title)
-      #   autocomplete_style (tag, list)
-      # html_options(optional)
+
+      # Renders a category selector in a form
+      #   key: CategorySet key (required)
+      #   options(optional):
+      #     type (checkbox, select, autocomplete)
+      #     name (Used for selector title)
+      #     autocomplete_style (tag, list)
+      #   html_options(optional)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
         key = key.to_s.pluralize
@@ -71,22 +72,24 @@ module UbiquoCategories
           :current_values => object.send(key).to_json(:only => [:id, :name]),
           :style => options[:autocomplete_style] || "tag"
         }
-        js_code =<<EOF
-document.observe('dom:loaded', function() {
-  var autocomplete = new AutoCompleteSelector('#{autocomplete_options[:url]}',
-                                              '#{object_name}',
-                                              '#{key}',
-                                              #{autocomplete_options[:current_values]},
-                                              '#{autocomplete_options[:style]}')
-});
-EOF
+        js_code =<<-JS
+          document.observe('dom:loaded', function() {
+            var autocomplete = new AutoCompleteSelector(
+              '#{autocomplete_options[:url]}',
+              '#{object_name}',
+              '#{key}',
+              #{autocomplete_options[:current_values]},
+              '#{autocomplete_options[:style]}'
+            )
+          });
+        JS
         javascript_tag(js_code) +
           text_field_tag("#{object_name}[#{key}][]", "",
                          :id => "#{object_name}_#{key}_autocomplete")
       end
       
       def new_category_controls(type, object_name, key)
-        output = content_tag(:div, :class => "new_category_controls") do
+        content_tag(:div, :class => "new_category_controls") do
           link_to(t("ubiquo.category_selector.new_element"), '#', 
                   :id => "link_new__#{type}__#{object_name}__#{key}",
                   :class => "category_selector_new") +

@@ -121,7 +121,6 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
       module_function :uhook_category_index_actions
     end
 
-    # expectations to mock
     Standard::UbiquoCategoriesController::Helper.expects(:t).at_least_once.returns('t')
     Standard::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [:edit, :ubiquo, set, category])
     Standard::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [:ubiquo, set, category], {:confirm => 't', :method => :delete})

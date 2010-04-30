@@ -163,13 +163,15 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
   end
 
   # Define module mocks for testing
-  module Base::Category; end
-  module Base::CategorySet; end
-  module Base::UbiquoCategoriesController; end
-  module Base::UbiquoHelpers; end
-  module Base::Migration; end
-  module Base::ActiveRecord
-    module Base; end
+  class Base
+    module Category; end
+    module CategorySet; end
+    module UbiquoCategoriesController; end
+    module UbiquoHelpers; end
+    module Migration; end
+    module ActiveRecord
+      module Base; end
+    end
   end
     
 end

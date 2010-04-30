@@ -36,10 +36,6 @@ class Ubiquo::CategoriesController < UbiquoAreaController
   def show
     @category = Category.find(params[:id])
     return if uhook_show_category(@category) == false
-#    unless @category.locale?(current_locale)
-#      redirect_to(ubiquo_categories_url)
-#      return
-#    end
 
     respond_to do |format|
       format.html # show.html.erb

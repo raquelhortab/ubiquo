@@ -4,7 +4,6 @@ class Category < ActiveRecord::Base
   
   validates_presence_of :name, :category_set
     
-  # See vendor/plugins/ubiquo_core/lib/ubiquo/extensions/active_record.rb to see an example of usage.
   def self.filtered_search(filters = {}, options = {})
     
     scopes = create_scopes(filters) do |filter, value|

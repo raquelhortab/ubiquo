@@ -1,6 +1,16 @@
 class CategorySet < ActiveRecord::Base
 
   has_many :categories do
+
+    # This method accepts an options parameter if you use it like this:
+    #
+    #   set << [category_1, category_2, {:option => value}]
+    #
+    # Can be used as usual too
+    #
+    #   set << category_1
+    #
+    # In any case, category can be a Category instance or a simple string
     def << categories
       if categories.is_a? Array
         options = categories.extract_options!
@@ -12,7 +22,7 @@ class CategorySet < ActiveRecord::Base
         # skip if already added
         load_target
         next if proxy_target.map(&:to_s).include? category.to_s
-          
+
         case category
         when String
           raise UbiquoCategories::CreationNotAllowed unless proxy_owner.is_editable?
@@ -32,9 +42,6 @@ class CategorySet < ActiveRecord::Base
     super attrs
   end
 
-
-
-  # See vendor/plugins/ubiquo_core/lib/ubiquo/extensions/active_record.rb to see an example of usage.
   def self.filtered_search(filters = {}, options = {})
     
     scopes = create_scopes(filters) do |filter, value|
@@ -49,12 +56,12 @@ class CategorySet < ActiveRecord::Base
     end
   end
 
-  # sets the set as editable
+  # Sets the set as editable
   def is_editable!
     update_attribute :is_editable, true
   end
 
-  # sets the set as not editable
+  # Sets the set as not editable
   def is_not_editable!
     update_attribute :is_editable, false
   end

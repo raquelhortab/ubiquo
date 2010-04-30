@@ -13,11 +13,9 @@ module UbiquoCategories
         end if ubiquo_config_call(:categories_permit, {:context => :ubiquo_categories})
       end
 
-      # prepares a collection
+      # Prepares a collection
       def categories_for_select key
         uhook_categories_for_set category_set(key)
-#        .categories.locale(current_locale, :ALL)
-#        category_set(key).categories.locale(current_locale, :ALL)
       end
 
       def render_category_filter(url_for_options, options = {})
