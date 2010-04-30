@@ -42,9 +42,9 @@ module UbiquoCategories
           categories.map do |category|
             content_tag(:li) do
               check_box_tag("#{object_name}[#{key}][]", category.name, 
-                                      object.send(key).has_category?(category),
-                                      :id => "#{object_name}_#{key}_#{category.id}") +
-              label_tag("#{object_name}_#{key}_#{category.id}", category)
+                            object.send(key).has_category?(category),
+                            :id => "#{object_name}_#{key}_#{category.id}") +
+                label_tag("#{object_name}_#{key}_#{category.id}", category)
             end
           end.join
         end
