@@ -166,7 +166,6 @@ module UbiquoCategories
 
           value = Array(category_names).map do |category_name|
             value = set.uhook_category_identifier_for_name category_name
-#            value = set.select_fittest(category_name).content_id rescue 0
           end.compact
 
           value = [0] if value.blank? # to prevent rails sql bad formation

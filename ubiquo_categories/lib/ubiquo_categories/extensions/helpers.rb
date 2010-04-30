@@ -13,11 +13,6 @@ module UbiquoCategories
         end if ubiquo_config_call(:categories_permit, {:context => :ubiquo_categories})
       end
 
-      # Prepares a collection
-      def categories_for_select key
-        uhook_categories_for_set category_set(key)
-      end
-
       def render_category_filter(url_for_options, options = {})
         render_filter :links_or_select, url_for_options, {
           :collection => categories_for_select(options[:set]),
@@ -39,6 +34,11 @@ module UbiquoCategories
       end
 
       protected
+
+      # Prepares a collection
+      def categories_for_select key
+        uhook_categories_for_set category_set(key)
+      end
 
       def category_set(key)
         key = key.to_s.pluralize
