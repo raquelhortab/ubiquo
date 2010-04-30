@@ -90,6 +90,11 @@ module UbiquoCategories
           def uhook_category_form form
             ''
           end
+
+          # Returns any necessary extra code to be inserted in the category partial
+          def uhook_category_partial category
+            ''
+          end
         end
 
         module InstanceMethods

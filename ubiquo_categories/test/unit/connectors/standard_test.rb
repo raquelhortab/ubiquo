@@ -145,6 +145,14 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     assert_equal '', Standard::UbiquoCategoriesController::Helper.uhook_category_form(f)
   end
 
+  test 'uhook_category_partial should return empty string' do
+    mock_helper
+    Standard::UbiquoCategoriesController::Helper.module_eval do
+      module_function :uhook_category_partial
+    end
+    assert_equal '', Standard::UbiquoCategoriesController::Helper.uhook_category_partial(Category.first)
+  end
+
   test 'uhook_categories_for_set should return set categories' do
     mock_helper
     set = create_category_set

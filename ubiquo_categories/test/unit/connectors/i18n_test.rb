@@ -254,6 +254,27 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     I18n::UbiquoCategoriesController::Helper.uhook_category_form(f)
   end
 
+  test 'uhook_category_partial should return locale information' do
+    set = create_category_set
+    set.categories << ['category', {:locale => 'ca'}]
+    category = set.categories.first
+    
+    mock_helper
+    I18n::UbiquoCategoriesController::Helper.module_eval do
+      module_function :uhook_category_partial
+    end
+
+    I18n::UbiquoCategoriesController::Helper.expects(:content_tag).with(:dt,
+      Category.human_attribute_name("locale") + ':'
+    ).returns ''
+    I18n::UbiquoCategoriesController::Helper.expects(:content_tag).with(:dd,
+      anything
+    ).returns ''
+    Locale.expects(:find_by_iso_code).with('ca')
+    
+    I18n::UbiquoCategoriesController::Helper.uhook_category_partial category
+  end
+
   test 'uhook_categories_for_set should return set categories by locale' do
     # setup
     mock_helper

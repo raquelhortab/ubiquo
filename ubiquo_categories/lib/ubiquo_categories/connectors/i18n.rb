@@ -133,6 +133,13 @@ module UbiquoCategories
           def uhook_category_form form
             (form.hidden_field :content_id) + (hidden_field_tag(:from, params[:from]))
           end
+
+          # Returns the locale information of this category
+          def uhook_category_partial category
+            locale = ::Locale.find_by_iso_code(category.locale)
+            content_tag(:dt, ::Category.human_attribute_name("locale") + ':') +
+            content_tag(:dd, (locale.native_name rescue t('ubiquo.category.any')))
+          end
         end
 
         module InstanceMethods

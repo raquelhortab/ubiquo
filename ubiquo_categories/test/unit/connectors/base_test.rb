@@ -164,6 +164,14 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     assert Base.current_connector::UbiquoCategoriesController::Helper.uhook_category_form(f).is_a?(String)
   end
 
+  test 'uhook_category_partial should return string' do
+    mock_helper
+    Base.current_connector::UbiquoCategoriesController::Helper.module_eval do
+      module_function :uhook_category_partial
+    end
+    assert_kind_of String, Base.current_connector::UbiquoCategoriesController::Helper.uhook_category_partial(Category.first)
+  end
+
   test 'uhook_categories_for_set should return searchable' do
     mock_helper
     set = create_category_set
