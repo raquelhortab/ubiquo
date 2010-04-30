@@ -118,10 +118,6 @@ module UbiquoCategories
               :conditions => ["category_relations.attr_name = ?", association_name],
               :order => "category_relations.position ASC",
             },&proc)
-
-          if self.is_translatable?
-            self.reflections[association_name.to_sym].options[:translation_shared] = true
-          end
           
           define_method "#{association_name}_with_categories=" do |categories|
             categories = categories.split(options[:separator]) if categories.is_a? String
@@ -146,6 +142,8 @@ module UbiquoCategories
           named_scope "with_#{association_name}_in", lambda{ |*values|
             category_conditions_for field, values
           }
+          
+          uhook_categorized_with field, options
           
         end
         

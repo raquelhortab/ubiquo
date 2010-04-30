@@ -39,6 +39,12 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     CategorySet.uhook_assign_to_set set, ['category'], set
   end
 
+  test 'uhook_categorized_with should not raise' do
+    assert_nothing_raised do
+      CategorySet.uhook_categorized_with :field, {}
+    end
+  end
+
   test 'uhook_category_identifier_for_name should return a value' do
     set = create_category_set
     set.categories << 'category'

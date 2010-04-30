@@ -33,6 +33,12 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     CategorySet.uhook_assign_to_set set, ['category'], set
   end
 
+  test 'uhook_categorized_with should assign translation shared' do
+    categorize :cities
+    CategorySet.uhook_categorized_with :cities, {}
+    assert CategoryTranslatableTestModel.reflections[:cities].options[:translation_shared]
+  end
+
   test 'uhook_category_identifier_for_name should return content_id' do
     set = create_category_set
     set.categories << 'category'

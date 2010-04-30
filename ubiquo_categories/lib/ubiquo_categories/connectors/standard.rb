@@ -178,6 +178,9 @@ module UbiquoCategories
               categories = Array(categories).reject(&:blank?)
               categories.map{|c| set.select_fittest c}.uniq.compact
             end
+            
+            # Hook called at the end of a categorized_with call
+            def uhook_categorized_with field, options; end
           end
 
         end

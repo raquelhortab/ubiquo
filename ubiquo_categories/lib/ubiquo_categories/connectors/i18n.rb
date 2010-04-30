@@ -240,6 +240,14 @@ module UbiquoCategories
                 set.select_fittest(c, :locale => locale)
               end.uniq.compact
             end
+
+            # Defines the relation as translation_shared if is a translatable class
+            def uhook_categorized_with field, options
+              association_name = field.to_s.pluralize
+              if self.is_translatable?
+                self.reflections[association_name.to_sym].options[:translation_shared] = true
+              end
+            end
           end
 
         end
