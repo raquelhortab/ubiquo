@@ -8,9 +8,7 @@ module UbiquoCategories
         def self.included(klass)
           klass.send(:extend, ClassMethods)
           klass.send(:translatable, :name, :description)
-#          klass.send(:include, InstanceMethods)
           I18n.register_uhooks klass, ClassMethods
-#          I18n.register_uhooks klass, ClassMethods, InstanceMethods
         end
 
         module ClassMethods
@@ -29,6 +27,11 @@ module UbiquoCategories
               end
             end
           end
+
+          # Initializes a new category with the given +name+ and +options+
+          def uhook_new_from_name name, options = {}
+            ::Category.new(:name => name, :locale => (options[:locale] || :any).to_s)
+          end
         end
 
       end
@@ -45,7 +48,13 @@ module UbiquoCategories
           def uhook_category_identifier_for_name category_name
             self.select_fittest(category_name).content_id rescue 0
           end
+          
+          # Returns the fittest category in the requested locale
+          def uhook_select_fittest category, options = {}
+            options[:locale] ? category.in_locale(options[:locale]) : category
+          end
         end
+
       end
 
       module UbiquoCategoriesController
@@ -220,7 +229,9 @@ module UbiquoCategories
 
               set.categories << [categories, categories_options]
               categories = Array(categories).reject(&:blank?)
-              categories.map{|c| set.select_fittest(c, locale)}.uniq.compact
+              categories.map do |c|
+                set.select_fittest(c, :locale => locale)
+              end.uniq.compact
             end
           end
 

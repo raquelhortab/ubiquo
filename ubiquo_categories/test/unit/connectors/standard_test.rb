@@ -39,6 +39,12 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     )
   end
   
+  test 'uhook_select_fittest should return the same category' do
+    set = create_category_set
+    set.categories << 'category'
+    assert_equal set.categories.first, set.uhook_select_fittest(set.categories.first)
+  end
+
   test 'uhook_category_identifier_condition should return a id condition' do
     assert_equal(['categories.id IN (?)', [1]], Category.uhook_category_identifier_condition([1]))
   end

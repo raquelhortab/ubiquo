@@ -21,6 +21,11 @@ module UbiquoCategories
           def uhook_filtered_search filters
             []
           end
+
+          # Initializes a new category with the given +name+ and +options+
+          def uhook_new_from_name name, options = {}
+            ::Category.new(:name => name)
+          end
         end
 
       end
@@ -36,6 +41,11 @@ module UbiquoCategories
           # Returns an identifier value for a given +category_name+ in this set
           def uhook_category_identifier_for_name category_name
             self.select_fittest(category_name).id rescue 0
+          end
+
+          # Returns the fittest category given other possible determining +options+
+          def uhook_select_fittest category, options = {}
+            category
           end
         end
       end

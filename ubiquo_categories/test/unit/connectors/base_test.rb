@@ -47,12 +47,25 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     )
   end
 
+  test 'uhook_select_fittest should return a category' do
+    set = create_category_set
+    set.categories << 'category'
+    assert_kind_of Category, set.uhook_select_fittest(set.categories.first, {})
+  end
+
   test 'uhook_category_identifier_condition should return a condition' do
     assert [String, Hash, Array].include?(Category.uhook_category_identifier_condition([]).class)
   end
   
   test 'uhook_filtered_search_in_category should return an array' do
     assert_kind_of Array, Category.uhook_filtered_search({})
+  end
+
+  test 'uhook_new_from_name should return a category' do
+    category = Category.uhook_new_from_name('name', {})
+    assert_kind_of Category, category
+    assert_equal 'name', category.name
+    assert category.new_record?
   end
 
   test 'uhook_index_filters_should_return_hash' do

@@ -1,5 +1,6 @@
 <div class="view_box preview">
   <dl>
+    <%= uhook_category_partial -%>
     <dt><%= Category.human_attribute_name("locale") %>:</dt>
     <dd><%= Locale.find_by_iso_code(category.locale).native_name rescue t('ubiquo.category.any') %></dd>
     <dt><%= Category.human_attribute_name("name") %>:</dt>

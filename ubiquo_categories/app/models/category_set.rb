@@ -26,7 +26,7 @@ class CategorySet < ActiveRecord::Base
         case category
         when String
           raise UbiquoCategories::CreationNotAllowed unless proxy_owner.is_editable?
-          self.concat(Category.new(:name => category, :locale => (options[:locale] || :any).to_s))
+          self.concat(Category.uhook_new_from_name(category, options))
         else
           self.concat(category)
         end
@@ -66,20 +66,16 @@ class CategorySet < ActiveRecord::Base
     update_attribute :is_editable, false
   end
 
-  # Returns the fittest category given the required params
-  #   category: either a Category or a string (category name)
-  #   locale: expected locale of the category
-  def select_fittest(category, locale = nil)
-    case category
+  # Returns the fittest category given the required params.
+  # category can be either a Category or a string (category name)
+  def select_fittest(category, options = {})
+    category = case category
     when Category
-      if locale
-        category.locale?(locale) ? category : category.in_locale(locale)
-      else
-        category
-      end
+      category
     when String
-      categories.select{|c| c.name == category && (!locale || c.locale?(locale))}.first
+      categories.first(:conditions => {:name => category})
     end
+    uhook_select_fittest category, options unless category.nil?
   end
 
 end

@@ -42,6 +42,33 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     )
   end
 
+  test 'uhook_select_fittest should return the same category if no locale' do
+    set = create_category_set
+    set.categories << ['category', {:locale => 'ca'}]
+    assert_equal set.categories.first, set.uhook_select_fittest(set.categories.first)
+  end
+
+  test 'uhook_select_fittest should return the same category if same locale' do
+    set = create_category_set
+    set.categories << ['category', {:locale => 'ca'}]
+    assert_equal set.categories.first, set.uhook_select_fittest(set.categories.first, :locale => 'ca')
+  end
+
+  test 'uhook_select_fittest should return nil if no correct locale' do
+    set = create_category_set
+    set.categories << ['category', {:locale => 'ca'}]
+    assert_nil set.uhook_select_fittest(set.categories.first, :locale => 'jp')
+  end
+
+  test 'uhook_select_fittest should return in correct locale' do
+    set = create_category_set
+    set.categories << ['category', {:locale => 'ca'}]
+    catalan_category = set.categories.first
+    translation = catalan_category.translate('jp', :copy_all => true)
+    translation.save
+    assert_equal translation, set.uhook_select_fittest(catalan_category, :locale => 'jp')
+  end
+
   test 'uhook_category_identifier_condition should return a content_id condition' do
     assert_equal(['categories.content_id IN (?)', [1]], Category.uhook_category_identifier_condition([1]))
   end
@@ -60,6 +87,16 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
   test 'uhook_index_filters_should_return_locale_filter' do
     mock_params :filter_locale => 'ca'
     assert_equal({:locale => 'ca'}, Ubiquo::CategoriesController.new.uhook_index_filters)
+  end
+
+  test 'uhook_new_from_name should return a category with given locale' do
+    category = Category.uhook_new_from_name('name', {:locale => 'ca'})
+    assert_equal 'ca', category.locale
+  end
+
+  test 'uhook_new_from_name should return a category with any locale by default' do
+    category = Category.uhook_new_from_name('name')
+    assert_equal 'any', category.locale.to_s
   end
 
   test 'uhook_index_search_subject should return locale filtered categories' do
@@ -280,8 +317,8 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     cat_category = category.translate('ca', :copy_all => true)
     cat_category.save
     assert_equal category, set.reload.select_fittest(category)
-    assert_equal cat_category, set.select_fittest(category, 'ca')
-    assert_equal cat_category, set.select_fittest('Category', 'ca')
+    assert_equal cat_category, set.select_fittest(category, :locale => 'ca')
+    assert_equal cat_category, set.select_fittest('Category', :locale => 'ca')
   end
 
   test 'category adopts object locale' do
