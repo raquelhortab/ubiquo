@@ -207,7 +207,7 @@ module UbiquoCategories
 
           def self.included(klass)
             klass.send(:extend, ClassMethods)
-#            I18n.register_uhooks klass, ClassMethods
+            I18n.register_uhooks klass, ClassMethods
           end
 
           module ClassMethods
