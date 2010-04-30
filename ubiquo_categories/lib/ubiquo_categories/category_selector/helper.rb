@@ -5,17 +5,13 @@ module UbiquoCategories
       # Renders a category selector in a form
       #   key: CategorySet key (required)
       #   options(optional):
-      #     type (checkbox, select, autocomplete)
-      #     name (Used for selector title)
-      #     autocomplete_style (tag, list)
-      #   html_options(optional)
+      #     type (:checkbox, :select, :autocomplete)
+      #     name (Used as the selector title)
+      #     autocomplete_style (:tag, :list)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
         key = key.to_s.pluralize
-        categories = category_set(key).categories
-        if object.class.is_translatable?
-          categories = categories.locale(object.locale, :ALL)
-        end
+        categories = uhook_categories_for_set(category_set(key), object)
         selector_type = options[:type]
         categorize_size = object.class.categorize_options(key)[:size]
         max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)
@@ -36,7 +32,7 @@ module UbiquoCategories
       protected
       
       def category_set(key)
-        CategorySet.find_by_key(key) || raise(SetNotFoundError, "CategorySet with key '#{key}' not found")
+        CategorySet.find_by_key(key) || raise(SetNotFoundError.new(key))
       end
       
       def category_checkbox_selector(object, object_name, key, categories, options = {})

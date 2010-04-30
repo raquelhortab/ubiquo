@@ -175,7 +175,8 @@ module UbiquoCategories
 
         module Helper
           # Returns a the applicable categories for +set+
-          def uhook_categories_for_set set
+          # +context+ can be a related object that restricts the possible categories
+          def uhook_categories_for_set set, context = nil
             set.categories
           end
         end

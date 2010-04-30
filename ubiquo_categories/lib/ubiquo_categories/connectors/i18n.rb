@@ -234,8 +234,14 @@ module UbiquoCategories
 
         module Helper
           # Returns a the applicable categories for +set+
-          def uhook_categories_for_set set
-            set.categories.locale(current_locale, :ALL)
+          # +context+ can be a related object that restricts the possible categories
+          def uhook_categories_for_set set, object = nil
+            locale = if object && object.class.is_translatable?
+              object.locale
+            else
+              current_locale
+            end
+            set.categories.locale(locale, :ALL)
           end
         end
       end

@@ -217,7 +217,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     I18n::UbiquoCategoriesController::Helper.uhook_category_form(f)
   end
 
-  test 'uhook_categories_for_set should return set categories' do
+  test 'uhook_categories_for_set should return set categories by locale' do
     # setup
     mock_helper
     set = create_category_set
@@ -234,6 +234,29 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     assert_equal(
       [catalan_category],
       I18n::UbiquoHelpers::Helper.uhook_categories_for_set(set)
+    )
+  end
+
+  test 'uhook_categories_for_set should return categories by object locale' do
+    # setup
+    mock_helper
+    set = create_category_set
+    set.categories << ['ca', {:locale => 'ca'}]
+    catalan_category = set.categories.first
+    translation = catalan_category.translate('jp', :copy_all => true)
+    translation.save
+    assert_equal 2, set.categories.reload.size
+
+    I18n::UbiquoHelpers::Helper.expects(:current_locale).never
+    I18n::UbiquoHelpers::Helper.module_eval do
+      module_function :uhook_categories_for_set
+    end
+
+    object_class = mock(:is_translatable? => true)
+    object = mock(:locale => 'jp', :class => object_class)
+    assert_equal(
+      [translation],
+      I18n::UbiquoHelpers::Helper.uhook_categories_for_set(set, object)
     )
   end
 
