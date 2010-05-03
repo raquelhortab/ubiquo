@@ -8,7 +8,7 @@ A _worker_ will look for planified jobs and execute them considering the priorit
 == System setup
 To be able to run a worker, you need the following:
 * A Rails app with this plugin installed.
-* The daemons gem
+* A system utility to monitor the worker (such as monit).
 
 This plugin uses a transparent backend to store job information. To configure the backend,
 set :job_manager_class in Ubiquo::Config to the class that will manage jobs.
