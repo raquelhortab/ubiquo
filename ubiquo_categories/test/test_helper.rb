@@ -20,9 +20,6 @@ def create_categories_test_model_backend
     Object.const_set(klass, Class.new(ActiveRecord::Base)) unless Object.const_defined? klass
   end
 
-  CategoryTranslatableTestModel.class_eval do
-    translatable :field
-  end
 end
 
 def categorize attr, options = {}
