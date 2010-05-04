@@ -59,4 +59,10 @@ class TestOptions < Test::Unit::TestCase
     assert_equal "s@s.com", opts[:sender_address]
   end
   
+  def test_should_be_able_to_add_custom_plugins
+    opts = Options.new(%w[ --custom ubiquo_media myapp ])
+    assert_equal :custom, opts[:profile]
+    assert_equal ["ubiquo_media"].inspect, opts[:plugins].inspect
+  end
+  
 end

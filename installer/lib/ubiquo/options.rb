@@ -37,6 +37,13 @@ module Ubiquo
         suported_profiles.each do |profile, msg|
           o.on("--#{profile.to_s}", msg) { self[:profile] = profile }
         end
+        o.on(
+          "--custom [PLUGINS]", 
+          "Includes minimal template, but you can add extra plugins"
+        ) do |plugins|
+          self[:profile] = :custom
+          self[:plugins] = plugins.split(",")
+        end
 
         o.separator "\nSelects ubiquo default locale (defaults to english): "
 

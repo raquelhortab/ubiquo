@@ -22,6 +22,8 @@ choosen_plugin_set = "<%= @opts[:profile].to_s %>"
 
 case choosen_plugin_set
   when "minimal" then selected_plugins = minimal_plugins
+  when "custom"
+    selected_plugins = (minimal_plugins + <%= @opts[:plugins].inspect %>).uniq
   else selected_plugins = minimal_plugins + rest_plugins
 end
 
