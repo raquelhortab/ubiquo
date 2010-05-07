@@ -309,7 +309,7 @@ var AutoCompleteSelector = Class.create({
     var li_data = this.prePopulate;
     if(li_data && li_data.length) {
       li_data.each(function(item) {
-      var this_token = this.add_token_from_json(item);
+      var this_token = this.add_token_from_json(item['category'] || item);
     }.bind(this));
     }
   },
@@ -384,7 +384,7 @@ var AutoCompleteSelector = Class.create({
 
   add_token_from_li: function(item) {
     var li_data = item.readAttribute('alt').evalJSON();
-    this.add_token(li_data.id, li_data[this.queryParam]);
+    this.add_token(li_data.id, li_data['category'][this.queryParam] || li_data[this.queryParam]);
   },
 
   add_token_from_json: function(item) {
@@ -498,7 +498,8 @@ var AutoCompleteSelector = Class.create({
       for(var i in results) {
         if (results.hasOwnProperty(i)) {
           var this_li = document.createElement('li');
-          this_li.insert(this.highlight_term(results[i][this.queryParam], query));
+          var value = this.highlight_term(results[i][this.queryParam] || results[i]['category'][this.queryParam], query)
+          this_li.insert(value);
           dropdown_ul.insert(this_li);
           if(i%2) {
             this_li.addClassName(this.CLASSES.dropdownItem);
