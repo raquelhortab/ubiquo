@@ -7,8 +7,8 @@ module UbiquoCategories
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
         ::Category.send(:include, self::Category)
         ::CategorySet.send(:include, self::CategorySet)
-        ::Ubiquo::CategoriesController.send(:include, self::UbiquoCategoriesController)
         ::Ubiquo::Extensions::UbiquoAreaController.send(:include, self::UbiquoHelpers)
+        ::Ubiquo::CategoriesController.send(:include, self::UbiquoCategoriesController)
         ::ActiveRecord::Migration.send(:include, self::Migration)
         UbiquoCategories::Connectors::Base.set_current_connector self
       end
