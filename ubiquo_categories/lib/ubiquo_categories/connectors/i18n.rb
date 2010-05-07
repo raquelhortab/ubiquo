@@ -2,6 +2,23 @@ module UbiquoCategories
   module Connectors
     class I18n < Base
 
+      # Validates the ubiquo_i18n-related dependencies
+      def self.validate_requirements
+        unless Ubiquo::Plugin.registered[:ubiquo_i18n]
+          raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
+        end
+        category_columns = ::Category.columns.map(&:name).map(&:to_sym)
+        unless [:locale, :content_id].all?{|field| category_columns.include? field}
+          if Rails.env.test?
+            ::ActiveRecord::Base.connection.change_table(:categories, :translatable => true){}
+            ::Category.reset_column_information
+          else
+            raise ConnectorRequirementError,
+              "The categories table does not have the i18n fields. " +
+              "To use this connector, update the table enabling :translatable => true"
+          end
+        end
+      end
 
       module Category
 

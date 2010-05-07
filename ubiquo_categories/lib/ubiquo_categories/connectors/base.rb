@@ -4,6 +4,8 @@ module UbiquoCategories
       
       # loads this connector. It's called if that connector is used
       def self.load!
+        ::Category.reset_column_information
+        validate_requirements
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
         ::Category.send(:include, self::Category)
         ::CategorySet.send(:include, self::CategorySet)
@@ -62,6 +64,9 @@ module UbiquoCategories
       def self.get_uhook_calls method
         Array((Base.instance_variable_get('@uhook_calls')||{})[method.to_sym])
       end
+
+      # Validate here the possible connector requirements and dependencies
+      def self.validate_requirements; end
     end
     
   end

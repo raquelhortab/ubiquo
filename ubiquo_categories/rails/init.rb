@@ -23,6 +23,11 @@ Ubiquo::Plugin.register(:ubiquo_categories, directory, config) do |config|
 
   # Max number after which category_selector will render a autocomplete selector
   config.add :max_categories_simple_selector, 6
-  
+
+  # Connectors available in the application.
+  # These connectors will be tested against the Base uhooks api
+  config.add :available_connectors, [:i18n, :standard]
+
+  # Currently enabled connector
   config.add :connector, :standard
 end

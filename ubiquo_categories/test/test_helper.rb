@@ -93,3 +93,24 @@ if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
 
+def test_each_connector
+  Ubiquo::Config.context(:ubiquo_media).get(:available_connectors).each do |conn|
+
+    (class << self; self end).class_eval do
+      eval <<-CONN
+        def test_with_connector name, &block
+        block_with_connector_load = Proc.new{
+          "UbiquoMedia::Connectors::#{conn.to_s.classify}".constantize.load!
+           block.bind(self).call
+        }
+        test_without_connector "#{conn}_\#{name}", &block_with_connector_load
+      end
+      CONN
+      unless instance_methods.include? 'test_without_connector'
+        alias_method :test_without_connector, :test
+      end
+      alias_method :test, :test_with_connector
+    end
+    yield
+  end
+end
