@@ -15,7 +15,10 @@ rest_plugins = %w[
   ubiquo_activity
   ubiquo_versions
   ubiquo_guides
-  <%= "ubiquo_design" if @opts[:gnuine] %>
+  <% if @opts[:gnuine] %>
+    <%= "ubiquo_categories" %>
+    <%= "ubiquo_design" %>
+  <% end %>
 ]
 
 choosen_plugin_set = "<%= @opts[:profile].to_s %>"
@@ -257,6 +260,7 @@ ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
 add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:gnuine] ? true : false %>)
 
 <% if @opts[:gnuine] %>
+plugin 'ubiquo_categories', :git => 'gitosis@gandalf.gnuine.com:ubiquo_categories.git', :submodule => true, :branch => ubiquo_branch
 plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => ubiquo_branch
 <% end %>
 

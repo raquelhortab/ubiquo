@@ -199,7 +199,10 @@ ActionController::Routing::Routes.draw do |map|
 
   # Ubiquo plugins routes. See routes.rb from each plugin path.
 #{ubiquo_routes}
-<%= "map.from_plugin :ubiquo_design" if opts[:gnuine] %>
+<% if opts[:gnuine] %>
+  <%= "map.from_plugin :ubiquo_categories" %>
+  <%= "map.from_plugin :ubiquo_design" %>
+<% end %>
   ############# default routes
   #map.connect ':controller/:action/:id'
   #map.connect ':controller/:action/:id.:format'
@@ -255,6 +258,7 @@ ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
 add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
 
 <% if @opts[:gnuine] && opts[:profile] == :complete %>
+plugin 'ubiquo_categories', :git => 'gitosis@gandalf.gnuine.com:ubiquo_categories.git', :submodule => true, :branch => nil
 plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => ubiquo_branch
 <% end %>
 
