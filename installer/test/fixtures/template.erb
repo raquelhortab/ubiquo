@@ -5,20 +5,14 @@ external_plugins = %w[
   tiny_mce
   paperclip
 ]
-minimal_plugins = %w[ ubiquo_core ubiquo_authentication ]
+minimal_plugins = %w[ ubiquo_core ubiquo_authentication ubiquo_access_control ubiquo_scaffold ]
 rest_plugins = %w[
-  ubiquo_access_control
   ubiquo_media
-  ubiquo_scaffold
   ubiquo_jobs
   ubiquo_i18n
   ubiquo_activity
   ubiquo_versions
   ubiquo_guides
-  <% if @opts[:gnuine] %>
-    <%= "ubiquo_categories" %>
-    <%= "ubiquo_design" %>
-  <% end %>
 ]
 
 choosen_plugin_set = "<%= @opts[:profile].to_s %>"
@@ -54,8 +48,8 @@ def add_plugins(plugin_names, options={})
 end
 # To ask needed settings when boostraping the app
 appname             = "<%= @opts[:app_name] %>"
-exception_recipient = "programadors@gnuine.com"
-sender_address      = "errors@gnuine.com"
+exception_recipient = "<%= @opts[:exception_recipient] %>"
+sender_address      = "<%= @opts[:sender_address] %>"
 # Remove rails temporary directories
 ["./tmp/pids", "./tmp/sessions", "./tmp/sockets", "./tmp/cache"].each do |f|
   run("rmdir ./#{f}")
@@ -117,11 +111,13 @@ base_config: &base_config
     encoding: unicode
     adapter:  postgresql
     host: localhost
+    username: #{%x{id -u -n}.strip}
+    password:
 
 development:
-  <<: *base_config  
+  <<: *base_config
   database: #{appname}_development
-  
+
 test:
   <<: *base_config
   database: #{appname}_test
@@ -145,9 +141,9 @@ base_config: &base_config
   socket: /var/run/mysqld/mysqld.sock
 
 development:
-  <<: *base_config  
+  <<: *base_config
   database: #{appname}_development
-  
+
 test:
   <<: *base_config
   database: #{appname}_test
@@ -169,20 +165,20 @@ base_config: &base_config
   timeout: 5000
 
 development:
-  <<: *base_config  
-  dbfile: db/#{appname}_development.db
-  
+  <<: *base_config
+  database: db/#{appname}_development.db
+
 test:
   <<: *base_config
-  dbfile: db/#{appname}_test.db
+  database: db/#{appname}_test.db
 
 preproduction:
   <<: *base_config
-  dbfile: db/#{appname}_preproduction.db
+  database: db/#{appname}_preproduction.db
 
 production:
   <<: *base_config
-  dbfile: db/#{appname}_production.db
+  database: db/#{appname}_production.db
 CODE
 
 choosen_adapter = "<%= @opts[:database] %>"
@@ -203,12 +199,17 @@ ActionController::Routing::Routes.draw do |map|
 
   # Ubiquo plugins routes. See routes.rb from each plugin path.
 #{ubiquo_routes}
+<% if opts[:gnuine] %>
+  <% if @opts[:template] == :edge %>
+    <%= "map.from_plugin :ubiquo_categories" %>
+  <% end %>
+  <%= "map.from_plugin :ubiquo_design" %>
+<% end %>
   ############# default routes
   #map.connect ':controller/:action/:id'
   #map.connect ':controller/:action/:id.:format'
 end
 CODE
-puts "here we go"
 # default rails environment.rb
 file 'config/environment.rb', <<-CODE
 # Be sure to restart your server when you modify this file
@@ -225,14 +226,14 @@ Rails::Initializer.run do |config|
   # -- all .rb files in that directory are automatically loaded.
 
   # Add additional load paths for your own custom dirs
-  
-  # Specify gems that this application depends on. 
+
+  # Specify gems that this application depends on.
   # They can then be installed with "rake gems:install" on new installations.
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "rmagick", :lib => 'RMagick'
-  
+  # config.gem "rmagick", :lib => 'RMagick'
+
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   config.plugins = [ :ubiquo_core, :all ]
@@ -250,23 +251,28 @@ Rails::Initializer.run do |config|
 
 # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
-  # config.i18n.default_locale = :de  
+  # config.i18n.default_locale = :de
   config.i18n.load_path += Dir.glob(File.join("config", "locales", "**","*.{rb,yml}"))
-  config.i18n.default_locale = :ca
+  config.i18n.default_locale = :<%= @opts[:locale] %>
 end
 CODE
-puts "out of here"
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
-add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:gnuine] ? true : false %>)
+add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
 
-<% if @opts[:gnuine] %>
-plugin 'ubiquo_categories', :git => 'gitosis@gandalf.gnuine.com:ubiquo_categories.git', :submodule => true, :branch => ubiquo_branch
+<% if @opts[:gnuine] && opts[:profile] == :complete %>
+  <% if @opts[:template] == :edge %>
+    plugin 'ubiquo_categories', :git => 'gitosis@gandalf.gnuine.com:ubiquo_categories.git', :submodule => true, :branch => nil
+  <% end %>
 plugin 'ubiquo_design', :git => 'gitosis@gandalf.gnuine.com:ubiquo_design.git', :submodule => true, :branch => ubiquo_branch
 <% end %>
 
 rake("rails:update")
 rake("calendardateselect:install")
-rake("ubiquo:install")
+rake("ubiquo:install OVERWRITE=yes")
+
+<% if RUBY_PLATFORM =~ /java/ %>
+  generate(:jdbc)
+<% end %>
 
 <% if @opts[:gnuine] %>
 rake("db:create:all")
@@ -277,9 +283,5 @@ git :add => "."
 git :commit => "-a -m 'Initial #{appname} commit'"
 
 <% unless @opts[:gnuine] %>
-puts "1.- You must configure your database using config/database.yml"
-puts "2.- You must create your databases. rake db:create:all"
-puts "3.- You must initialize your database. rake ubiquo:db:init"
-puts "4.- You must create the admin user. rake ubiquo:create_user"
-puts "5.- scrip/server and point your browser to http://localhost:3000/ubiquo"
+puts "Run script/server and go to http://localhost:3000/ and follow the instructions there."
 <% end %>
