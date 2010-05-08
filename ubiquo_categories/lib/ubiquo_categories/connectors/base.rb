@@ -5,7 +5,11 @@ module UbiquoCategories
       # loads this connector. It's called if that connector is used
       def self.load!
         ::Category.reset_column_information
+        if current = UbiquoCategories::Connectors::Base.current_connector
+          current.unload!
+        end
         validate_requirements
+        prepare_mocks if Rails.env.test?
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
         ::Category.send(:include, self::Category)
         ::CategorySet.send(:include, self::CategorySet)
@@ -22,7 +26,10 @@ module UbiquoCategories
       def self.set_current_connector klass
         @current_connector = klass
       end
-      
+
+      # Possible cleanups to perform
+      def self.unload!; end
+
       # Register the uhooks methods in connectors to be used in klass
       def self.register_uhooks klass, *connectors
         connectors.each do |connector|
@@ -67,6 +74,24 @@ module UbiquoCategories
 
       # Validate here the possible connector requirements and dependencies
       def self.validate_requirements; end
+
+      # Load any test mock needed for base tests
+      # If your connector calls to a method that will be undefined in test time,
+      # using this method you can mock them to allow it pass.
+      def self.prepare_mocks; end
+
+      # Prepared helper stubs for this connector
+      class << self
+        attr_accessor :mock_helper_stubs
+      end
+
+      # Used to add particular helper expectations from the connectors
+      # Usually called from prepare_mocks
+      def self.add_mock_helper_stubs(methods_with_returns)
+        future_stubs = (mock_helper_stubs || {}).merge(methods_with_returns)
+        self.mock_helper_stubs = future_stubs
+      end
+
     end
     
   end

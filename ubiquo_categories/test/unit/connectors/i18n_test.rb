@@ -13,8 +13,6 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     def teardown
       reload_old_connector
-      # unmark Category as translatable to avoid interferring in other tests
-      Category.instance_variable_set :@translatable, false
     end
 
     test 'Category should be translatable' do

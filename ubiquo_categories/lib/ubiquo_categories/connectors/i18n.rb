@@ -20,6 +20,10 @@ module UbiquoCategories
         end
       end
 
+      def self.unload!
+        ::Category.instance_variable_set :@translatable, false
+      end
+
       module Category
 
         def self.included(klass)
@@ -288,7 +292,16 @@ module UbiquoCategories
           end
         end
       end
-      
+
+      def self.prepare_mocks
+        add_mock_helper_stubs({
+          :show_translations => '', :ubiquo_category_set_categories_url => '',
+          :ubiquo_category_set_category_path => '', :current_locale => '',
+          :content_tag => '', :hidden_field_tag => '', :locale => Category,
+          :new_ubiquo_category_set_category_path => ''
+        })
+      end
+
     end
   end
 end
