@@ -1,4 +1,8 @@
 class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
+
+  <%- if attributes.map(&:field_type).include? :text_area -%>
+  uses_tiny_mce(:options => default_tiny_mce_options)
+  <%- end -%>
   <%- if options[:store_activity] -%>
   register_activity :create, :update, :destroy
   <% end %>

@@ -10,7 +10,7 @@
   <p>
 <% end -%>
     <%%= form.label :<%= attribute.name %>, <%= class_name %>.human_attribute_name("<%= attribute.name %>") %>
-    <%%= form.<%= attribute.field_type %> :<%= attribute.name %> %>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.name %><%= ", :class => 'visual_editor'" if attribute.field_type.to_s == "text_area" %>  %>
   </p>
 <% end -%>
 </div>
