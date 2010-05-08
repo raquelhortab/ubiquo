@@ -102,6 +102,13 @@ class Ubiquo::SessionsControllerTest < ActionController::TestCase
     assert_nil session[:ubiquo_user_id]
     assert !@controller.send(:logged_in?)
   end
+  
+  def test_should_have_enabled_cookies
+    @request.session["_session_id"] = ""
+    Ubiquo::SessionsController.any_instance.expects("has_cookies_enabled?").returns(false)
+    post :create, :login => 'josep', :password => 'test', :remember_me => "0"
+    assert_redirected_to ubiquo_login_path
+  end
 
   protected
     def auth_token(token)
