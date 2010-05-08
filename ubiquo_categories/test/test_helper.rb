@@ -49,37 +49,37 @@ def create_i18n_category_model
   CategoryTranslatableTestModel.create(:locale => 'en')
 end
 
-def save_current_connector
+def save_current_categories_connector
   @old_connector = UbiquoCategories::Connectors::Base.current_connector
 end
 
-def reload_old_connector
+def reload_old_categories_connector
   @old_connector.load!
 end
 
-def mock_params params = nil
+def mock_categories_params params = nil
   Ubiquo::CategoriesController.any_instance.expects(:params).at_least(0).returns(params || {:category => {}})
 end
 
-def mock_session session = nil
+def mock_categories_session session = nil
   Ubiquo::CategoriesController.any_instance.expects(:session).at_least(0).returns(session || {:category => {}})
 end
 
-def mock_response
+def mock_categories_response
   Ubiquo::CategoriesController.any_instance.expects(:redirect_to).at_least(0)
   Ubiquo::CategoriesController.any_instance.stubs(:url_for).returns('')
 end
 
 # Prepares the proper mocks for a hook that will be using controller features
-def mock_controller
-  mock_params
-  mock_session
-  mock_response
-  mock_helper
+def mock_categories_controller
+  mock_categories_params
+  mock_categories_session
+  mock_categories_response
+  mock_categories_helper
 end
 
 # Prepares the proper mocks for a hook that will be using helper features
-def mock_helper
+def mock_categories_helper
   # we stub well-known usable helper methods along with particular connector added methods
   stubs = {
     :params => {}, :t => '', :filter_info => '',
@@ -120,7 +120,7 @@ if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
 
-def test_each_connector
+def test_each_categories_connector
   Ubiquo::Config.context(:ubiquo_categories).get(:available_connectors).each do |conn|
 
     (class << self; self end).class_eval do

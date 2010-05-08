@@ -7,12 +7,12 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     I18n = UbiquoCategories::Connectors::I18n
 
     def setup
-      save_current_connector
+      save_current_categories_connector
       I18n.load!
     end
 
     def teardown
-      reload_old_connector
+      reload_old_categories_connector
     end
 
     test 'Category should be translatable' do
@@ -93,7 +93,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_index_filters_should_return_locale_filter' do
-      mock_params :filter_locale => 'ca'
+      mock_categories_params :filter_locale => 'ca'
       assert_equal({:locale => 'ca'}, Ubiquo::CategoriesController.new.uhook_index_filters)
     end
 
@@ -116,7 +116,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_new_category should return translated category' do
-      mock_params :from => 1
+      mock_categories_params :from => 1
       Ubiquo::CategoriesController.any_instance.expects(:current_locale).returns('ca')
       Category.expects(:translate).with(1, 'ca', :copy_all => true)
       Ubiquo::CategoriesController.new.uhook_new_category
@@ -147,7 +147,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_create_category_should_return_new_category_with_current_locale' do
-      mock_params
+      mock_categories_params
       Ubiquo::CategoriesController.any_instance.expects(:current_locale).at_least_once.returns('ca')
       category = Ubiquo::CategoriesController.new.uhook_create_category
       assert_kind_of Category, category
@@ -157,18 +157,18 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     test 'uhook_destroy_category_should_destroy_category' do
       Category.any_instance.expects(:destroy).returns(:value)
-      mock_params :destroy_content => false
+      mock_categories_params :destroy_content => false
       assert_equal :value, Ubiquo::CategoriesController.new.uhook_destroy_category(Category.new)
     end
 
     test 'uhook_destroy_category_should_destroy_category_content' do
       Category.any_instance.expects(:destroy_content).returns(:value)
-      mock_params :destroy_content => true
+      mock_categories_params :destroy_content => true
       assert_equal :value, Ubiquo::CategoriesController.new.uhook_destroy_category(Category.new)
     end
 
     test 'uhook_category_filters_should_return_locale_filter' do
-      mock_helper
+      mock_categories_helper
       UbiquoCategories::Connectors::Base.current_connector::UbiquoCategoriesController::Helper.expects(:render_filter).at_least_once.with(
         :links, '',
         :caption => ::Category.human_attribute_name("locale"),
@@ -186,7 +186,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_filters_info_should_return_locale_filter_info' do
-      mock_helper
+      mock_categories_helper
       UbiquoCategories::Connectors::Base.current_connector::UbiquoCategoriesController::Helper.expects(:filter_info).at_least_once.with(
         :string, {},
         :field => :filter_locale,
@@ -199,7 +199,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_edit_category_sidebar_should_return_show_translations_links' do
-      mock_helper
+      mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.expects(:show_translations).at_least_once.returns('links')
       I18n::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_edit_category_sidebar
@@ -208,7 +208,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_new_category_sidebar should return show translations links' do
-      mock_helper
+      mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.expects(:show_translations).at_least_once.returns('links')
       I18n::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_new_category_sidebar
@@ -221,7 +221,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       set.categories << ['category', {:locale => 'ca'}]
       category = set.categories.first
 
-      mock_helper
+      mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.expects(:current_locale).at_least_once.returns('en')
       I18n::UbiquoCategoriesController::Helper.expects(:ubiquo_category_set_category_path).with(set, category, :destroy_content => true)
       I18n::UbiquoCategoriesController::Helper.expects(:new_ubiquo_category_set_category_path).with(:from => category.content_id)
@@ -238,7 +238,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       set.categories << ['category', {:locale => 'ca'}]
       category = set.categories.first
 
-      mock_helper
+      mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.stubs(:current_locale).returns('ca')
       I18n::UbiquoCategoriesController::Helper.expects(:ubiquo_category_set_category_path).with(set, category, :destroy_content => true)
 
@@ -251,7 +251,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_form should return content_id field' do
-      mock_helper
+      mock_categories_helper
       f = stub_everything
       f.expects(:hidden_field).with(:content_id).returns('')
       I18n::UbiquoCategoriesController::Helper.expects(:params).returns({:from => 100})
@@ -267,7 +267,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       set.categories << ['category', {:locale => 'ca'}]
       category = set.categories.first
 
-      mock_helper
+      mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_category_partial
       end
@@ -285,7 +285,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     test 'uhook_categories_for_set should return set categories by locale' do
       # setup
-      mock_helper
+      mock_categories_helper
       set = create_category_set
       set.categories << ['ca', {:locale => 'ca'}]
       catalan_category = set.categories.first
@@ -305,7 +305,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     test 'uhook_categories_for_set should return categories by object locale' do
       # setup
-      mock_helper
+      mock_categories_helper
       set = create_category_set
       set.categories << ['ca', {:locale => 'ca'}]
       catalan_category = set.categories.first

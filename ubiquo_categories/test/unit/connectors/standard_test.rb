@@ -5,12 +5,12 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   Standard = UbiquoCategories::Connectors::Standard
 
   def setup
-    save_current_connector
+    save_current_categories_connector
     Standard.load!
   end
   
   def teardown
-    reload_old_connector
+    reload_old_categories_connector
   end
 
 
@@ -76,7 +76,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_create_category_should_return_new_category' do
-    mock_params
+    mock_categories_params
     category = Ubiquo::CategoriesController.new.uhook_create_category
     assert_kind_of Category, category
     assert category.new_record?
@@ -102,7 +102,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_edit_category_sidebar_should_return_empty_string' do
-    mock_helper
+    mock_categories_helper
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_edit_category_sidebar
     end
@@ -110,7 +110,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_new_category_sidebar should return empty string' do
-    mock_helper
+    mock_categories_helper
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_new_category_sidebar
     end
@@ -122,7 +122,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     set.categories << 'category'
     category = set.categories.first
     
-    mock_helper
+    mock_categories_helper
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_category_index_actions
     end
@@ -137,7 +137,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_category_form should return empty string' do
-    mock_helper
+    mock_categories_helper
     f = stub_everything
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_category_form
@@ -146,7 +146,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_category_partial should return empty string' do
-    mock_helper
+    mock_categories_helper
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_category_partial
     end
@@ -154,7 +154,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_categories_for_set should return set categories' do
-    mock_helper
+    mock_categories_helper
     set = create_category_set
     set.categories << 'category'
     Standard::UbiquoHelpers::Helper.module_eval do
