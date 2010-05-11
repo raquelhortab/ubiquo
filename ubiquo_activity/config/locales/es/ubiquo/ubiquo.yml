@@ -1,10 +1,8 @@
 es:
   ubiquo:
     activity_info:
-      tab_name: "Registro de actividad"
-      tab_title: "Ir al registro de actividad"
       activity_list: "Listado de actividades"
-      title: "Registro de actividad"
+      title: "Actividad"
       controller: "Controlador"
       action: "Acción"
       date: "Fecha"

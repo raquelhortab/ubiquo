@@ -1,10 +1,8 @@
 en:
   ubiquo:
     activity_info:
-      tab_name: "Activities list"
-      tab_title: "Go to activities list"
       activity_list: "Activities list"
-      title: "Activities list"
+      title: "Activity"
       controller: "Controller"
       action: "Action"
       date: "Date"

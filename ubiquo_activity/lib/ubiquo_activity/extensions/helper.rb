@@ -1,17 +1,17 @@
 module UbiquoActivity
   module Extensions
     module Helper
-      # Adds a "Activity Info" tab
-      def activity_info_tab(tabnav)
-        if ubiquo_config_call(:activity_info_permit, { :context => :ubiquo_activity })
-          tabnav.add_tab do |tab|
-            tab.text = I18n.t("ubiquo.activity_info.tab_name")
-            tab.title = I18n.t("ubiquo.activity_info.tab_title")
-            tab.highlights_on({:controller => "ubiquo/activity_infos"})
-            tab.link = ubiquo_activity_infos_path  
-          end
-        end
+
+      # Adds the activity link in the upper-left menu if the user
+      # has the proper permissions.
+      def ubiquo_activities_link(navigator)
+        navigator.add_link do |link|
+          link.text = I18n.t("ubiquo.activity_info.title")
+          link.highlights << {:controller => "ubiquo/activity_infos"}
+          link.url = ubiquo_activity_infos_path
+        end if ubiquo_config_call(:activity_info_permit, {:context => :ubiquo_activity })
       end
+
     end
   end
 end
