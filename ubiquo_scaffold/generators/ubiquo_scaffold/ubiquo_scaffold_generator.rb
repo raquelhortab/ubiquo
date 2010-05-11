@@ -109,8 +109,8 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
              "Set max versions amount for versionable models") { |v| options[:versions_amount] = v }
       opt.on("--translatable f1,f2...", Array,
              "Creates a translatable model") { |v| options[:translatable] = v }
-      opt.on("--store-activity",
-             "Creates scaffold actions adding store-activity statement") { |v| options[:store_activity] = v }
+      opt.on("--skip-activity",
+             "Don't send actions to ubiquo activity") { |v| options[:skip_activity] = v }
       opt.on("-m","--run-migration",
              "Run the migration task. rake db:migrate") { |v| options[:run_migration] = v }
     end
