@@ -31,7 +31,7 @@ end
 def create_category_set(options = {})
   default_options = {
     :name => 'MyString', # string
-    :key => 'MyString', # string
+    :key => rand.to_s, # string
     :is_editable => true
   }
   CategorySet.create(default_options.merge(options))

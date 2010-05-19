@@ -34,7 +34,8 @@ class CategorySet < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :name
+  validates_presence_of :name, :key
+  validates_uniqueness_of :key
 
   def initialize(attrs = {})
     attrs ||= {}

@@ -55,14 +55,10 @@ class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
 
   def category_set_attributes(options = {})
     default_options = {
-              :name => 'MyString', # string
-              :key => 'MyString', # string
-          }
+      :name => 'MyString', # string
+      :key => rand.to_s, # string
+    }
     default_options.merge(options)  
-  end
-
-  def create_category_set(options = {})
-    CategorySet.create(category_set_attributes(options))
   end
       
 end
