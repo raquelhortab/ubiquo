@@ -93,6 +93,9 @@ module UbiquoCategories
       end
 
     end
-    
+
+    # Raised when a connector requirement is not met
+    class ConnectorRequirementError < StandardError; end
+
   end
 end 
