@@ -7,20 +7,22 @@ module UbiquoCategories
         unless Ubiquo::Plugin.registered[:ubiquo_i18n]
           raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
         end
-        category_columns = ::Category.columns.map(&:name).map(&:to_sym)
-        unless [:locale, :content_id].all?{|field| category_columns.include? field}
-          if Rails.env.test?
-            ::ActiveRecord::Base.connection.change_table(:categories, :translatable => true){}
-
-            # "Supporting" DDL transactions for mysql
-            ::ActiveRecord::Base.connection.begin_db_transaction
-            ::ActiveRecord::Base.connection.create_savepoint
-
-            ::Category.reset_column_information
-          else
-            raise ConnectorRequirementError,
+        if ::Category.table_exists?
+          category_columns = ::Category.columns.map(&:name).map(&:to_sym)
+          unless [:locale, :content_id].all?{|field| category_columns.include? field}
+            if Rails.env.test?
+              ::ActiveRecord::Base.connection.change_table(:categories, :translatable => true){}
+              
+              # "Supporting" DDL transactions for mysql
+              ::ActiveRecord::Base.connection.begin_db_transaction
+              ::ActiveRecord::Base.connection.create_savepoint
+              
+              ::Category.reset_column_information
+            else
+              raise ConnectorRequirementError,
               "The categories table does not have the i18n fields. " +
-              "To use this connector, update the table enabling :translatable => true"
+                "To use this connector, update the table enabling :translatable => true"
+            end
           end
         end
       end
