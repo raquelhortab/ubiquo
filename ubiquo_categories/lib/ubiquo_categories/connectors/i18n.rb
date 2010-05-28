@@ -12,11 +12,11 @@ module UbiquoCategories
           unless [:locale, :content_id].all?{|field| category_columns.include? field}
             if Rails.env.test?
               ::ActiveRecord::Base.connection.change_table(:categories, :translatable => true){}
-              
-              # "Supporting" DDL transactions for mysql
-              ::ActiveRecord::Base.connection.begin_db_transaction
-              ::ActiveRecord::Base.connection.create_savepoint
-              
+              if ::ActiveRecord::Base.connection.class.included_modules.include?(Ubiquo::Adapters::Mysql)
+                # "Supporting" DDL transactions for mysql
+                ::ActiveRecord::Base.connection.begin_db_transaction
+                ::ActiveRecord::Base.connection.create_savepoint
+              end
               ::Category.reset_column_information
             else
               raise ConnectorRequirementError,
