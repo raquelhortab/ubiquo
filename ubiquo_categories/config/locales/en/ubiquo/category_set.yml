@@ -1,6 +1,6 @@
 en:
   ubiquo:
-    category set:
+    category_set:
       title: "Category sets"
       created: "Category set created succesfully"
       create_error: "Error creating category set"
