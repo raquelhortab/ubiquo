@@ -3,9 +3,14 @@ module UbiquoCategories
     class I18n < Base
 
       # Validates the ubiquo_i18n-related dependencies
+      # Returning false will halt the connector load
       def self.validate_requirements
         unless Ubiquo::Plugin.registered[:ubiquo_i18n]
-          raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
+          unless Rails.env.test?
+            raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
+          else
+            return false
+          end
         end
         if ::Category.table_exists?
           category_columns = ::Category.columns.map(&:name).map(&:to_sym)

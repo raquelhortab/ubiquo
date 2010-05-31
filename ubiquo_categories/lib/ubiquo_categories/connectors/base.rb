@@ -4,11 +4,11 @@ module UbiquoCategories
       
       # loads this connector. It's called if that connector is used
       def self.load!
+        return if validate_requirements == false
         ::Category.reset_column_information
         if current = UbiquoCategories::Connectors::Base.current_connector
           current.unload!
         end
-        validate_requirements
         prepare_mocks if Rails.env.test?
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
         ::Category.send(:include, self::Category)
