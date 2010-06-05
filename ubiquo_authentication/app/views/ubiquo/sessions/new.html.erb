@@ -21,10 +21,10 @@
     <div id="central">
       <div class="form_box">
         <div class="inner_form_box">
-          <% if flash[:notice] %>
-            <p id='feedback_notice'><%= flash[:notice] %></p>
-          <% elsif flash[:error] %>
+          <% if flash[:error] %>
             <p id='feedback_error'><%= flash[:error] %></p>
+          <% elsif flash[:notice] %>
+            <p id='feedback_notice'><%= flash[:notice] %></p>
           <% else %>
             <p id='feedback_notice'><%= t 'ubiquo.auth.welcome' %></p>
           <% end %>

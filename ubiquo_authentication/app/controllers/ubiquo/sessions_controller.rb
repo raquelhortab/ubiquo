@@ -2,8 +2,16 @@ class Ubiquo::SessionsController < ApplicationController
   
   include Ubiquo::Extensions::UbiquoAreaController
   
+  before_filter :cookies_required
+  
+  skip_before_filter :cookies_required, :only => [:new]
+  skip_before_filter :verify_authenticity_token, :only => [:create]
+  
   #shows the login form
   def new
+    unless has_cookies_enabled?
+      flash[:error] = t 'ubiquo.auth.cookies_error'
+    end
     unless ubiquo_users?
       flash.now[:notice] = t 'ubiquo.auth.create_superadmin'
     end
@@ -48,6 +56,17 @@ class Ubiquo::SessionsController < ApplicationController
 
   def ubiquo_users?
     Rails.env.production? || UbiquoUser.count > 0
+  end
+  
+  def cookies_required
+    return if has_cookies_enabled?
+    redirect_to(ubiquo_login_path)
+    return false
+  end 
+  
+  def has_cookies_enabled?
+    Rails.env.test? ||
+      !request.cookies[ActionController::Base.session_options[:key]].to_s.blank?
   end
   
 end
