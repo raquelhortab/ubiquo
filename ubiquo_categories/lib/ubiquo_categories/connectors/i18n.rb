@@ -185,7 +185,7 @@ module UbiquoCategories
           # Returns a subject that will have applied the index filters
           # (e.g. a class, with maybe some scopes applied)
           def uhook_index_search_subject
-            ::Category.locale(current_locale, :ALL)
+            ::Category.locale(current_locale, :all)
           end
 
           # Initializes a new instance of category.
@@ -300,7 +300,7 @@ module UbiquoCategories
             else
               current_locale
             end
-            set.categories.locale(locale, :ALL)
+            set.categories.locale(locale, :all)
           end
         end
       end
