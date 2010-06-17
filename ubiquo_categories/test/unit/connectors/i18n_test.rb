@@ -13,6 +13,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     def teardown
       reload_old_categories_connector
+      Locale.current = nil
     end
 
     test 'Category should be translatable' do
@@ -109,7 +110,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     test 'uhook_index_search_subject should return locale filtered categories' do
       Ubiquo::CategoriesController.any_instance.expects(:current_locale).at_least_once.returns('ca')
-      Category.expects(:locale).with('ca', :ALL).returns(Category)
+      Category.expects(:locale).with('ca', :all).returns(Category)
       assert_nothing_raised do
         Ubiquo::CategoriesController.new.uhook_index_search_subject.filtered_search
       end
@@ -329,13 +330,13 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     test 'categories_are_created_with_locale_any_if_unspecified' do
       set = create_category_set
       set.categories << 'Category'
-      assert set.categories.first.locale?('any')
+      assert set.categories.first.in_locale?('any')
     end
 
     test 'categories_are_created_with_specified_locale' do
       set = create_category_set
       set.categories << ['Category', {:locale => :ca}]
-      assert set.categories.first.locale?('ca')
+      assert set.categories.first.in_locale?('ca')
     end
 
     test 'select_fittest with locale' do
@@ -361,11 +362,12 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       i18n_categorize :city, :translation_shared => true
       model = create_i18n_category_model
       model.city = 'Barcelona'
-      translation = model.translate('ca', :copy_all => true)
+      translation = model.translate 'ca'
+      translation.cities
       assert_kind_of Category, translation.city
       assert_equal 'Barcelona', translation.city.to_s
       assert_equal model.city.content_id, translation.city.content_id
-      assert_equal 'ca', translation.city.locale
+      assert_equal 'en', translation.city.locale
     end
 
     test 'category_conditions_for_existent_category' do

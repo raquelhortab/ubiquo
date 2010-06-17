@@ -117,7 +117,6 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     set.categories = Category.create(:name => 'Barcelona'), Category.create(:name => 'Athens')
     model = create_category_model
     assert_no_difference 'Category.count' do
-#      require 'ruby-debug';debugger
       model.cities = 'Barcelona##Athens'
     end
     assert_equal set, model.cities.first.category_set

@@ -131,15 +131,15 @@ module UbiquoCategories
           # Returns the available actions links for a given category
           def uhook_category_index_actions category_set, category
             actions = []
-            if category.locale?(current_locale)
+            if category.in_locale?(current_locale)
               actions << link_to(t("ubiquo.view"), [:ubiquo, category_set, category])
             end
 
-            if category.locale?(current_locale)
+            if category.in_locale?(current_locale)
               actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set, category])
             end
 
-            unless category.locale?(current_locale)
+            unless category.in_locale?(current_locale)
               actions << link_to(
                 t("ubiquo.translate"),
                 new_ubiquo_category_set_category_path(
@@ -153,7 +153,7 @@ module UbiquoCategories
               :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
               )
 
-            if category.locale?(current_locale, :skip_any => true) && !category.translations.empty?
+            if category.in_locale?(current_locale, :skip_any => true) && !category.translations.empty?
               actions << link_to(t("ubiquo.remove_translation"), [:ubiquo, category_set, category],
                 :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
                 )
@@ -195,7 +195,7 @@ module UbiquoCategories
 
           # Performs any required action on category when in show
           def uhook_show_category category
-            unless category.locale?(current_locale)
+            unless category.in_locale?(current_locale)
               redirect_to(ubiquo_category_set_categories_url)
               false
             end
@@ -203,7 +203,7 @@ module UbiquoCategories
 
           # Performs any required action on category when in edit
           def uhook_edit_category category
-            unless category.locale?(current_locale)
+            unless category.in_locale?(current_locale)
               redirect_to(ubiquo_category_set_categories_url)
               false
             end
@@ -263,7 +263,9 @@ module UbiquoCategories
             # Adds the +categories+ to the +set+ and returns the categories that
             # will be effectively related to +object+
             def uhook_assign_to_set set, categories, object
-              locale = object.locale if object.class.is_translatable?
+              if object.class.is_translatable?
+                locale = object.locale || Locale.current
+              end
               categories_options = {}
               categories_options.merge!(:locale => locale)
 
@@ -276,9 +278,9 @@ module UbiquoCategories
 
             # Defines the relation as translation_shared if is a translatable class
             def uhook_categorized_with field, options
-              association_name = field.to_s.pluralize
+              association_name = field.to_s.pluralize.to_sym
               if self.is_translatable?
-                self.reflections[association_name.to_sym].options[:translation_shared] = true
+                share_translations_for association_name
               end
             end
           end
