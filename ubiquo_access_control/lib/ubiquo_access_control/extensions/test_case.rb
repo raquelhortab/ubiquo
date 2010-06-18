@@ -11,7 +11,8 @@ module UbiquoAccessControl
           Permission.new(:key => key.to_s, :name => "test #{key}")
         end
         role.permissions << permissions_records
-        @request.session[:ubiquo_user_id] = ubiquo_user
+        @request.session[:ubiquo] ||= {}
+        @request.session[:ubiquo][:ubiquo_user_id] = ubiquo_user
       end
       
     end
