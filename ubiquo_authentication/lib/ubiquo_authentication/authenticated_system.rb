@@ -15,7 +15,7 @@ module UbiquoAuthentication
 
     # Store the given ubiquo_user in the session.
     def current_ubiquo_user=(new_ubiquo_user)
-      session[:ubiquo_user_id] = (new_ubiquo_user.nil? || new_ubiquo_user.is_a?(Symbol)) ? nil : new_ubiquo_user.id
+      session[:ubiquo][:ubiquo_user_id] = (new_ubiquo_user.nil? || new_ubiquo_user.is_a?(Symbol)) ? nil : new_ubiquo_user.id
       @current_ubiquo_user = new_ubiquo_user || :false
     end
     
@@ -99,7 +99,7 @@ module UbiquoAuthentication
 
     # Attempt to login by the ubiquo_user id stored in the session.
     def login_from_session
-      self.current_ubiquo_user = UbiquoUser.find_by_id(session[:ubiquo_user_id]) if session[:ubiquo_user_id]
+      self.current_ubiquo_user = UbiquoUser.find_by_id(session[:ubiquo][:ubiquo_user_id]) if session[:ubiquo] && session[:ubiquo][:ubiquo_user_id]
     end
 
     # Attempt to login by an expiring token in the cookie.

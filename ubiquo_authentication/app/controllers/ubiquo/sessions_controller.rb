@@ -39,7 +39,7 @@ class Ubiquo::SessionsController < ApplicationController
   def destroy
     self.current_ubiquo_user.forget_me if logged_in?
     cookies.delete :auth_token
-    reset_session
+    session.delete(:ubiquo)
     flash[:notice] = t 'ubiquo.auth.logout'
     redirect_back_or_default(ubiquo_home_path)
   end

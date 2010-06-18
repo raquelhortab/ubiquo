@@ -21,7 +21,8 @@ module UbiquoAuthentication
                       when nil
                         ubiquo_users(:admin).id
                       end
-        @request.session[:ubiquo_user_id] = ubiquo_user
+        @request.session[:ubiquo] ||= {}
+        @request.session[:ubiquo][:ubiquo_user_id] = ubiquo_user
       end
       
     end
