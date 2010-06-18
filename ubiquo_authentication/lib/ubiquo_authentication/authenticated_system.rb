@@ -15,6 +15,7 @@ module UbiquoAuthentication
 
     # Store the given ubiquo_user in the session.
     def current_ubiquo_user=(new_ubiquo_user)
+      session[:ubiquo] ||= {}
       session[:ubiquo][:ubiquo_user_id] = (new_ubiquo_user.nil? || new_ubiquo_user.is_a?(Symbol)) ? nil : new_ubiquo_user.id
       @current_ubiquo_user = new_ubiquo_user || :false
     end
