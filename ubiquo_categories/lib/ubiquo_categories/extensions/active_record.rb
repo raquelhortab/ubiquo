@@ -181,20 +181,20 @@ module UbiquoCategories
         protected
 
         def prepare_categories_join_sql field
-          association_name = field.to_s.pluralize.to_sym
+          association_name = field.to_s.pluralize.to_s
 
-          relation_table = CategoryRelation.table_name
-          category_table = Category.table_name
-          relation_alias = CategoryRelation.alias_for_association association_name
-          category_alias = Category.alias_for_association association_name
+          relation_table = connection.quote_table_name(CategoryRelation.table_name)
+          category_table = connection.quote_table_name(Category.table_name)
+          relation_alias = connection.quote_table_name(CategoryRelation.alias_for_association(association_name))
+          category_alias = connection.quote_table_name(Category.alias_for_association(association_name))
 
           categorize_options(field)[:join_sql] = <<-SQL
-            INNER JOIN "#{relation_table}" "#{relation_alias}" ON
-            ("#{table_name}"."id" = "#{relation_alias}"."related_object_id" AND
-            "#{relation_alias}"."related_object_type" = '#{base_class.name}')
-            INNER JOIN "#{category_table}" "#{category_alias}" ON
-            ("#{category_alias}"."id" = "#{relation_alias}"."category_id") AND
-            "#{relation_alias}".attr_name = '#{association_name}'
+            INNER JOIN #{relation_table} #{relation_alias} ON
+            (#{table_name}.id = #{relation_alias}.related_object_id AND
+            #{relation_alias}.related_object_type = #{quote_value(base_class.name)})
+            INNER JOIN #{category_table} #{category_alias} ON
+            (#{category_alias}.id = #{relation_alias}.category_id) AND
+            #{relation_alias}.attr_name = #{quote_value(association_name)}
           SQL
         end
 
