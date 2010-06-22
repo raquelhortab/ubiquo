@@ -61,7 +61,7 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_identifier_condition should return a condition' do
-      assert [String, Hash, Array].include?(Category.uhook_category_identifier_condition([]).class)
+      assert [String, Hash, Array].include?(Category.uhook_category_identifier_condition([], :dummy).class)
     end
 
     test 'uhook_filtered_search_in_category should return an array' do

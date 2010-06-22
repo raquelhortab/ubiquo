@@ -46,7 +46,10 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
   end
 
   test 'uhook_category_identifier_condition should return a id condition' do
-    assert_equal(['categories.id IN (?)', [1]], Category.uhook_category_identifier_condition([1]))
+    assert_equal(
+      ["#{Category.alias_for_association('cities')}.id IN (?)", [1]],
+      Category.uhook_category_identifier_condition([1], :cities)
+    )
   end
 
   test 'uhook_filtered_search should return no scopes' do

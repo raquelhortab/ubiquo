@@ -310,6 +310,37 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal_set [], CategoryTestModel.with_cities_in()
   end
 
+  def test_with_field_in_scope_multiple
+    categorize :cities, :size => 2
+    create_set :cities
+    categorize :genre
+    create_set :genres
+
+    model_1 = create_category_model
+    model_1.cities = ['Barcelona', 'Tokyo']
+    model_1.genre = 'Male'
+    model_2 = create_category_model
+    model_2.cities = ['Barcelona', 'London']
+    model_2.genre = 'Female'
+    model_3 = create_category_model
+    model_3.cities = []
+    model_3.genre = 'Male'
+
+    assert_equal_set([model_1], CategoryTestModel.with_cities_in('Barcelona').with_genre_in('Male'))
+    assert_equal_set([model_2], CategoryTestModel.with_genre_in('Female').with_cities_in('London'))
+
+    model_2.genre = 'Male'
+
+    assert_equal_set(
+      [model_1, model_2],
+      CategoryTestModel.with_genre_in('Male').with_cities_in('Barcelona')
+    )
+
+    assert_equal_set([], CategoryTestModel.with_genre_in('Female').with_cities_in('Tokyo'))
+    assert_equal_set [], CategoryTestModel.with_cities_in().with_genre_in('Male')
+    assert_equal_set [], CategoryTestModel.with_genre_in('Male').with_cities_in()
+  end
+
   def test_with_field_no_set
     categorize :things, :size => 2
     assert_raise UbiquoCategories::SetNotFoundError do

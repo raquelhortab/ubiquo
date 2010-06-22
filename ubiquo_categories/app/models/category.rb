@@ -26,4 +26,8 @@ class Category < ActiveRecord::Base
     name
   end
   
+  def self.alias_for_association association_name
+    connection.table_alias_for "#{table_name}_#{association_name}"
+  end
+
 end

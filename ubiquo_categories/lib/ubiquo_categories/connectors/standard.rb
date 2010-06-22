@@ -13,8 +13,8 @@ module UbiquoCategories
         module ClassMethods
 
           # Returns a condition to return categories using their +identifiers+
-          def uhook_category_identifier_condition identifiers
-            ['categories.id IN (?)', identifiers]
+          def uhook_category_identifier_condition identifiers, association
+             ["#{::Category.alias_for_association(association)}.id IN (?)", identifiers]
           end
 
           # Applies any required extra scope to the filtered_search method

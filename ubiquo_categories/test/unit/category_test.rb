@@ -50,6 +50,13 @@ class CategoryTest < ActiveSupport::TestCase
     assert_equal 'my_name', create_category(:name => 'my_name').to_s
   end
 
+  def test_alias_for_association
+    assert_equal(
+      "#{Category.table_name}_name",
+      Category.alias_for_association('name')
+    )
+  end
+
   private
   
   def create_category(options = {})

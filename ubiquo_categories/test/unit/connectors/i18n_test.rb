@@ -79,7 +79,10 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_identifier_condition should return a content_id condition' do
-      assert_equal(['categories.content_id IN (?)', [1]], Category.uhook_category_identifier_condition([1]))
+      assert_equal(
+        ["#{Category.alias_for_association('cities')}.content_id IN (?)", [1]],
+        Category.uhook_category_identifier_condition([1], :cities)
+      )
     end
 
     test 'uhook_filtered_search should return locale scope' do
@@ -377,18 +380,18 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       category = set.categories.last
 
       assert_equal(
-        {:conditions => ['categories.content_id IN (?)', [category.content_id]], :include => :cities},
-        CategoryTestModel.category_conditions_for(:cities, category.name)
-        )
+        ["#{Category.alias_for_association(:cities)}.content_id IN (?)", [category.content_id]],
+        CategoryTestModel.category_conditions_for(:cities, category.name)[:conditions]
+      )
     end
 
     test 'category_conditions_for_inexistent_category' do
       categorize :genre
       create_set :genres
       assert_equal(
-        {:conditions => ['categories.content_id IN (?)', [0]], :include => :genres},
-        CategoryTestModel.category_conditions_for(:genre, 'value')
-        )
+        ["#{Category.alias_for_association(:genres)}.content_id IN (?)", [0]],
+        CategoryTestModel.category_conditions_for(:genre, 'value')[:conditions]
+      )
     end
 
     protected

@@ -64,6 +64,13 @@ class CategoryRelationTest < ActiveSupport::TestCase
     assert_equal 100, CategoryRelation.last_position('two')
   end
 
+  def test_alias_for_association
+    assert_equal(
+      "#{CategoryRelation.table_name}_name",
+      CategoryRelation.alias_for_association('name')
+    )
+  end
+
   private
   
   def create_category_relation(options = {})

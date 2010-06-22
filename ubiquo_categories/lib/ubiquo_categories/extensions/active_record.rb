@@ -134,15 +134,19 @@ module UbiquoCategories
           
           alias_method_chain "#{association_name}=", 'categories'
 
-          if field != association_name
-            alias_method field, association_name
-            alias_method "#{field}=", "#{association_name}="
-          end
-
           named_scope "with_#{association_name}_in", lambda{ |*values|
             category_conditions_for field, values
           }
-          
+
+          if field != association_name
+            alias_method field, association_name
+            alias_method "#{field}=", "#{association_name}="
+            klass = class << self; self; end
+            klass.send :alias_method,  "with_#{field}_in", "with_#{association_name}_in"
+          end
+
+          prepare_categories_join_sql field
+
           uhook_categorized_with field, options
           
         end
@@ -169,9 +173,29 @@ module UbiquoCategories
           value = [0] if value.blank? # to prevent rails sql bad formation
 
           {
-            :conditions => Category.uhook_category_identifier_condition(value),
-            :include => association_name
+            :conditions => Category.uhook_category_identifier_condition(value, association_name),
+            :joins => categorize_options(field)[:join_sql]
           }
+        end
+
+        protected
+
+        def prepare_categories_join_sql field
+          association_name = field.to_s.pluralize.to_sym
+
+          relation_table = CategoryRelation.table_name
+          category_table = Category.table_name
+          relation_alias = CategoryRelation.alias_for_association association_name
+          category_alias = Category.alias_for_association association_name
+
+          categorize_options(field)[:join_sql] = <<-SQL
+            INNER JOIN "#{relation_table}" "#{relation_alias}" ON
+            ("#{table_name}"."id" = "#{relation_alias}"."related_object_id" AND
+            "#{relation_alias}"."related_object_type" = '#{base_class.name}')
+            INNER JOIN "#{category_table}" "#{category_alias}" ON
+            ("#{category_alias}"."id" = "#{relation_alias}"."category_id") AND
+            "#{relation_alias}".attr_name = '#{association_name}'
+          SQL
         end
 
       end

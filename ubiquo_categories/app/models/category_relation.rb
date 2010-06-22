@@ -25,6 +25,10 @@ class CategoryRelation < ActiveRecord::Base
     self.maximum("#{table_name}.position", :conditions => {:attr_name => attr_name.to_s})
   end
 
+  def self.alias_for_association association_name
+    connection.table_alias_for "#{table_name}_#{association_name}"
+  end
+
   protected
 
   def create_position
@@ -34,5 +38,5 @@ class CategoryRelation < ActiveRecord::Base
       write_attribute :position, last_position+1
     end
   end
-  
+
 end
