@@ -57,7 +57,7 @@ document.observe("dom:loaded", function() {
 });
 
 var AutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection, style) {
+  initialize: function(url, object_name, key, initial_collection, style, editable) {
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
@@ -68,6 +68,7 @@ var AutoCompleteSelector = Class.create({
     this.queryParam = 'name';
     this.onResult = null;
     this.prePopulate = initial_collection;
+    this.editable = editable;
     this.CAPTIONS = {
       hintText: "Type in a search term",
       noResultsText: "No results",
@@ -210,7 +211,9 @@ var AutoCompleteSelector = Class.create({
               event.stop();
               return false;
             } else {
-              klass.add_token_from_text(this.value);
+              if (klass.editable == true) {
+                klass.add_token_from_text(this.value);
+              }
               event.stop();
               return false;
             }
@@ -392,7 +395,9 @@ var AutoCompleteSelector = Class.create({
   },
 
   add_token_from_text: function(value) {
-    if (value.trim() != "") {
+    //ignore value if introduced text is blank
+    //this regexp is the same that trim function
+    if (value.replace(/^\s+|\s+$/g,'') != "") {
       this.add_token(3, value);
     }
   },

@@ -68,6 +68,32 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     end
   end
 
+  def test_category_selector_should_show_new_buttons_if_is_editable
+    object = CategoryTestModel.new
+    output = category_selector 'name', :tags, { :object => object }, { :id => 'html_id' }
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'fieldset[id=html_id]'
+    assert_select doc.root, '.new_category_controls' do
+      assert_select doc.root, '.category_selector_new'
+      assert_select doc.root, '.add_new_category' do
+        assert_select doc.root, '.add_new_category_link'
+      end
+    end
+  end
+
+  def test_category_selector_shouldnt_show_new_category_buttons
+    @set.update_attributes(:is_editable => false)
+    object = CategoryTestModel.new
+    output = category_selector 'name', :tags, { :object => object }, { :id => 'html_id' }
+    doc = HTML::Document.new(output)
+    # first, check if category selector is printed
+    assert_select doc.root, 'fieldset[id=html_id]'
+    # now, check that all new categories controls aren't displayed
+    assert_select doc.root, '.new_category_controls', 0
+    assert_select doc.root, '.category_selector_new', 0
+    assert_select doc.root, '.add_new_category', 0
+  end
+
   def test_fieldset_has_html_options
     object = CategoryTestModel.new
     output = category_selector 'name', :tags, {:object => object}, {:id => 'html_id'}
@@ -91,7 +117,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   def test_category_select_selector
     object = CategoryTestModel.new
     assert_nothing_raised do
-      category_select_selector object, 'name', :tags, @set.categories
+      category_select_selector object, 'name', :tags, @set.categories, @set
     end
   end
 

@@ -7,11 +7,13 @@ module UbiquoCategories
       #   options(optional):
       #     type (:checkbox, :select, :autocomplete)
       #     name (Used as the selector title)
+      #     set  (CategorySet to obtains selector categories)
       #     autocomplete_style (:tag, :list)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
         key = key.to_s.pluralize
-        categories = uhook_categories_for_set(category_set(key), object)
+        options[:set] ||= category_set(key)
+        categories = uhook_categories_for_set(options[:set], object)
         selector_type = options[:type]
         categorize_size = object.class.categorize_options(key)[:size]
         max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)
@@ -24,7 +26,7 @@ module UbiquoCategories
         output = content_tag(:fieldset, html_options) do
           content_tag(:legend, options[:name] || object.class.human_attribute_name(key)) + 
             send("category_#{selector_type}_selector",
-                 object, object_name, key, categories, options)
+                 object, object_name, key, categories, options.delete(:set), options)
         end
         output
       end
@@ -35,7 +37,7 @@ module UbiquoCategories
         CategorySet.find_by_key(key) || raise(SetNotFoundError.new(key))
       end
       
-      def category_checkbox_selector(object, object_name, key, categories, options = {})
+      def category_checkbox_selector(object, object_name, key, categories, set, options = {})
         output = content_tag(:ul, :class => 'check_list') do
           categories.map do |category|
             content_tag(:li) do
@@ -47,23 +49,26 @@ module UbiquoCategories
           end.join
         end
         output << hidden_field_tag("#{object_name}[#{key}][]", '')
-        output << new_category_controls("checkbox", object_name, key)
+        if set.is_editable?
+          output << new_category_controls("checkbox", object_name, key)
+        end
         output
       end
       
-      def category_select_selector(object, object_name, key, categories, options = {})
+      def category_select_selector(object, object_name, key, categories, set, options = {})
         categories_for_select = categories.collect { |cat| [cat.name, cat.name] }
         output = select_tag("#{object_name}[#{key}][]", 
                              options_for_select(categories_for_select,
                                                 :selected => object.send(key).name),
-                             { :id => "#{object_name}_#{key}_select" })
-        output << new_category_controls("select", object_name, key)
+                            { :id => "#{object_name}_#{key}_select" })
+        if set.is_editable?
+          output << new_category_controls("select", object_name, key)
+        end
         output
       end
       
-      def category_autocomplete_selector(object, object_name, key, categories, options = {})
-        category_set = CategorySet.find_by_key(key)
-        url_params = { :category_set_id => category_set.id, :format => :js }
+      def category_autocomplete_selector(object, object_name, key, categories, set, options = {})
+        url_params = { :category_set_id => set.id, :format => :js }
         autocomplete_options = { 
           :url => ubiquo_category_set_categories_path(url_params),
           :current_values => object.send(key).to_json(:only => [:id, :name]),
@@ -76,7 +81,8 @@ module UbiquoCategories
               '#{object_name}',
               '#{key}',
               #{autocomplete_options[:current_values]},
-              '#{autocomplete_options[:style]}'
+              '#{autocomplete_options[:style]}',
+              #{set.is_editable?}
             )
           });
         JS

@@ -15,6 +15,21 @@ class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
     assert_response :success
     assert !assigns(:can_manage)
   end
+
+  def test_should_not_see_actions_if_set_isnt_editable
+    Ubiquo::Config.context(:ubiquo_categories).set(:administrable_category_sets, true)    
+    set_attrs = category_set_attributes.merge(:is_editable => false)
+    category_set = CategorySet.create(set_attrs)
+    get :index
+    assert_equal 4, assigns(:category_sets).size
+    assert_select "table#category_sets-list tr:nth-child(2)" do
+        assert_select "a", 1
+    end
+    assert_select "table#category_sets-list tr:last-child" do
+      assert_select "a", 3
+    end
+    assert_response :success
+  end
   
   def test_should_get_new
     get :new
