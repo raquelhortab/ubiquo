@@ -9,7 +9,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
-    @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %><%= options[:translatable] ? ".locale(current_locale, :ALL)" : "" %>.paginated_filtered_search(params)
+    @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %><%= options[:translatable] ? ".locale(current_locale, :all)" : "" %>.paginated_filtered_search(params)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -24,7 +24,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def show
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] %>
-    unless @<%= file_name %>.locale?(current_locale)
+    unless @<%= file_name %>.in_locale?(current_locale)
       redirect_to(ubiquo_<%= table_name %>_url)
       return
     end
@@ -39,7 +39,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # GET /<%= table_name %>/new
   # GET /<%= table_name %>/new.xml
   def new
-    @<%= file_name %> = <%= class_name %><%= options[:translatable] ? ".translate(params[:from], current_locale, :copy_all => true)" : ".new" %>
+    @<%= file_name %> = <%= class_name %><%= options[:translatable] ? ".translate(params[:from], current_locale)" : ".new" %>
 
     respond_to do |format|
       format.html # new.html.erb
@@ -51,7 +51,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   def edit
     @<%= file_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] -%>
-    unless @<%= file_name %>.locale?(current_locale)
+    unless @<%= file_name %>.in_locale?(current_locale)
       redirect_to(ubiquo_<%= table_name %>_url)
       return
     end
@@ -62,9 +62,6 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
   # POST /<%= table_name %>.xml
   def create
     @<%= file_name %> = <%= class_name %>.new(params[:<%= file_name %>])
-    <%- if options[:translatable] -%>
-    @<%= file_name %>.locale = current_locale
-    <%- end -%>
 
     respond_to do |format|
       if @<%= file_name %>.save
