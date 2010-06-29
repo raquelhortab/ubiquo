@@ -61,7 +61,7 @@ var AutoCompleteSelector = Class.create({
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
-    this.searchDelay = 10;
+    this.searchDelay = 1500;
     this.minChars = 1;
     this.tokenLimit = null;
     this.jsonContainer = null,
@@ -387,7 +387,13 @@ var AutoCompleteSelector = Class.create({
 
   add_token_from_li: function(item) {
     var li_data = item.readAttribute('alt').evalJSON();
-    this.add_token(li_data.id, li_data['category'][this.queryParam] || li_data[this.queryParam]);
+    var value = null;
+    if (li_data['category'] == undefined) {
+      value =  li_data[this.queryParam];
+    } else {
+      value = li_data['category'][this.queryParam];
+    }
+    this.add_token(li_data.id, value);
   },
 
   add_token_from_json: function(item) {
