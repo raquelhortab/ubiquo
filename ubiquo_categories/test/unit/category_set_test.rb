@@ -92,6 +92,15 @@ class CategorySetTest < ActiveSupport::TestCase
     end
   end
 
+  def test_should_ignore_categories_with_blank_value
+    set = create_category_set(:is_editable => false)
+    assert_no_difference 'Category.count' do
+      set.categories << ''
+      set.categories << ' '
+      set.categories << '                 '
+    end
+  end  
+
   def test_select_fittest_with_string
     set = create_category_set
     set.categories << 'Category'

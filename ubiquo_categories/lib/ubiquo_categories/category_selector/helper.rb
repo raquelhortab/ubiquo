@@ -48,6 +48,8 @@ module UbiquoCategories
             end
           end.join
         end
+        # hidden field without value is required when you want remove
+        # all your selection values
         output << hidden_field_tag("#{object_name}[#{key}][]", '')
         if set.is_editable?
           output << new_category_controls("checkbox", object_name, key)
