@@ -78,7 +78,12 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
       m.template('functional_test.rb', File.join('test/functional/ubiquo', controller_class_path, "#{controller_file_name}_controller_test.rb"))
       m.template('helper.rb', File.join('app/helpers/ubiquo', controller_class_path, "#{controller_file_name}_helper.rb"))
 
-      m.namespaced_route_resources "ubiquo", controller_file_name
+      if @options[:parent]
+        m.nested_route_resources(@options[:parent], controller_file_name)
+      else
+        m.namespaced_route_resources "ubiquo", controller_file_name
+      end
+
       m.ubiquo_tab controller_file_name
       m.ubiquo_migration if @options[:run_migration]
       puts "Notes:
@@ -113,6 +118,9 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
              "Don't send actions to ubiquo activity") { |v| options[:skip_activity] = v }
       opt.on("-m","--run-migration",
              "Run the migration task. rake db:migrate") { |v| options[:run_migration] = v }
+      opt.on("--nested-from parent", String, "Adds a nested resource under an existing parent") {|v|
+        options[:parent] = v
+      }
     end
 
     def scaffold_views
