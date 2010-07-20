@@ -2,6 +2,7 @@ class Ubiquo::CategoriesController < UbiquoAreaController
 
   ubiquo_config_call :categories_access_control, {:context => :ubiquo_categories}
   before_filter :load_category_set
+  before_filter :load_category, :only => [:show, :edit, :update, :destroy]
 
   # GET /categories
   # GET /categories.xml
@@ -34,7 +35,6 @@ class Ubiquo::CategoriesController < UbiquoAreaController
   # GET /categories/1
   # GET /categories/1.xml
   def show
-    @category = Category.find(params[:id])
     return if uhook_show_category(@category) == false
 
     respond_to do |format|
@@ -57,7 +57,6 @@ class Ubiquo::CategoriesController < UbiquoAreaController
 
   # GET /categories/1/edit
   def edit
-    @category = Category.find(params[:id])
     return if uhook_edit_category(@category) == false
   end
 
@@ -83,11 +82,8 @@ class Ubiquo::CategoriesController < UbiquoAreaController
   # PUT /categories/1
   # PUT /categories/1.xml
   def update
-    @category = Category.find(params[:id])
-    ok = @category.update_attributes(params[:category])
-
     respond_to do |format|
-      if ok
+      if @category.update_attributes(params[:category])
         flash[:notice] = t("ubiquo.category.edited")
         format.html { redirect_to(ubiquo_category_set_categories_url) }
         format.xml  { head :ok }
@@ -102,7 +98,6 @@ class Ubiquo::CategoriesController < UbiquoAreaController
   # DELETE /categories/1
   # DELETE /categories/1.xml
   def destroy
-    @category = Category.find(params[:id])
     if uhook_destroy_category(@category)
       flash[:notice] = t("ubiquo.category.destroyed")
     else
@@ -118,5 +113,9 @@ class Ubiquo::CategoriesController < UbiquoAreaController
 
   def load_category_set
     @category_set = CategorySet.find(params[:category_set_id])
+  end
+
+  def load_category
+    @category = Category.find(params[:id])
   end
 end

@@ -1,7 +1,8 @@
 class Ubiquo::CategorySetsController < UbiquoAreaController
 
   ubiquo_config_call :categories_access_control, {:context => :ubiquo_categories}
-
+  before_filter :load_category_set, :only => [:show, :edit, :update, :destroy]
+  
   # GET /category_sets
   # GET /category_sets.xml
   def index
@@ -32,8 +33,6 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
   # GET /category_sets/1
   # GET /category_sets/1.xml
   def show
-    @category_set = CategorySet.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @category_set }
@@ -54,7 +53,6 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
 
   # GET /category_sets/1/edit
   def edit
-    @category_set = CategorySet.find(params[:id])
   end
 
   # POST /category_sets
@@ -78,11 +76,8 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
   # PUT /category_sets/1
   # PUT /category_sets/1.xml
   def update
-    @category_set = CategorySet.find(params[:id])
-    ok = @category_set.update_attributes(params[:category_set])
-
     respond_to do |format|
-      if ok
+      if @category_set.update_attributes(params[:category_set])
         flash[:notice] = t("ubiquo.category_set.edited")
         format.html { redirect_to(ubiquo_category_sets_url) }
         format.xml  { head :ok }
@@ -97,7 +92,6 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
   # DELETE /category_sets/1
   # DELETE /category_sets/1.xml
   def destroy
-    @category_set = CategorySet.find(params[:id])
     if @category_set.destroy
       flash[:notice] = t("ubiquo.category_set.destroyed")
     else
@@ -107,5 +101,11 @@ class Ubiquo::CategorySetsController < UbiquoAreaController
       format.html { redirect_to(ubiquo_category_sets_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def load_category_set
+    @category_set = CategorySet.find(params[:id])
   end
 end
