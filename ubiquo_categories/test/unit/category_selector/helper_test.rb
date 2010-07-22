@@ -31,6 +31,19 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     end
   end
 
+  def test_from_options_available
+    create_set :cities
+    categorize(:using_from, :from => :cities)
+
+    assert_nothing_raised do
+      form_for(:post, CategoryTestModel.new, :url => '') do |f|
+        concat f.category_selector(:using_from)
+      end
+    end
+    
+  end
+
+  
   def test_category_selector_should_be_autocomplete_when_many_categories
     current_categories_amount = @set.categories.size
     max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)

@@ -11,8 +11,9 @@ module UbiquoCategories
       #     autocomplete_style (:tag, :list)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
+        from_param = object.class.categorize_options(key)[:from]      
         key = key.to_s.pluralize
-        options[:set] ||= category_set(key)
+        options[:set] ||= category_set(from_param || key)
         categories = uhook_categories_for_set(options[:set], object)
         selector_type = options[:type]
         categorize_size = object.class.categorize_options(key)[:size]
@@ -34,7 +35,7 @@ module UbiquoCategories
       protected
       
       def category_set(key)
-        CategorySet.find_by_key(key) || raise(SetNotFoundError.new(key))
+        CategorySet.find_by_key(key.to_s) || raise(SetNotFoundError.new(key))
       end
       
       def category_checkbox_selector(object, object_name, key, categories, set, options = {})
