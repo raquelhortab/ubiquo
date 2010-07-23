@@ -1,6 +1,7 @@
 class Category < ActiveRecord::Base
   
   belongs_to :category_set
+  has_many :category_relations
   
   validates_presence_of :name, :category_set
     

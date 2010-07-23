@@ -57,6 +57,18 @@ class CategoryTest < ActiveSupport::TestCase
     )
   end
 
+  def test_should_find_category_relations_from_category
+    category = create_category
+    related = CategoryTestModel.create
+    category_relation = CategoryRelation.create(
+        :category_id => category.id,
+        :related_object_id => related.id,
+        :related_object_type => related.class.to_s,
+        :position => 1,
+        :attr_name => "attrs")
+    assert_equal [category_relation], category.category_relations
+  end
+
   private
   
   def create_category(options = {})
