@@ -18,7 +18,7 @@ class CategorySet < ActiveRecord::Base
         categories = [categories]
         options = {}
       end
-      categories.reject(&:blank?).flatten.each do |category|
+      categories.flatten.reject(&:blank?).each do |category|
         # skip if already added
         load_target
         next if proxy_target.map(&:to_s).include? category.to_s
