@@ -7,7 +7,7 @@ es:
     attributes:
       page:
         name: "Nombre"
-        url_name: "Nombre de página"
+        url_name: "URL"
         page_template: "plantilla"
       menu_item:
         caption: "Título"
