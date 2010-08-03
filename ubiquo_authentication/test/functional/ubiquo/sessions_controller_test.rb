@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
-require 'ubiquo/sessions_controller'
 
 class Ubiquo::SessionsControllerTest < ActionController::TestCase
   use_ubiquo_fixtures
@@ -104,10 +103,17 @@ class Ubiquo::SessionsControllerTest < ActionController::TestCase
   end
   
   def test_should_have_enabled_cookies
-    @request.session["_session_id"] = ""
     Ubiquo::SessionsController.any_instance.expects("has_cookies_enabled?").returns(false)
     post :create, :login => 'josep', :password => 'test', :remember_me => "0"
-    assert_redirected_to ubiquo_login_path
+    assert_redirected_to ubiquo_login_path(:cookies => true)
+  end
+
+  def test_should_have_enabled_cookies_but_not_loop_redirect
+    @request.session.delete(:ubiquo) #logout
+    Ubiquo::SessionsController.any_instance.\
+      expects("has_cookies_enabled?").twice.returns(false)
+    get :new, :cookies => true
+    assert_response :success
   end
 
   protected
