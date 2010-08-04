@@ -12,8 +12,8 @@ module Ubiquo
         options = Options.new(arguments)
         options = options.merge(env_opts) if env_opts
 
-        unless Gem.available?('rails', '2.3.5')
-          $stderr.puts "Sorry ubiquo needs rails 2.3.5 to work properly."
+        unless Gem.available?('rails', '2.3.8')
+          $stderr.puts "Sorry ubiquo needs rails 2.3.8 to work properly."
           options[:show_help] = true
         end
         
@@ -49,7 +49,7 @@ module Ubiquo
           file.write Generator.build_template(options, skeleton) 
         end
         tpl.sync=true
-        system("rails _2.3.5_ -m #{tpl.path} #{options[:app_name]}")
+        system("rails _2.3.8_ -m #{tpl.path} #{options[:app_name]}")
       end
     end
   end
