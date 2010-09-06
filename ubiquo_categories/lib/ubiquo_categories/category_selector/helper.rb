@@ -13,8 +13,7 @@ module UbiquoCategories
         object = options[:object]
         categorize_options = object.class.categorize_options(key)
         raise UbiquoCategories::CategorizationNotFoundError unless categorize_options
-        key = key.to_s.pluralize
-        options[:set] ||= category_set(categorize_options[:from] || key)
+        options[:set] ||= category_set(categorize_options[:from] || key.to_s.pluralize)
         categories = uhook_categories_for_set(options[:set], object)
         selector_type = options[:type]
         categorize_size = categorize_options[:size]
