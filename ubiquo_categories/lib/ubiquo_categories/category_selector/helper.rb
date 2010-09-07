@@ -67,11 +67,12 @@ module UbiquoCategories
 
       def category_checkbox_selector(object, object_name, key, categories, set, options = {})
         tree = convert_to_tree(categories)
+        output = ''
         if tree.keys.size == 1
           output = checkbox_area(object, object_name, key, categories)
         else
           tree.each_pair do |parent, children|
-            (output ||= '') << checkbox_area(object, object_name, key,
+            output << checkbox_area(object, object_name, key,
               categories.select{|c| c.id == parent},
               {
                 :css_class => 'hierarchical_check_list',
