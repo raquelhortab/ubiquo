@@ -24,7 +24,7 @@ module UbiquoCategories
 
           # Initializes a new category with the given +name+ and +options+
           def uhook_new_from_name name, options = {}
-            ::Category.new(:name => name)
+            ::Category.new(:name => name, :parent_id => options[:parent_id])
           end
         end
 
