@@ -2,6 +2,8 @@ class Category < ActiveRecord::Base
   
   belongs_to :category_set
   has_many :category_relations
+  belongs_to :parent, :class_name => 'Category'
+  has_many :children, :class_name => 'Category', :foreign_key => 'parent_id'
   
   validates_presence_of :name, :category_set
     

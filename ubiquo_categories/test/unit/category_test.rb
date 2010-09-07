@@ -16,7 +16,7 @@ class CategoryTest < ActiveSupport::TestCase
       assert category.errors.on(:name)
     end
   end
-  
+
   def test_should_require_category_set
     assert_no_difference 'Category.count' do
       category = create_category(:category_set => nil)
@@ -31,10 +31,10 @@ class CategoryTest < ActiveSupport::TestCase
       create_category(:name => "try to FinD me"),
       create_category(:name => "I don't appear"),
     ]
-    
+
     assert_equal_set [category_1,category_2], Category.filtered_search({:text => "find"})
   end
-  
+
   def test_should_filter_by_category_set
     Category.destroy_all
     category_1,category_2,category_3 = [
@@ -69,8 +69,14 @@ class CategoryTest < ActiveSupport::TestCase
     assert_equal [category_relation], category.category_relations
   end
 
+  def test_parent_and_children
+    parent = create_category
+    child = create_category(:parent_id => parent.id)
+    assert_equal [child], parent.children
+  end
+
   private
-  
+
   def create_category(options = {})
     default_options = {
       :name => 'MyString', # string

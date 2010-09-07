@@ -38,17 +38,51 @@ module UbiquoCategories
         CategorySet.find_by_key(key.to_s) || raise(SetNotFoundError.new(key))
       end
 
-      def category_checkbox_selector(object, object_name, key, categories, set, options = {})
-        output = content_tag(:ul, :class => 'check_list') do
+      def convert_to_tree(set)
+        returning(map = {}) do
+          set.each do |element|
+            (map[element.parent_id] ||= []) << element
+          end
+        end
+      end
+
+      # Creates a set of checkboxes given for the set of given +categories+
+      # +options+ can be
+      #   css_class:  ul's css class. Defaults to 'check_list'
+      #   extra:      string to add at the end of the li
+      def checkbox_area(object, object_name, key, categories, options = {})
+        options.reverse_merge!({:css_class => 'check_list'})
+        content_tag(:ul, :class => options[:css_class]) do
           categories.map do |category|
             content_tag(:li) do
               check_box_tag("#{object_name}[#{key}][]", category.name,
-                            object.send(key).has_category?(category),
-                            :id => "#{object_name}_#{key}_#{category.id}") +
-                label_tag("#{object_name}_#{key}_#{category.id}", category)
+                object.send(key).has_category?(category),
+                :id => "#{object_name}_#{key}_#{category.id}") + ' ' +
+                label_tag("#{object_name}_#{key}_#{category.id}", category) +
+                options[:extra].to_s
             end
           end.join
         end
+      end
+
+      def category_checkbox_selector(object, object_name, key, categories, set, options = {})
+        tree = convert_to_tree(categories)
+        if tree.keys.size == 1
+          output = checkbox_area(object, object_name, key, categories)
+        else
+          tree.each_pair do |parent, children|
+            (output ||= '') << checkbox_area(object, object_name, key,
+              categories.select{|c| c.id == parent},
+              {
+                :css_class => 'hierarchical_check_list',
+                :extra => checkbox_area(object, object_name, key, children,
+                  :css_class => 'children_check_list check_list'
+                )
+              }
+            )
+          end
+        end
+
         # hidden field without value is required when you want remove
         # all your selection values
         output << hidden_field_tag("#{object_name}[#{key}][]", '')

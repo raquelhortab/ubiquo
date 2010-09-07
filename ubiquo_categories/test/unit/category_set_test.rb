@@ -31,7 +31,18 @@ class CategorySetTest < ActiveSupport::TestCase
       category_set.categories << 1
     end
   end
-  
+
+  def test_should_allow_add_hash_categories
+    category_set = create_category_set
+    assert_difference 'Category.count', 3 do
+      category_set.categories << {'parent' => ['child1', 'child2']}
+    end
+    assert_equal 3, category_set.categories.size
+    assert_equal 'parent', Category.find_by_name('child1').parent.name
+    assert_equal 'parent', Category.find_by_name('child2').parent.name
+    assert_nil Category.find_by_name('parent').parent
+  end
+
   def test_should_filter_by_name
     CategorySet.destroy_all
     category_set_1,category_set_2,category_set_3 = [
@@ -39,7 +50,7 @@ class CategorySetTest < ActiveSupport::TestCase
       create_category_set(:name => "try to FinD me"),
       create_category_set(:name => "I don't appear"),
     ]
-    
+
     assert_equal_set [category_set_1,category_set_2], CategorySet.filtered_search({:text => "find"})
   end
 
@@ -55,7 +66,7 @@ class CategorySetTest < ActiveSupport::TestCase
       set.categories << 'Category'
     end
   end
-  
+
   def test_should_allow_creation
     set = create_category_set
     set.is_editable!

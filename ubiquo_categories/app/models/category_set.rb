@@ -27,6 +27,11 @@ class CategorySet < ActiveRecord::Base
         when String
           raise UbiquoCategories::CreationNotAllowed unless proxy_owner.is_editable?
           self.concat(Category.uhook_new_from_name(category, options))
+        when Hash
+          parent = category.keys.first
+          self << parent
+          parent_id = self.select{|cat| cat.to_s == parent.to_s}.first.id
+          self << [category[parent], {:parent_id => parent_id}]
         else
           self.concat(category)
         end
