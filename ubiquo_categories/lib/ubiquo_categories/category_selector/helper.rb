@@ -8,7 +8,9 @@ module UbiquoCategories
       #     type (:checkbox, :select, :autocomplete)
       #     name (Used as the selector title)
       #     set  (CategorySet to obtains selector categories)
+      #     include_blank (defaults to false, true to show a blank option if applicable)
       #     autocomplete_style (:tag, :list)
+      #   html_options: options for the fieldset tag (optional)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
         categorize_options = object.class.categorize_options(key)
@@ -94,11 +96,15 @@ module UbiquoCategories
       end
 
       def category_select_selector(object, object_name, key, categories, set, options = {})
-        categories_for_select = categories.collect { |cat| [cat.name, cat.name] }
-        output = select_tag("#{object_name}[#{key}][]",
-                             options_for_select(categories_for_select,
-                                                :selected => object.send(key).name),
-                            { :id => "#{object_name}_#{key}_select" })
+        blank_name = options[:include_blank] if options[:include_blank].kind_of?(String)
+        categories_for_select = options[:include_blank] ? [[blank_name, nil]] : []
+        categories_for_select += categories.collect { |cat| [cat.name, cat.name] }
+        selected_value = object.send(key).name
+        output = select_tag(
+          "#{object_name}[#{key}][]",
+          options_for_select(categories_for_select, :selected => selected_value),
+          { :id => "#{object_name}_#{key}_select" }
+        )
         if set.is_editable?
           output << new_category_controls("select", object_name, key)
         end
