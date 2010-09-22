@@ -3,12 +3,20 @@ require 'mocha'
 
 def create_categories_test_model_backend
   # Creates a test table for AR things work properly
-  %w{category_test_models category_translatable_test_models}.each do |table|
+  %w{category_test_models category_translatable_test_models category_test_model_bases empty_test_model_bases}.each do |table|
     if ActiveRecord::Base.connection.tables.include?(table)
       ActiveRecord::Base.connection.drop_table table
     end
   end
   ActiveRecord::Base.connection.create_table :category_translatable_test_models, :translatable => true do |t|
+    t.string :field
+  end
+
+  ActiveRecord::Base.connection.create_table :category_test_model_bases, :translatable => true do |t|
+    t.string :field
+  end
+
+  ActiveRecord::Base.connection.create_table :empty_test_model_bases, :translatable => true do |t|
     t.string :field
   end
 
@@ -19,11 +27,23 @@ def create_categories_test_model_backend
   %w{CategoryTestModel CategoryTranslatableTestModel}.each do |klass|
     Object.const_set(klass, Class.new(ActiveRecord::Base)) unless Object.const_defined? klass
   end
+  Object.const_set("CategoryTestModelBase", Class.new(ActiveRecord::Base)) unless Object.const_defined? "CategoryTestModelBase"
+  Object.const_set("CategoryTestModelSubOne", Class.new(CategoryTestModelBase)) unless Object.const_defined? "CategoryTestModelSubOne"
+  Object.const_set("CategoryTestModelSubTwo", Class.new(CategoryTestModelSubOne)) unless Object.const_defined? "CategoryTestModelSubTwo"
 
+  Object.const_set("EmptyTestModelBase", Class.new(ActiveRecord::Base)) unless Object.const_defined? "EmptyTestModelBase"
+  Object.const_set("EmptyTestModelSubOne", Class.new(EmptyTestModelBase)) unless Object.const_defined? "EmptyTestModelSubOne"
+  Object.const_set("EmptyTestModelSubTwo", Class.new(EmptyTestModelSubOne)) unless Object.const_defined? "EmptyTestModelSubTwo"
 end
 
 def categorize attr, options = {}
   CategoryTestModel.class_eval do
+    categorized_with attr, options
+  end
+end
+
+def categorize_base attr, options = {}
+  CategoryTestModelBase.class_eval do
     categorized_with attr, options
   end
 end

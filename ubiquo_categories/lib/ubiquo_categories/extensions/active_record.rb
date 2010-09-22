@@ -150,11 +150,19 @@ module UbiquoCategories
           uhook_categorized_with field, options
           
         end
+
+        def categorized_with_options_lookup
+          return {} if self.name == ::ActiveRecord::Base.name 
+          @categorized_with_options = {} if @categorized_with_options.blank?
+          return @categorized_with_options.reverse_merge(self.superclass.categorized_with_options_lookup)
+        end
         
         # Returns the associated options for the categorized +field+
         def categorize_options(field)
+          categorized_with_options = self.categorized_with_options_lookup
+          raise UbiquoCategories::CategorizationNotFoundError if categorized_with_options.blank?
           association_name = field.to_s.pluralize.to_sym
-          @categorized_with_options[association_name]
+          categorized_with_options[association_name]
         end
 
         def category_conditions_for field, category_names
