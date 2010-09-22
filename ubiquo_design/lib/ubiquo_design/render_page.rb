@@ -37,7 +37,7 @@ module UbiquoDesign
         children = if root.automatic_menu
                      locals, render_options = run_generator(root.automatic_menu.generator)
                      locals[:menu_items]
-                   else                        
+                   else
                      root.active_children
                    end
         [root, children, is_current_root]
@@ -45,8 +45,8 @@ module UbiquoDesign
     end
 
     def template_directory
-      (RAILS_ENV == 'test')? File.join(ActiveSupport::TestCase.fixture_path, "templates") : 
-        "#{RAILS_ROOT}/app/templates"
+      Rails.env.test? ? File.join(ActiveSupport::TestCase.fixture_path, "templates") :
+        Rails.root.join('app/templates').to_s
     end
 
     def render_template_file(key, layout = 'main')
