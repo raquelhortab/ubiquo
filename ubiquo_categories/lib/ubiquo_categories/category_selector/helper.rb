@@ -41,7 +41,7 @@ module UbiquoCategories
       end
 
       def convert_to_tree(set)
-        returning(map = {}) do
+        (map = {}).tap do
           set.each do |element|
             (map[element.parent_id] ||= []) << element
           end
