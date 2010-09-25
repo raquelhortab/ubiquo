@@ -1,7 +1,7 @@
 en:
   ubiquo:
     category:
-      title: "Categories for \"{{name}}\""
+      title: "Categories for \"%{name}\""
       created: "Category created succesfully"
       create_error: "Error creating category"
       edited: "Category updated succesfully"
