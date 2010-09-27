@@ -259,7 +259,7 @@ ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
 add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
 
 <% if @opts[:template] == :edge && @opts[:profile] == :complete %>
-  add_plugins(['ubiquo_categories'], :branch => nil)
+  add_plugins(['ubiquo_categories'], :branch => nil, :devel => <%= @opts[:devel] ? true : false %>)
 <% end %>
 
 rake("rails:update")
