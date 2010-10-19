@@ -5,7 +5,7 @@ module UbiquoCategories
     autoload :I18n, "ubiquo_categories/connectors/i18n"
     
     def self.load!
-      "UbiquoCategories::Connectors::#{Ubiquo::Config.context(:ubiquo_categories).get(:connector).to_s.classify}".constantize.load!
+      "UbiquoCategories::Connectors::#{Ubiquo::Config.context(:ubiquo_categories).get(:connector).to_s.camelize}".constantize.load!
     end
   end
 end
