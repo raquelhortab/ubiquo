@@ -16,7 +16,7 @@
       <%= form.select(
             :locale, 
             [[t("ubiquo.auth.default_locale"), nil]] + Ubiquo.supported_locales.map{|locale| 
-              [t("ubiquo.auth.locale_name", :locale => locale), locale]
+              [t("ubiquo.auth.locale_name", :locale => locale), locale.to_s]
             }
             ) %>
     </p>
