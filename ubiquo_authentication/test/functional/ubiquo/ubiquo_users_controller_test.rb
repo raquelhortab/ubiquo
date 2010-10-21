@@ -98,5 +98,47 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
     put :update, :id => ubiquo_users(:josep).id, :ubiquo_user => {:role_ids => Role.find(:all).map(&:id)}
     assert_equal ubiquo_users(:josep).roles.size, Role.count
   end
-  
+
+  def test_should_not_create_admin_if_no_admin
+    user = ubiquo_users(:josep)
+    set_user_management user
+    login_as user
+
+    assert_no_difference('UbiquoUser.count') do
+      post :create,  :ubiquo_user => { :name => "name", :surname => "surname", :login => 'ubiquo_userlogin', :email => "test@test.com", :password => '123456', :password_confirmation => '123456', :is_admin => true, :is_active => false}
+    end
+  end
+
+  def test_should_not_update_admin_if_no_admin
+    user = ubiquo_users(:josep)
+    set_user_management user
+    login_as user
+
+    put :update, :id => ubiquo_users(:inactive).id, :ubiquo_user => {:is_admin => true, :is_active => true}
+
+    m_user = UbiquoUser.find_by_login('inactive')
+    assert m_user.is_admin == false
+    assert m_user.is_active == false
+  end
+ 
+  def test_should_not_destroy_admin_if_no_admin
+    user = ubiquo_users(:josep)
+    set_user_management user
+    login_as user
+
+    assert_no_difference('UbiquoUser.count') do
+      delete :destroy, :id => ubiquo_users(:admin).id
+    end
+    
+  end
+
+  protected
+
+  def set_user_management user
+    r = Role.create(:name => 'user_management')
+    r.permissions << Permission.create(:name => 'Ubiquo User management', :key => 'ubiquo_user_management')
+    r.save
+    user.roles << r
+    user.save
+  end
 end

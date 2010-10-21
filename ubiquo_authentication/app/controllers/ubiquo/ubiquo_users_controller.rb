@@ -48,8 +48,10 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
   def create
     @ubiquo_user = UbiquoUser.new(params[:ubiquo_user])
 
+    is_admin_to_allow_admin = @ubiquo_user.is_admin ? current_ubiquo_user.is_admin : true
+    
     respond_to do |format|
-      if @ubiquo_user.save
+      if is_admin_to_allow_admin && @ubiquo_user.save
         if params[:send_confirm_creation]
           UbiquoUsersNotifier.deliver_confirm_creation(
             @ubiquo_user, 
@@ -76,8 +78,9 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
       params.delete(atr.to_sym) if params[atr.to_sym].blank?
     end
 
+    is_admin_to_allow_admin = params[:ubiquo_user][:is_admin].present? ? current_ubiquo_user.is_admin : true
     respond_to do |format|
-      if @ubiquo_user.update_attributes(params[:ubiquo_user])
+      if is_admin_to_allow_admin && @ubiquo_user.update_attributes(params[:ubiquo_user])
         flash[:notice] = t("ubiquo.auth.user_edited")
         format.html { redirect_to(ubiquo_ubiquo_users_path) }
         format.xml  { head :ok }
@@ -93,7 +96,8 @@ class Ubiquo::UbiquoUsersController < UbiquoAreaController
   # DELETE /ubiquo_users/1.xml
   def destroy
     @ubiquo_user = UbiquoUser.find(params[:id])
-    if @ubiquo_user.destroy
+    is_admin_to_allow_admin = @ubiquo_user.is_admin ? current_ubiquo_user.is_admin : true
+    if is_admin_to_allow_admin && @ubiquo_user.destroy
       flash[:notice] = t("ubiquo.auth.user_removed")
     else
       flash[:error] = t("ubiquo.auth.user_remove_error")
