@@ -37,6 +37,13 @@ class Ubiquo::<%= controller_class_name %>ControllerTest < ActionController::Tes
     assert_response :success
   end
 
+  <%- if options[:translatable] -%>
+  test "should redirect to correct locale" do
+    get :edit, :id => <%= table_name %>(:one).id, :locale => 'other'
+    assert_redirected_to ubiquo_<%= table_name %>_url
+  end
+
+  <%- end -%>
   test "should update <%= file_name %>" do
     put :update, :id => <%= table_name %>(:one).id, :<%= file_name %> => <%= file_name %>_attributes
     assert_redirected_to ubiquo_<%= table_name %>_url
