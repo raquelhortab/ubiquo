@@ -63,10 +63,10 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       assert_equal set.categories.first, set.uhook_select_fittest(set.categories.first, :locale => 'ca')
     end
 
-    test 'uhook_select_fittest should return nil if no correct locale' do
+    test 'uhook_select_fittest should return the available category if no correct locale' do
       set = create_category_set
       set.categories << ['category', {:locale => 'ca'}]
-      assert_nil set.uhook_select_fittest(set.categories.first, :locale => 'jp')
+      assert_equal set.categories.first, set.uhook_select_fittest(set.categories.first, :locale => 'jp')
     end
 
     test 'uhook_select_fittest should return in correct locale' do

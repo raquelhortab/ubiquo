@@ -88,7 +88,7 @@ module UbiquoCategories
           
           # Returns the fittest category in the requested locale
           def uhook_select_fittest category, options = {}
-            options[:locale] ? category.in_locale(options[:locale]) : category
+            options[:locale] ? (category.in_locale(options[:locale]) || category) : category
           end
         end
 
