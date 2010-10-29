@@ -12,6 +12,7 @@ ca:
       empty_list_title: "Categories de pàgina"
       empty_list_message: "Aquí pots veure i modificar les categories de pàgina. Gràcies a aquestes podràs agrupar pàgines que comparteixen part de la URL"
     design:
+      metatags: "Metatags"
       design: "Maquetació"
       design_title: "Anar a maquetació de pàgines"
       sitemap: "Mapa web"
