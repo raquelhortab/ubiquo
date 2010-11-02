@@ -8,12 +8,12 @@
 
 <%%= render :partial => "shared/ubiquo/feedback" %>
 
-<%%= <%= singular_name %>_filters_info(params) %>
+<%%= show_filter_info %>
 
 <%%= <%= singular_name %>_list(@<%= plural_name%>, @<%= plural_name%>_pages) %>
 
 <%% content_for :sidebar do %>
-  <%%= <%= singular_name %>_filters %>
+  <%%= show_filters %>
 
   <h3><%%= t("ubiquo.help") %></h3>
   <p><%%= t("ubiquo.<%= singular_name %>.index.help_message") %></p>
