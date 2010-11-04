@@ -1,30 +1,16 @@
 module Ubiquo::JobsHelper
-  def job_filters_info(params)
-    string_filter = filter_info(:string, params,
-      :field => :filter_text,
-      :caption => t('ubiquo.jobs.text'))
-    date_filter = filter_info(:date, params,
-      :caption => t('ubiquo.jobs.creation_date'),
-      :field => [:filter_date_start, :filter_date_end])
 
-    build_filter_info(string_filter, date_filter)
+  def job_filters
+    filters_for 'UbiquoJobs::Jobs::ActiveJob' do |f|
+      f.text :caption => t('ubiquo.jobs.text')
+      f.date :caption => t('ubiquo.jobs.creation_date')
+    end
   end
 
-  def job_filters(url_for_options = {})
-    string_filter = render_filter(:string, url_for_options,
-      :field => :filter_text,
-      :caption => t('ubiquo.jobs.text'))
-    date_filter = render_filter(:date, url_for_options,
-      :caption => t('ubiquo.jobs.creation_date'),
-      :field => [:filter_date_start, :filter_date_end])
-        
-    [string_filter, date_filter]
-  end
-  
   def short_date(date)
     date.in_time_zone('Madrid').strftime('%d/%m/%Y %H:%M') if date
   end
-  
+
   def state_name(state)
     case state
     when UbiquoJobs::Jobs::Base::STATES[:waiting]
@@ -50,7 +36,7 @@ module Ubiquo::JobsHelper
       t('ubiquo.jobs.priority.low')
     end
   end
-  
+
   def job_actions(job, context = 'index')
     remove_action = link_to(t('ubiquo.jobs.remove'), ubiquo_job_path(job.id), :confirm => t('ubiquo.jobs.remove_confirmation'), :method => :delete)
     repeat_action  = link_to(t('ubiquo.jobs.repeat'), repeat_ubiquo_job_path(job.id), :confirm => t('ubiquo.jobs.repeat_confirmation'), :method => :put)

@@ -5,17 +5,17 @@
 <%= render :partial => "shared/ubiquo/feedback" %>
 
 <div style="clear:both"></div>
-<%= job_filters_info(params) %>
+<%= show_filter_info %>
 
 <%= stylesheet_link_tag 'ubiquo_jobs.css' %>
-<%= render :partial => "shared/ubiquo/lists/standard", 
+<%= render :partial => "shared/ubiquo/lists/standard",
            :locals => {
              :name => UbiquoJobs.manager.job_class.to_s,
              :headers => [:name, :state, :planified_at, :created_at] +
                (permit?({:admin => true}) ? [:priority] : []),
              :rows => @jobs.collect { |job|
                {
-                 :id => job.id, 
+                 :id => job.id,
                  :columns => [
                    job.name,
                    state_name(job.state),
@@ -29,7 +29,7 @@
 
 
 <% content_for :sidebar do %>
-  <%= job_filters %>
+  <%= show_filters %>
 
   <%= help_block_sidebar(t("ubiquo.helpmsg.jobs.index")) %>
 <% end %>
