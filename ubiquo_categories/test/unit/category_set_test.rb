@@ -110,7 +110,7 @@ class CategorySetTest < ActiveSupport::TestCase
       set.categories << [[' ']]
       set.categories << '                 '
     end
-  end  
+  end
 
   def test_select_fittest_with_string
     set = create_category_set

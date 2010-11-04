@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/../../test_helper"
 class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
 
   Base = UbiquoCategories::Connectors::Base
-  
+
   test 'should_load_correct_modules' do
     ::Category.expects(:include).with(Base::Category)
     ::CategorySet.expects(:include).with(Base::CategorySet)
@@ -11,17 +11,18 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     ::ActiveRecord::Migration.expects(:include).with(Base::Migration)
     ::ActiveRecord::Base.expects(:include).with(Base::ActiveRecord::Base)
     ::Ubiquo::Extensions::UbiquoAreaController.expects(:include).with(Base::UbiquoHelpers)
+    ::UbiquoCategories::Extensions::FilterHelpers::CategoryFilter.expects(:include).with(Base::UbiquoHelpers::Helper)
     Base.expects(:set_current_connector).with(Base)
     Base.load!
   end
-  
+
   test 'should_set_current_connector_on_load' do
     save_current_categories_connector
     Base.load!
     assert_equal Base, Base.current_connector
     reload_old_categories_connector
   end
-  
+
   test_each_categories_connector do
 
     test 'uhook_create_categories_table_should_create_table' do
@@ -190,17 +191,19 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
       end
     end
   end
-  
+
   # Define module mocks for testing
   class Base
     module Category; end
     module CategorySet; end
     module UbiquoCategoriesController; end
-    module UbiquoHelpers; end
+    module UbiquoHelpers
+      module Helper; end
+    end
     module Migration; end
     module ActiveRecord
       module Base; end
     end
   end
-    
+
 end

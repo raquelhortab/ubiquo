@@ -1,10 +1,10 @@
+# -*- coding: undecided -*-
 require File.dirname(__FILE__) + "/../../test_helper.rb"
+require 'ubiquo_categories/extensions/filter_helpers/category_filter'
 
-class UbiquoCategories::Extensions::HelpersTest < ActionView::TestCase
+class CategoryFilterTest < Ubiquo::Extensions::FilterHelpers::UbiquoFilterTestCase
 
-  include Ubiquo::Extensions::FiltersHelper
   include UbiquoCategories::Extensions::Helpers
-  ActionView::Base.send :include, Ubiquo::Extensions::FiltersHelper
 
   connector = UbiquoCategories::Connectors::Base.current_connector
   ActionView::TestCase.send(:include, connector::UbiquoHelpers::Helper)
@@ -13,42 +13,49 @@ class UbiquoCategories::Extensions::HelpersTest < ActionView::TestCase
     self.stubs(:params).returns({})
     self.stubs(:current_locale).returns('ca')
     @set = create_set :genres
+   @filter = CategoryFilter.new(@model, @context)
   end
 
   def test_render_category_filter
     assert_nothing_raised do
-      assert render_category_filter('url', {:set => :genres})
+     assert @filter.configure(:genres, :url_for_options => 'url')
     end
   end
 
   def test_render_category_filter_fails_when_set_does_not_exist
     assert_raise UbiquoCategories::SetNotFoundError do
-      render_category_filter 'url', {:set => :unknown}
+      @filter.configure(:unknown, :url_for_options => 'url')
+      @filter.render
     end
   end
 
   def test_render_category_filter_loads_categories_from_set
-    ActionView::Base.any_instance.stubs(:link_to)
     CategorySet.expects(:find_by_key).with('genres').returns(@set)
     CategorySet.any_instance.expects(:categories).returns(Category.all)
-    render_category_filter({:aa => 'a'}, {:set => :genres})
+    @filter.configure(:genres, :url_for_options => { :aa => 'a' })
+    assert_match /MyString/, @filter.render
   end
 
   def test_render_category_filter_prints_categories_from_set
-    ActionView::Base.any_instance.stubs(:link_to)
     @set.categories << ['Male', 'Female']
-    render_category_filter({:controller => 'a', :action => 'a'}, {:set => :genres})
-  end
-
-  def test_filter_category_info
-    assert_nothing_raised do
-      filter_category_info('url', {:set => :genres})
+    @filter.configure(:genres, :url_for_options => { :controller => 'a', :action => 'a'})
+    rendered_filter = @filter.render
+    @set.categories do |category|
+      assert_match /#{category}/, rendered_filter
     end
   end
 
-  def test_filter_category_info_fails_when_set_does_not_exist
+  def test_filter_category_message
+    assert_nothing_raised do
+      @filter.configure(:genres, :url_for_options => 'url')
+      @filter.message
+    end
+  end
+
+  def test_filter_category_message_fails_when_set_does_not_exist
     assert_raise UbiquoCategories::SetNotFoundError do
-      filter_category_info 'url', {:set => :unknown}
+      @filter.configure(:unknown, :url_for_options => 'url')
+      @filter.message
     end
   end
 
@@ -57,11 +64,10 @@ class UbiquoCategories::Extensions::HelpersTest < ActionView::TestCase
     @set.categories << ['Male', 'Female']
     categories = @set.categories
     CategorySet.any_instance.expects(:categories).returns(categories)
-    
-    self.expects(:filter_info).with { |*args|
-      args.extract_options![:collection] == categories
-    }
-    filter_category_info 'url', {:set => :genres}
+
+    @context.params.merge!({'filter_genres' => 'Male'})
+    @filter.configure(:genres, :url_for_options => 'url')
+    assert_match /Male/, @filter.message.first
   end
 
 end

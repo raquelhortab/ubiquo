@@ -1,7 +1,7 @@
 module UbiquoCategories
   module Connectors
     class Base
-      
+
       # loads this connector. It's called if that connector is used
       def self.load!
         ::Category.reset_column_information
@@ -16,13 +16,14 @@ module UbiquoCategories
         ::Ubiquo::Extensions::UbiquoAreaController.send(:include, self::UbiquoHelpers)
         ::Ubiquo::CategoriesController.send(:include, self::UbiquoCategoriesController)
         ::ActiveRecord::Migration.send(:include, self::Migration)
+        ::UbiquoCategories::Extensions::FilterHelpers::CategoryFilter.send(:include, self::UbiquoHelpers::Helper)
         UbiquoCategories::Connectors::Base.set_current_connector self
       end
-      
+
       def self.current_connector
         @current_connector
       end
-      
+
       def self.set_current_connector klass
         @current_connector = klass
       end
@@ -49,9 +50,9 @@ module UbiquoCategories
           end
         end
       end
-      
+
       # Registers a uhook call and keeps a registry of this
-      # 
+      #
       #   parameters: List of parameters that will be recorded along with the call
       #   replace_block: Optional block that will be called for each previous call to this function.
       #                  If it returns true, the previous call will be deleted
@@ -66,7 +67,7 @@ module UbiquoCategories
         (uhook_calls[$1.to_sym] ||= []) << parameters
         Base.instance_variable_set('@uhook_calls', uhook_calls)
       end
-      
+
       # Returns the list of calls for this method
       def self.get_uhook_calls method
         Array((Base.instance_variable_get('@uhook_calls')||{})[method.to_sym])
@@ -98,4 +99,4 @@ module UbiquoCategories
     class ConnectorRequirementError < StandardError; end
 
   end
-end 
+end

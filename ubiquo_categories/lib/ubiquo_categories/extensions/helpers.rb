@@ -1,7 +1,7 @@
 module UbiquoCategories
   module Extensions
     module Helpers
-      
+
       # Adds a tab for the category set section
       def category_sets_tab(navtab)
         navtab.add_tab do |tab|
