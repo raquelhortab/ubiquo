@@ -118,6 +118,11 @@ module UbiquoCategories
           :current_values => object.send(key).to_json(:only => [:id, :name]),
           :style => options[:autocomplete_style] || "tag"
         }
+
+        obj_size = object.class.instance_variable_get(:@categorized_with_options)[key][:size] || :many
+
+        size = (obj_size == :many ? 'null' : obj_size.to_i)
+
         js_code =<<-JS
           document.observe('dom:loaded', function() {
             var autocomplete = new AutoCompleteSelector(
@@ -126,7 +131,8 @@ module UbiquoCategories
               '#{key}',
               #{autocomplete_options[:current_values]},
               '#{autocomplete_options[:style]}',
-              #{set.is_editable?}
+              #{set.is_editable?},
+              #{size}
             )
           });
         JS

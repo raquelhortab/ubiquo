@@ -57,13 +57,13 @@ document.observe("dom:loaded", function() {
 });
 
 var AutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection, style, editable) {
+  initialize: function(url, object_name, key, initial_collection, style, editable, token_limit) {
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
     this.searchDelay = 500;
     this.minChars = 1;
-    this.tokenLimit = null;
+    this.tokenLimit = token_limit;
     this.jsonContainer = null,
     this.queryParam = 'name';
     this.onResult = null;
@@ -138,7 +138,7 @@ var AutoCompleteSelector = Class.create({
     var klass = this;
     var input_box = new Element('input', {type: 'text', style: 'outline:none; border:0;min-width:0'});
     input_box.observe('focus', function(event) {
-      if (this.tokenLimit == null || this.tokenLimit != this.token_count) {
+      if (this.tokenLimit == null || this.tokenLimit <= this.token_count) {
         this.selected_dropdown_item = null;
         this.show_dropdown_hint();
         event.stop();
@@ -390,7 +390,7 @@ var AutoCompleteSelector = Class.create({
     var new_hidden_input = new Element('input', {type: 'hidden', name: this.object_name+"["+this.key+"][]", id: this.object_name+"_"+this.key+"_"+id, value: value});
     this.hidden_input.insert({after: new_hidden_input});
     this.token_count++;
-    if(this.tokenLimit != null && this.tokenLimit >= this.token_count) {
+    if(this.tokenLimit != null && this.tokenLimit <= this.token_count) {
       this.input_box.hide();
       this.hide_dropdown();
     }
