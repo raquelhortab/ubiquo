@@ -3,7 +3,10 @@ module Ubiquo::JobsHelper
   def job_filters
     filters_for 'UbiquoJobs::Jobs::ActiveJob' do |f|
       f.text :caption => t('ubiquo.jobs.text')
-      f.date :caption => t('ubiquo.jobs.creation_date')
+      f.date(
+        :field   => [:filter_date_start, :filter_date_end],
+        :caption => t('ubiquo.jobs.creation_date')
+      )
     end
   end
 
