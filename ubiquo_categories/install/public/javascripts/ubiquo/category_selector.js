@@ -61,7 +61,7 @@ var AutoCompleteSelector = Class.create({
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
-    this.searchDelay = 1500;
+    this.searchDelay = 500;
     this.minChars = 1;
     this.tokenLimit = null;
     this.jsonContainer = null,
@@ -175,13 +175,22 @@ var AutoCompleteSelector = Class.create({
             }
           } else {
             var dropdown_item = null;
-            if(event.keyCode == klass.KEYS.DOWN || event.keyCode == klass.KEYS.RIGHT) {
-              dropdown_item = $(klass.selected_dropdown_item).next(0);
+            var first_li = $(klass.dropdown).select("li").first();
+            if(klass.selected_dropdown_item){
+              if(event.keyCode == klass.KEYS.DOWN || event.keyCode == klass.KEYS.RIGHT) {
+                dropdown_item = $(klass.selected_dropdown_item).next(0);
+              } else {
+                if($(klass.selected_dropdown_item) == first_li){
+                  klass.deselect_dropdown_item(first_li);
+                } else {
+                  dropdown_item = $(klass.selected_dropdown_item).previous(0);
+                }
+              }
+              if(dropdown_item) {
+                klass.select_dropdown_item(dropdown_item);
+              }
             } else {
-              dropdown_item = $(klass.selected_dropdown_item).previous(0);
-            }
-            if(dropdown_item) {
-              klass.select_dropdown_item(dropdown_item);
+              klass.select_dropdown_item(first_li);
             }
             return false;
           }
@@ -198,6 +207,7 @@ var AutoCompleteSelector = Class.create({
           return false;
         } else if($(this).value.length == 1) {
           klass.hide_dropdown();
+          klass.selected_dropdown_item = null;
         } else {
           // set a timeout just long enough to let this function finish.
           setTimeout(function(){klass.do_search(false);}, 1);
@@ -220,6 +230,7 @@ var AutoCompleteSelector = Class.create({
             break;
           case klass.KEYS.ESC:
             klass.hide_dropdown();
+            klass.selected_dropdown_item = null;
             event.stop();
             return true;
           default:
@@ -518,9 +529,9 @@ var AutoCompleteSelector = Class.create({
             this_li.addClassName(this.CLASSES.dropdownItem2);
           }
 
-          if(i == 0){
-            this.select_dropdown_item(this_li);
-          }
+          // if(i == 0){
+          //   this.select_dropdown_item(this_li);
+          // }
           this_li.writeAttribute('alt', $H(results[i]).toJSON());
         }
       }
