@@ -1,86 +1,33 @@
 module Ubiquo::ActivityInfosHelper
-  def activity_info_filters_info(params)
-    filters = []
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_date_filter_enabled)
-      filters << filter_info(:date, params,
-             :caption => t("ubiquo.activity_info.date"),
-             :field => [:filter_date_start, :filter_date_end])
-    end    
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
-      filters << filter_info(:links_or_select, params,
-             :field => :filter_user,
-             :name_field => :full_name,
-             :id_field => :ubiquo_user_id,
-             :collection => @users,
-             :caption => ActivityInfo.human_attribute_name(:user))
-    end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)
-      filters << filter_info(:links, params,
-             :field => :filter_controller,
-             :name_field => :controller,
-             :id_field => :controller,
-             :collection => @controllers,
-             :caption => t("ubiquo.activity_info.controller"))
-    end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_action_filter_enabled)
-      filters << filter_info(:links, params,
-             :field => :filter_action,
-             :name_field => :action,
-             :id_field => :action,
-             :collection => @actions,
-             :caption => t("ubiquo.activity_info.action"))      
-    end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_status_filter_enabled)
-      filters << filter_info(:links, params,
-             :field => :filter_status,
-             :name_field => :status,
-             :id_field => :status,
-             :collection => @statuses,
-             :caption => t("ubiquo.activity_info.status"))    
-    end
-    build_filter_info(*filters)
-  end
 
-  def activity_info_filters(url_for_options = {})
-    filters = []
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_date_filter_enabled)
-      filters << render_filter(:date, url_for_options,
-          :caption => t("ubiquo.activity_info.date"),
-          :field => [:filter_date_start, :filter_date_end])
+  def activity_info_filters
+    filters_for 'ActivityInfo' do |f|
+      f.date(
+        :caption => t('ubiquo.activity_info.date'),
+        :field => [:filter_date_start, :filter_date_end]
+      ) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_date_filter_enabled)
+
+      f.links_or_select(:user, @users, {
+        :name_field => :full_name,
+        :id_field   => :ubiquo_user_id,
+        :caption    => ActivityInfo.human_attribute_name(:user)
+      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
+
+      f.link(:controller, @controllers, {
+        :id_field => :key,
+        :caption  => t('ubiquo.activity_info.controller')
+      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)
+
+      f.link(:action, @actions, {
+        :id_field => :key,
+        :caption  => t('ubiquo.activity_info.action')
+      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_action_filter_enabled)
+
+      f.link(:status, @statuses, {
+        :id_field => :key,
+        :caption  => t('ubiquo.activity_info.status')
+      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_status_filter_enabled)
     end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
-      filters << render_filter(:links_or_select, url_for_options,
-          :field => :filter_user,
-          :id_field => :ubiquo_user_id,
-          :name_field => :full_name,
-          :collection => @users,
-          :caption => ActivityInfo.human_attribute_name(:user))
-    end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)    
-      filters << render_filter(:links, url_for_options,
-          :field => :filter_controller,
-          :id_field => :key,
-          :name_field => :name,
-          :collection => @controllers,
-          :caption => t("ubiquo.activity_info.controller"))
-    end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_action_filter_enabled)
-      filters << render_filter(:links, url_for_options,
-          :field => :filter_action,
-          :id_field => :key,
-          :name_field => :name,
-          :collection => @actions,
-          :caption => t("ubiquo.activity_info.action"))
-    end
-    if Ubiquo::Config.context(:ubiquo_activity).get(:activities_status_filter_enabled)
-      filters << render_filter(:links, url_for_options,
-          :field => :filter_status,
-          :id_field => :key,
-          :name_field => :name,
-          :collection => @statuses,
-          :caption => t("ubiquo.activity_info.status"))
-    end        
-    filters.join
   end
 
   def activity_info_list(collection, pages, options = {})
@@ -110,7 +57,7 @@ module Ubiquo::ActivityInfosHelper
         :pages => pages
       })
   end
-    
+
   def activity_info_box(activity)
     custom_partial = Rails.root.join("app", "views", activity.controller,
                                      "_activity_#{activity.action}.html.erb")
@@ -121,12 +68,12 @@ module Ubiquo::ActivityInfosHelper
     end
     render :partial => partial, :locals => { :activity => activity }
   end
-  
+
   private
-    
+
   def activity_info_actions(activity_info, options = {})
     actions = []
-    actions << link_to(t("ubiquo.remove"), [:ubiquo, activity_info], 
+    actions << link_to(t("ubiquo.remove"), [:ubiquo, activity_info],
                        :confirm => t("ubiquo.activity_info.confirm_removal"),
                        :method => :delete)
     if activity_info.status != "error" && activity_info.related_object
