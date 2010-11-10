@@ -79,7 +79,7 @@ class CategorySet < ActiveRecord::Base
     when Category
       category
     when String
-      categories.first(:conditions => {:name => category})
+      categories.first(:conditions => ['upper(categories.name) = upper(?)', category])
     end
     uhook_select_fittest category, options unless category.nil?
   end

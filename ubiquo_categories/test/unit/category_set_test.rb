@@ -119,6 +119,13 @@ class CategorySetTest < ActiveSupport::TestCase
     assert_equal category, set.select_fittest('Category')
   end
 
+  def test_select_fittest_with_string_case_insensitive
+    set = create_category_set
+    set.categories << 'Category'
+    category = Category.last
+    assert_equal category, set.select_fittest('cAtEgOrY')
+  end
+  
   def test_select_fittest_with_category
     set = create_category_set
     set.categories << 'Category'
