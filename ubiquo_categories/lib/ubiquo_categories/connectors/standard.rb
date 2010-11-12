@@ -1,7 +1,7 @@
 module UbiquoCategories
   module Connectors
     class Standard < Base
-      
+
 
       module Category
 
@@ -58,14 +58,8 @@ module UbiquoCategories
         end
 
         module Helper
-          # Returns a string with extra filters for categories
-          def uhook_category_filters url_for_options
-            ''
-          end
-
-          # Returns an array with any display information for extra categories filters
-          def uhook_category_filters_info
-            []
+          # Defines additional filters on the received filter set
+          def uhook_category_filters(filter_set)
           end
 
           # Returns content to show in the sidebar when editing an category
@@ -140,12 +134,12 @@ module UbiquoCategories
       end
 
       module Migration
-        
+
         def self.included(klass)
           klass.send(:extend, ClassMethods)
           Standard.register_uhooks klass, ClassMethods
         end
-        
+
         module ClassMethods
           def uhook_create_categories_table
             create_table :categories do |t|
@@ -170,15 +164,15 @@ module UbiquoCategories
           end
 
           module ClassMethods
-            
-            # Adds the +categories+ to the +set+ and returns the categories that 
+
+            # Adds the +categories+ to the +set+ and returns the categories that
             # will be effectively related to +object+
             def uhook_assign_to_set set, categories, object
               set.categories << categories
               categories = Array(categories).reject(&:blank?)
               categories.map{|c| set.select_fittest c}.uniq.compact
             end
-            
+
             # Hook called at the end of a categorized_with call
             def uhook_categorized_with field, options; end
           end
@@ -199,7 +193,7 @@ module UbiquoCategories
           end
         end
       end
-      
+
     end
   end
 end

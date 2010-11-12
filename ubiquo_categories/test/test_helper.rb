@@ -23,7 +23,7 @@ def create_categories_test_model_backend
   ActiveRecord::Base.connection.create_table :category_test_models do |t|
     t.string :field
   end
-  
+
   %w{CategoryTestModel CategoryTranslatableTestModel}.each do |klass|
     Object.const_set(klass, Class.new(ActiveRecord::Base)) unless Object.const_defined? klass
   end
@@ -102,8 +102,7 @@ end
 def mock_categories_helper
   # we stub well-known usable helper methods along with particular connector added methods
   stubs = {
-    :params => {}, :t => '', :filter_info => '',
-    :render_filter => '', :link_to => ''
+    :params => {}, :t => '', :filter_info => '', :link_to => ''
   }.merge(UbiquoCategories::Connectors::Base.current_connector.mock_helper_stubs || {})
 
   stubs.each_pair do |method, retvalue|

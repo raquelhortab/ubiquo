@@ -72,7 +72,7 @@ module UbiquoCategories
         end
 
       end
-      
+
       module CategorySet
 
         def self.included(klass)
@@ -85,7 +85,7 @@ module UbiquoCategories
           def uhook_category_identifier_for_name category_name
             self.select_fittest(category_name).content_id rescue 0
           end
-          
+
           # Returns the fittest category in the requested locale
           def uhook_select_fittest category, options = {}
             options[:locale] ? (category.in_locale(options[:locale]) || category) : category
@@ -102,24 +102,9 @@ module UbiquoCategories
         end
 
         module Helper
-          # Returns a string with extra filters for categories
-          def uhook_category_filters url_for_options
-            render_filter(:links, url_for_options,
-              :caption => ::Category.human_attribute_name("locale"),
-              :field => :filter_locale,
-              :collection => Locale.active,
-              :id_field => :iso_code,
-              :name_field => :native_name
-            )
-          end
 
-          # Returns an array with any display information for extra categories filters
-          def uhook_category_filters_info
-            [filter_info(
-              :string, params,
-              :field => :filter_locale,
-              :caption => ::Category.human_attribute_name("locale"))
-            ]
+          def uhook_category_filters(filter_set)
+            filter_set.locale
           end
 
           # Returns content to show in the sidebar when editing a category
@@ -234,12 +219,12 @@ module UbiquoCategories
       end
 
       module Migration
-        
+
         def self.included(klass)
           klass.send(:extend, ClassMethods)
           I18n.register_uhooks klass, ClassMethods
         end
-        
+
         module ClassMethods
           def uhook_create_categories_table
             create_table :categories, :translatable => true do |t|
@@ -291,7 +276,7 @@ module UbiquoCategories
 
         end
       end
-      
+
       module UbiquoHelpers
         def self.included(klass)
           klass.append_helper(Helper)

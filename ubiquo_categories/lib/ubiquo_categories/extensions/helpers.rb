@@ -13,26 +13,6 @@ module UbiquoCategories
         end if ubiquo_config_call(:categories_permit, {:context => :ubiquo_categories})
       end
 
-      def render_category_filter(url_for_options, options = {})
-        render_filter :links_or_select, url_for_options, {
-          :collection => categories_for_select(options[:set]),
-          :caption => options[:caption] || t("ubiquo.category_sets.#{options[:set]}"),
-          :field => "filter_#{options[:set].to_s.pluralize}",
-          :id_field => :name,
-          :name_field => :name
-        }.merge(options)
-      end
-
-      def filter_category_info(params, options = {})
-        filter_info :links_or_select, params, {
-          :collection => categories_for_select(options[:set]),
-          :caption => options[:caption] || t("ubiquo.category_sets.#{options[:set]}"),
-          :field => "filter_#{options[:set].to_s.pluralize}",
-          :id_field => :name,
-          :name_field => :name
-        }.merge(options)
-      end
-
       protected
 
       # Prepares a collection

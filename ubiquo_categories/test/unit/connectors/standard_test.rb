@@ -1,14 +1,14 @@
 require File.dirname(__FILE__) + "/../../test_helper"
 
 class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
-  
+
   Standard = UbiquoCategories::Connectors::Standard
 
   def setup
     save_current_categories_connector
     Standard.load!
   end
-  
+
   def teardown
     reload_old_categories_connector
   end
@@ -38,7 +38,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
       set.uhook_category_identifier_for_name(set.categories.first.name)
     )
   end
-  
+
   test 'uhook_select_fittest should return the same category' do
     set = create_category_set
     set.categories << 'category'
@@ -90,26 +90,11 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     assert_equal :value, Ubiquo::CategoriesController.new.uhook_destroy_category(Category.new)
   end
 
-  test 'uhook_category_filters_should_return_empty_string' do
+  test 'uhook_category_filters_should_exist' do
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_category_filters
     end
-    assert_equal '', Standard::UbiquoCategoriesController::Helper.uhook_category_filters('')
-  end
-
-  test 'uhook_category_filters_info_should_return_empty_array' do
-    Standard::UbiquoCategoriesController::Helper.module_eval do
-      module_function :uhook_category_filters_info
-    end
-    assert_equal [], Standard::UbiquoCategoriesController::Helper.uhook_category_filters_info
-  end
-
-  test 'uhook_edit_category_sidebar_should_return_empty_string' do
-    mock_categories_helper
-    Standard::UbiquoCategoriesController::Helper.module_eval do
-      module_function :uhook_edit_category_sidebar
-    end
-    assert_equal '', Standard::UbiquoCategoriesController::Helper.uhook_edit_category_sidebar(Category.new)
+    assert_respond_to Standard::UbiquoCategoriesController::Helper, :uhook_category_filters
   end
 
   test 'uhook_new_category_sidebar should return empty string' do
@@ -124,7 +109,7 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     set = create_category_set
     set.categories << 'category'
     category = set.categories.first
-    
+
     mock_categories_helper
     Standard::UbiquoCategoriesController::Helper.module_eval do
       module_function :uhook_category_index_actions

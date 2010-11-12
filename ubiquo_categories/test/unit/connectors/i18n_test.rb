@@ -171,35 +171,15 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       assert_equal :value, Ubiquo::CategoriesController.new.uhook_destroy_category(Category.new)
     end
 
-    test 'uhook_category_filters_should_return_locale_filter' do
-      mock_categories_helper
-      UbiquoCategories::Connectors::Base.current_connector::UbiquoCategoriesController::Helper.expects(:render_filter).at_least_once.with(
-        :links, '',
-        :caption => ::Category.human_attribute_name("locale"),
-        :field => :filter_locale,
-        :collection => Locale.active,
-        :id_field => :iso_code,
-        :name_field => :native_name
-        ).returns('filter')
+    test 'uhook_category_filters_should_add_a_locale_filter' do
+      filter_set = mock()
+      filter_set.expects(:locale).returns(true)
 
       I18n::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_category_filters
       end
 
-      assert !I18n::UbiquoCategoriesController::Helper.uhook_category_filters('').blank?
-    end
-
-    test 'uhook_category_filters_info_should_return_locale_filter_info' do
-      mock_categories_helper
-      UbiquoCategories::Connectors::Base.current_connector::UbiquoCategoriesController::Helper.expects(:filter_info).at_least_once.with(
-        :string, {},
-        :field => :filter_locale,
-        :caption => ::Category.human_attribute_name("locale")
-        )
-      I18n::UbiquoCategoriesController::Helper.module_eval do
-        module_function :uhook_category_filters_info
-      end
-      assert_equal 1, I18n::UbiquoCategoriesController::Helper.uhook_category_filters_info.size
+      assert I18n::UbiquoCategoriesController::Helper.uhook_category_filters(filter_set)
     end
 
     test 'uhook_edit_category_sidebar_should_return_show_translations_links' do

@@ -1,31 +1,19 @@
 module Ubiquo::CategoriesHelper
-  def category_filters_info(params)
-    filters = []
-    filters <<  filter_info(:string, params,
-           :field => :filter_text,
-           :caption => t('ubiquo.filters.text'))
 
-    filters += uhook_category_filters_info
-    build_filter_info(*filters)
-  end
-
-  def category_filters(url_for_options = {})
-    filters = []
-    filters << render_filter(:string, url_for_options,
-        :field => :filter_text,
-        :caption => t('ubiquo.filters.text'))
-        
-    filters << uhook_category_filters(url_for_options)
-    filters.join
+  def category_filters
+    filters_for 'Category' do |f|
+      f.text
+      uhook_category_filters f
+    end
   end
 
   def category_list(collection, pages, options = {})
     render(:partial => "shared/ubiquo/lists/standard", :locals => {
         :name => 'category',
         :headers => [:name, :description],
-        :rows => collection.collect do |category| 
+        :rows => collection.collect do |category|
           {
-            :id => category.id, 
+            :id => category.id,
             :columns => [
               category.name,
               category.description,

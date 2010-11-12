@@ -8,7 +8,7 @@
 
 <%= render :partial => "shared/ubiquo/feedback" %>
 
-<%= category_set_filters_info(params) %>
+<%= show_filter_info %>
 
 <%= category_set_list(
   @category_sets,
@@ -17,7 +17,7 @@
 ) %>
 
 <% content_for :sidebar do %>
-  <%= category_set_filters %>
+  <%= show_filters %>
 
   <h3><%= t("ubiquo.help") %></h3>
   <p><%= t("ubiquo.category_set.index.help_message") %></p>

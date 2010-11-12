@@ -122,20 +122,12 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
       assert_equal :value, Ubiquo::CategoriesController.new.uhook_destroy_category(Category.new)
     end
 
-    test 'uhook_category_filters_should_return_string' do
+    test 'uhook_category_filters_should_exist' do
       mock_categories_helper
       Base.current_connector::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_category_filters
       end
-      assert Base.current_connector::UbiquoCategoriesController::Helper.uhook_category_filters('').is_a?(String)
-    end
-
-    test 'uhook_category_filters_info_should_return_array' do
-      mock_categories_helper
-      Base.current_connector::UbiquoCategoriesController::Helper.module_eval do
-        module_function :uhook_category_filters_info
-      end
-      assert Base.current_connector::UbiquoCategoriesController::Helper.uhook_category_filters_info.is_a?(Array)
+      assert_respond_to Base.current_connector::UbiquoCategoriesController::Helper, :uhook_category_filters
     end
 
     test 'uhook_edit_category_sidebar_should_return_string' do
