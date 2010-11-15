@@ -101,7 +101,11 @@ module UbiquoCategories
             end
 
             define_method 'has_category?' do |category|
-              Array(self).map(&:to_s).include? category.to_s
+              if category.is_a? Category
+                Array(self).include? category
+              else
+                Array(self).map(&:to_s).include? category.to_s
+              end
             end
 
             # Automatically set the required attr_name when creating through the through
