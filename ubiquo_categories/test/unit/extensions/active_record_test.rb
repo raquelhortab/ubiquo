@@ -62,6 +62,24 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert model.cities.is_full?
   end
 
+  def test_category_filter_should_not_return_read_only_instances
+    categorize :cities
+    CategoryTestModel.class_eval do
+      named_scope :city, lambda{|value|
+        category_conditions_for(:cities, value).merge(:order => 'field asc')
+      }
+    end
+
+    c = Category.create(:name => 'city1', :category_set_id => CategorySet.find_by_key('cities').id)
+    model = CategoryTestModel.create(:field => 'name_field')
+    model.cities << c
+    ctm = CategoryTestModel.city('city1').find(:first, :conditions => ['field = ?', 'name_field'])
+    ctm.field = 'name_field_2'
+    assert_nothing_raised do
+      ctm.save
+    end
+  end
+  
   def test_categorized_store_one_string_element
     categorize :city
     model = create_category_model

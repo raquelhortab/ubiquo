@@ -186,6 +186,7 @@ module UbiquoCategories
 
           {
             :conditions => Category.uhook_category_identifier_condition(value, association_name),
+            :readonly => false,
             :joins => categorize_options(field)[:join_sql]
           }
         end
