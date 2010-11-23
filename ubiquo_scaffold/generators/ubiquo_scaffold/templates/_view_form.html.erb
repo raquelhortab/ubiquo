@@ -14,3 +14,34 @@
   </p>
 <% end -%>
 </div>
+
+<%- if options[:belongs_to] || options[:has_many] -%>
+<div class="form_box">
+  <%- if options[:belongs_to] -%>
+    <%- options[:belongs_to].each do |bt| -%>
+      <%%= form.relation_selector :<%= bt %>, :type => :select %> 
+    <%- end -%>
+  <%- end -%>
+  <%- if options[:has_many] %>
+    <%- options[:has_many].each do |bt| -%>
+      <%%= form.relation_selector :<%= bt.pluralize %>, :type => :checkbox %> 
+    <%- end -%>
+  <%- end -%>
+</div>
+<%- end -%>
+
+<%- if options[:media] -%>
+<div class="form_box">
+  <%- options[:media].each do |bt| -%>
+    <%%= media_selector form, :<%= bt %>, :visibility => 'public' %> 
+  <%- end -%>
+</div>
+<%- end -%>
+
+<%- if options[:categorized] -%>
+<div class="form_box">
+  <%- options[:categorized].each do |bt| -%>
+    <%%= form.category_selector :<%= bt %> %> 
+  <%- end -%>
+</div>
+<%- end -%>

@@ -63,5 +63,16 @@ class UbiquoModelGenerator < Rails::Generator::NamedBase
              "Set max versions amount for versionable models") { |v| options[:versions_amount] = v}
       opt.on("--translatable f1,f2...", Array,
         "Creates a translatable model") { |v| options[:translatable] = v}
+
+
+      opt.on("--has_many f1,f2...", Array,
+        "Creates has_many relations between model and f1, f2...") { |v| options[:has_many] = v }
+      opt.on("--belongs_to f1,f2...", Array,
+        "Creates belongs_to relations between model and f1, f2...") { |v| options[:belongs_to] = v }
+      opt.on("--categorized f1,f2...", Array,
+        "Creates category relations with f1, f2...") { |v| options[:categorized] = v }
+      opt.on("--media f1,f2...", Array,
+        "Creates media relations with f1, f2...") { |v| options[:media] = v }
+      
     end
 end
