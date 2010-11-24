@@ -41,7 +41,14 @@ module UbiquoJobs
         STDERR.reopen(new_stderr)
         
         # Call to do the real job work
-        result = do_job_work rescue -1
+        result = begin
+          do_job_work
+        rescue => e
+          # log the caught exception
+          exception_error = e.inspect
+          # return an error result code
+          -1
+        end
 
         # Update state accordingly to the result
         new_state = if result != 0
@@ -50,12 +57,14 @@ module UbiquoJobs
           notify_finished
           STATES[:finished]
         end
+
+        error_log = exception_error || (IO.read(new_stderr.path) rescue "Can't read error log")
         
         # Final properties update
         set_property :ended_at, Time.now.utc
         set_property :state, new_state
         set_property :result_code, result
-        set_property :result_error, (IO.read(new_stderr.path) rescue "Can't read error log")
+        set_property :result_error, error_log
         
         # Reset to the original error out
         STDERR.reopen(orig_stderr)
