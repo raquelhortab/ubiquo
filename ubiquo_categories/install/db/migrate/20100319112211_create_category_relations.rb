@@ -9,6 +9,7 @@ class CreateCategoryRelations < ActiveRecord::Migration
       t.timestamps
 
       t.index :category_id
+      t.index :related_object_type
       t.index [:related_object_id, :related_object_type]
     end
   end
