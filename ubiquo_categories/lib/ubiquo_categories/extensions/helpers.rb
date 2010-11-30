@@ -22,7 +22,9 @@ module UbiquoCategories
 
       def category_set(key)
         key = key.to_s.pluralize
-        CategorySet.find_by_key(key) || raise(SetNotFoundError.new(key))
+        CategorySet.find_by_key(key) ||
+        CategorySet.find_by_key(key.singularize) ||
+        raise(SetNotFoundError.new(key))
       end
 
     end

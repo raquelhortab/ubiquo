@@ -37,7 +37,9 @@ module UbiquoCategories
       protected
 
       def category_set(key)
-        CategorySet.find_by_key(key.to_s) || raise(SetNotFoundError.new(key))
+        CategorySet.find_by_key(key.to_s) ||
+        CategorySet.find_by_key(key.singularize) ||
+        raise(SetNotFoundError.new(key))
       end
 
       def convert_to_tree(set)

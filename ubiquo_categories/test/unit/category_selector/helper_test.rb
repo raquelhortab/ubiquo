@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
-    
+
   def setup
     @set = CategorySet.create(:name => "Tags", :key => "tags")
     @set.categories.build(:name => "Red")
@@ -15,6 +15,26 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     self.expects(:category_selector).with(:post, :tags, {:object => object}, {})
     form_for(:post, object, :url => '') do |f|
       f.category_selector :tags
+    end
+  end
+
+  def test_category_selector_in_form_object_with_a_singular_category_set_key
+    @set = CategorySet.create(:name => "Section", :key => "section")
+    @set.categories.build(:name => "one")
+    @set.categories.build(:name => "two")
+    @set.save
+
+    categorize :section
+
+    form_for(:post, CategoryTestModel.new, :url => '') do |f|
+      concat f.category_selector(:section, :type => 'checkbox')
+      concat f.category_selector(:section, :type => 'select')
+    end
+
+    doc = HTML::Document.new(output_buffer)
+    assert_select doc.root, 'form' do
+      assert_select 'input[type=checkbox]'
+      assert_select 'select'
     end
   end
 
@@ -42,20 +62,20 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
         concat f.category_selector(:using_from)
       end
     end
-    
+
   end
 
-  
+
   def test_category_selector_should_be_autocomplete_when_many_categories
     categorize :tags
     current_categories_amount = @set.categories.size
     max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)
-    
+
     (max + 1 - current_categories_amount).times do
       @set.categories << rand.to_s
     end
     assert_equal max + 1, @set.categories.size
-    
+
     self.expects('category_autocomplete_selector').returns('')
     category_selector 'name', :tags, :object => CategoryTestModel.new
   end
@@ -156,10 +176,10 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
       category_selector 'name', :tags, {:object => object}, {:id => 'html_id'}
     end
   end
-  
+
   def test_should_not_raise_categorization_not_found_when_baseclass_have_been_categorized
     categorize_base :tags
-    object = CategoryTestModelSubOne.new    
+    object = CategoryTestModelSubOne.new
     assert_nothing_raised do
       category_selector 'name', :tags, {:object => object}, {:id => 'html_id'}
     end

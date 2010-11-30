@@ -6,7 +6,7 @@ module UbiquoCategories
         super
         base.extend(ClassMethods)
       end
-      
+
       module ClassMethods
 
         DEFAULT_CATEGORIZED_OPTIONS = {
@@ -19,7 +19,7 @@ module UbiquoCategories
         # Example:
         #
         #   categorized_with :city
-        # 
+        #
         # possible options:
         #   :from => CategorySet key(s) where this attribute should feed from.
         #            If it's not provided, will pluralize the attribute name and
@@ -33,7 +33,7 @@ module UbiquoCategories
 
         def categorized_with(field, options = {})
           options.reverse_merge!(DEFAULT_CATEGORIZED_OPTIONS)
-          
+
           self.has_many(:category_relations, {
               :as => :related_object,
               :class_name => "::CategoryRelation",
@@ -48,7 +48,7 @@ module UbiquoCategories
           @categorized_with_options[association_name.to_sym] = options
 
           assign_to_set = Proc.new do |categories, object|
-            set = CategorySet.find_by_key set_key
+            set = CategorySet.find_by_key(set_key) || CategorySet.find_by_key(set_key.singularize)
             raise UbiquoCategories::SetNotFoundError unless set
 
             categories = uhook_assign_to_set set, categories, object
@@ -59,7 +59,7 @@ module UbiquoCategories
 
             define_method "<<" do |categories|
               set, categories = assign_to_set.call(categories, proxy_owner)
-              
+
               categories.each do |category|
                 unless has_category? category.to_s
                   raise UbiquoCategories::LimitError if is_full?
@@ -89,7 +89,7 @@ module UbiquoCategories
                 end
               end
             end
-            
+
             define_method 'is_full?' do
               return false if options[:size].to_sym == :many
               Array(self).size >= options[:size]
@@ -122,7 +122,7 @@ module UbiquoCategories
               :conditions => ["category_relations.attr_name = ?", association_name],
               :order => "category_relations.position ASC",
             },&proc)
-          
+
           define_method "#{association_name}_with_categories=" do |categories|
             categories = categories.split(options[:separator]) if categories.is_a? String
 
@@ -135,7 +135,7 @@ module UbiquoCategories
             end
 
           end
-          
+
           alias_method_chain "#{association_name}=", 'categories'
 
           named_scope "with_#{association_name}_in", lambda{ |*values|
@@ -152,15 +152,15 @@ module UbiquoCategories
           prepare_categories_join_sql field
 
           uhook_categorized_with field, options
-          
+
         end
 
         def categorized_with_options_lookup
-          return {} if self.name == ::ActiveRecord::Base.name 
+          return {} if self.name == ::ActiveRecord::Base.name
           @categorized_with_options = {} if @categorized_with_options.blank?
           return @categorized_with_options.reverse_merge(self.superclass.categorized_with_options_lookup)
         end
-        
+
         # Returns the associated options for the categorized +field+
         def categorize_options(field)
           categorized_with_options = self.categorized_with_options_lookup
