@@ -34,12 +34,33 @@ module UbiquoCategories
         def categorized_with(field, options = {})
           options.reverse_merge!(DEFAULT_CATEGORIZED_OPTIONS)
 
+          association_name = field.to_s.pluralize
+
           self.has_many(:category_relations, {
               :as => :related_object,
               :class_name => "::CategoryRelation",
               :dependent => :destroy,
               :order => "category_relations.position ASC"
           }) unless self.respond_to?(:category_relations)
+
+          # TODO: Possible Rails bug? Conditions doesn't get applied
+          # inside the first join (monkey patch applied), correct query below:
+
+          # SELECT DISTINCT "articles".id FROM "articles"
+          # LEFT OUTER JOIN "category_relations" ON (
+          #   "articles"."id" = "category_relations"."related_object_id" AND
+          #   "category_relations"."related_object_type" = 'Article' AND
+          #   "category_relations"."attr_name" = 'sections') <-- association_name
+          # LEFT OUTER JOIN "categories" ON (
+          #   "categories"."id" = "category_relations"."category_id")
+          # ORDER BY categories.name asc LIMIT 11 OFFSET 0;
+          self.has_many(:"#{field}_category_relations", {
+              :as => :related_object,
+              :class_name => "::CategoryRelation",
+              :conditions => ["category_relations.attr_name = ?", association_name],
+              :dependent => :destroy,
+              :order => "category_relations.position ASC"
+          })
 
           association_name = field.to_s.pluralize
           set_key = (options[:from] || association_name).to_s
@@ -116,7 +137,7 @@ module UbiquoCategories
           end
 
           self.has_many(association_name.to_sym, {
-              :through => :category_relations,
+              :through => :"#{field}_category_relations",
               :class_name => "::Category",
               :source => :category,
               :conditions => ["category_relations.attr_name = ?", association_name],

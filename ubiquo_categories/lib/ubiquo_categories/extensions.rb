@@ -1,3 +1,5 @@
+require 'ubiquo_categories/extensions/active_record_through_conditions_fix'
+
 module UbiquoCategories
   module Extensions
     autoload :ActiveRecord, 'ubiquo_categories/extensions/active_record'
