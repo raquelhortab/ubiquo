@@ -7,12 +7,12 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     I18n = UbiquoCategories::Connectors::I18n
 
     def setup
-      save_current_categories_connector
+      save_current_connector(:ubiquo_categories)
       I18n.load!
     end
 
     def teardown
-      reload_old_categories_connector
+      reload_old_connector(:ubiquo_categories)
       Locale.current = nil
     end
 

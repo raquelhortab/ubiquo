@@ -23,7 +23,7 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     reload_old_categories_connector
   end
 
-  test_each_categories_connector do
+  test_each_connector(:ubiquo_categories) do
 
     test 'uhook_create_categories_table_should_create_table' do
       ActiveRecord::Migration.expects(:create_table).with(:categories, anything)
