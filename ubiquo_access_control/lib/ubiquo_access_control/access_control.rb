@@ -178,11 +178,11 @@ module UbiquoAccessControl
       # Will use an :ubiquo_user from the context hash to do the checks.
       #
       def process(auth, context)
-        return false if context[:ubiquo_user].nil?
+        return false if context[:ubiquo_user].nil? || context[:ubiquo_user] == :false
         return true if context[:ubiquo_user].is_superadmin?
         return true if context[:ubiquo_user].has_permission?(nil) # only admins should get true
         [auth].flatten.each do |a|
-          permit = context[:ubiquo_user] != :false && context[:ubiquo_user].has_permission?(a[:permission])
+          permit = context[:ubiquo_user].has_permission?(a[:permission])
           return true if permit==true
         end
         false
