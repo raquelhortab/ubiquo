@@ -11,7 +11,7 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
     ::ActiveRecord::Migration.expects(:include).with(Base::Migration)
     ::ActiveRecord::Base.expects(:include).with(Base::ActiveRecord::Base)
     ::Ubiquo::Extensions::UbiquoAreaController.expects(:include).with(Base::UbiquoHelpers)
-    ::UbiquoCategories::Extensions::FilterHelpers::CategoryFilter.expects(:include).with(Base::UbiquoHelpers::Helper)
+    ::UbiquoCategories::Filters::CategoryFilter.expects(:include).with(Base::UbiquoHelpers::Helper)
     Base.expects(:set_current_connector).with(Base)
     Base.load!
   end

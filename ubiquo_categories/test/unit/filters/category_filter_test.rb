@@ -1,8 +1,8 @@
 # -*- coding: undecided -*-
 require File.dirname(__FILE__) + "/../../test_helper.rb"
-require 'ubiquo_categories/extensions/filter_helpers/category_filter'
+require 'ubiquo_categories/filters/category_filter'
 
-class CategoryFilterTest < Ubiquo::Extensions::FilterHelpers::UbiquoFilterTestCase
+class CategoryFilterTest < Ubiquo::Filters::UbiquoFilterTestCase
 
   include UbiquoCategories::Extensions::Helpers
 

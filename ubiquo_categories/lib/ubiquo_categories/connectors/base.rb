@@ -16,7 +16,7 @@ module UbiquoCategories
         ::Ubiquo::Extensions::UbiquoAreaController.send(:include, self::UbiquoHelpers)
         ::Ubiquo::CategoriesController.send(:include, self::UbiquoCategoriesController)
         ::ActiveRecord::Migration.send(:include, self::Migration)
-        ::UbiquoCategories::Extensions::FilterHelpers::CategoryFilter.send(:include, self::UbiquoHelpers::Helper)
+        ::UbiquoCategories::Filters::CategoryFilter.send(:include, self::UbiquoHelpers::Helper)
         UbiquoCategories::Connectors::Base.set_current_connector self
       end
 
