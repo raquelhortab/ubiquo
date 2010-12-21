@@ -10,10 +10,10 @@
 
 <%% form_for([:ubiquo, @<%= singular_name %>]) do |form| %>
   <%%= render :partial => 'form', :locals => {:form => form} %>
-    <p class="form_buttons">
-      <%%= form.submit t('ubiquo.create') %>
-      <%%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_<%= plural_name %>_path}'" %>
-    </p>
+    <div class="form-item-submit">
+      <%%= form.submit t('ubiquo.create'), :class => 'bt-create' %>
+      <%%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_<%= plural_name %>_path}'", :class => 'bt-back' %>
+    </div>
 <%% end %>
 
 <%% content_for :sidebar do %>
