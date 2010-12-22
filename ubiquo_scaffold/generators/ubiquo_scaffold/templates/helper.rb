@@ -20,7 +20,11 @@ module Ubiquo::<%= controller_class_name %>Helper
             :id => <%= singular_name%>.id,
             :columns => [
               <%- attributes.each do |at| -%>
+              <%- if at.field_type.to_s == 'check_box'-%>
+              <%= "ubiquo_boolean_image(#{singular_name}.#{at.name})," %>
+              <%- else -%>
               <%= "#{singular_name}.#{at.name}," %>
+              <%- end -%>
               <%- end -%>
             ],
             :actions => <%= singular_name %>_actions(<%= singular_name%>)
