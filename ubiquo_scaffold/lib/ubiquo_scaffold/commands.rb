@@ -13,8 +13,8 @@ module UbiquoScaffold #:nodoc:
 
       module Create
 
-        def update_locale_models
-          template_path = Pathname.new(File.join(File.dirname(__FILE__), '../../generators/ubiquo_model/templates'))
+        def update_locale_models(path = '/')
+          template_path = Pathname.new(source_path(path))
           translations = UbiquoScaffold::TranslationUpdater.new(template_path)
           translations.update_with('models.yml', 'model-locale.yml', binding) do |models, current_model, locale|
             models[locale]['activerecord']['models'].merge! current_model[locale]['activerecord']['models']
@@ -22,8 +22,8 @@ module UbiquoScaffold #:nodoc:
           end
         end
 
-        def update_ubiquo_locales
-          template_path = Pathname.new(File.join(File.dirname(__FILE__), '../../generators/ubiquo_scaffold/templates'))
+        def update_ubiquo_locales(path = '/')
+          template_path = Pathname.new(source_path(path))
           translations = UbiquoScaffold::TranslationUpdater.new(template_path)
           translations.update_with('ubiquo.yml', 'locale.yml', binding) do |models, current_model, locale|
             models[locale]['ubiquo'].merge! current_model[locale]['ubiquo']
@@ -34,8 +34,8 @@ module UbiquoScaffold #:nodoc:
 
       module Destroy
 
-        def update_locale_models
-          template_path = Pathname.new(File.join(File.dirname(__FILE__), '../../generators/ubiquo_model/templates'))
+        def update_locale_models(path = '/')
+          template_path = Pathname.new(source_path(path))
           translations = UbiquoScaffold::TranslationUpdater.new(template_path)
           translations.update_with('models.yml', 'model-locale.yml', binding) do |models, current_model, locale|
             models[locale]['activerecord']['models'].delete current_model[locale]['activerecord']['models'].keys.first
@@ -43,8 +43,8 @@ module UbiquoScaffold #:nodoc:
           end
         end
 
-        def update_ubiquo_locales
-          template_path = Pathname.new(File.join(File.dirname(__FILE__), '../../generators/ubiquo_scaffold/templates'))
+        def update_ubiquo_locales(path = '/')
+          template_path = Pathname.new(source_path(path))
           translations = UbiquoScaffold::TranslationUpdater.new(template_path)
           translations.update_with('ubiquo.yml', 'locale.yml', binding) do |models, current_model, locale|
             models[locale]['ubiquo'].delete current_model[locale]['ubiquo'].keys.first
