@@ -1,43 +1,5 @@
 /* Ubiquo Categories */
 
-.new_category_controls {
-    margin-top: 7px;
-}
-
-.new_category_controls input, .new_category_controls select {
-    display:block;
-    margin-top:0.2em;
-    float:left;
-}
-
-.check_list li { 
-    float:left;
-    margin-bottom:0;
-    padding:0 10px 0 0;
-}
-
-a.category_selector_new {
-    display:inline-block;
-    padding:3px 0px;
-    font-size:1.2em;
-    margin:0px 0 5px;
-}
-fieldset input.text {
-    float:left;
-}
-
-a.add_new_category_link {
-    margin-left: 4px;
-    display:inline-block;
-    padding:4px 8px;
-    font-size:1.3em;
-    color:#fff;
-    margin-top:3px;
-    text-decoration:none !important;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-}
-
 /* AutoComplete styles */
   /* facebook style */
 ul.tag-token-input-list {
