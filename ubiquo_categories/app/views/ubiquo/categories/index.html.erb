@@ -14,6 +14,5 @@
 
 <% content_for :sidebar do %>
   <%= show_filters %>
-  <h3><%= t("ubiquo.help") %></h3>
-  <p><%= t("ubiquo.category.index.help_message") %></p>
+  <%= help_block_sidebar t("ubiquo.category.index.help_message") %>
 <% end %>
