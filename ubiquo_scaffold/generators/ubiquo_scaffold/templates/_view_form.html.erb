@@ -1,11 +1,11 @@
 <%%= error_messages_for '<%= singular_name %>' %>
-<div class="form_box">
+
   <%- if options[:translatable] -%>
   <%%= form.hidden_field :content_id %>
   <%- end -%>
 <% for attribute in attributes -%>
 <% if attribute.field_type.to_s == "date_select" || attribute.field_type.to_s == "datetime_select" -%>
-  <div class="datetime form-item-submit">
+  <div class="datetime form-item">
 <% else -%>
   <div class="form-item<%= '-inline' if attribute.field_type.to_s == 'check_box' -%>">
 <% end -%>
@@ -13,10 +13,11 @@
     <%%= form.<%= attribute.field_type %> :<%= attribute.name %><%= ", :class => 'visual_editor'" if attribute.field_type.to_s == "text_area" %>  %>
   </div>
 <% end -%>
-</div>
+
 
 <%- if options[:belongs_to] || options[:has_many] -%>
-<div class="form_box">
+<fieldset>
+  <legend><%= 'Belongs to' %></legend>
   <%- if options[:belongs_to] -%>
     <%- options[:belongs_to].each do |bt| -%>
       <%%= form.relation_selector :<%= bt %>, :type => :select %> 
@@ -27,21 +28,23 @@
       <%%= form.relation_selector :<%= bt.pluralize %>, :type => :checkbox %> 
     <%- end -%>
   <%- end -%>
-</div>
+</fieldset>
 <%- end -%>
 
 <%- if options[:media] -%>
-<div class="form_box">
+<fieldset>
+	<legend><%= 'Media selector' %></legend>
   <%- options[:media].each do |bt| -%>
     <%%= media_selector form, :<%= bt %>, :visibility => 'public' %> 
   <%- end -%>
-</div>
+</fieldset>
 <%- end -%>
 
 <%- if options[:categorized] -%>
-<div class="form_box">
+<fieldset>
+	<legend><%= 'Categories' %></legend>
   <%- options[:categorized].each do |bt| -%>
     <%%= form.category_selector :<%= bt %> %> 
   <%- end -%>
-</div>
+</fieldset>
 <%- end -%>
