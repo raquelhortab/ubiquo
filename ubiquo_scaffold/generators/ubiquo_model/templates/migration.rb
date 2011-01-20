@@ -8,6 +8,14 @@ class <%= migration_name %> < ActiveRecord::Migration
       t.timestamps
 <% end -%>
     end
+<%- if options[:categorized] -%>
+<%- options[:categorized].each do |categorized| -%>
+<%- category_set_key = categorized.pluralize -%>
+    unless CategorySet.find_by_key(<%= category_set_key.to_json %>)
+      CategorySet.create(:key => <%= category_set_key.to_json %>, :name => <%= category_set_key.humanize.to_json %>)
+    end
+<% end -%>
+<% end -%>
   end
 
   def self.down
