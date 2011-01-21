@@ -1,5 +1,5 @@
 class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
-  default_options :skip_timestamps => false, :skip_migration => false
+  default_options :skip_timestamps => false, :skip_migration => false, :run_migration => true
 
   attr_reader   :controller_name,
                 :controller_class_path,
@@ -86,12 +86,6 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
 
       m.ubiquo_tab controller_file_name
       m.ubiquo_migration if @options[:run_migration]
-      puts "Notes:
-      
-  - Add new permissions to fixture db/dev_bootstrap/permissions.yml if needed. 
-  - Add tabs on app/views/navigators/_main_navtabs.html.erb
-  - Create app/views/navigators/_#{controller_file_name}_navtabs.html.erb tab file if needed.
-      "
     end
   end
 
@@ -116,8 +110,8 @@ class UbiquoScaffoldGenerator < Rails::Generator::NamedBase
              "Creates a translatable model") { |v| options[:translatable] = v }
       opt.on("--skip-activity",
              "Don't send actions to ubiquo activity") { |v| options[:skip_activity] = v }
-      opt.on("-m","--run-migration",
-             "Run the migration task. rake db:migrate") { |v| options[:run_migration] = v }
+      opt.on("--no-migrate",
+        "Avoid running the migration task (rake db:migrate)") { |v| options[:run_migration] = v }
       opt.on("--nested-from parent", String, "Adds a nested resource under an existing parent") {|v|
         options[:parent] = v
       }
