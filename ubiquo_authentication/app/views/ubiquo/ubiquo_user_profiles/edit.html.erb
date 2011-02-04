@@ -6,9 +6,9 @@
 
 <% form_for(@ubiquo_user, :url => ubiquo_ubiquo_user_profile_path, :html => {:method => :put, :multipart => true}) do |form| %>
 	<%= render :partial => 'form', :locals => {:form => form} %>
-	  <p class="form_buttons">
-	    <%= form.submit t("ubiquo.save") %>
-	  </p>
+	  <div class="form-item-submit">
+	    <%= form.submit t("ubiquo.save"), :class => "bt-update" %>
+	  </div>
 <% end %>
 
 <% content_for :sidebar do %>
