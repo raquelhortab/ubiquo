@@ -2,7 +2,7 @@
 <h2>
   <%= render :partial => "submenu" %>
 </h2>
-<%= render(:partial => "shared/ubiquo/feedback") %>
+<%= error_messages_for 'role' %>
 
 <% form_for([:ubiquo, @role]) do |form| %>
 	<%= render :partial => 'form', :locals => {:form => form} %>

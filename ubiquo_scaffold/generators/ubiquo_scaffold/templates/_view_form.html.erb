@@ -1,4 +1,3 @@
-<%%= error_messages_for '<%= singular_name %>' %>
 
   <%- if options[:translatable] -%>
   <%%= form.hidden_field :content_id %>
@@ -20,12 +19,12 @@
   <legend><%= 'Belongs to' %></legend>
   <%- if options[:belongs_to] -%>
     <%- options[:belongs_to].each do |bt| -%>
-      <%%= form.relation_selector :<%= bt %>, :type => :select %> 
+      <%%= form.relation_selector :<%= bt %>, :type => :select %>
     <%- end -%>
   <%- end -%>
   <%- if options[:has_many] %>
     <%- options[:has_many].each do |bt| -%>
-      <%%= form.relation_selector :<%= bt.pluralize %>, :type => :checkbox %> 
+      <%%= form.relation_selector :<%= bt.pluralize %>, :type => :checkbox %>
     <%- end -%>
   <%- end -%>
 </fieldset>
@@ -35,7 +34,7 @@
 <fieldset>
 	<legend><%= 'Media selector' %></legend>
   <%- options[:media].each do |bt| -%>
-    <%%= media_selector form, :<%= bt %>, :visibility => 'public' %> 
+    <%%= media_selector form, :<%= bt %>, :visibility => 'public' %>
   <%- end -%>
 </fieldset>
 <%- end -%>
@@ -44,7 +43,7 @@
 <fieldset>
 	<legend><%= 'Categories' %></legend>
   <%- options[:categorized].each do |bt| -%>
-    <%%= form.category_selector :<%= bt %> %> 
+    <%%= form.category_selector :<%= bt %> %>
   <%- end -%>
 </fieldset>
 <%- end -%>
