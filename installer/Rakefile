@@ -19,7 +19,8 @@ begin
                    "Ramon Salvadó",
                    "Arnau Sánchez"
                   ]
-    gem.add_dependency(%q<rails>, '= 2.3.8')
+    gem.add_dependency(%q<rails>, '= 2.3.11')
+    gem.add_dependency(%q<i18n>, '< 0.5.0')
 
     gem.add_development_dependency(%q<mocha>, '>= 0.9.8')
     gem.add_development_dependency(%q<highline>, '>= 1.5.2')
