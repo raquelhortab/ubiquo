@@ -112,5 +112,13 @@ module UbiquoAuthentication
         self.current_ubiquo_user = ubiquo_user
       end
     end
+
+    # Handler to remove cookie login data on an unverified request (CVE-2011-0447)
+    def handle_unverified_request
+      super # call the default behaviour which resets the session
+      cookies.delete(:auth_token) # remove the auto login cookie so the fraudulent request is rejected.
+      raise ActionController::InvalidAuthenticityToken # added to detect possible problems when upgrading
+    end
+
   end
 end
