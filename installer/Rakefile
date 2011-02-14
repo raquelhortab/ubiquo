@@ -7,7 +7,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "ubiquo"
     gem.summary = %Q{command line application for building ubiquo based applications.}
-    gem.description = %Q{This gem provides a command-line application to make the creation of ubiquo based applications fast and easy.}
+    gem.description = %Q{This gem provides a command-line interface to speed up creation of ubiquo based apps.}
     gem.email = "rsalvado@gnuine.com"
     gem.homepage = "http://www.ubiquo.me"
     gem.authors = [
@@ -21,6 +21,7 @@ begin
                   ]
     gem.add_dependency(%q<rails>, '= 2.3.11')
     gem.add_dependency(%q<i18n>, '< 0.5.0')
+    gem.add_dependency(%q<lockfile>, '>= 1.4.3')
 
     gem.add_development_dependency(%q<mocha>, '>= 0.9.8')
     gem.add_development_dependency(%q<highline>, '>= 1.5.2')
