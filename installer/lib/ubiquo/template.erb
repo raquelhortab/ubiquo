@@ -88,6 +88,7 @@ Ubiquo::Config.add do |config|
 end
 CODE
 # Initializer for ubiquo crontab
+<% if @opts[:template] == :edge %>
 initializer 'ubiquo_crontab.rb', <<-CODE
 # -*- coding: utf-8 -*-
 Ubiquo::Cron::Crontab.schedule do |cron|
@@ -129,6 +130,7 @@ Ubiquo::Cron::Crontab.schedule do |cron|
   # cron.runner "* * * * *", "puts 6+6"
 end
 CODE
+<% end %>
 # Initializer for exception notifier
 # Needs 3 params:
 #   appname -> Application name (Ex: test)

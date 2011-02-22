@@ -7,7 +7,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "ubiquo"
     gem.summary = %Q{command line application for building ubiquo based applications.}
-    gem.description = %Q{This gem provides a command-line interface to speed up creation of ubiquo based apps.}
+    gem.description = %Q{This gem provides a command-line interface to speed up the creation of ubiquo based apps.}
     gem.email = "rsalvado@gnuine.com"
     gem.homepage = "http://www.ubiquo.me"
     gem.authors = [
