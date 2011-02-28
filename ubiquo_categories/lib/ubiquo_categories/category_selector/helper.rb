@@ -117,7 +117,7 @@ module UbiquoCategories
         url_params = { :category_set_id => set.id, :format => :js }
         autocomplete_options = {
           :url => ubiquo_category_set_categories_path(url_params),
-          :current_values => [object.send(key)].to_json(:only => [:id, :name]),          
+          :current_values => Array(object.send(key)).to_json(:only => [:id, :name]),          
           :style => options[:autocomplete_style] || "tag"
         }
 
