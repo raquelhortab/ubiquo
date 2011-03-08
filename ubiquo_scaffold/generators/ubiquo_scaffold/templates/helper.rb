@@ -38,11 +38,7 @@ module Ubiquo::<%= controller_class_name %>Helper
     actions = []
     <%- if options[:translatable] -%>
     if <%= singular_name%>.in_locale?(current_locale)
-      actions << link_to(t("ubiquo.view"), [:ubiquo, <%= singular_name%>])
-    end
-
-    if <%= singular_name%>.in_locale?(current_locale)
-      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])
+      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>], :class => 'btn-edit')
     end
 
     unless <%= singular_name%>.in_locale?(current_locale)
@@ -56,7 +52,8 @@ module Ubiquo::<%= controller_class_name %>Helper
 
     actions << link_to(t("ubiquo.remove"),
       ubiquo_<%= singular_name%>_path(<%= singular_name%>, :destroy_content => true),
-      :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete
+      :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete,
+      :class => 'btn-delete'
       )
 
     if <%= singular_name%>.in_locale?(current_locale, :skip_any => true) && !<%= singular_name%>.translations.empty?
@@ -66,10 +63,10 @@ module Ubiquo::<%= controller_class_name %>Helper
     end
 
     <%- else -%>
-    actions << link_to(t("ubiquo.view"), [:ubiquo, <%= singular_name%>])
-    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>])
+    actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, <%= singular_name%>], :class => 'btn-edit')
     actions << link_to(t("ubiquo.remove"), [:ubiquo, <%= singular_name%>],
-      :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete
+      :confirm => t("ubiquo.<%= singular_name %>.index.confirm_removal"), :method => :delete, 
+      :class => 'btn-delete'
       )
     <%- end -%>
     actions
