@@ -1,4 +1,4 @@
-class Ubiquo::JobsController < UbiquoAreaController
+class Ubiquo::JobsController < UbiquoController
   # GET /jobs
   # GET /jobs.xml
   def index

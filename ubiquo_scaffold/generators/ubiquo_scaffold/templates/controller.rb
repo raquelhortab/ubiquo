@@ -1,4 +1,4 @@
-class Ubiquo::<%= controller_class_name %>Controller < UbiquoAreaController
+class Ubiquo::<%= controller_class_name %>Controller < UbiquoController
 
   <%- if attributes.map(&:field_type).include? :text_area -%>
   uses_tiny_mce(:options => default_tiny_mce_options)
