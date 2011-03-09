@@ -1,3 +1,3 @@
 require 'ubiquo_access_control/extensions.rb'
 
-Ubiquo::Extensions::UbiquoAreaController.append_include(UbiquoAccessControl::AccessControl)
+Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAccessControl::AccessControl)

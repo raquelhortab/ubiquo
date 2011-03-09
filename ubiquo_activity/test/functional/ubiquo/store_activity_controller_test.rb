@@ -39,7 +39,7 @@ class Ubiquo::StoreActivityControllerTest < ActionController::TestCase
   end
 end
 
-class Ubiquo::StoreActivityController < UbiquoAreaController
+class Ubiquo::StoreActivityController < UbiquoController
   def create
     respond_to do |format|
       store_activity :successful, { :title => "Test object - 12/06/09" }

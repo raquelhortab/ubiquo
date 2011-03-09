@@ -3,4 +3,4 @@ require 'ubiquo_authentication/extensions.rb'
 require 'ubiquo_authentication/ubiquo_user_console_creator.rb'
 require 'ubiquo_authentication/version.rb'
 
-Ubiquo::Extensions::UbiquoAreaController.append_include(UbiquoAuthentication::AuthenticatedSystem)
+Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::AuthenticatedSystem)

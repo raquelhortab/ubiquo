@@ -1,4 +1,4 @@
-class Ubiquo::RolesController < UbiquoAreaController
+class Ubiquo::RolesController < UbiquoController
 
   ubiquo_config_call :role_access_control, {:context => :ubiquo_access_control}
 

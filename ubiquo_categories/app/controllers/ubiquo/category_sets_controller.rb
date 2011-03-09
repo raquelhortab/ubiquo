@@ -1,4 +1,4 @@
-class Ubiquo::CategorySetsController < UbiquoAreaController
+class Ubiquo::CategorySetsController < UbiquoController
 
   ubiquo_config_call :categories_access_control, {:context => :ubiquo_categories}
   before_filter :load_category_set, :only => [:show, :edit, :update, :destroy]

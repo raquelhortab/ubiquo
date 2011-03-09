@@ -14,7 +14,7 @@ A _role_ has a collection of permissions which grant access to certain parts of 
 
 Access to the controllers (and its actions) can be restricted separately. On this example, a controller is restricted for ubiquo users with _show_ permission (that is, which have a role assigned containing this permission) for _show_ action, and _manage_ permission for all other actions:
 
-  class Ubiquo::ExampleController < UbiquoAreaController
+  class Ubiquo::ExampleController < UbiquoController
     access_control :show => 'guest', :DEFAULT => "management"
     ...
   end

@@ -1,4 +1,4 @@
-class Ubiquo::UbiquoUsersController < UbiquoAreaController
+class Ubiquo::UbiquoUsersController < UbiquoController
   
   #eval this option is a lambda that will be called in that context. Normally contains the access control method invocation
   ubiquo_config_call(:user_access_control, {:context => :ubiquo_authentication})

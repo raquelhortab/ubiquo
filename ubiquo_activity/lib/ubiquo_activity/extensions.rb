@@ -4,4 +4,4 @@ module UbiquoActivity
   end
 end
 
-Ubiquo::Extensions::UbiquoAreaController.append_helper(UbiquoActivity::Extensions::Helper)
+Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoActivity::Extensions::Helper)

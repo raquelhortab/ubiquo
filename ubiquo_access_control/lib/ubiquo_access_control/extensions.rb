@@ -3,7 +3,7 @@ module UbiquoAccessControl
   end
 end
 
-Ubiquo::Extensions::UbiquoAreaController.append_helper(UbiquoAccessControl::Extensions::Helper)
+Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoAccessControl::Extensions::Helper)
 if Rails.env.test?
   ActionController::TestCase.send(:include, UbiquoAccessControl::Extensions::TestCase)
 end

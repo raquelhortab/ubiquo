@@ -1,4 +1,4 @@
-class Ubiquo::ActivityInfosController < UbiquoAreaController
+class Ubiquo::ActivityInfosController < UbiquoController
   ubiquo_config_call :activity_info_access_control, { :context => :ubiquo_activity }
   before_filter :load_vars_for_filters
   

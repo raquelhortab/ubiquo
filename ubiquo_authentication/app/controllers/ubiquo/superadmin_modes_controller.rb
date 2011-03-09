@@ -1,4 +1,4 @@
-class Ubiquo::SuperadminModesController < UbiquoAreaController
+class Ubiquo::SuperadminModesController < UbiquoController
 
   #put the current_ubiquo_user in superadmin mode if can go to that mode.
   def create

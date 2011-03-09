@@ -13,7 +13,7 @@ module UbiquoCategories
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
         ::Category.send(:include, self::Category)
         ::CategorySet.send(:include, self::CategorySet)
-        ::Ubiquo::Extensions::UbiquoAreaController.send(:include, self::UbiquoHelpers)
+        ::Ubiquo::Extensions::Loader.send(:include, self::UbiquoHelpers)
         ::Ubiquo::CategoriesController.send(:include, self::UbiquoCategoriesController)
         ::ActiveRecord::Migration.send(:include, self::Migration)
         ::UbiquoCategories::Filters::CategoryFilter.send(:include, self::UbiquoHelpers::Helper)

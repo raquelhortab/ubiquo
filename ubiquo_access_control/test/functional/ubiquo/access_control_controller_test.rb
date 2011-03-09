@@ -82,7 +82,7 @@ class AccessControlControllerTest < ActionController::TestCase
 end
 
 # This controller is just for test purposes it can be safely be deleted.
-class AccessControlController < UbiquoAreaController
+class AccessControlController < UbiquoController
 
   @@permissions = {
     :admin  => nil,

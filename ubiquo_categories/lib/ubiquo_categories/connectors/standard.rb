@@ -182,7 +182,7 @@ module UbiquoCategories
 
       module UbiquoHelpers
         def self.included(klass)
-          klass.append_helper(Helper)
+          klass.append_helper(:UbiquoController, Helper)
         end
 
         module Helper

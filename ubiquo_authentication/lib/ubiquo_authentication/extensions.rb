@@ -3,8 +3,8 @@ module UbiquoAuthentication
   end
 end
 
-Ubiquo::Extensions::UbiquoAreaController.append_helper(UbiquoAuthentication::Extensions::Helper)
-Ubiquo::Extensions::UbiquoAreaController.append_include(UbiquoAuthentication::Extensions::Controller)
+Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoAuthentication::Extensions::Helper)
+Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::Extensions::Controller)
 
 if Rails.env.test?
   ActionController::TestCase.send(:include, UbiquoAuthentication::Extensions::TestCase)

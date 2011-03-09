@@ -1,4 +1,4 @@
-class Ubiquo::UbiquoUserProfilesController < UbiquoAreaController
+class Ubiquo::UbiquoUserProfilesController < UbiquoController
   
   #shows the user profile
   def edit

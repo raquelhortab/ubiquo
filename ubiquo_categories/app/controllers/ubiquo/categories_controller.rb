@@ -1,4 +1,4 @@
-class Ubiquo::CategoriesController < UbiquoAreaController
+class Ubiquo::CategoriesController < UbiquoController
 
   ubiquo_config_call :categories_access_control, {:context => :ubiquo_categories}
   before_filter :load_category_set
