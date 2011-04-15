@@ -385,7 +385,7 @@ CODE
 <% if RUBY_PLATFORM =~ /java/ %>
 run "jruby -S bundle install"
 <% else %>
-run "bundle install --without jruby"
+run "bundle install"
 <% end %>
 # End of bundler setup
 
