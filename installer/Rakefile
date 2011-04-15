@@ -22,6 +22,7 @@ begin
     gem.add_dependency(%q<rails>, '= 2.3.11')
     gem.add_dependency(%q<i18n>, '< 0.5.0')
     gem.add_dependency(%q<lockfile>, '>= 1.4.3')
+    gem.add_dependency(%q<bundler>, '>= 1.0.10')
 
     gem.add_development_dependency(%q<mocha>, '>= 0.9.8')
     gem.add_development_dependency(%q<highline>, '>= 1.5.2')

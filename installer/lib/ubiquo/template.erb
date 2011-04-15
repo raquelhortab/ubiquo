@@ -225,7 +225,6 @@ production:
   <<: *base_config
   database: db/#{appname}_production.db
 CODE
-
 choosen_adapter = "<%= @opts[:database] %>"
 case choosen_adapter
   when "mysql" then file 'config/database.yml', mysql
@@ -276,7 +275,6 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
   # config.gem "rmagick", :lib => 'RMagick'
-  config.gem "lockfile"
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
@@ -311,12 +309,92 @@ rake("rails:update")
 rake("calendardateselect:install")
 rake("ubiquo:install OVERWRITE=yes")
 
+# Bundler setup
+gsub_file 'config/boot.rb', /Rails\.boot!/ do <<-CODE
+class Rails::Boot
+  def run
+    load_initializer
+
+    Rails::Initializer.class_eval do
+      def load_gems
+        @bundler_loaded ||= Bundler.require :default, Rails.env
+      end
+    end
+
+    Rails::Initializer.run(:set_load_path)
+  end
+end
+
+Rails.boot!
+CODE
+end
+file 'config/preinitializer.rb', <<-CODE
+begin
+  require "rubygems"
+  require "bundler"
+rescue LoadError
+  raise "Could not load the bundler gem. Install it with `gem install bundler`."
+end
+
+if Gem::Version.new(Bundler::VERSION) <= Gem::Version.new("0.9.24")
+  raise RuntimeError, "Your bundler version is too old for Rails 2.3." +
+   "Run `gem install bundler` to upgrade."
+end
+
+begin
+  # Set up load paths for all bundled gems
+  ENV["BUNDLE_GEMFILE"] = File.expand_path("../../Gemfile", __FILE__)
+  Bundler.setup
+rescue Bundler::GemNotFound
+  raise RuntimeError, "Bundler couldn't find some gems." +
+    "Did you run `bundle install`?"
+end
+CODE
+adapter_gem = case choosen_adapter
+  when "mysql" then "mysql"
+  when "sqlite" then "sqlite3"
+  else "pg"
+end
+jruby_adapter_gem = adapter_gem == "pg" ? "postgres" : adapter_gem
+file 'Gemfile', <<-CODE
+source "http://rubygems.org"
+
+gem "rails",     "= 2.3.11"
+gem "lockfile",  ">= 1.4.3"
+gem "i18n",      "< 0.5.0"
+gem "#{adapter_gem}", :platforms => :mri_18
+
+platforms :jruby do
+  gem "activerecord-jdbc-adapter", "~> 1.1.1"
+  gem "jdbc-#{jruby_adapter_gem}"
+  gem "jruby-openssl", "~> 0.7.3"
+end
+
+group :development do
+  gem "ruby-debug"
+  gem "ya2yaml", ">= 0.2.6"
+  gem "highline", ">= 1.5.2"
+  gem "ffi-ncurses", "~> 0.3.3", :platforms => :jruby
+end
+
+group :test do
+  gem "mocha", ">= 0.9.8"
+end
+CODE
+# we  need to take care of Jruby
+<% if RUBY_PLATFORM =~ /java/ %>
+run "jruby -S bundle install"
+<% else %>
+run "bundle install --without jruby"
+<% end %>
+# End of bundler setup
+
 <% if RUBY_PLATFORM =~ /java/ %>
   generate(:jdbc)
 <% end %>
 
 <% if @opts[:gnuine] %>
-rake("db:create:all")
+   rake("db:create:all")
 rake("ubiquo:db:reset")
 <% end %>
 
