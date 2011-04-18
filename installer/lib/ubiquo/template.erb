@@ -362,7 +362,13 @@ source "http://rubygems.org"
 gem "rails",     "= 2.3.11"
 gem "lockfile",  ">= 1.4.3"
 gem "i18n",      "< 0.5.0"
-gem "#{adapter_gem}", :platforms => :mri_18
+
+platforms :mri_18 do
+  gem "#{adapter_gem}"
+<% if @opts[:template] == :stable %>
+  gem "daemons", "~> 1.1.2"
+<% end %>
+end
 
 platforms :jruby do
   gem "activerecord-jdbc-adapter", "~> 1.1.1"
