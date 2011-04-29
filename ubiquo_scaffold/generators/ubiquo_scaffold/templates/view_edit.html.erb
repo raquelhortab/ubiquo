@@ -8,12 +8,12 @@
   <%%= render :partial => '<%= singular_name %>', :object => <%= singular_name %> %>
 <%% end %>
 
-<%% form_for([:ubiquo, @<%= singular_name %>]) do |form| %>
+<%% ubiquo_form_for([:ubiquo, @<%= singular_name %>]) do |form| %>
   <%%= render :partial => 'form', :locals => {:form => form} %>
-    <div class="form-item-submit">
-      <%%= form.submit t('ubiquo.save'), :class => 'bt-update' %>
-      <%%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo_<%= plural_name %>_path}'", :class => 'bt-back' %>
-    </div>
+  <%% form.submit_group do %>
+    <%%= form.update_button %>
+    <%%= form.back_button %>
+  <%% end %>
 <%% end %>
 
 <%% content_for :sidebar do %>
