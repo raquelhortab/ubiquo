@@ -17,7 +17,7 @@ module UbiquoCategories
 
       # Prepares a collection
       def categories_for_select key
-        uhook_categories_for_set category_set(key)
+        @context.uhook_categories_for_set category_set(key)
       end
 
       def category_set(key)
