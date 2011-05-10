@@ -125,7 +125,7 @@ module UbiquoCategories
             end
 
             if category.in_locale?(current_locale)
-              actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set, category])
+              actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set, category], :class => 'btn-edit')
             end
 
             unless category.in_locale?(current_locale)
@@ -139,7 +139,7 @@ module UbiquoCategories
 
             actions << link_to(t("ubiquo.remove"),
               ubiquo_category_set_category_path(category_set, category, :destroy_content => true),
-              :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete
+              :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete, :class => 'btn-delete'
               )
 
             if category.in_locale?(current_locale, :skip_any => true) && !category.translations.empty?

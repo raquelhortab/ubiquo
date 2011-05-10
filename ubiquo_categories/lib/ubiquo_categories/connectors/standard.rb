@@ -75,8 +75,8 @@ module UbiquoCategories
           # Returns the available actions links for a given category
           def uhook_category_index_actions category_set, category
             [
-              link_to(t('ubiquo.edit'), [:edit, :ubiquo, category_set, category]),
-              link_to(t('ubiquo.remove'), [:ubiquo, category_set, category], :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete)
+              link_to(t('ubiquo.edit'), [:edit, :ubiquo, category_set, category], :class => 'btn-edit'),
+              link_to(t('ubiquo.remove'), [:ubiquo, category_set, category], :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete, :class => 'btn-delete')
             ]
           end
 

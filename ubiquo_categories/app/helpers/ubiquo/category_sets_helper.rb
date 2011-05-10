@@ -32,9 +32,9 @@ module Ubiquo::CategorySetsHelper
     actions = []
     actions << link_to(t("ubiquo.category_set.see_categories"), [:ubiquo, category_set, :categories])
     if options[:can_manage] && category_set.is_editable?
-      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set])
+      actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set], :class => 'btn-edit')
       actions << link_to(t("ubiquo.remove"), [:ubiquo, category_set],
-        :confirm => t("ubiquo.category_set.index.confirm_removal"), :method => :delete)
+        :confirm => t("ubiquo.category_set.index.confirm_removal"), :method => :delete, :class => 'btn-delete')
     end
     actions
   end

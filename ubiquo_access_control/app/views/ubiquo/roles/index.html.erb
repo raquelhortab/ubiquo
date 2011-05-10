@@ -14,8 +14,9 @@
 						role.name,
           ],
           :actions=>[
-            link_to(t('ubiquo.edit'), [:edit, :ubiquo, role]),
-            link_to(t('ubiquo.remove'), [:ubiquo, role], :confirm => t('ubiquo.auth.confirm_role_removal'), :method => :delete)
+            link_to(t('ubiquo.edit'), [:edit, :ubiquo, role], :class => 'btn-edit'),
+            link_to(t('ubiquo.remove'), [:ubiquo, role], :confirm =>
+      t('ubiquo.auth.confirm_role_removal'), :method => :delete, :class => 'btn-delete')
           ]
         }
       },
