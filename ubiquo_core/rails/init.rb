@@ -57,6 +57,8 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
       }
     },
     :submit_group => {:content_tag => :div, :class => "form-item-submit"},
+    :translatable => {:content_tag => :p, :class => "translation-info"},
+    :description => {:content_tag => :p, :class => "description"}
   })
   setting.add( :default_group_type, :div )  
 end
