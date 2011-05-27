@@ -30,7 +30,7 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
     :relation_selector => { :append_class => "relation" },
     :date_select => { :group => {:append_class => "datetime"} },
     :datetime_select => { :group => {:append_class => "datetime"} },
-    :check_box => {:group => {:class => "form-item-inline"} },
+    :check_box => {:group => {:class => "form-item-inline"}, :label_at_bottom => true },
     :create_button => {
       :i18n_label_key => "ubiquo.create",
       :class => "bt-update",
