@@ -7,13 +7,13 @@ class CategoryFilterTest < Ubiquo::Filters::UbiquoFilterTestCase
   include UbiquoCategories::Extensions::Helpers
 
   connector = UbiquoCategories::Connectors::Base.current_connector
-  ActionView::TestCase.send(:include, connector::UbiquoHelpers::Helper)
+  Ubiquo::Filters::FakeContext.send(:include, connector::UbiquoHelpers::Helper)
 
   def setup
     self.stubs(:params).returns({})
     self.stubs(:current_locale).returns('ca')
     @set = create_set :genres
-   @filter = CategoryFilter.new(@model, @context)
+    @filter = CategoryFilter.new(@model, @context)
   end
 
   def test_render_category_filter

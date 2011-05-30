@@ -181,10 +181,6 @@ module UbiquoCategories
       end
 
       module UbiquoHelpers
-        def self.included(klass)
-          klass.append_helper(:UbiquoController, Helper)
-        end
-
         module Helper
           # Returns a the applicable categories for +set+
           # +context+ can be a related object that restricts the possible categories

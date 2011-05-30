@@ -13,7 +13,7 @@ module UbiquoCategories
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
         ::Category.send(:include, self::Category)
         ::CategorySet.send(:include, self::CategorySet)
-        ::Ubiquo::Extensions::Loader.send(:include, self::UbiquoHelpers)
+        ::Ubiquo::Extensions::Loader.append_helper(:UbiquoController, self::UbiquoHelpers::Helper)
         ::Ubiquo::CategoriesController.send(:include, self::UbiquoCategoriesController)
         ::ActiveRecord::Migration.send(:include, self::Migration)
         UbiquoCategories::Connectors::Base.set_current_connector self

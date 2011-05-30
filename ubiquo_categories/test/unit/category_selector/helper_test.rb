@@ -2,6 +2,9 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
 
+  connector = UbiquoCategories::Connectors::Base.current_connector
+  self.send(:include, connector::UbiquoHelpers::Helper)
+
   def setup
     @set = CategorySet.create(:name => "Tags", :key => "tags")
     @set.categories.build(:name => "Red")

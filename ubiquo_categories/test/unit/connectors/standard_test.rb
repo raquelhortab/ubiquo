@@ -116,8 +116,8 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     end
 
     Standard::UbiquoCategoriesController::Helper.expects(:t).at_least_once.returns('t')
-    Standard::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [:edit, :ubiquo, set, category])
-    Standard::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [:ubiquo, set, category], {:confirm => 't', :method => :delete})
+    Standard::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [:edit, :ubiquo, set, category], {:class => 'btn-edit'})
+    Standard::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [:ubiquo, set, category], {:confirm => 't', :method => :delete, :class => 'btn-delete'})
 
     actions = Standard::UbiquoCategoriesController::Helper.uhook_category_index_actions set, category
     assert actions.is_a?(Array)
