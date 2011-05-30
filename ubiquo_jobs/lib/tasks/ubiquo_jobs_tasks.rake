@@ -1,7 +1,7 @@
 namespace :ubiquo do
   namespace :worker do
     desc "Starts a new ubiquo worker"
-    task :start, :name, :interval, :needs => :environment do |t, args|
+    task :start, [:name, :interval] => [:environment] do |t, args|
       options = {
         :sleep_time => args.interval.to_f
       }.delete_if { |k,v| v.blank? }
