@@ -1,6 +1,6 @@
 class Ubiquo::PasswordsController < ApplicationController
 
-  include Ubiquo::Extensions::UbiquoController
+  Ubiquo::Extensions.load_extensions_for UbiquoController, self
   
   #shows the request pasword recovering form.
   def new

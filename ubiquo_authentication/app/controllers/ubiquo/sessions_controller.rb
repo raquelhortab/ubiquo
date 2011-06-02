@@ -1,6 +1,6 @@
 class Ubiquo::SessionsController < ApplicationController
 
-  include Ubiquo::Extensions::UbiquoController
+  Ubiquo::Extensions.load_extensions_for UbiquoController, self
 
   before_filter :cookies_required
 
