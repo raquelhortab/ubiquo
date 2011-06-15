@@ -13,6 +13,10 @@ var CategorySelector = Class.create({
     var element_input = $(input_id);
     if (element_input.value != "") {
       if (this.type == "checkbox") {
+        //We create the <ul> element if it's not present
+        if (!element_input.up().up().previous('ul')) {
+          element_input.up().up().previous('legend').insert({after: '<ul class="check_list"></ul>'});
+        }
         var element = "<li><input type='"+this.type+"' checked='checked' value='"+element_input.value+"' id='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"' name='"+this.object_name+"["+this.key+"][]' />";
         element += "<label for='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"'>"+element_input.value+"</label></li>";
         element_input.up().up().previous('ul').insert(element);
