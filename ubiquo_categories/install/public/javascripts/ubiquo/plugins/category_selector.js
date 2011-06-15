@@ -54,6 +54,22 @@ document.observe("dom:loaded", function() {
       );
     });
   });
+
+  // Mark parent checkboxes in hierarchichal categories
+  if ($$('.children_check_list').size() > 0) {
+    $$('ul.children_check_list li input').each(function(item){
+      item.observe("change", function(){
+        var main_list = item.up('ul.hierarchical_check_list');
+        if (item.checked) {
+          main_list.select('input').first().checked = true;
+        } else {
+          if (main_list.select('input:checked').size() <= 1) {
+            main_list.select('input').first().checked = false;
+          }
+        }
+      })
+    })
+  }
 });
 
 var AutoCompleteSelector = Class.create({

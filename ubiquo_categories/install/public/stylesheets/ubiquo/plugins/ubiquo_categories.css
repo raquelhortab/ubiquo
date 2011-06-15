@@ -229,3 +229,19 @@ div.list-token-input-dropdown ul li.list-token-input-selected-dropdown-item {
     background-color: #d0efa0;
 }
 
+fieldset ul.hierarchical_check_list {
+  clear: both;
+  padding: 2px
+}
+
+fieldset ul.children_check_list li {
+  padding: 5px
+}
+
+fieldset ul.children_check_list {
+  margin-left: 15px;
+}
+
+fieldset ul.children_check_list label {
+  font-weight: normal;
+}
