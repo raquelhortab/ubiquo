@@ -12,12 +12,15 @@ class Asset < ActiveRecord::Base
   has_many :asset_relations, :dependent => :destroy
   has_many :asset_areas, :dependent => :destroy
 
+  has_many :asset_geometries, :dependent => :destroy
+
   validates_presence_of :name, :asset_type_id, :type
   before_validation_on_create :set_asset_type
   after_update :uhook_after_update
   attr_accessor :cloned_from
   after_create :save_backup_on_clone
   after_save :update_backup
+  after_save :save_geometries
 
   # Generic find (ID, key or record)
   def self.gfind(something, options={})
@@ -85,9 +88,20 @@ class Asset < ActiveRecord::Base
     "asset_#{visibility}".classify.constantize
   end
 
+  # Correct parameters to the resize_and_crop processor.
+  # If the processor is other, the extra params will be ignored
+  def self.correct_styles(styles_list = {})
+    final_styles = {}
+    styles_list.each do |style, value|
+      final_styles[style] = { :geometry   => value,
+                              :style_name => style }
+    end
+
+    final_styles
+  end
+
   def is_resizeable?
-    self.asset_type && self.asset_type.key == "image" &&
-      self.resource && self.resource.options[:storage] == :filesystem
+    self.asset_type && self.asset_type.key == "image" && self.resource
   end
 
   def backup_path
@@ -118,7 +132,6 @@ class Asset < ActiveRecord::Base
     obj = super
     obj.resource = File.new(self.resource.path)
     obj.cloned_from = self
-    uhook_cloned_object( obj )
     obj
   end
 
@@ -137,6 +150,21 @@ class Asset < ActiveRecord::Base
         end
       end
       self.asset_type = AssetType.find_by_key("other") unless self.asset_type
+    end
+  end
+
+  # Keeps the backup file when an asset has been cloned
+  def save_backup_on_clone
+    if self.cloned_from && self.cloned_from.restorable? && self.keep_backup
+      FileUtils.mkdir_p( File.dirname( self.backup_path ))
+      FileUtils.cp( self.cloned_from.backup_path, self.backup_path )
+    end
+  end
+  
+  def update_backup
+    unless self.keep_backup
+      # Delete backup
+      File.unlink( self.backup_path ) if File.exists?( self.backup_path )
     end
   end
 
