@@ -138,6 +138,29 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     assert_select doc.root, '.add_new_category', 0
   end
 
+  def test_category_selector_shouldnt_show_new_category_buttons_with_hide_controls_option
+    categorize :tags
+    object = CategoryTestModel.new
+    output = category_selector 'name', :tags, { :object => object , :hide_controls => true }, {:id => 'html_id'}
+    doc = HTML::Document.new(output)
+    # first, check if category selector is printed
+    assert_select doc.root, 'fieldset[id=html_id]'
+    # now, check that all new categories controls aren't displayed
+    assert_select doc.root, '.new_category_controls', 0
+    assert_select doc.root, '.category_selector_new', 0
+    assert_select doc.root, '.add_new_category', 0
+
+    object2 = CategoryTestModel.new
+    output2 = category_selector 'name', :tags, { :object => object2 , :hide_controls => false }, {:id => 'html_id'}
+    doc2 = HTML::Document.new(output2)
+    # first, check if category selector is printed
+    assert_select doc2.root, 'fieldset[id=html_id]'
+    # now, check that all new categories controls aren't displayed
+    assert_select doc2.root, '.new_category_controls', 1
+    assert_select doc2.root, '.category_selector_new', 1
+    assert_select doc2.root, '.add_new_category', 1
+  end
+
   def test_fieldset_has_html_options
     categorize :tags
     object = CategoryTestModel.new
