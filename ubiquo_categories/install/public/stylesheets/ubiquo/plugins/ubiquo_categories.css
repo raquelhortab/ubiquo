@@ -3,8 +3,8 @@
 /* AutoComplete styles */
   /* facebook style */
 ul.tag-token-input-list {
-    overflow: hidden; 
-    height: auto !important; 
+    overflow: hidden;
+    height: auto !important;
     height: 1%;
     width: 400px;
     cursor: text;
@@ -35,8 +35,8 @@ ul.tag-token-input-list {
 }
 
 li.tag-token-input-token {
-    overflow: hidden; 
-    height: auto !important; 
+    overflow: hidden;
+    height: auto !important;
     height: 1%;
     margin: 3px;
     padding: 1px 3px;
@@ -124,8 +124,8 @@ div.tag-token-input-dropdown ul li.tag-token-input-selected-dropdown-item {
 
 /* Example tokeninput style #1: Token vertical list*/
 ul.list-token-input-list {
-    overflow: hidden; 
-    height: auto !important; 
+    overflow: hidden;
+    height: auto !important;
     height: 1%;
     width: 400px;
     border: 1px solid #999;
@@ -138,6 +138,8 @@ ul.list-token-input-list {
 
 ul.list-token-input-list li {
     list-style-type: none;
+    margin: 0;
+    font-size: 1em;
 }
 
 ul.list-token-input-list li input {
@@ -148,8 +150,8 @@ ul.list-token-input-list li input {
 }
 
 li.list-token-input-token {
-    overflow: hidden; 
-    height: auto !important; 
+    overflow: hidden;
+    height: auto !important;
     height: 1%;
     margin: 3px;
     padding: 3px 5px;
