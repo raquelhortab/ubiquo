@@ -30,7 +30,7 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
     :relation_selector => { :append_class => "relation" },
     :date_select => { :group => {:append_class => "datetime"} },
     :datetime_select => { :group => {:append_class => "datetime"} },
-    :check_box => {:group => {:class => "form-item-inline"}, :label_at_bottom => true },
+    :check_box => {:group => {:class => "form-item"}, :class => "checkbox"},
     :create_button => {
       :i18n_label_key => "ubiquo.create",
       :class => "bt-update",
@@ -41,7 +41,7 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
     },
     :back_button => {
       :i18n_label_key => "ubiquo.back_to_list",
-    },
+    }
   })
   setting.add( :groups_configuration,{
     :div => {:content_tag => :div, :class => "form-item"},
@@ -58,7 +58,8 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
     },
     :submit_group => {:content_tag => :div, :class => "form-item-submit"},
     :translatable => {:content_tag => :p, :class => "translation-info"},
-    :description => {:content_tag => :p, :class => "description"}
+    :description  => {:content_tag => :p, :class => "description"},
+    :help         => {:partial => "/shared/ubiquo/form_parts/form_help"}
   })
   setting.add( :default_group_type, :div )  
 end
