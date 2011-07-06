@@ -97,32 +97,39 @@ class Page < ActiveRecord::Base
 
   # This method will raise an exception if it's not possible to publish the page
   def publish
-    transaction do
-      self.clear_published_page
-      published_page = self.dup
-      published_page.attributes = {
-        :is_modified => false,
-        :published_id => nil
-      }
+    begin
+      transaction do
+        self.clear_published_page
+        published_page = self.dup
+        published_page.attributes = {
+          :is_modified => false,
+          :published_id => nil
+        }
 
-      published_page.save!
+        published_page.save!
 
-      published_page.blocks.destroy_all
-      self.blocks.each do |block|
-        new_block = block.dup
-        new_block.page = published_page
-        new_block.save!
-        uhook_publish_block_widgets(block, new_block) do |widget, new_widget|
-          uhook_publish_widget_relations(widget, new_widget)
+        published_page.blocks.destroy_all
+        self.blocks.each do |block|
+          new_block = block.dup
+          new_block.page = published_page
+          new_block.save!
+          uhook_publish_block_widgets(block, new_block) do |widget, new_widget|
+            uhook_publish_widget_relations(widget, new_widget)
+          end
         end
+
+        published_page.reload.update_attributes(:is_modified => false)
+
+        self.update_attributes(
+          :is_modified => false,
+          :published_id => published_page.id
+        )
+
+        expire_varnish
       end
-
-      published_page.reload.update_attributes(:is_modified => false)
-
-      self.update_attributes(
-        :is_modified => false,
-        :published_id => published_page.id
-      )
+      return true
+    rescue Exception => e
+      return false
     end
   end
 
@@ -135,7 +142,33 @@ class Page < ActiveRecord::Base
     end
   end
 
-  # Returns true if the page has been published.
+
+  def expire_varnish
+    if defined? VARNISH_SERVER
+      ['es','ca'].each do |suffix|
+        base_url = self.url_name + '/' + suffix
+        varnish_request(base_url) # page expiration
+        self.blocks.map(&:widgets).flatten.each do |widget|
+          # widget expiration
+          varnish_request("#{base_url}?widget=#{widget.id}")
+        end
+      end
+    end
+    true
+  end
+
+  def varnish_request(url)
+    Rails.logger.warn "PURGING #{url}"
+    puts "PURGING #{url}"
+    begin
+      http = Net::HTTP.new(VARNISH_SERVER)
+      http.send_request('PURGE', url)
+    rescue
+      ''
+    end
+  end
+
+  # Returns true if the page has been published
   def published?
     published_id
   end
