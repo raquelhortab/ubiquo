@@ -34,7 +34,7 @@ module UbiquoDesign
     end
 
     def esi_widget?(widget)
-      true
+      Rails.env.production?
     end
       
     def template_directory

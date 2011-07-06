@@ -125,7 +125,7 @@ class Page < ActiveRecord::Base
           :published_id => published_page.id
         )
 
-        expire_varnish
+        expire_varnish if Rails.env.production?
       end
       return true
     rescue Exception => e
