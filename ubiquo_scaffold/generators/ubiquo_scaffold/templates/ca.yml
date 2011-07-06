@@ -7,7 +7,7 @@ ca:
       edited: "Entitat <%= singular_name.capitalize %> editada amb èxit"
       edit_error: "Error a l'editar l'entitat <%= singular_name %>"
       destroyed: "Entitat <%= singular_name.capitalize %> eliminada amb èxit"
-      destroy_error: "Error al eliminar la entitat <%= singular_name %>"
+      destroy_error: "Error al eliminar l'entitat <%= singular_name %>"
       index:
         title: "Llistat de <%= plural_name %>"
         help_message: "Aquí pots veure el llistat de <%= plural_name %>"
