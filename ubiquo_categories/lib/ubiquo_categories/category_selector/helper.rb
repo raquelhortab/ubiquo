@@ -100,9 +100,9 @@ module UbiquoCategories
         # hidden field without value is required when you want remove
         # all your selection values
         output << hidden_field_tag("#{object_name}[#{key}][]", '')
-        if set.is_editable? && !options[:hide_controls]
-          output << new_category_controls("checkbox", object_name, key)
-        end
+
+        output << category_controls("checkbox", object_name, key, set.is_editable?, options).to_s
+
         output
       end
 
@@ -122,9 +122,9 @@ module UbiquoCategories
           options_for_select(categories_for_select, :selected => selected_value),
           { :id => "#{object_name}_#{key}_select" }.merge(options)
         )
-        if set.is_editable? && !options[:hide_controls]
-          output << new_category_controls("select", object_name, key)
-        end
+
+        output << category_controls("select", object_name, key, set.is_editable?, options).to_s
+
         output
       end
 
@@ -163,6 +163,12 @@ module UbiquoCategories
         javascript_tag(js_code) +
           text_field_tag("#{object_name}[#{key}][]", "",
                          :id => "#{object_name}_#{key}_autocomplete")
+      end
+
+      def category_controls(type, object_name, key, set_editable, options = {})
+        if set_editable && !options[:hide_controls]
+          new_category_controls(type, object_name, key)
+        end
       end
 
       def new_category_controls(type, object_name, key)
