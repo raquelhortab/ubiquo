@@ -1,6 +1,6 @@
 class CategorySet < ActiveRecord::Base
 
-  has_many :categories do
+  has_many :categories, {:order => "name ASC"} do
 
     # This method accepts an options parameter if you use it like this:
     #

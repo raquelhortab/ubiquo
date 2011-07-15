@@ -177,7 +177,7 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
 
   def test_from_option_retrieves_from_correct_set
     set = create_set :group_of_cities
-    categories = ['Barcelona', 'Athens']
+    categories = ['Athens', 'Barcelona']
     categorize :cities, :from => :group_of_cities, :size => :many
     model = create_category_model
     assert_nothing_raised UbiquoCategories::SetNotFoundError do
