@@ -198,14 +198,12 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :ubiquo do |ubiquo|
   end
 
+  Translate::Routes.translation_ui(map) unless Rails.env.production?
   # Ubiquo plugins routes. See routes.rb from each plugin path.
-#{ubiquo_routes}
-<% if @opts[:template] == :edge %>
+<% if @opts[:template] == :edge && @opts[:profile] == :complete %>
   <%= "map.from_plugin :ubiquo_categories" %>
 <% end %>
-<% if opts[:gnuine] %>
-  <%= "map.from_plugin :ubiquo_design" %>
-<% end %>
+#{ubiquo_routes}
   ############# default routes
   #map.connect ':controller/:action/:id'
   #map.connect ':controller/:action/:id.:format'
