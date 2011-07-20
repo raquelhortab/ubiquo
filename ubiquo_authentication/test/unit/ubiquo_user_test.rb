@@ -63,10 +63,14 @@ class UbiquoUserTest < ActiveSupport::TestCase
   end
   def test_should_require_unique_email
     assert_difference 'UbiquoUser.count', 1 do
-      u = create_ubiquo_user(:email => "unique.mail@mail.com")
+      email = "unique.mail@mail.com"
+      u = create_ubiquo_user(:email => email)
       assert !u.new_record?
       
-      u = create_ubiquo_user(:email => "unique.mail@mail.com")
+      u = create_ubiquo_user(:email => email)
+      assert u.errors.on(:email)
+
+      u = create_ubiquo_user(:email => email.upcase)
       assert u.errors.on(:email)
     end
   end

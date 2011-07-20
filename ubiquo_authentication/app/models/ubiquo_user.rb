@@ -21,7 +21,7 @@ class UbiquoUser < ActiveRecord::Base
   validates_length_of       :password, :within => 4..40, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
   validates_presence_of     :email
-  validates_uniqueness_of   :email
+  validates_uniqueness_of   :email, :case_sensitive => false
   validates_format_of       :email, :with => /\A([a-z0-9#_.-]+)@([a-z0-9-]+)\.([a-z.]+)\Z/i
   validates_length_of       :login, :within => 3..40
   validates_uniqueness_of   :login, :case_sensitive => false
