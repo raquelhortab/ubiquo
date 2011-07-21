@@ -6,7 +6,7 @@ module UbiquoCategories
         defaults = {
           :collection => categories_for_select(set),
           :caption => options[:caption] || I18n.t("ubiquo.category_sets.#{set}"),
-          :field => "filter_#{set.to_s.pluralize}",
+          :field => "filter_#{set.to_s}",
           :id_field => :name,
           :name_field => :name
         }
