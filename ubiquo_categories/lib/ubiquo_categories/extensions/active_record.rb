@@ -159,15 +159,15 @@ module UbiquoCategories
 
           alias_method_chain "#{association_name}=", 'categories'
 
-          named_scope "with_#{association_name}_in", lambda{ |*values|
+          named_scope "#{association_name}", lambda{ |*values|
             category_conditions_for field, values
           }
 
-          if field != association_name
+          if field.to_s != association_name
             alias_method field, association_name
             alias_method "#{field}=", "#{association_name}="
             klass = class << self; self; end
-            klass.send :alias_method,  "with_#{field}_in", "with_#{association_name}_in"
+            klass.send :alias_method,  "#{field}", "#{association_name}"
           end
 
           prepare_categories_join_sql field

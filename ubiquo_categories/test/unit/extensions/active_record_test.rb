@@ -340,9 +340,9 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model_3 = create_category_model
     model_3.cities = []
 
-    assert_equal_set([model_1, model_2], CategoryTestModel.with_cities_in('Barcelona'))
-    assert_equal_set([model_2], CategoryTestModel.with_cities_in('London'))
-    assert_equal_set [], CategoryTestModel.with_cities_in()
+    assert_equal_set([model_1, model_2], CategoryTestModel.cities('Barcelona'))
+    assert_equal_set([model_2], CategoryTestModel.cities('London'))
+    assert_equal_set [], CategoryTestModel.cities()
   end
 
   def test_with_field_in_scope_multiple
@@ -361,25 +361,25 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model_3.cities = []
     model_3.genre = 'Male'
 
-    assert_equal_set([model_1], CategoryTestModel.with_cities_in('Barcelona').with_genre_in('Male'))
-    assert_equal_set([model_2], CategoryTestModel.with_genre_in('Female').with_cities_in('London'))
+    assert_equal_set([model_1], CategoryTestModel.cities('Barcelona').genre('Male'))
+    assert_equal_set([model_2], CategoryTestModel.genre('Female').cities('London'))
 
     model_2.genre = 'Male'
 
     assert_equal_set(
       [model_1, model_2],
-      CategoryTestModel.with_genre_in('Male').with_cities_in('Barcelona')
+      CategoryTestModel.genre('Male').cities('Barcelona')
     )
 
-    assert_equal_set([], CategoryTestModel.with_genre_in('Female').with_cities_in('Tokyo'))
-    assert_equal_set [], CategoryTestModel.with_cities_in().with_genre_in('Male')
-    assert_equal_set [], CategoryTestModel.with_genre_in('Male').with_cities_in()
+    assert_equal_set([], CategoryTestModel.genre('Female').cities('Tokyo'))
+    assert_equal_set [], CategoryTestModel.cities().genre('Male')
+    assert_equal_set [], CategoryTestModel.genre('Male').cities()
   end
 
   def test_with_field_no_set
     categorize :things, :size => 2
     assert_raise UbiquoCategories::SetNotFoundError do
-      CategoryTestModel.with_things_in []
+      CategoryTestModel.things []
     end
   end
 
