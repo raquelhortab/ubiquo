@@ -117,7 +117,6 @@ module UbiquoCategories
         elsif object.new_record?
           options[:default]
         end
-        require 'ruby-debug';debugger
         output = select_tag(
           "#{object_name}[#{key}][]",
           options_for_select(categories_for_select, :selected => selected_value),
