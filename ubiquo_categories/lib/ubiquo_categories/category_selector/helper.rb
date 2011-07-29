@@ -59,9 +59,16 @@ module UbiquoCategories
         content_tag(:ul, :class => options[:css_class]) do
           categories.map do |category|
             content_tag(:li) do
+              is_checked = if options[:checked]
+                options[:checked]
+              elsif object.send(key).present?
+                object.send(key).has_category?(category)
+              elsif object.new_record?
+                Array(options[:default]).include?(category.name)
+              end
               check_box_tag("#{object_name}[#{key}][]", category.name,
-                object.send(key).has_category?(category),
-                :id => "#{object_name}_#{key}_#{category.id}") + ' ' +
+                is_checked,
+                { :id => "#{object_name}_#{key}_#{category.id}" }.merge(options)) + ' ' +
                 label_tag("#{object_name}_#{key}_#{category.id}", category) +
                 options[:extra].to_s
             end
@@ -73,12 +80,14 @@ module UbiquoCategories
         tree = convert_to_tree(categories)
         output = ''
         if tree.keys.size == 1
-          output = checkbox_area(object, object_name, key, categories)
+          output = checkbox_area(object, object_name, key, categories,
+            { :default => options[:default] })
         else
           tree.each_pair do |parent, children|
             output << checkbox_area(object, object_name, key,
               categories.select{|c| c.id == parent},
               {
+                :default => options[:default],
                 :css_class => 'hierarchical_check_list',
                 :extra => checkbox_area(object, object_name, key, children,
                   :css_class => 'children_check_list check_list'
@@ -101,11 +110,18 @@ module UbiquoCategories
         blank_name = options[:include_blank] if options[:include_blank].kind_of?(String)
         categories_for_select = options[:include_blank] ? [[blank_name, nil]] : []
         categories_for_select += categories.collect { |cat| [cat.name, cat.name] }
-        selected_value = object.send(key).name
+        selected_value = if options[:selected]
+          options[:selected]
+        elsif object.send(key).present?
+          object.send(key).name
+        elsif object.new_record?
+          options[:default]
+        end
+        require 'ruby-debug';debugger
         output = select_tag(
           "#{object_name}[#{key}][]",
           options_for_select(categories_for_select, :selected => selected_value),
-          { :id => "#{object_name}_#{key}_select" }
+          { :id => "#{object_name}_#{key}_select" }.merge(options)
         )
         if set.is_editable? && !options[:hide_controls]
           output << new_category_controls("select", object_name, key)
@@ -115,9 +131,16 @@ module UbiquoCategories
 
       def category_autocomplete_selector(object, object_name, key, categories, set, options = {})
         url_params = { :category_set_id => set.id, :format => :js }
+        current_values = if object.send(key).present?
+          Array(object.send(key))
+        elsif object.new_record? && options[:default].present?
+          options[:default].map { |value| { :name => value } }
+        else
+          []
+        end
         autocomplete_options = {
           :url => ubiquo_category_set_categories_path(url_params),
-          :current_values => Array(object.send(key)).to_json(:only => [:id, :name]),          
+          :current_values => current_values.to_json(:only => [:id, :name]),
           :style => options[:autocomplete_style] || "tag"
         }
 

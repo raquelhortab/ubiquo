@@ -68,7 +68,6 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
 
   end
 
-
   def test_category_selector_should_be_autocomplete_when_many_categories
     categorize :tags
     current_categories_amount = @set.categories.size
@@ -213,6 +212,80 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     assert_nothing_raised do
       category_selector 'name', :tags, {:object => object}, {:id => 'html_id'}
     end
+  end
+
+  def test_category_select_selector_with_default_option
+    object = CategoryTestModel.new
+    options = {:default => 'Red'}
+    output = category_select_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'select' do
+      assert_select 'option[selected=selected][value=Red]'
+    end
+  end
+
+  def test_category_select_selector_respect_value_as_selected_option
+    object = CategoryTestModel.new
+    object.tags << 'Blue'
+    options = {:default => 'Red'}
+    output = category_select_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'select' do
+      assert_select 'option[selected=selected][value=Blue]'
+    end
+  end
+
+  def test_category_select_selector_should_ignore_default_option_if_itsnt_new_record
+    object = CategoryTestModel.create(:field => 'test')
+    options = {:default => 'Red'}
+    output = category_select_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    red_option = doc.root.find(:tag => "option", :attributes => { :value => 'Red' })
+    assert red_option.match(:attributes => { :selected => false })
+  end
+
+  def test_category_checkbox_selector_with_default_option
+    categorize :tags
+    object = CategoryTestModel.new
+    options = {:default => 'Red'}
+    output = category_checkbox_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    red_check = doc.root.find({:attributes => { :type => 'checkbox', :value => 'Red' }})
+    assert red_check.match(:attributes => { :checked => true })
+  end
+
+  def test_category_checkbox_selector_with_multiple_default_option
+    categorize :tags
+    object = CategoryTestModel.new
+    options = {:default => ['Red','Blue']}
+    output = category_checkbox_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    red_check = doc.root.find({:attributes => { :type => 'checkbox', :value => 'Red' }})
+    blue_check = doc.root.find({:attributes => { :type => 'checkbox', :value => 'Blue' }})
+    assert red_check.match(:attributes => { :checked => true })
+    assert blue_check.match(:attributes => { :checked => true })
+  end
+
+  def test_category_checkbox_selector_should_ignore_default_option_if_itsnt_new_record
+    categorize :tags
+    object = CategoryTestModel.create(:field => 'test')
+    options = {:default => 'Red'}
+    output = category_checkbox_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    red_check = doc.root.find({:attributes => { :type => 'checkbox', :value => 'Red' }})
+    assert red_check.match(:attributes => { :checked => false })
+  end
+
+  def test_category_checkbox_selector_respect_values_as_checked_options
+    categorize :tags, :size => :many
+    object = CategoryTestModel.new
+    object.tags += ['Blue', 'Yellow', 'Green']
+    options = {:default => 'Red'}
+    output = category_checkbox_selector object, 'name', :tags, @set.categories, @set, options
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'input[type=checkbox][checked=checked][value=Blue]'
+    assert_select doc.root, 'input[type=checkbox][checked=checked][value=Yellow]'
+    assert_select doc.root, 'input[type=checkbox][checked=checked][value=Green]'
   end
 
 end
