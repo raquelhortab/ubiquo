@@ -93,7 +93,8 @@ module UbiquoDesign
     end
 
     # Run a widget behaviour, given a +widget+ instance
-    def run_behaviour(widget)
+    def run_behaviour widget
+      varnish_expires_in ::Widget::WIDGET_TTL[:default] if widget_request?
       ::Widget.behaviours[widget.key][:proc].bind(self).call(widget)
     end
 

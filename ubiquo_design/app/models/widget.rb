@@ -4,6 +4,10 @@ class Widget < ActiveRecord::Base
 
   INACCEPTABLE_OPTIONS = %w{options widget widget_id block block_id position}
 
+  WIDGET_TTL = {
+    :default => 10.minutes
+  }
+
   @@behaviours = {}
 
   # NOTE: the @inheritable_attributes variable is no longer available in Rails 3
