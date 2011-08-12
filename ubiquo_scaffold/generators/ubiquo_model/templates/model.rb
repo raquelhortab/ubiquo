@@ -16,20 +16,21 @@ class <%= class_name %> < ActiveRecord::Base
     <%- options[:belongs_to].each do |rl| -%>
   belongs_to :<%= rl.singularize %>
     <%- end -%>
-  <%- end -%>  
+  <%- end -%>
   <%- if options[:media] -%>
+
     <%- options[:media].each do |rl| -%>
   media_attachment :<%= rl %>, :types => %w{image doc video audio flash}
     <%- end -%>
   <%- end -%>
-    
   <%- if options[:categorized] -%>
+
     <%- options[:categorized].each do |rl| -%>
   categorized_with :<%= rl %>
     <%- end -%>
   <%- end -%>
-    
   <%- unless ton.nil? -%>
+
   validates_presence_of :<%= ton %>
   <%- end -%>
 
