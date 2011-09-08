@@ -19,7 +19,7 @@ begin
                    "Ramon Salvadó",
                    "Arnau Sánchez"
                   ]
-    gem.add_dependency(%q<rails>, '= 2.3.11')
+    gem.add_dependency(%q<rails>, '= 2.3.14')
     gem.add_dependency(%q<i18n>, '< 0.5.0')
     gem.add_dependency(%q<lockfile>, '>= 1.4.3')
     gem.add_dependency(%q<bundler>, '>= 1.0.10')
