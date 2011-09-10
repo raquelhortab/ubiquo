@@ -7,20 +7,20 @@ var CategorySelector = Class.create({
     this.key = link_id[2];
   },
   counter: function() {
-    return this.new_element_link.up().previous('ul').select('li').size();
+    return this.new_element_link.up().previous('div').select('div').size();
   },
   add_element: function(input_id) {
     var element_input = $(input_id);
     if (element_input.value != "") {
       if (this.type == "checkbox") {
         //We create the <ul> element if it's not present
-        if (!element_input.up().up().previous('ul')) {
-          element_input.up().up().previous('legend').insert({after: '<ul class="check_list"></ul>'});
+        if (!element_input.up().up().previous('div')) {
+          element_input.up().up().previous('legend').insert({after: '<div class="category-group"></div>'});
         }
-        var element = "<li><input type='"+this.type+"' checked='checked' value='"+element_input.value+"' id='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"' name='"+this.object_name+"["+this.key+"][]' />";
-        element += "<label for='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"'>"+element_input.value+"</label></li>";
-        element_input.up().up().previous('ul').insert(element);
-        this.toggle_new_category_input(element_input.up().previous('.category_selector_new'));
+        var element = "<div class='form-item-inline'><input type='"+this.type+"' checked='checked' value='"+element_input.value+"' id='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"' name='"+this.object_name+"["+this.key+"][]' />";
+        element += "<label for='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"'>"+element_input.value+"</label></div>";
+        element_input.up().up().previous('div').insert(element);
+        this.toggle_new_category_input(element_input.up().previous('.new_category_controls'));
       } else if (this.type == "select") {
         var select = $(this.object_name + "_" + this.key + "_select");
         var option = document.createElement('option');
@@ -28,7 +28,7 @@ var CategorySelector = Class.create({
         option.value = element_input.value;
         option.selected = "selected";
         select.options.add(option);
-        this.toggle_new_category_input(element_input.up().previous('.category_selector_new'));
+        this.toggle_new_category_input(element_input.up().previous('.bt-add-category'));
       }
     }
   },
@@ -39,7 +39,7 @@ var CategorySelector = Class.create({
 });
 document.observe("dom:loaded", function() {
   var selectors = {};
-  $$('.category_selector_new').each(function(link, index) {
+  $$('.new_category_controls .bt-add-category').each(function(link, index) {
     selectors[index] = new CategorySelector(link);
     link.observe(
       "click",
@@ -48,7 +48,7 @@ document.observe("dom:loaded", function() {
         event.stop();
       }
     );
-    $$('.add_new_category_link').each(function(add_link) {
+  $$('.new_category_controls .bt-create-category').each(function(add_link) {
       add_link.observe(
         "click",
         function(event) {

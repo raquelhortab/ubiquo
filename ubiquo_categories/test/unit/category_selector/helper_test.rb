@@ -100,13 +100,27 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     category_selector 'name', :city, :object => CategoryTestModel.new
   end
 
-  def test_category_selector_have_fieldset_and_legend
+  def test_category_selector_have_fieldset_and_legend_if_type_is_checkbox
     categorize :tags
-    output = category_selector 'name', :tags, :object => CategoryTestModel.new
+    output = category_selector 'name', :tags, :object => CategoryTestModel.new, :type => 'checkbox'
     doc = HTML::Document.new(output)
     assert_select doc.root, 'fieldset' do
       assert_select 'legend'
     end
+  end
+
+  def test_category_selector_have_div_instead_of_fieldset_if_type_is_select
+    categorize :tags
+    output = category_selector 'name', :tags, :object => CategoryTestModel.new, :type => 'select'
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'div'
+  end
+
+  def test_category_selector_have_div_instead_of_fieldset_if_type_is_autocomplete
+    categorize :tags
+    output = category_selector 'name', :tags, :object => CategoryTestModel.new, :type => 'autocomplete'
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'div'
   end
 
   def test_category_selector_should_show_new_buttons_if_is_editable
@@ -114,11 +128,11 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     object = CategoryTestModel.new
     output = category_selector 'name', :tags, { :object => object }, { :id => 'html_id' }
     doc = HTML::Document.new(output)
-    assert_select doc.root, 'fieldset[id=html_id]'
+    assert_select doc.root, 'div[id=html_id]'
     assert_select doc.root, '.new_category_controls' do
-      assert_select doc.root, '.category_selector_new'
+      assert_select doc.root, '.bt-add-category'
       assert_select doc.root, '.add_new_category' do
-        assert_select doc.root, '.add_new_category_link'
+        assert_select doc.root, '.bt-create-category'
       end
     end
   end
@@ -130,7 +144,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     output = category_selector 'name', :tags, { :object => object }, { :id => 'html_id' }
     doc = HTML::Document.new(output)
     # first, check if category selector is printed
-    assert_select doc.root, 'fieldset[id=html_id]'
+    assert_select doc.root, 'div[id=html_id]'
     # now, check that all new categories controls aren't displayed
     assert_select doc.root, '.new_category_controls', 0
     assert_select doc.root, '.category_selector_new', 0
@@ -140,30 +154,37 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   def test_category_selector_shouldnt_show_new_category_buttons_with_hide_controls_option
     categorize :tags
     object = CategoryTestModel.new
-    output = category_selector 'name', :tags, { :object => object , :hide_controls => true }, {:id => 'html_id'}
+    output = category_selector(
+      'name',
+      :tags,
+      { :object => object , :type => 'checkbox', :hide_controls => true },
+      {:id => 'html_id'})
     doc = HTML::Document.new(output)
     # first, check if category selector is printed
     assert_select doc.root, 'fieldset[id=html_id]'
     # now, check that all new categories controls aren't displayed
     assert_select doc.root, '.new_category_controls', 0
-    assert_select doc.root, '.category_selector_new', 0
-    assert_select doc.root, '.add_new_category', 0
+    assert_select doc.root, '.bt-add-category', 0
+    assert_select doc.root, '.bt-create-category', 0
 
     object2 = CategoryTestModel.new
-    output2 = category_selector 'name', :tags, { :object => object2 , :hide_controls => false }, {:id => 'html_id'}
+    output2 = category_selector('name',
+      :tags,
+      { :object => object2 , :type => 'checkbox', :hide_controls => false },
+      {:id => 'html_id'})
     doc2 = HTML::Document.new(output2)
     # first, check if category selector is printed
     assert_select doc2.root, 'fieldset[id=html_id]'
     # now, check that all new categories controls aren't displayed
     assert_select doc2.root, '.new_category_controls', 1
-    assert_select doc2.root, '.category_selector_new', 1
-    assert_select doc2.root, '.add_new_category', 1
+    assert_select doc2.root, '.bt-add-category', 1
+    assert_select doc2.root, '.bt-create-category', 1
   end
 
   def test_fieldset_has_html_options
     categorize :tags
     object = CategoryTestModel.new
-    output = category_selector 'name', :tags, {:object => object}, {:id => 'html_id'}
+    output = category_selector 'name', :tags, {:object => object, :type => 'checkbox'}, {:id => 'html_id'}
     doc = HTML::Document.new(output)
     assert_select doc.root, 'fieldset[id=html_id]'
   end
@@ -171,14 +192,14 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   def test_legend_uses_name_if_present
     categorize :tags
     object = CategoryTestModel.new
-    output = category_selector 'name', :tags, {:object => object, :name => 'legend'}
+    output = category_selector 'name', :tags, {:object => object, :name => 'legend', :type => 'checkbox'}
     doc = HTML::Document.new(output)
     assert_select doc.root, 'legend', 'legend'
   end
 
   def test_legend_uses_relation_name_if_no_name
     categorize :tags
-    output = category_selector 'name', :tags, {:object => CategoryTestModel.new}
+    output = category_selector 'name', :tags, {:object => CategoryTestModel.new, :type => 'checkbox'}
     doc = HTML::Document.new(output)
     assert_select doc.root, 'legend', CategoryTestModel.human_attribute_name(:tags)
   end
