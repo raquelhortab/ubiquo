@@ -14,7 +14,9 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
   end
 
   def test_should_not_be_able_to_create_a_nil_priority_job
-    assert_raise(ActiveRecord::StatementInvalid) { create_job(:priority => nil) }
+    exceptions = [ActiveRecord::StatementInvalid]
+    exceptions << ActiveRecord::JDBCError if ActiveRecord.const_defined?(:JDBCError)
+    assert_raise(*exceptions) { create_job(:priority => nil) }
   end
   
   def test_should_get_job_higher_priority_first
