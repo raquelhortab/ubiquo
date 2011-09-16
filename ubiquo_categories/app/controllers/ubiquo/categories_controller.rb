@@ -7,8 +7,8 @@ class Ubiquo::CategoriesController < UbiquoController
   # GET /categories
   # GET /categories.xml
   def index
-    order_by = params[:order_by] || 'categories.id'
-    sort_order = params[:sort_order] || 'desc'
+    order_by = params[:order_by] || 'categories.name'
+    sort_order = params[:sort_order] || 'ASC'
     
     filters = {
       :text => params[:filter_text],
