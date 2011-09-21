@@ -56,12 +56,28 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
           end
       }
     },
+    :tabbed => { :content_tag => :div, :append_class => "form-tab-container" },
+    # This group config is used for each tab
+    :tab => {:content_tag => :fieldset, :append_class => "form-tab",
+      :callbacks => {
+        :before =>
+          lambda do |context, options|
+            # Render the legend tag
+            legend_options = options.delete(:legend) || options.delete(:label) || {}
+            context.eval("@template").content_tag(:legend, legend_options)
+          end
+      }
+    },
+    # Configuration for disabled tab wrapper
+    :tabbed_unfolded => { :content_tag => :div, :append_class => "form-tab-container-unfolded" },
     :submit_group => {:content_tag => :div, :class => "form-item-submit"},
     :translatable => {:content_tag => :p, :class => "translation-info"},
     :description  => {:content_tag => :p, :class => "description"},
     :help         => {:partial => "/shared/ubiquo/form_parts/form_help"}
   })
   setting.add( :default_group_type, :div )  
+  # Set to false to unfold the group(:type => :tabbed)
+  setting.add( :unfold_tabs, false)
 end
 
 require 'ubiquo'
