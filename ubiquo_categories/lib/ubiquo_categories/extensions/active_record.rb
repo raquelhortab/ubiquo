@@ -111,6 +111,10 @@ module UbiquoCategories
               end
             end
 
+            define_method 'to_a' do
+              Array(self)
+            end
+
             define_method 'is_full?' do
               return false if options[:size].to_sym == :many
               Array(self).size >= options[:size]
