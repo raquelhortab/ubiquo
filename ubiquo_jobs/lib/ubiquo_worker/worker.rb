@@ -20,10 +20,10 @@ module UbiquoWorker
         while (!shutdown) do
           job = UbiquoJobs.manager.get(name)
           if job
-            puts "#{Time.now} [#{name}] - executing job #{job.id}"
+            log "executing job #{job.id}"
             job.run!
           else
-            puts "#{Time.now} [#{name}] - no job available"
+            log "no job available"
             wait
           end
         end
@@ -33,22 +33,27 @@ module UbiquoWorker
     private
 
     def with_pid_file
+      pid_directory = File.dirname(pid_file_path)
+      Dir.mkdir(pid_directory) unless File.exist?(pid_directory)
       raise ArgumentError unless block_given?
       if File.exists? pid_file_path
-        puts "Existing pid file: #{pid_file_path}"
+        log "Existing pid file: #{pid_file_path}"
         existing_pid = File.read(pid_file_path).to_i
         if existing_pid > 0
           begin
             Process.kill(0, existing_pid)
-            abort "Process with pid #{existing_pid} already running. Aborting..."
+            log "Process with pid #{existing_pid} already running. Aborting...", :error
+            abort
           rescue Errno::ESRCH
-            puts "Process with pid #{existing_pid} not running. Cleaning pid file and continuing..."
+            log "Process with pid #{existing_pid} not running. Cleaning pid file and continuing..."
             store_pid
           rescue Errno::EPERM
-            abort "No permission to query process with id #{existing_pid}. Changed uid, please do investigate. Aborting..."
+            log "No permission to query process with id #{existing_pid}. Changed uid, please do investigate. Aborting...", :error
+            abort
           end
         else
-          abort "pid file doesnt contain an integer?"
+          log "pid file doesnt contain an integer?", :error
+          abort
         end
       else
         store_pid
@@ -67,7 +72,7 @@ module UbiquoWorker
 
     def daemon_handle_signals
       Signal.trap("TERM") do
-        puts "Caught TERM signal, terminating ..."
+        log "Caught TERM signal, terminating ..."
         self.shutdown = true
       end
     end
@@ -78,6 +83,14 @@ module UbiquoWorker
         break if shutdown
         sleep sleep_interval
         time_slept = time_slept + sleep_interval
+      end
+    end
+
+    def log(message,severity=:warn)
+      if Rails.env == 'development'
+        puts "#{Time.now} [#{name}] - #{message}"
+      else
+        Rails.logger.send(severity, "#{Time.now} [UBIQUO WORKER ##{name}] - #{message}")
       end
     end
 
