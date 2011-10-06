@@ -7,5 +7,11 @@ namespace :ubiquo do
       }.delete_if { |k,v| v.blank? }
       UbiquoWorker.init(args.name, options)
     end
+
+    desc "Stops an existing ubiquo worker"
+    task :stop, [:name] => [:environment] do |t, args|
+      pid = File.read(Rails.root + "tmp/pids/#{args.name}").to_i
+      Process.kill("TERM", pid)
+    end
   end
 end
