@@ -29,6 +29,57 @@ class UbiquoWorker::WorkerTest < ActiveSupport::TestCase
     start_worker :iterations => 2
   end
 
+  def test_should_create_and_cleanup_pid_file
+    UbiquoWorker::Worker.any_instance.expects(:store_pid)
+    UbiquoWorker::Worker.any_instance.expects(:cleanup_pid_file)
+    start_worker :iterations => 1
+  end
+
+  def test_should_set_pid_file_path
+    pid_file = Tempfile.new('pid')
+    pid_file_path = pid_file.path
+    pid_file.unlink
+    File.expects(:open).with(pid_file_path, 'w')
+    start_worker :iterations =>1, :worker_options => { :pid_file_path => pid_file_path }
+  end
+
+  def test_should_abort_with_existing_pid_file_and_invalid_contents
+    assert_raise SystemExit do
+      pid_file = Tempfile.new('pid')
+      pid_file_path = pid_file.path
+      start_raw_worker :test, { :pid_file_path => pid_file_path }
+    end
+  end
+
+  def test_should_abort_with_existing_pid_file_and_running_process
+    assert_raise SystemExit do
+      pid_file = Tempfile.new('pid')
+      pid_file_path = pid_file.path
+      pid_file.write(Process.pid)
+      pid_file.flush
+      start_raw_worker :test, { :pid_file_path => pid_file_path }
+    end
+  end
+
+  def test_should_start_worker_with_existing_pid_file_and_no_running_process
+    pid_file = Tempfile.new('pid')
+    pid_file_path = pid_file.path
+    pid_file.write('6666666') #FIXME: This should be an inexistent pid
+    pid_file.flush
+    UbiquoWorker::Worker.any_instance.expects(:store_pid)
+    start_worker :worker_options => {:pid_file_path => pid_file_path}, :iterations => 1
+  end
+
+  def test_should_abort_with_existing_pid_file_and_pid_with_permissions_to_be_queried
+    assert_raise SystemExit do
+      pid_file = Tempfile.new('pid')
+      pid_file_path = pid_file.path
+      pid_file.write("1")
+      pid_file.flush
+      start_raw_worker :test, { :pid_file_path => pid_file_path }
+    end
+  end
+
   def test_should_trap_term_signal
     Signal.expects(:trap).with("TERM")
     start_worker :iterations => 1
@@ -61,9 +112,13 @@ class UbiquoWorker::WorkerTest < ActiveSupport::TestCase
     UbiquoWorker::Worker.any_instance.expects(:sleep).times(0..sleep_invoked_times).returns(nil)
     UbiquoWorker::Worker.any_instance.expects(:shutdown).at_least(options[:iterations]).returns(*shutdown_values)
 
+    start_raw_worker(options[:name], options[:worker_options])
+  end
+
+  def start_raw_worker(name, options)
     orig_stdout = $stdout
     $stdout = File.new('/dev/null', 'w')
-    UbiquoWorker.init(options[:name], options[:worker_options])
+    UbiquoWorker.init(name, options)
     $stdout = orig_stdout
   end
 
