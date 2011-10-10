@@ -5,6 +5,8 @@ module UbiquoWorker
 
     def initialize(name, options = {})
       raise ArgumentError, "A worker name is required" if name.blank?
+      @logger = Rails.logger
+      @logger.auto_flushing = 1 # default is 1000 lines
       self.name = name
       self.pid_file_path = options[:pid_file_path] || Rails.root + "tmp/pids/#{name}"
       self.sleep_time = options[:sleep_time]
@@ -86,11 +88,13 @@ module UbiquoWorker
       end
     end
 
-    def log(message,severity=:warn)
+    def log(message,severity=:info)
+      log_time = Time.now.strftime("%b %d %H:%M:%S")
+      log_message = "#{log_time} [UBIQUO WORKER ##{name}] - #{message}"
       if Rails.env == 'development'
-        puts "#{Time.now} [#{name}] - #{message}"
+        puts log_message
       else
-        Rails.logger.send(severity, "#{Time.now} [UBIQUO WORKER ##{name}] - #{message}")
+        @logger.send(severity, log_message)
       end
     end
 
