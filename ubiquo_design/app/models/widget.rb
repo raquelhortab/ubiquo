@@ -139,6 +139,7 @@ class Widget < ActiveRecord::Base
     self.previewable_attr = (value == true)
   end
 
+<<<<<<< HEAD
   def self.clonation_exception(value)
     exceptions = clonation_exceptions + [value.to_sym]
     self.clonation_exceptions_attr = exceptions.uniq
@@ -162,6 +163,18 @@ class Widget < ActiveRecord::Base
 
   def self.is_relation_clonable?(relation_name)
     !clonation_exceptions.include?(relation_name.to_sym)
+  end
+
+  # Returns true if the widget can be retrieved in a unique url independently of
+  # the page it is placed in or any other params
+  def has_unique_url?
+    url.present?
+  end
+
+  # If the widget +has_unique_url?+, returns a string with the url where this widget
+  # can be retrieved. Else returns a +blank?+ value
+  def url
+    false
   end
 
   private
