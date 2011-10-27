@@ -27,18 +27,21 @@ module UbiquoDesign
         end
 
         def create_with_cache_expiration
-          expire_by_model
-          create_without_cache_expiration
+          created = create_without_cache_expiration
+          expire_by_model if created
+          created
         end
 
         def update_with_cache_expiration
-          expire_by_model
-          update_without_cache_expiration
+          updated = update_without_cache_expiration
+          expire_by_model if updated
+          updated
         end
 
         def destroy_with_cache_expiration
-          expire_by_model
-          destroy_without_cache_expiration
+          destroyed = destroy_without_cache_expiration
+          expire_by_model if destroyed
+          destroyed
         end
         protected
 
