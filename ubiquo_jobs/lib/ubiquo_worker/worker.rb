@@ -20,13 +20,33 @@ module UbiquoWorker
       daemon_handle_signals
       with_pid_file do
         while (!shutdown) do
-          job = UbiquoJobs.manager.get(name)
-          if job
-            log "executing job #{job.id}"
-            job.run!
-          else
-            log "no job available"
+          begin
+            job = UbiquoJobs.manager.get(name)
+            if job
+              log "executing job #{job.id}"
+              job.run!
+              result_msg = "job #{job.id} finished - "
+              if job.state == UbiquoJobs::Jobs::Base::STATES[:finished]
+                log "#{result_msg} Ok"
+              else
+                log "#{result_msg} ERROR", :error
+                log "Error log: #{job.error_log}", :error
+                if job.state == UbiquoJobs::Jobs::Base::STATES[:error]
+                  log "Job #{job.id} will not be retried", :error
+                end
+              end
+            else
+              log "no job available"
+              wait
+            end
+          rescue StandardError
+            log "Worker got an exception with job #{job.id rescue nil}", :error
+            log $!.inspect
             wait
+          rescue Exception
+            log "Unexpected exception! Worker main loop ended", :error
+            log $!.inspect
+            raise $!
           end
         end
       end
@@ -88,7 +108,7 @@ module UbiquoWorker
       end
     end
 
-    def log(message,severity=:info)
+    def log(message, severity=:info)
       log_time = Time.now.strftime("%b %d %H:%M:%S")
       log_message = "#{log_time} [UBIQUO WORKER ##{name}] - #{message}"
       if Rails.env == 'development'
