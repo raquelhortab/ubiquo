@@ -59,7 +59,7 @@ ca:
       new_user_created: "[%{app_title}] Nou usuari creat"
       confirm_creation_message: "S'ha creat un nou usuari per a accedir a %{app_title} (%{url}) amb les següents dades d'accés:"
       confirm_creation_welcome_message: "L'usuari que l'ha donat d'alta ha escrit el següent missatge de benvinguda:\n\n%{welcome_message}"
-      forgot_password_message: "Les noves dades d'accés per a accedir a %{app_title}( %{url} ) son les següents"
+      forgot_password_message: "Les noves dades d'accés per a accedir a %{app_title}( %{url} ) són les següents"
       is_active:
         "true": "actiu"
         "false": "inactiu"
