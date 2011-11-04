@@ -15,6 +15,6 @@ two:
   description: MyText
   category_set: two
 <% if (Category.is_translatable? rescue false) %>
-  content_id: 1
+  content_id: 2
   locale: 'en_US'
 <% end %>
