@@ -41,10 +41,10 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   def test_should_get_index_filtered_by_admin
     admin_ubiquo_users = [ubiquo_users(:admin)]
     get :index, :filter_admin => "1"
-    assert UbiquoUser.filtered_search({:filter_admin => true}).to_set == admin_ubiquo_users.to_set
+    assert UbiquoUser.filtered_search({"filter_admin" => "true"}).to_set == admin_ubiquo_users.to_set
     non_admin_ubiquo_users = [ubiquo_users(:josep), ubiquo_users(:inactive), ubiquo_users(:eduard)]
     get :index, :filter_admin => "0"
-    assert UbiquoUser.filtered_search({:filter_admin => false}).to_set == non_admin_ubiquo_users.to_set
+    assert UbiquoUser.filtered_search({"filter_admin" => "false"}).to_set == non_admin_ubiquo_users.to_set
   end  
 
   def test_should_get_new

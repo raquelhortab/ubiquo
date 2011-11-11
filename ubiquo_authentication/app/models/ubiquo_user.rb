@@ -32,6 +32,17 @@ class UbiquoUser < ActiveRecord::Base
   # anything else you want your ubiquo_user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :is_admin, :is_active, :role_ids, :photo, :name, :surname, :locale
 
+  named_scope :admin, lambda {|value|{
+              :conditions => {:is_admin => value}
+  }}
+
+  named_scope :active, lambda {|value|{
+              :conditions => {:is_active => value}
+  }}
+
+  filtered_search_scopes :text => [:name, :surname, :login],
+                         :enable => [:admin, :active]
+
   # Magic finder. It's like find_by_id_or_login
   def self.gfind(something, options={})
     case something
@@ -44,30 +55,6 @@ class UbiquoUser < ActiveRecord::Base
     else
       nil
     end
-  end
-
-  # Filter UbiquoUsers
-  # 
-  # Available filters: filter_admin: true|false|nil
-  def self.filtered_search(filters = {}, options = {})
-    scopes = create_scopes(filters) do |filter, value|
-      case filter
-      when :filter_text
-        {:conditions => [
-            "((upper(ubiquo_users.name)    LIKE upper(?)) OR "+
-            " (upper(ubiquo_users.surname) LIKE upper(?)) OR "+
-            " (upper(ubiquo_users.login)   LIKE upper(?)))",
-            "%#{value}%", "%#{value}%", "%#{value}%"]}
-      when :filter_admin
-        {:conditions => {:is_admin => value}}
-      when :filter_active
-        {:conditions => {:is_active => value}}
-      end
-    end
-    
-    apply_find_scopes(scopes) do
-      find(:all, options)
-    end  
   end
 
   # Creates first user. Used when installing ubiquo. It shouldn't work in production mode.

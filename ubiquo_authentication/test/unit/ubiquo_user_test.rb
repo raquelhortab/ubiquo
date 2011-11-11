@@ -216,8 +216,8 @@ class UbiquoUserTest < ActiveSupport::TestCase
   def test_should_filter_by_admin
     admin_ubiquo_users = [ubiquo_users(:admin)]
     non_admin_ubiquo_users = [ubiquo_users(:josep), ubiquo_users(:inactive), ubiquo_users(:eduard)]
-    assert UbiquoUser.filtered_search({:filter_admin => true}).to_set == admin_ubiquo_users.to_set
-    assert UbiquoUser.filtered_search({:filter_admin => false}).to_set == non_admin_ubiquo_users.to_set      
+    assert UbiquoUser.filtered_search({"filter_admin" => "true"}).to_set == admin_ubiquo_users.to_set
+    assert UbiquoUser.filtered_search({"filter_admin" => "false"}).to_set == non_admin_ubiquo_users.to_set      
   end
   
   def test_should_filter_by_active
@@ -226,8 +226,8 @@ class UbiquoUserTest < ActiveSupport::TestCase
     active_ubiquo_users.each{|u| u.update_attribute :is_active, true}
     non_active_ubiquo_users.each{|u| u.update_attribute :is_active, false}
     
-    assert UbiquoUser.filtered_search({:filter_active => true}).to_set == active_ubiquo_users.to_set
-    assert UbiquoUser.filtered_search({:filter_active => false}).to_set == non_active_ubiquo_users.to_set      
+    assert UbiquoUser.filtered_search({"filter_active" => "true"}).to_set == active_ubiquo_users.to_set
+    assert UbiquoUser.filtered_search({"filter_active" => "false"}).to_set == non_active_ubiquo_users.to_set      
   end
   
   def test_should_filter_by_name
@@ -236,7 +236,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
       create_ubiquo_user(:login => 'log2', :email => '2@prova.com', :name => "FiNdMe"),
       create_ubiquo_user(:login => 'log3', :email => '3@prova.com', :name => "hide me"),
     ]
-    assert_equal_set users[0..1], UbiquoUser.filtered_search({:filter_text => "find"})
+    assert_equal_set users[0..1], UbiquoUser.filtered_search({"filter_text" => "find"})
   end
   
   def test_should_filter_by_surname
@@ -245,7 +245,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
       create_ubiquo_user(:login => 'log2', :email => '2@prova.com', :surname => "FiNdMe"),
       create_ubiquo_user(:login => 'log3', :email => '3@prova.com', :surname => "hide me"),
     ]
-    assert_equal_set users[0..1], UbiquoUser.filtered_search({:filter_text => "find"})
+    assert_equal_set users[0..1], UbiquoUser.filtered_search({"filter_text" => "find"})
   end
   
   def test_should_filter_by_login
@@ -254,7 +254,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
       create_ubiquo_user(:login => 'findmeagain', :email => '2@prova.com'),
       create_ubiquo_user(:login => 'hideme',      :email => '3@prova.com'),
     ]
-    assert_equal_set users[0..1], UbiquoUser.filtered_search({:filter_text => "find"})
+    assert_equal_set users[0..1], UbiquoUser.filtered_search({"filter_text" => "find"})
   end
   
   def test_should_generate_random_password
