@@ -128,7 +128,7 @@ class UbiquoUser < ActiveRecord::Base
   end
   
   def reset_password!
-    returning (password = ActiveSupport::SecureRandom.base64(6)) do
+    (password = ActiveSupport::SecureRandom.base64(6)).tap do
       self.password = password
       self.password_confirmation = password
       self.save
