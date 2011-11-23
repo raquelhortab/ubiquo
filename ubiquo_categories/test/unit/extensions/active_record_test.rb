@@ -330,7 +330,7 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_kind_of Hash, CategoryTestModel.category_conditions_for(:genre, 'value')
   end
 
-  def test_with_field_in_scope
+  def test_field_named_scope
     create_set :cities
     categorize :cities, :size => 2
     model_1 = create_category_model
@@ -345,7 +345,24 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal_set [], CategoryTestModel.cities()
   end
 
-  def test_with_field_in_scope_multiple
+  def test_field_named_scope_does_not_repeat_results
+    create_set :cities
+    categorize :cities, :size => 2
+    model_1 = create_category_model
+    model_1.cities = ['Barcelona', 'Tokyo']
+    model_2 = create_category_model
+    model_2.cities = ['Barcelona', 'London']
+    model_3 = create_category_model
+    model_3.cities = []
+
+    assert_equal(
+      [model_1, model_2],
+      CategoryTestModel.cities('Barcelona', 'Tokyo').\
+        all(:order => 'category_test_models.id')
+    )
+  end
+
+  def test_field_named_scope_scope_multiple
     categorize :cities, :size => 2
     create_set :cities
     categorize :genre
