@@ -204,7 +204,7 @@ module UbiquoCategories
           raise UbiquoCategories::SetNotFoundError unless set
 
           value = Array(category_names).map do |category_name|
-            value = set.uhook_category_identifier_for_name category_name
+            set.uhook_category_identifier_for_name category_name
           end.compact
 
           value = [0] if value.blank? # to prevent rails sql bad formation
@@ -230,10 +230,15 @@ module UbiquoCategories
             INNER JOIN #{relation_table} #{relation_alias} ON
             (#{table_name}.id = #{relation_alias}.related_object_id AND
             #{relation_alias}.related_object_type = #{quote_value(base_class.name)})
-            INNER JOIN #{category_table} #{category_alias} ON
-            (#{category_alias}.id = #{relation_alias}.category_id) AND
-            #{relation_alias}.attr_name = #{quote_value(association_name)}
           SQL
+
+          if Category.uhook_join_category_table_in_category_conditions_for_sql
+            categorize_options(field)[:join_sql] += <<-SQL
+              INNER JOIN #{category_table} #{category_alias} ON
+              (#{category_alias}.id = #{relation_alias}.category_id) AND
+              #{relation_alias}.attr_name = #{quote_value(association_name)}
+            SQL
+          end
         end
 
       end

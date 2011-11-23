@@ -54,6 +54,10 @@ module UbiquoCategories
             ["#{::Category.alias_for_association(association)}.content_id IN (?)", identifiers]
           end
 
+          def uhook_join_category_table_in_category_conditions_for_sql
+            true
+          end
+
           # Applies any required extra scope to the filtered_search method
           def uhook_filtered_search filters = {}
             create_scopes(filters) do |filter, value|

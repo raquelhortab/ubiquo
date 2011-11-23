@@ -85,6 +85,10 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       )
     end
 
+    test 'uhook_join_category_table_in_category_conditions_for_sql should return true as needed' do
+      assert Category.uhook_join_category_table_in_category_conditions_for_sql
+    end
+
     test 'uhook_filtered_search should return locale scope' do
       assert_equal(
         [{:conditions => {:locale => 'ca'}}],

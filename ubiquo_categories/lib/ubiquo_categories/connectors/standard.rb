@@ -14,7 +14,11 @@ module UbiquoCategories
 
           # Returns a condition to return categories using their +identifiers+
           def uhook_category_identifier_condition identifiers, association
-             ["#{::Category.alias_for_association(association)}.id IN (?)", identifiers]
+             ["#{CategoryRelation.alias_for_association(association)}.category_id IN (?)", identifiers]
+          end
+
+          def uhook_join_category_table_in_category_conditions_for_sql
+            false
           end
 
           # Applies any required extra scope to the filtered_search method
