@@ -15,6 +15,7 @@ Ubiquo::Plugin.register(:ubiquo, directory, config) do |setting|
   setting.add :required_field_class, 'required_field'
   setting.add :error_field_class, 'error_field'
   setting.add :ubiquo_path, 'ubiquo'
+  setting.add :edit_on_row_click, true
   setting.add :settings_overridable, false
   setting.add :settings_access_control, lambda{
     access_control :DEFAULT => "settings_management"
