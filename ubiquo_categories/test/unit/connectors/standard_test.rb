@@ -39,6 +39,17 @@ class UbiquoCategories::Connectors::StandardTest < ActiveSupport::TestCase
     )
   end
 
+  test 'uhook_category_identifier_for_name should safely check if a identifier was found' do
+    set = create_category_set
+
+    nil.expects(:id).never
+    set.expects("select_fittest").with("invented").returns(nil)
+    assert_equal(
+      0,
+      set.uhook_category_identifier_for_name("invented")
+    )
+  end
+
   test 'uhook_select_fittest should return the same category' do
     set = create_category_set
     set.categories << 'category'

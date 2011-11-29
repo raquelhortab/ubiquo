@@ -44,7 +44,9 @@ module UbiquoCategories
         module InstanceMethods
           # Returns an identifier value for a given +category_name+ in this set
           def uhook_category_identifier_for_name category_name
-            self.select_fittest(category_name).id rescue 0
+            identifier = self.select_fittest(category_name)
+            return 0 if !identifier
+            return identifier.id
           end
 
           # Returns the fittest category given other possible determining +options+
