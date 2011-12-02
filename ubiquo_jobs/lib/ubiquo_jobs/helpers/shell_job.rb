@@ -26,7 +26,8 @@ module UbiquoJobs
         output = %x{#{command}}
         self.update_attribute :result_output, output
         after_execution if self.respond_to?(:after_execution)
-        $?
+        job_exit_status = $?.exitstatus
+        raise job_exit_status if (job_exit_status) != 0
       end
   
       # Method used to set the command to be executed

@@ -25,7 +25,6 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
     job = UbiquoJobs.manager.get('me')
     job.run!
     assert_equal UbiquoJobs::Jobs::Base::STATES[:waiting], job.state
-    assert_not_equal 0, job.result_code
     assert_equal 1, job.tries
   end
 
@@ -46,7 +45,6 @@ class UbiquoJobs::Helpers::ShellJobTest < ActiveSupport::TestCase
     job = UbiquoJobs.manager.get('me')
     job.run!
     assert_equal UbiquoJobs::Jobs::Base::STATES[:finished], job.state
-    assert_equal 0, job.result_code
   end
   
   def test_should_discard_after_three_attempts

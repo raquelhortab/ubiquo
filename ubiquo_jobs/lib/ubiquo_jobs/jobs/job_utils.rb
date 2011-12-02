@@ -41,17 +41,18 @@ module UbiquoJobs
         STDERR.reopen(new_stderr)
 
         # Call to do the real job work
+        job_successfully_done = true
         result = begin
           do_job_work
         rescue => e
           # log the caught exception
           exception_error = e.inspect + e.backtrace.inspect
           # return an error result code
-          -1
+          job_successfully_done = false
         end
 
         # Update state accordingly to the result
-        new_state = if result != 0
+        new_state = unless job_successfully_done
           tries >= 3 ? STATES[:error] : STATES[:waiting]
         else
           notify_finished

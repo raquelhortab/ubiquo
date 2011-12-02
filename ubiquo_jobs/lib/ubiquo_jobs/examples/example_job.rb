@@ -19,5 +19,19 @@ module UbiquoJobs
       end
 
     end
+    class ExampleJobWithException < UbiquoJobs::Jobs::Base
+
+      def do_job_work
+        raise "Error"
+      end
+
+    end
+    class ExampleJobWithoutReturn < UbiquoJobs::Jobs::Base
+
+      def do_job_work
+        set_property :result_output, self.options[:set].size
+      end
+
+    end
   end
 end
