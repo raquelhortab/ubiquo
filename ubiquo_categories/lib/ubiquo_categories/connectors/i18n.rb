@@ -33,10 +33,7 @@ module UbiquoCategories
       end
 
       def self.unload!
-        [::Category].each do |klass|
-          klass.instance_variable_set :@translatable, nil
-          klass.clear_locale_uniqueness_per_entity_validation if klass.respond_to?(:clear_locale_uniqueness_per_entity_validation)
-        end
+        ::Category.untranslatable
       end
 
       module Category
