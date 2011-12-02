@@ -13,7 +13,6 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     def teardown
       reload_old_connector(:ubiquo_categories)
-      Locale.current = nil
     end
 
     test 'Category should be translatable' do
@@ -350,7 +349,6 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       model = create_i18n_category_model
       model.city = 'Barcelona'
       translation = model.translate 'ca'
-      translation.cities
       assert_kind_of Category, translation.city
       assert_equal 'Barcelona', translation.city.to_s
       assert_equal model.city.content_id, translation.city.content_id

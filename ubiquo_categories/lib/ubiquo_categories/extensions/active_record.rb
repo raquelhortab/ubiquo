@@ -168,10 +168,12 @@ module UbiquoCategories
           }
 
           if field.to_s != association_name
+            # alias for the getter and setter of the association
             alias_method field, association_name
             alias_method "#{field}=", "#{association_name}="
-            klass = class << self; self; end
-            klass.send :alias_method,  "#{field}", "#{association_name}"
+
+            # alias for the builtin named_scope
+            singleton_class.send :alias_method,  "#{field}", "#{association_name}"
           end
 
           prepare_categories_join_sql field

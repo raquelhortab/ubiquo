@@ -277,6 +277,11 @@ module UbiquoCategories
               association_name = field.to_s.pluralize.to_sym
               if self.is_translatable?
                 share_translations_for association_name
+                # overwrite the aliased methods since now should use the i18n methods
+                if field.to_s != association_name
+                  alias_method field, association_name
+                  alias_method "#{field}=", "#{association_name}="
+                end
               end
             end
           end
