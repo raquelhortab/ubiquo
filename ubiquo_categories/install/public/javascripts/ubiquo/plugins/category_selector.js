@@ -1,5 +1,9 @@
 var CategorySelector = Class.create({
-  initialize: function(link) {
+  initialize: function(link, options) {
+    this.options = Object.extend( {
+        unique:true,
+        highlight_effect: function(elem){Effect.Pulsate(elem,{pulses:2,duration:0.4});}
+    } ,options||{});
     this.new_element_link = link;
     var link_id = link.id.gsub('link_new__', '').split('__');
     this.type = link_id[0];
@@ -10,31 +14,62 @@ var CategorySelector = Class.create({
     return this.new_element_link.up().previous('div').select('div').size();
   },
   add_element: function(input_id) {
-    var element_input = $(input_id);
+    var element_input = $(input_id), element = null, do_insert = true;
     if (element_input.value != "") {
+      if( this.options.unique && this.get_values().include(element_input.value)){
+          do_insert = false;
+      }
       if (this.type == "checkbox") {
-        //We create the <ul> element if it's not present
-        if (!element_input.up().up().previous('div')) {
-          element_input.up().up().previous('legend').insert({after: '<div class="category-group"></div>'});
+        if( do_insert ){
+            //We create the <ul> element if it's not present
+            if (!element_input.up().up().previous('div')) {
+              element_input.up().up().previous('legend').insert({after: '<div class="category-group"></div>'});
+            }
+            element = "<div class='form-item-inline'><input type='"+this.type+"' checked='checked' value='"+element_input.value+"' id='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"' name='"+this.object_name+"["+this.key+"][]' />";
+            element += "<label for='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"'>"+element_input.value+"</label></div>";
+            element_input.up().up().previous('div').insert(element);
+        }else{
+            //Mark existing input as checked
+            var checkbox = this.get_checkbox(element_input.value);
+            checkbox.checked = true;
+            this.options.highlight_effect(checkbox.up());
         }
-        var element = "<div class='form-item-inline'><input type='"+this.type+"' checked='checked' value='"+element_input.value+"' id='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"' name='"+this.object_name+"["+this.key+"][]' />";
-        element += "<label for='new_"+this.object_name+"_"+this.key+"_"+this.counter()+"'>"+element_input.value+"</label></div>";
-        element_input.up().up().previous('div').insert(element);
-        this.toggle_new_category_input(element_input.up().previous('.new_category_controls'));
+        this.toggle_new_category_input(element_input.up(".new_category_controls").down('.bt-add-category'));
       } else if (this.type == "select") {
-        var select = $(this.object_name + "_" + this.key + "_select");
-        var option = document.createElement('option');
-        option.text = element_input.value;
-        option.value = element_input.value;
-        option.selected = "selected";
-        select.options.add(option);
+        if( do_insert ){
+            var select = $(this.object_name + "_" + this.key + "_select");
+            var option = document.createElement('option');
+            option.text = element_input.value;
+            option.value = element_input.value;
+            option.selected = "selected";
+            select.options.add(option);
+        }
         this.toggle_new_category_input(element_input.up().previous('.bt-add-category'));
       }
     }
   },
+  //Returns the values available on the selector. Not the choosen
+  get_values:function(){
+    if (this.type == "checkbox"){
+      return this.get_checkboxes().map(function(e){return e.readAttribute("value")})
+    } else if (this.type == "select") {
+      return $(this.object_name + "_" + this.key + "_select").select("option").map(
+        function(e){return e.readAttribute("value")});
+    }
+  },
+  get_checkboxes:function(){
+      return this.new_element_link.up(".relation-selector").select("input[type=checkbox]");
+  },
+  //returns the checkbox that has this value or null
+  get_checkbox:function(value){
+      return this.get_checkboxes().detect(function(item){return item.readAttribute("value") == value});
+  },
   toggle_new_category_input: function(link) {
-    $("new_" + this.object_name + "_" + this.key).value = "";
-    link.next('.add_new_category').toggle();
+    var input = $("new_" + this.object_name + "_" + this.key)
+    input.value = "";
+    var block = link.next('.add_new_category');
+    block.toggle();
+    if( block.visible() ) input.focus();
   }
 });
 document.observe("dom:loaded", function() {
@@ -49,13 +84,16 @@ document.observe("dom:loaded", function() {
       }
     );
   $$('.new_category_controls .bt-create-category').each(function(add_link) {
-      add_link.observe(
-        "click",
-        function(event) {
-          selectors[index].add_element("new_" + selectors[index].object_name + "_" + selectors[index].key);
-          event.stop();
-        }
-      );
+      var add_elem_callback = function(event) {
+        selectors[index].add_element("new_" + selectors[index].object_name + "_" + selectors[index].key);
+        event.stop();
+      };
+      add_link.observe("click",add_elem_callback);
+      add_link.up(".add_new_category").down("input[type=text]").observe('keydown', function(event) {
+          if(event.keyCode == Event.KEY_RETURN) {
+              add_elem_callback(event);
+          }
+      });
     });
   });
 
@@ -77,7 +115,12 @@ document.observe("dom:loaded", function() {
 });
 
 var AutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection, style, editable, token_limit) {
+  initialize: function(url, object_name, key, initial_collection, style, editable, token_limit, options) {
+    this.options = Object.extend({
+        trim:false, 
+        unique:true,
+        highlight_effect: function(elem){Effect.Pulsate(elem,{pulses:2,duration:0.4});}
+    },options || {});
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
@@ -397,8 +440,21 @@ var AutoCompleteSelector = Class.create({
 
   // Add a token to the token list based on user input
   add_token: function(id, value) {
-    var this_token = this.insert_token(id, value);
-
+    var do_insert = true, found = null, name;
+    if(this.options.trim){value = value.trim();}
+    if(this.options.unique){
+        found = this.token_list.select("li").detect(function(e){
+            name = e.readAttribute('alt');
+            if(name){name = name.evalJSON().name;}
+            return name == value;
+        });
+        if( found ){
+            do_insert = false;
+            this.options.highlight_effect(found);
+        }    
+    }
+    if(do_insert){this.insert_token(id, value);}
+    
     // Clear input box and make sure it keeps focus
     this.input_box.value = "";
     this.input_box.focus();
@@ -620,7 +676,7 @@ var AutoCompleteSelector = Class.create({
         klass.cache.add(query, results.responseText.evalJSON(true));
         klass.populate_dropdown(query, results.responseText.evalJSON(true));
       };
-      new Ajax.Response(new Ajax.Request(this.categories_url + queryStringDelimiter + "filter_text" + "=" + query, { method: "get", asynchronous: false, onSuccess: callback }));
+      new Ajax.Response(new Ajax.Request(this.categories_url + queryStringDelimiter + "filter_text" + "=" + query, {method: "get", asynchronous: false, onSuccess: callback}));
     }
   }
 });
