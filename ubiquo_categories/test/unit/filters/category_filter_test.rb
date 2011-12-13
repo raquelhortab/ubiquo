@@ -70,6 +70,26 @@ class CategoryFilterTest < Ubiquo::Filters::UbiquoFilterTestCase
     assert_match /Male/, @filter.message.first
   end
 
+  def test_filter_categories_for_select_should_use_connector_uhook
+    mock = mock("Object")
+    @filter.expects(:category_set).with('some_key').returns(mock)
+    @context.expects(:uhook_categories_for_set).with(mock)
+
+    @filter.send(:categories_for_select, 'some_key')
+  end
+
+  def test_filter_category_set
+    CategorySet.expects(:find_by_key).with('some_keys').returns(true)
+    @filter.send(:category_set, 'some_key')
+  end
+
+  def test_filter_category_set_should_raise_and_exception_if_the_set_can_not_not_found
+    CategorySet.expects(:find_by_key).with('some_keys').returns(false)
+    assert_raises(UbiquoCategories::SetNotFoundError) do
+      @filter.send(:category_set, 'some_key')
+    end
+  end
+
 end
 
 create_categories_test_model_backend
