@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Albert Callarisa", "Bernat Foj", "Eric Garc\303\255a", "Felip Ladr\303\263n", "Antoni Reina", "Ramon Salvad\303\263", "Arnau S\303\241nchez"]
-  s.date = %q{2011-12-15}
+  s.date = %q{2011-12-16}
   s.default_executable = %q{ubiquo}
   s.description = %q{This gem provides a command-line interface to speed up the creation of ubiquo based apps.}
   s.email = %q{rsalvado@gnuine.com}
@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<i18n>, ["< 0.5.0"])
       s.add_runtime_dependency(%q<lockfile>, [">= 1.4.3"])
       s.add_runtime_dependency(%q<bundler>, [">= 1.0.10"])
+      s.add_runtime_dependency(%q<rdoc>, [">= 2.4.2"])
       s.add_development_dependency(%q<mocha>, [">= 0.9.8"])
       s.add_development_dependency(%q<highline>, [">= 1.5.2"])
       s.add_development_dependency(%q<ya2yaml>, [">= 0.26"])
@@ -56,6 +57,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<i18n>, ["< 0.5.0"])
       s.add_dependency(%q<lockfile>, [">= 1.4.3"])
       s.add_dependency(%q<bundler>, [">= 1.0.10"])
+      s.add_dependency(%q<rdoc>, [">= 2.4.2"])
       s.add_dependency(%q<mocha>, [">= 0.9.8"])
       s.add_dependency(%q<highline>, [">= 1.5.2"])
       s.add_dependency(%q<ya2yaml>, [">= 0.26"])
@@ -65,6 +67,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<i18n>, ["< 0.5.0"])
     s.add_dependency(%q<lockfile>, [">= 1.4.3"])
     s.add_dependency(%q<bundler>, [">= 1.0.10"])
+    s.add_dependency(%q<rdoc>, [">= 2.4.2"])
     s.add_dependency(%q<mocha>, [">= 0.9.8"])
     s.add_dependency(%q<highline>, [">= 1.5.2"])
     s.add_dependency(%q<ya2yaml>, [">= 0.26"])
