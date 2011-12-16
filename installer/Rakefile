@@ -12,9 +12,11 @@ begin
     gem.homepage = "http://www.ubiquo.me"
     gem.authors = [
                    "Albert Callarisa",
+                   "Jordi Beltran",
                    "Bernat Foj",
                    "Eric García",
                    "Felip Ladrón",
+                   "David Lozano",
                    "Antoni Reina",
                    "Ramon Salvadó",
                    "Arnau Sánchez"
