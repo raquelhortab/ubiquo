@@ -31,7 +31,7 @@
                 <label for="ubiquo_user_login">
                   <%= t("ubiquo.auth.login") %>:
                 </label>
-                <%= text_field_tag 'login', 
+                <%= text_field_tag 'login',
                                    nil,
                                    :class => 'text',
                                    :id => 'ubiquo_user_login' %>
@@ -40,7 +40,7 @@
                 <label for="ubiquo_user_password">
                   <%= t("ubiquo.auth.password") %>:
                 </label>
-                <%= password_field_tag 'password', 
+                <%= password_field_tag 'password',
                                        nil,
                                        :class => 'text',
                                        :id => 'ubiquo_user_password' %>
@@ -50,7 +50,7 @@
                 <label for="remember_me"><%= t 'ubiquo.auth.rememberme' %></label>
               </p>
               <p class="forgot">
-                <%= link_to t('ubiquo.auth.forgotted_password'), 
+                <%= link_to t('ubiquo.auth.forgotted_password'),
                             new_ubiquo_password_path %>
               </p>
               <p class="form_buttons">
@@ -60,11 +60,16 @@
           </div>
         </div>
       </div>
-      <div id="footer">       
-        <%= link_to ubiquo_image_tag("app_logo_grey.png"), "http://www.ubiquo.me" %>® <%= Time.now.year -%> ubiquo <br/>
-        <%= link_to 'MIT license', 'http://www.opensource.org/licenses/mit-license.php' %>
-        <%= link_to 'ubiquo website', 'http://www.ubiquo.me' %>
-      </div>
+      <div id="footer">
+        <div class="logo_ubiquo">
+          <%= link_to 'Ubiquo', 'http://www.ubiquo.me' %>
+        </div>
+        <div class="links_ubiquo">
+          <span class="copy">® <%= Time.now.year %> ubiquo</span>
+          <%= link_to 'MIT license', 'http://www.opensource.org/licenses/mit-license.php' %>
+          <%= link_to 'ubiquo website', 'http://www.ubiquo.me' %>
+        </div>
+	  </div>
     </div>
   </body>
 </html>
