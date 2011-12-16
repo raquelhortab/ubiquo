@@ -33,11 +33,11 @@ class UbiquoUser < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :is_admin, :is_active, :role_ids, :photo, :name, :surname, :locale
 
   named_scope :admin, lambda {|value|{
-              :conditions => {:is_admin => value}
+              :conditions => {:is_admin => value.to_bool}
   }}
 
   named_scope :active, lambda {|value|{
-              :conditions => {:is_active => value}
+              :conditions => {:is_active => value.to_bool}
   }}
 
   filtered_search_scopes :text => [:name, :surname, :login],
