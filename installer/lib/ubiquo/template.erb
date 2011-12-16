@@ -11,6 +11,7 @@ rest_plugins = %w[
   ubiquo_jobs
   ubiquo_i18n
   ubiquo_activity
+  ubiquo_categories
   ubiquo_versions
   ubiquo_guides
   ubiquo_design
@@ -104,7 +105,6 @@ require 'tasks/rails'
 CODE
 
 # Initializer for ubiquo crontab
-<% if @opts[:template] == :edge %>
 initializer 'ubiquo_crontab.rb', <<-CODE
 # -*- coding: utf-8 -*-
 Ubiquo::Cron::Crontab.schedule do |cron|
@@ -146,7 +146,6 @@ Ubiquo::Cron::Crontab.schedule do |cron|
   # cron.runner "* * * * *", "puts 6+6"
 end
 CODE
-<% end %>
 # Initializer for exception notifier
 # Needs 3 params:
 #   appname -> Application name (Ex: test)
@@ -259,9 +258,6 @@ ActionController::Routing::Routes.draw do |map|
 
   Translate::Routes.translation_ui(map) unless Rails.env.production?
   # Ubiquo plugins routes. See routes.rb from each plugin path.
-<% if @opts[:template] == :edge && @opts[:profile] == :complete %>
-  <%= "map.from_plugin :ubiquo_categories" %>
-<% end %>
 #{ubiquo_routes}
 
   ############# default routes
@@ -315,12 +311,8 @@ Rails::Initializer.run do |config|
   config.i18n.default_locale = :<%= @opts[:locale] %>
 end
 CODE
-ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.7-stable'" %>
+ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.8-stable'" %>
 add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
-
-<% if @opts[:template] == :edge && @opts[:profile] == :complete %>
-  add_plugins(['ubiquo_categories'], :branch => nil, :devel => <%= @opts[:devel] ? true : false %>)
-<% end %>
 
 rake("rails:update")
 rake("calendardateselect:install")
@@ -380,15 +372,12 @@ gem "rails",     "= 2.3.14"
 gem "lockfile",  ">= 1.4.3"
 gem "i18n",      "< 0.5.0"
 gem "rdoc",      ">= 2.4.2"
-<% if @opts[:template] == :edge && @opts[:profile] == :complete # used in i18n %>
+<% if @opts[:profile] == :complete # used in i18n %>
 gem 'routing-filter', '~> 0.2.4', :require => false
 <% end %>
 
 platforms :mri_18 do
   gem "#{adapter_gem}"
-<% if @opts[:template] == :stable %>
-  gem "daemons", "~> 1.1.2"
-<% end %>
 end
 
 platforms :jruby do
