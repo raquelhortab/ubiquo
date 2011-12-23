@@ -204,6 +204,15 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     assert_select doc.root, 'legend', CategoryTestModel.human_attribute_name(:tags)
   end
 
+  def test_for_select__legend_uses_name_if_present_and_do_not_overwrite_select_field_name
+    categorize :tags
+    object = CategoryTestModel.new
+    output = category_selector 'name', :tags, {:object => object, :name => 'legend', :type => 'select'}
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'label', :text => 'legend'
+    assert_select doc.root, 'select[name=legend]', 0
+  end
+
   def test_category_select_selector
     categorize :tags
     object = CategoryTestModel.new

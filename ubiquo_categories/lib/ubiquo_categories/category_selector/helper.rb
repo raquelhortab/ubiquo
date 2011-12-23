@@ -121,7 +121,7 @@ module UbiquoCategories
           options[:default]
         end
         output = content_tag(:div, :class => "form-item") do
-          label_caption = options[:name] || object.class.human_attribute_name(key)
+          label_caption = options.delete(:name) || object.class.human_attribute_name(key)
           label_tag("#{object_name}[#{key}][]", label_caption) +
             select_tag(
             "#{object_name}[#{key}][]",
