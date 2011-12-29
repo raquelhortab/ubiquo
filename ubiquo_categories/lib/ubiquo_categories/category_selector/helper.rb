@@ -154,19 +154,22 @@ module UbiquoCategories
         obj_size = object.class.instance_variable_get(:@categorized_with_options)[key][:size] || :many
         size = (obj_size == :many ? 'null' : obj_size.to_i)
 
-        js_code =<<-JS
-          document.observe('dom:loaded', function() {
-            var autocomplete = new AutoCompleteSelector(
-              '#{autocomplete_options[:url]}',
-              '#{object_name}',
-              '#{key}',
-              #{autocomplete_options[:current_values]},
-              '#{autocomplete_options[:style]}',
-              #{set.is_editable?},
-              #{size}
-            )
-          });
+        js_autocomplete =<<-JS
+          var autocomplete = new AutoCompleteSelector(
+            '#{autocomplete_options[:url]}',
+            '#{object_name}',
+            '#{key}',
+            #{autocomplete_options[:current_values]},
+            '#{autocomplete_options[:style]}',
+            #{set.is_editable?},
+            #{size}
+          )
         JS
+        js_code = if (request.format rescue nil) == :js
+          js_autocomplete
+        else
+          "document.observe('dom:loaded', function() { %s })" % js_autocomplete
+        end
         label_caption = options[:name] || object.class.human_attribute_name(key)
         output = javascript_tag(js_code)
         output << content_tag(:div, :class => "form-item") do
