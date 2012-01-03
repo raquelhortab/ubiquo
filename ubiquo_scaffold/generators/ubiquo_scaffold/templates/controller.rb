@@ -9,7 +9,7 @@ class Ubiquo::<%= controller_class_name %>Controller < UbiquoController
   # GET /<%= table_name %>
   # GET /<%= table_name %>.xml
   def index
-    @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %><%= options[:translatable] ? ".locale(current_locale, :all)" : "" %>.paginated_filtered_search(params)
+    @<%= table_name %>_pages, @<%= table_name %> = <%= class_name %><%= options[:translatable] ? ".localized" : "" %>.paginated_filtered_search(params)
 
     respond_to do |format|
       format.html # index.html.erb
