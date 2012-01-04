@@ -62,6 +62,10 @@ module Ubiquo
 
         o.separator "\nExtra options:"
 
+        o.on("--rvm", 'Create a new rvm gemset named as the project and use it in the bundle install') do
+          self[:rvm] = true
+        end
+
         o.on("--devel", 'For ubiquo developers (ssh acces to github repos)') do
           self[:devel] = true
         end
