@@ -11,18 +11,20 @@ begin
     gem.email = "rsalvado@gnuine.com"
     gem.homepage = "http://www.ubiquo.me"
     gem.authors = [
-                   "Albert Callarisa",
-                   "Jordi Beltran",
-                   "Bernat Foj",
-                   "Eric García",
-                   "Felip Ladrón",
-                   "David Lozano",
-                   "Antoni Reina",
-                   "Ramon Salvadó",
-                   "Arnau Sánchez"
-                  ]
-    gem.add_dependency(%q<rails>, '~> 3.2.0.rc1')
-    gem.add_dependency(%q<bundler>, '>= 1.0.10')
+      "Albert Callarisa",
+      "Jordi Beltran",
+      "Bernat Foj",
+      "Eric García",
+      "Felip Ladrón",
+      "David Lozano",
+      "Antoni Reina",
+      "Ramon Salvadó",
+      "Arnau Sánchez"
+    ]
+    # journey dependency: temporal due to dependencies issue:
+    # http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released#comment-29814
+    gem.add_dependency(%q<journey>, '= 1.0.0.rc1')
+    gem.add_dependency(%q<rails>, '~> 3.2.0.rc2')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
