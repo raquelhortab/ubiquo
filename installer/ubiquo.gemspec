@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ubiquo"
-  s.version = "0.9.0.b1"
+  s.version = "0.9.0.b2"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Albert Callarisa", "Jordi Beltran", "Bernat Foj", "Eric Garc\303\255a", "Felip Ladr\303\263n", "David Lozano", "Antoni Reina", "Ramon Salvad\303\263", "Arnau S\303\241nchez"]
-  s.date = "2012-01-04"
+  s.date = "2012-01-05"
   s.description = "This gem provides a command-line interface to speed up the creation of ubiquo based apps."
   s.email = "rsalvado@gnuine.com"
   s.executables = ["ubiquo"]
@@ -43,15 +43,15 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rails>, ["~> 3.2.0.rc1"])
-      s.add_runtime_dependency(%q<bundler>, [">= 1.0.10"])
+      s.add_runtime_dependency(%q<journey>, ["= 1.0.0.rc1"])
+      s.add_runtime_dependency(%q<rails>, ["~> 3.2.0.rc2"])
     else
-      s.add_dependency(%q<rails>, ["~> 3.2.0.rc1"])
-      s.add_dependency(%q<bundler>, [">= 1.0.10"])
+      s.add_dependency(%q<journey>, ["= 1.0.0.rc1"])
+      s.add_dependency(%q<rails>, ["~> 3.2.0.rc2"])
     end
   else
-    s.add_dependency(%q<rails>, ["~> 3.2.0.rc1"])
-    s.add_dependency(%q<bundler>, [">= 1.0.10"])
+    s.add_dependency(%q<journey>, ["= 1.0.0.rc1"])
+    s.add_dependency(%q<rails>, ["~> 3.2.0.rc2"])
   end
 end
 
