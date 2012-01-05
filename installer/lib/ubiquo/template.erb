@@ -122,10 +122,11 @@ CODE
 #   exception_recipient -> email to deliver application error messages (Ex: developers@foo.com)
 #   sender_adress -> email to user in from when delivering error message (Ex: notifier@foo.com)
 initializer 'exception_notifier.rb', <<-CODE
-#Exception notification
-ExceptionNotifier.exception_recipients = %w( #{exception_recipient} )
-ExceptionNotifier.sender_address = %("Application Error" <#{sender_address}>)
-ExceptionNotifier.email_prefix = "[#{appname} \#\{RAILS_ENV\} ERROR]"
+# Exception notification
+#{appname.camelize}::Application.config.middleware.use ExceptionNotifier,
+  :email_prefix => "[#{appname} \#\{Rails.env\} ERROR]",
+  :sender_address => %("Application Error" <#{sender_address}>),
+  :exception_recipients => %w( #{exception_recipient} )
 CODE
 postgresql =  <<-CODE
 base_config: &base_config
