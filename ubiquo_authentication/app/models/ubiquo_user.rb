@@ -5,10 +5,12 @@ class UbiquoUser < ActiveRecord::Base
   has_many :roles, :through => :ubiquo_user_roles
 
   # Creates the photo attachment to the user and a resized thumbnail
-  file_attachment(:photo, :visibility => "protected",
-    :styles => { 
-      :thumb => "66x66>" 
-    })
+  file_attachment(:photo, {
+    :visibility => "protected",
+    :styles     => { :thumb => "66x66>" },
+    :storage    => ubiquo_config_call(:photo_storage,
+                                      :context => :ubiquo_authentication)
+  })
 
   # Virtual attribute for the unencrypted password
   attr_accessor :password
