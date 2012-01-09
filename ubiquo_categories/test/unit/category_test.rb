@@ -32,7 +32,11 @@ class CategoryTest < ActiveSupport::TestCase
       create_category(:name => "I don't appear"),
     ]
 
+    #Old filters
     assert_equal_set [category_1,category_2], Category.filtered_search({:text => "find"})
+
+    #New filters
+    assert_equal_set [category_1,category_2], Category.filtered_search({"filter_text" => "find"})
   end
 
   def test_should_filter_by_category_set
@@ -43,7 +47,11 @@ class CategoryTest < ActiveSupport::TestCase
       create_category(:category_set => category_sets(:two)),
     ]
 
+    #Old filters
     assert_equal_set [category_1,category_2], Category.filtered_search({:category_set => category_sets(:one).id})
+
+    #New filters
+    assert_equal_set [category_1,category_2], Category.filtered_search({"filter_category_set" => category_sets(:one).id})
   end
 
   def test_to_s

@@ -6,23 +6,25 @@ class Category < ActiveRecord::Base
   has_many :children, :class_name => 'Category', :foreign_key => 'parent_id'
   
   validates_presence_of :name, :category_set
-    
+
+  named_scope :category_set, lambda {|value| {:conditions => {:category_set_id => value}}}
+
+  filtered_search_scopes :text => [:name], :enable => [:category_set]
+
+  #For backwards compatibility
   def self.filtered_search(filters = {}, options = {})
-    
-    scopes = create_scopes(filters) do |filter, value|
-      case filter
-      when :text
-        {:conditions => ["upper(categories.name) LIKE upper(?)", "%#{value}%"]}
-      when :category_set
-        {:conditions => {:category_set_id => value}}
+    new_filters = {}
+    filters.each do |key, value|
+      if key == :text
+        new_filters["filter_text"] = value
+      elsif key == :category_set
+        new_filters["filter_category_set"] = value
+      else
+        new_filters[key] = value
       end
     end
 
-    scopes += uhook_filtered_search(filters)
-    
-    apply_find_scopes(scopes) do
-      find(:all, options)
-    end
+    super new_filters, options
   end
 
   def to_s
@@ -32,5 +34,4 @@ class Category < ActiveRecord::Base
   def self.alias_for_association association_name
     connection.table_alias_for "#{table_name}_#{association_name}"
   end
-
 end

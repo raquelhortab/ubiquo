@@ -42,24 +42,26 @@ class CategorySet < ActiveRecord::Base
   validates_presence_of :name, :key
   validates_uniqueness_of :key, :case_sensitive => false
 
+  filtered_search_scopes :text => [:name]
+
   def initialize(attrs = {})
     attrs ||= {}
     attrs.reverse_merge!(:is_editable => true)
     super attrs
   end
 
+  #For backwards compatibility
   def self.filtered_search(filters = {}, options = {})
-    
-    scopes = create_scopes(filters) do |filter, value|
-      case filter
-      when :text
-        {:conditions => ["upper(category_sets.name) LIKE upper(?)", "%#{value}%"]}
+    new_filters = {}
+    filters.each do |key, value|
+      if key == :text
+        new_filters["filter_text"] = value
+      else
+        new_filters[key] = value
       end
     end
-    
-    apply_find_scopes(scopes) do
-      find(:all, options)
-    end
+
+    super new_filters, options
   end
 
   # Sets the set as editable

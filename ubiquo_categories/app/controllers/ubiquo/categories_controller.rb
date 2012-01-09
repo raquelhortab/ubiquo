@@ -11,16 +11,14 @@ class Ubiquo::CategoriesController < UbiquoController
     sort_order = params[:sort_order] || 'ASC'
     
     filters = {
-      :text => params[:filter_text],
-      :category_set => params[:category_set_id]
+      "filter_category_set" => params[:category_set_id],
+      "per_page" => Ubiquo::Config.context(:ubiquo_categories).get(:categories_per_page),
+      "order_by" => order_by,
+      "sort_order" => sort_order
     }.merge(uhook_index_filters)
 
-    per_page = Ubiquo::Config.context(:ubiquo_categories).get(:categories_per_page)
-    @categories_pages, @categories = Category.paginate(:page => params[:page], :per_page => per_page) do
-      # remove this find and add something like this:
-      # Category.filtered_search filters, :order => "#{order_by} #{sort_order}"
-      uhook_index_search_subject.filtered_search filters, :order => "#{order_by} #{sort_order}"
-    end
+    @categories_pages, @categories = uhook_index_search_subject.paginated_filtered_search(params.merge(filters))
+
     respond_to do |format|
       format.html # index.html.erb
       format.js {

@@ -10,15 +10,12 @@ class Ubiquo::CategorySetsController < UbiquoController
     sort_order = params[:sort_order] || 'desc'
     
     filters = {
-      :text => params[:filter_text],
+      "per_page" => Ubiquo::Config.context(:ubiquo_categories).get(:category_sets_per_page),
+      "order_by" => order_by,
+      "sort_order" => sort_order
     }
 
-    per_page = Ubiquo::Config.context(:ubiquo_categories).get(:category_sets_per_page)
-    @category_sets_pages, @category_sets = CategorySet.paginate(:page => params[:page], :per_page => per_page) do
-      # remove this find and add something like this:
-      # CategorySet.filtered_search filters, :order => "#{order_by} #{sort_order}"
-      CategorySet.filtered_search filters, :order => "#{order_by} #{sort_order}"
-    end
+    @category_sets_pages, @category_sets = CategorySet.paginated_filtered_search(params.merge(filters))
 
     @can_manage = Ubiquo::Config.context(:ubiquo_categories).get(:administrable_category_sets)
     

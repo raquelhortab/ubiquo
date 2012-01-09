@@ -61,7 +61,11 @@ class CategorySetTest < ActiveSupport::TestCase
       create_category_set(:name => "I don't appear"),
     ]
 
+    #Old filters
     assert_equal_set [category_set_1,category_set_2], CategorySet.filtered_search({:text => "find"})
+
+    #New filters
+    assert_equal_set [category_set_1,category_set_2], CategorySet.filtered_search({"filter_text" => "find"})
   end
 
   def test_should_allow_creation_by_default
