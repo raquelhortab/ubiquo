@@ -20,6 +20,10 @@ module Ubiquo
       Ubiquo::Settings.add(:supported_locales, [ :ca, :es, :en ])
       Ubiquo::Settings.add(:default_locale, :ca)
     end
+
+    initializer :register_ubiquo_plugin do
+      require 'ubiquo/init_settings.rb'
+    end
   end
 
   def self.supported_locales
