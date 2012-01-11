@@ -6,8 +6,6 @@ class Ubiquo::SessionsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => [:create]
 
-  filter_parameter_logging :password
-
   #shows the login form
   def new
     unless has_cookies_enabled?
