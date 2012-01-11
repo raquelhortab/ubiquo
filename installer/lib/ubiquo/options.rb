@@ -10,8 +10,11 @@ module Ubiquo
 
       self[:template] = :stable
       self[:profile]  = :complete
-      self[:locale] = :en
+      self[:locale]   = :en
       self[:devel]    = false
+      self[:rvm]      = false
+      self[:gem_path] = false
+      self[:clone_gems] = false
       self[:database] = :sqlite
       self[:exception_recipient] = "chan@ge.me"
       self[:sender_address] = "chan@ge.me"
@@ -66,6 +69,14 @@ module Ubiquo
           self[:rvm] = true
         end
 
+        o.on("--gem-path [PATH]", 'Use ubiquo gems that are placed in this path') do |gem_path|
+          self[:gem_path] = gem_path
+        end
+
+        o.on("--clone-gems", 'Do a git clone of the ubiquo gems in the specified --gem-path') do
+          self[:clone_gems] = true
+        end
+
         o.on("--devel", 'For ubiquo developers (ssh acces to github repos)') do
           self[:devel] = true
         end
@@ -112,7 +123,7 @@ module Ubiquo
     def suported_profiles
       {
         :minimal  => "Includes minimal set of ubiquo plugins.",
-        :complete => "Includes all avaliable ubiquo core plugins."
+        :complete => "Includes all available ubiquo core plugins."
       }
     end
 

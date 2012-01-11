@@ -13,7 +13,7 @@ module Ubiquo
         options = options.merge(env_opts) if env_opts
 
         # We need this because sometimes we upgrade edge but no stable
-        options[:rails] = options[:template] == :edge ? '3.2.0.rc1' : '2.3.14'
+        options[:rails] = options[:template] == :edge ? '3.2.0.rc2' : '2.3.14'
 
         unless Gem.available?('rails', options[:rails])
           $stderr.puts "Sorry ubiquo needs rails #{options[:rails]} to work properly."

@@ -27,6 +27,9 @@ case choosen_plugin_set
   else selected_plugins = minimal_plugins + rest_plugins
 end
 
+# temporally overriden to the gemified set of plugins
+selected_plugins = %w[ubiquo_core ubiquo_authentication ubiquo_access_control]
+
 # File railties/lib/rails/generators/rails/app/app_generator.rb, line 238
 def file(*args, &block)
   config = args.last.is_a?(Hash) ? args.pop : {}
@@ -47,6 +50,12 @@ def add_plugins(plugin_names, options={})
   git_root = options[:devel] ? 'git@github.com:gnuine' : 'git://github.com/gnuine'
   plugin_names.each { |name| plugin name, :git => "#{git_root}/#{name}.git", :branch => options[:branch], :submodule => true }
 end
+
+def plugin_repo(name, options={})
+  git_root = options[:devel] ? 'git@github.com:gnuine' : 'git://github.com/gnuine'
+  "#{git_root}/#{name}.git"
+end
+
 # To ask needed settings when boostraping the app
 appname             = "<%= @opts[:app_name] %>"
 exception_recipient = "<%= @opts[:exception_recipient] %>"
@@ -247,7 +256,12 @@ end
 CODE
 # default rails environment.rb
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.8-stable'" %>
-add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
+#add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
+<% if @opts[:clone_gems] %>
+  (selected_plugins).each do |plugin_name|
+    run "git clone #{plugin_repo(plugin_name)} <%= @opts[:gem_path] %>/#{plugin_name}"
+  end
+<% end %>
 
 adapter_gem = case choosen_adapter
   when "mysql" then "mysql"
@@ -255,10 +269,19 @@ adapter_gem = case choosen_adapter
   else "pg"
 end
 jruby_adapter_gem = adapter_gem == "pg" ? "postgres" : adapter_gem
+
+ubiquo_gems = (selected_plugins).map do |plugin|
+  <% if @opts[:gem_path] %>
+    "  gem \"#{plugin}\""
+  <% else %>>
+    "  gem \"#{plugin}\", :git => #{plugin_repo(plugin)}"
+  <% end %>
+end.join("\n")
+
 file 'Gemfile', <<-CODE
 source "https://rubygems.org"
 
-gem "rails",     "= 3.2.0.rc1"
+gem "rails",     "~> 3.2.0.rc2"
 
 platforms :mri_19 do
   gem "#{adapter_gem}"
@@ -280,6 +303,16 @@ gem 'jquery-rails'
 group :test do
   gem "mocha", ">= 0.9.8", :require => false
 end
+
+<% if @opts[:gem_path] %>
+path "<%= @opts[:gem_path] %>" do
+#{ubiquo_gems}
+end
+<% else %>
+#{ubiquo_gems}
+<% end %>
+
+
 <% if @opts[:profile] == :complete # used in i18n %>
 #gem 'routing-filter', '~> 0.2.4', :require => false
 <% end %>
