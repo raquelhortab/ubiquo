@@ -1067,6 +1067,11 @@ form label {
 			width: auto;
                   }
 
+                  #content .datetime input {
+			display: inline;
+			width: auto;
+                  }
+
     input[type="hidden"] {
       display: none!important;
 			/*width: 40%;
