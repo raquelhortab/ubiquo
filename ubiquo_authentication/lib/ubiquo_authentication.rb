@@ -1,6 +1,17 @@
-require 'ubiquo_authentication/authenticated_system.rb'
-require 'ubiquo_authentication/extensions.rb'
-require 'ubiquo_authentication/ubiquo_user_console_creator.rb'
-require 'ubiquo_authentication/version.rb'
+module UbiquoAuthentication
+  class Engine < Rails::Engine
+    config.paths["lib"].autoload!
+    config.autoload_paths << "#{config.root}/install/app/controllers"
 
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::AuthenticatedSystem)
+    initializer :load_extensions do
+      require 'ubiquo_authentication/authenticated_system.rb'
+      require 'ubiquo_authentication/extensions.rb'
+      require 'ubiquo_authentication/ubiquo_user_console_creator.rb'
+      require 'ubiquo_authentication/version.rb'
+
+      Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::AuthenticatedSystem)
+    end
+
+  end
+end
+
