@@ -84,7 +84,8 @@ Ubiquo::Settings.create_context(:ubiquo_form_builder) do |setting|
     :time_zone_select => {
       :base_args => [nil,{},{}],
       :html_options_position => 2,
-    }
+    },
+    :calendar_date_select => {:group => {:append_class => "datetime"}}
   })
   setting.add( :groups_configuration,{
     :div => {:content_tag => :div, :class => "form-item"},
