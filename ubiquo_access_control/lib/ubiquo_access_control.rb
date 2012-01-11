@@ -1,3 +1,12 @@
-require 'ubiquo_access_control/extensions.rb'
+module UbiquoAccessControl
+  class Engine < Rails::Engine
+    config.paths["lib"].autoload!
 
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAccessControl::AccessControl)
+    initializer :load_extensions do
+      require 'ubiquo_access_control/extensions.rb'
+
+      Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAccessControl::AccessControl)
+    end
+
+  end
+end
