@@ -10,9 +10,7 @@ class Ubiquo::RolesController < UbiquoController
     params[:order_by] = params[:order_by] || Ubiquo::Config.context(:ubiquo_access_control).get(:roles_default_order_field)
     params[:sort_order] = params[:sort_order] || Ubiquo::Config.context(:ubiquo_access_control).get(:roles_default_sort_order)
     per_page = Ubiquo::Config.context(:ubiquo_access_control).get(:roles_elements_per_page)
-    @roles_pages, @roles = Role.paginate(:page => params[:page], :per_page => per_page) do
-      Role.find :all, :order => params[:order_by] + " " + params[:sort_order]
-    end
+    @roles_pages, @roles = Role.paginated_filtered_search(params.merge(:per_page => per_page))
     
     respond_to do |format|
       format.html {} # index.html.erb
