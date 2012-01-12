@@ -1330,13 +1330,13 @@ form#new_ubiquo_setting .setting-info{
   float: left;
   overflow: hidden;
   display:inline;
-  width: 60%;
+  width: 70%;
  }
 
 form#new_ubiquo_setting .setting-actions{
   float: left;
   display:inline;
-  width: 39%;
+  width: 29%;
  }
 form#new_ubiquo_setting .setting-actions ul.actions {
   margin-top: .4em;
