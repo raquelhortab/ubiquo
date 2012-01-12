@@ -8,18 +8,8 @@ class Ubiquo::ActivityInfosController < UbiquoController
     order_by = params[:order_by] || Ubiquo::Config.context(:ubiquo_activity).get(:activities_default_order_field)
     sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_activity).get(:activities_default_sort_order)
     
-    filters = {
-      :date_start => parse_date(params[:filter_date_start]),
-      :date_end => parse_date(params[:filter_date_end]),
-      :controller => params[:filter_controller],
-      :action => params[:filter_action],
-      :status => params[:filter_status],
-      :user => params[:filter_user]
-    }
     per_page = Ubiquo::Config.context(:ubiquo_activity).get(:activities_elements_per_page)
-    @activity_infos_pages, @activity_infos = ActivityInfo.paginate(:page => params[:page]) do
-      ActivityInfo.filtered_search filters, :order => "#{order_by} #{sort_order}"
-    end
+    @activity_infos_pages, @activity_infos = ActivityInfo.paginated_filtered_search(params.merge(:per_page => per_page))
     
     respond_to do |format|
       format.html # index.html.erb  

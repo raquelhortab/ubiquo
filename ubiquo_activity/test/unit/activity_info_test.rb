@@ -51,8 +51,15 @@ class ActivityInfoTest < ActiveSupport::TestCase
     activity1 = create_activity_info :created_at => 4.days.ago
     activity2 = create_activity_info :created_at => 2.days.ago
     fake_activity = create_activity_info
+    #Old filters
     searched_activities = ActivityInfo.filtered_search({ :date_start => 3.days.ago,
                                                        :date_end => 1.days.ago,
+                                                     })                                       
+    assert_equal_set [activity2], searched_activities
+    
+    #New filters
+    searched_activities = ActivityInfo.filtered_search({ "filter_date_start" => 3.days.ago,
+                                                       "filter_date_end" => 1.days.ago,
                                                      })                                       
     assert_equal_set [activity2], searched_activities
   end
@@ -62,7 +69,12 @@ class ActivityInfoTest < ActiveSupport::TestCase
     searched_user = UbiquoUser.find_by_login("josep")
     activity1 = create_activity_info :ubiquo_user => searched_user
     activity2 = create_activity_info :ubiquo_user => UbiquoUser.find_by_login("eduard")
+    #Old filters
     searched_activities = ActivityInfo.filtered_search(:user => searched_user.id)
+    assert_equal_set [activity1], searched_activities
+    assert_equal_set [], ActivityInfo.filtered_search(:user => '100')
+    #New filters
+    searched_activities = ActivityInfo.filtered_search("filter_user" => searched_user.id)
     assert_equal_set [activity1], searched_activities
     assert_equal_set [], ActivityInfo.filtered_search(:user => '100')
   end
