@@ -29,6 +29,17 @@ def categorize attr, options = {}
   end
 end
 
+def validate_presence_of_category attr, options = {}
+  CategoryTestModel.class_eval do
+    validates_presence_of attr, :identifier => :category_test_presence
+  end
+end
+def invalidate_presence_of_category attr, options = {}
+  CategoryTestModel.validate.delete_if do |v|
+    v.identifier == :category_test_presence
+  end if CategoryTestModel.validate.respond_to?(:delete_if)
+end
+
 def categorize_base attr, options = {}
   CategoryTestModelBase.class_eval do
     categorized_with attr, options

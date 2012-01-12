@@ -207,11 +207,47 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   def test_for_select__legend_uses_name_if_present_and_do_not_overwrite_select_field_name
     categorize :tags
     object = CategoryTestModel.new
-    output = category_selector 'name', :tags, {:object => object, :name => 'legend', :type => 'select'}
+    output = category_selector 'name', :tags, {:object => object, :name => 'legend', :type => 'select', :required_field => false}
     doc = HTML::Document.new(output)
+    
     assert_select doc.root, 'label', :text => 'legend'
     assert_select doc.root, 'select[name=legend]', 0
+    
   end
+
+
+  def test_append_asterisk_to_label_if_category_selector_is_a_required_field_and_type_is_autocomplete_or_select
+    categorize :tags
+    validate_presence_of_category :tags
+    c = CategoryTestModel.new
+    output = category_selector 'name', :tags, {:object => c, :type => 'autocomplete'}
+    output2 = category_selector 'name', :tags, {:object => c, :type => 'select'}
+    doc = HTML::Document.new(output)
+    doc2 = HTML::Document.new(output2)
+    assert_select doc.root, 'span.required_field', 1
+    assert_select doc2.root, 'span.required_field', 1
+    invalidate_presence_of_category :tags
+  end
+
+  
+  def test_category_selector_has_category_error_class_if_model_has_error_and_type_is_autocomplete
+    categorize :tags
+    c = CategoryTestModel.new
+    c.errors.add(:tags,"some error")
+    output = category_selector 'name', :tags, {:object => c, :type => 'autocomplete'}
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'div.category-error', 1
+  end
+  
+  def test_category_selector_has_category_error_class_if_model_has_error_and_type_is_select
+    categorize :tags
+    c = CategoryTestModel.new
+    c.errors.add(:tags,"some error")
+    output = category_selector 'name', :tags, {:object => c, :type => 'select'}
+    doc = HTML::Document.new(output)
+    assert_select doc.root, 'div.category-error', 1
+  end
+
 
   def test_category_select_selector
     categorize :tags

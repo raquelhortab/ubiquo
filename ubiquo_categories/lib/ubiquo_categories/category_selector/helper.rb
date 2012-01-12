@@ -29,6 +29,13 @@ module UbiquoCategories
         html_options.reverse_merge!({
           :class => "group relation-selector relation-type-#{selector_type}"
         })
+        if object.respond_to?(:required_fields) && object.required_fields.include?(key) && options[:required_field].nil?
+          options[:required_field] = true
+        end
+        if !object.try(:errors).try(:on, key).nil?
+            html_options[:class] ||= ""
+            html_options[:class] = html_options[:class].split(" ").push("category-error").join(" ")
+        end
         wrapper_type = selector_type == :checkbox ? :fieldset : :div
         output = content_tag(wrapper_type, html_options) do
           wrapper_title = options[:name] || object.class.human_attribute_name(key)
@@ -122,7 +129,7 @@ module UbiquoCategories
         end
         output = content_tag(:div, :class => "form-item") do
           label_caption = options.delete(:name) || object.class.human_attribute_name(key)
-          label_tag("#{object_name}[#{key}][]", label_caption) +
+          label_tag("#{object_name}[#{key}][]", label_caption, "append_asterisk" => options.delete(:required_field)) +
             select_tag(
             "#{object_name}[#{key}][]",
             options_for_select(categories_for_select, :selected => selected_value),
@@ -173,7 +180,7 @@ module UbiquoCategories
         label_caption = options[:name] || object.class.human_attribute_name(key)
         output = javascript_tag(js_code)
         output << content_tag(:div, :class => "form-item") do
-          label_tag("#{object_name}[#{key}][]", label_caption) +
+          label_tag("#{object_name}[#{key}][]", label_caption, "append_asterisk" => options.delete(:required_field)) +
           text_field_tag("#{object_name}[#{key}][]", "",
                          :id => "#{object_name}_#{key}_autocomplete")
         end
