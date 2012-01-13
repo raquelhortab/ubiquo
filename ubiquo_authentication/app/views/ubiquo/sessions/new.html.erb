@@ -26,7 +26,7 @@
             <% else %>
               <p id='feedback_notice'><%= t 'ubiquo.auth.welcome' %></p>
             <% end %>
-            <% form_tag ubiquo_login_path do -%>
+            <%= form_tag ubiquo.login_path do -%>
               <p>
                 <label for="ubiquo_user_login">
                   <%= t("ubiquo.auth.login") %>:
@@ -51,7 +51,7 @@
               </p>
               <p class="forgot">
                 <%= link_to t('ubiquo.auth.forgotted_password'),
-                            new_ubiquo_password_path %>
+                            ubiquo.new_password_path %>
               </p>
               <p class="form_buttons">
                 <%= submit_tag t("ubiquo.auth.enter"), :class => 'buttons' %>

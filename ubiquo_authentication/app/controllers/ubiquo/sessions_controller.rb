@@ -15,7 +15,7 @@ class Ubiquo::SessionsController < ApplicationController
       flash.now[:notice] = t 'ubiquo.auth.create_superadmin'
     end
     if logged_in?
-      redirect_to ubiquo_home_path
+      redirect_to ubiquo.home_path
     end
   end
 
@@ -35,7 +35,7 @@ class Ubiquo::SessionsController < ApplicationController
         }
       end
       flash.discard
-      redirect_back_or_default(ubiquo_home_path)
+      redirect_back_or_default(ubiquo.home_path)
     else
       flash[:error] = t 'ubiquo.auth.login_invalid'
       render :action => 'new'
@@ -48,7 +48,7 @@ class Ubiquo::SessionsController < ApplicationController
     cookies.delete :auth_token
     session.delete(:ubiquo)
     flash[:notice] = t 'ubiquo.auth.logout'
-    redirect_back_or_default(ubiquo_home_path)
+    redirect_back_or_default(ubiquo.home_path)
   end
 
   protected

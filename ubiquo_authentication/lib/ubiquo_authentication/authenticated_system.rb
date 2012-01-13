@@ -70,7 +70,7 @@ module UbiquoAuthentication
       respond_to do |format|
         format.html do
           store_location
-          redirect_to ubiquo_login_path
+          redirect_to ubiquo.login_path
         end
         format.any(:js, :xml, :atom, :rss) do
           request_http_basic_authentication 'Web Password'
@@ -82,7 +82,7 @@ module UbiquoAuthentication
     #
     # We can return to this location by calling #redirect_back_or_default.
     def store_location
-      session[:return_to] = request.request_uri
+      session[:return_to] = request.fullpath
     end
 
     # Redirect to the URI stored by the most recent store_location call or

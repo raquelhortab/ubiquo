@@ -16,6 +16,6 @@ class Ubiquo::SuperadminModesController < UbiquoController
   
   #send a redirect to the correct home, superadmin home if in superadmin mode or normal home if in normal mode
   def redirect_to_home
-    redirect_to session[:superadmin_mode] ? ubiquo_superadmin_home_path : ubiquo_home_path
+    redirect_to session[:superadmin_mode] ? ubiquo.superadmin_home_path : ubiquo.home_path
   end
 end
