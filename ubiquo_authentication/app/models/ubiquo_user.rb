@@ -34,13 +34,8 @@ class UbiquoUser < ActiveRecord::Base
   # anything else you want your ubiquo_user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :is_admin, :is_active, :role_ids, :photo, :name, :surname, :locale
 
-  named_scope :admin, lambda {|value|{
-              :conditions => {:is_admin => value.to_bool}
-  }}
-
-  named_scope :active, lambda {|value|{
-              :conditions => {:is_active => value.to_bool}
-  }}
+  scope :admin, lambda { |value| where(:is_admin => value.to_bool) }
+  scope :active, lambda { |value| where(:is_active => value.to_bool) }
 
   filtered_search_scopes :text => [:name, :surname, :login],
                          :enable => [:admin, :active]
@@ -130,7 +125,7 @@ class UbiquoUser < ActiveRecord::Base
   end
   
   def reset_password!
-    (password = ActiveSupport::SecureRandom.base64(6)).tap do
+    (password = SecureRandom.base64(6)).tap do
       self.password = password
       self.password_confirmation = password
       self.save
