@@ -12,6 +12,10 @@ module UbiquoAuthentication
       Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::AuthenticatedSystem)
     end
 
+    initializer :register_ubiquo_plugin do
+      require 'ubiquo_authentication/init_settings.rb'
+    end
+
   end
 end
 
