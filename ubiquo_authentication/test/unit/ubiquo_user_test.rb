@@ -37,28 +37,28 @@ class UbiquoUserTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:name => nil)
-      assert u.errors.on(:name)
+      assert u.errors[:name]
     end
   end
 
   def test_should_require_surname
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:surname => nil)
-      assert u.errors.on(:surname)
+      assert u.errors[:surname].any?
     end
   end
 
   def test_should_require_login
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:login => nil)
-      assert u.errors.on(:login)
+      assert u.errors[:login].any?
     end
   end
   
   def test_should_require_email
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:email => nil)
-      assert u.errors.on(:email)
+      assert u.errors[:email].any?
     end
   end
   def test_should_require_unique_email
@@ -68,10 +68,10 @@ class UbiquoUserTest < ActiveSupport::TestCase
       assert !u.new_record?
       
       u = create_ubiquo_user(:email => email)
-      assert u.errors.on(:email)
+      assert u.errors[:email].any?
 
       u = create_ubiquo_user(:email => email.upcase)
-      assert u.errors.on(:email)
+      assert u.errors[:email].any?
     end
   end
   
@@ -87,7 +87,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
     assert_no_difference 'UbiquoUser.count' do
       not_valid_mails.each do |mail|
         u = create_ubiquo_user(:email => mail)
-        assert u.errors.on(:email), mail
+        assert u.errors[:email].any?
       end
     end
   end
@@ -95,21 +95,21 @@ class UbiquoUserTest < ActiveSupport::TestCase
   def test_should_require_password
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:password => nil)
-      assert u.errors.on(:password)
+      assert u.errors[:password].any?
     end
   end
 
   def test_should_require_password_confirmation
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:password_confirmation => nil)
-      assert u.errors.on(:password_confirmation)
+      assert u.errors[:password_confirmation].any?
     end
   end
 
   def test_should_require_valid_password_confirmation
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:password => "pass", :password_confirmation => "wrong pass")
-      assert u.errors.on(:password)
+      assert u.errors[:password].any?
     end
   end
 
