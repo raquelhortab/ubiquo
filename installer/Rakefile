@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 require 'rubygems'
 require 'rake'
 
@@ -21,9 +21,6 @@ begin
       "Ramon Salvadó",
       "Arnau Sánchez"
     ]
-    # journey dependency: temporal due to dependencies issue:
-    # http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released#comment-29814
-    gem.add_dependency(%q<journey>, '= 1.0.0.rc1')
     gem.add_dependency(%q<rails>, '~> 3.2.0.rc2')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

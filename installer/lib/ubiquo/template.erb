@@ -86,7 +86,7 @@ doc/api
 doc/app
 CODE
 initializer 'ubiquo_config.rb', <<-CODE
-Ubiquo::Config.add do |config|
+Ubiquo::Settings.set do |config|
   config.app_name = "#{appname}"
   config.app_title = "#{appname.gsub(/_/, " ").capitalize}"
   config.app_description = "#{appname.gsub(/_/, " ").capitalize}"
@@ -233,26 +233,15 @@ case choosen_adapter
   when "sqlite" then file 'config/database.yml', sqlite3
   else file 'config/database.yml', postgresql
 end
-# gnuine routes.rb
-ubiquo_routes = selected_plugins.map do |plugin|
-  "  #map.from_plugin :#{plugin}"
-end.join("\n")
 file 'config/routes.rb', <<-CODE
 #{appname.camelize}::Application.routes.draw do
-end
-#ActionController::Routing::Routes.draw do |map|
+  mount Ubiquo::Engine => '/ubiquo'
 
 #  map.namespace :ubiquo do |ubiquo|
 #  end
 
 #  Translate::Routes.translation_ui(map) unless Rails.env.production?
-  # Ubiquo plugins routes. See routes.rb from each plugin path.
-#{ubiquo_routes}
-
-  ############# default routes
-  #map.connect ':controller/:action/:id'
-  #map.connect ':controller/:action/:id.:format'
-#end
+end
 CODE
 # default rails environment.rb
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.8-stable'" %>
@@ -312,6 +301,8 @@ end
 #{ubiquo_gems}
 <% end %>
 
+gem "paperclip", "~> 2.4.5"
+gem "exception_notifier", "~> 1.0.0"
 
 <% if @opts[:profile] == :complete # used in i18n %>
 #gem 'routing-filter', '~> 0.2.4', :require => false
