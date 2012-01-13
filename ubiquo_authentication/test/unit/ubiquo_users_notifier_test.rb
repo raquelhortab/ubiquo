@@ -10,7 +10,7 @@ class UbiquoUsersNotifierTest < ActionMailer::TestCase
     ubiquo_user.reset_password!
     
     assert ActionMailer::Base.deliveries.empty? 
-    email = UbiquoUsersNotifier.deliver_forgot_password(ubiquo_user, "localhost:3000")
+    email = UbiquoUsersNotifier.forgot_password(ubiquo_user, "localhost:3000").deliver
     assert !ActionMailer::Base.deliveries.empty? 
     
     assert_equal [ubiquo_user.email], email.to
@@ -24,7 +24,7 @@ class UbiquoUsersNotifierTest < ActionMailer::TestCase
     ubiquo_user.reset_password!
     
     assert ActionMailer::Base.deliveries.empty? 
-    email = UbiquoUsersNotifier.deliver_confirm_creation(ubiquo_user, "Welcome message", "localhost:3000")
+    email = UbiquoUsersNotifier.confirm_creation(ubiquo_user, "Welcome message", "localhost:3000").deliver
     assert !ActionMailer::Base.deliveries.empty? 
     
     assert_equal [ubiquo_user.email], email.to
