@@ -21,6 +21,15 @@ Ubiquo::Config.add(:error_field_class, 'error_field')
 
 Ubiquo::Config.add(:ubiquo_path, 'ubiquo')
 
+Ubiquo::Settings.add do |app_config|
+  app_config.app_name = "u09"
+  app_config.app_title = "U09"
+  app_config.app_description = "U09"
+  app_config.notifier_email_from = "change@me.com"
+  app_config.supported_locales = [:ca, :es, :en ]
+  app_config.default_locale = :ca
+end
+
 Ubiquo::Config.add(:edit_on_row_click, true)
 
 Ubiquo::Config.create_context(:ubiquo_form_builder)
