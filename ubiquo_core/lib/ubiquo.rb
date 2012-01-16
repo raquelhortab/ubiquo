@@ -48,6 +48,7 @@ module Ubiquo
       require 'ubiquo/filtered_search'
       require 'ubiquo/adapters'
       require 'ubiquo/relation_selector'
+      require 'ubiquo/permissions_interface'
 
       Ubiquo::Settings.add(:supported_locales, [ :ca, :es, :en ])
       Ubiquo::Settings.add(:default_locale, :ca)
