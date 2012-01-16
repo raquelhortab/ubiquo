@@ -45,7 +45,7 @@ class Ubiquo::RolesController < UbiquoController
           @role.add_permission(permission.to_s)
         end
         flash[:notice] = t('ubiquo.auth.role_created')
-        format.html { redirect_to(ubiquo_roles_path) }
+        format.html { redirect_to(ubiquo.roles_path) }
         format.xml  { render :xml => @role, :status => :created, :location => @role }
       else
         format.html { render :action => "new" }
@@ -65,7 +65,7 @@ class Ubiquo::RolesController < UbiquoController
     respond_to do |format|
       if @role.update_attributes(params[:role])
         flash[:notice] = t('ubiquo.auth.role_edited')
-        format.html { redirect_to(ubiquo_roles_path) }
+        format.html { redirect_to(ubiquo.roles_path) }
         format.xml  { head :ok }
       else
         flash[:error] = t('ubiquo.auth.role_edit_error')
@@ -86,7 +86,7 @@ class Ubiquo::RolesController < UbiquoController
     end
 
     respond_to do |format|
-      format.html { redirect_to(ubiquo_roles_path) }
+      format.html { redirect_to(ubiquo.roles_path) }
       format.xml  { head :ok }
     end
   end
