@@ -1,7 +1,10 @@
+# -*- encoding: utf-8 -*-
+
 module UbiquoScaffold
   def self.version
     VERSION::STRING
   end
+
   module VERSION #:nodoc:
     file    = File.join(File.dirname(__FILE__), "..", "..", "VERSION")
     version = File.read(file).strip.split(".")

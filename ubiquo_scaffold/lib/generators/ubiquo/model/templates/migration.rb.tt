@@ -1,0 +1,38 @@
+class Create<%= class_name.pluralize %> < ActiveRecord::Migration
+  def self.up
+    create_table :<%= table_name %><%= create_table_options %> do |t|
+      <%- attributes.each do |attribute| -%>
+      t.<%= attribute.type %> :<%= attribute.name %>
+      <%- end -%>
+      <%- if options[:belongs_to] -%>
+
+        <%- options[:belongs_to].each do |rl| -%>
+      t.integer :<%= rl.singularize %>_id
+        <%- end -%>
+      <%- end -%>
+      <%- classes_for_has_many.each do |target_class| -%>
+
+      if defined?(<%= target_class %>) && <%= target_class %>.table_exists?
+        <%= target_class %>.reset_column_information
+        unless <%= target_class %>.column_names.include?('<%= belongs_to_field %>')
+          add_column <%= target_class%>.table_name, :<%= belongs_to_field %>, :integer
+        end
+      end
+      <%- end -%>
+
+      <%- if options[:timestamps] -%>
+      t.timestamps
+      <%- end -%>
+      <%- keys_for_categories.each do |key| -%>
+
+      unless ::CategorySet.find_by_key('<%= key %>')
+        ::CategorySet.create(key: '<%= key %>', name: '<%= key.humanize %>')
+      end
+      <%- end -%>
+    end
+  end
+
+  def self.down
+    drop_table :<%= table_name %>
+  end
+end

@@ -1,0 +1,142 @@
+class Ubiquo::<%= controller_class_name %> < UbiquoController
+  <%- if include_tiny_mce? -%>
+
+  uses_tiny_mce(options: default_tiny_mce_options)
+  <%- end -%>
+  <%- if register_activity? -%>
+
+  register_activity :create, :update, :destroy
+  <%- end -%>
+
+  # GET /<%= plural_name %>
+  # GET /<%= plural_name %>.json
+  def index
+    @<%= plural_name %>_pages, @<%= plural_name %> = <%= class_name %><%= options[:translatable] ? ".localized" : "" %>.paginated_filtered_search(params)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @<%= plural_name %> }
+    end
+  end
+
+  # GET /<%= plural_name %>/1
+  # GET /<%= plural_name %>/1.json
+  def show
+    @<%= singular_name %> = <%= class_name %>.find(params[:id])
+    <%- if options[:translatable] -%>
+    unless @<%= singular_name %>.in_locale?(current_locale)
+      redirect_to ubiquo_<%= plural_name %>_url
+      return
+    end
+    <%- end -%>
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @<%= singular_name %> }
+    end
+  end
+
+
+  # GET /<%= plural_name %>/new
+  # GET /<%= plural_name %>/new.json
+  def new
+    @<%= singular_name %> = <%= class_name %>.<%= options[:translatable] ? "translate(params[:from], current_locale)" : "new" %>
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @<%= singular_name %> }
+    end
+  end
+
+  # GET /<%= plural_name %>/1/edit
+  def edit
+    @<%= singular_name %> = <%= class_name %>.find(params[:id])
+    <%- if options[:translatable] -%>
+    unless @<%= singular_name %>.in_locale?(current_locale)
+      redirect_to ubiquo_<%= plural_name %>_url
+      return
+    end
+    <%- end -%>
+
+    respond_to do |format|
+      format.html # edit.html.erb
+      format.json { render json: @<%= singular_name %> }
+    end
+  end
+
+  # POST /<%= plural_name %>
+  # POST /<%= plural_name %>.json
+  def create
+    @<%= singular_name %> = <%= class_name %>.new(params[:<%= singular_name %>])
+
+    respond_to do |format|
+      if @<%= singular_name %>.save
+        flash[:notice] = t("ubiquo.<%= singular_name %>.created")
+        format.html { redirect_to(ubiquo_<%= plural_name %>_url) }
+        format.json { render json: @<%= singular_name %>, status: :created, location: @<%= singular_name %> }
+      else
+        flash[:error] = t("ubiquo.<%= singular_name %>.create_error")
+        format.html { render action: "new" }
+        format.json { render json: @<%= singular_name %>.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /<%= plural_name %>/1
+  # PUT /<%= plural_name %>/1.json
+  def update
+    @<%= singular_name %> = <%= class_name %>.find(params[:id])
+    <%- if options[:versionable] -%>
+    ok = if params[:restore_from_version]
+           @<%= singular_name %>.restore(params[:restore_from_version])
+         else
+           @<%= singular_name %>.update_attributes(params[:<%= singular_name %>])
+         end
+    <%- else -%>
+    ok = @<%= singular_name %>.update_attributes(params[:<%= singular_name %>])
+    <%- end -%>
+
+    respond_to do |format|
+      if ok
+        flash[:notice] = t("ubiquo.<%= singular_name %>.edited")
+        format.html { redirect_to(ubiquo_<%= plural_name %>_url) }
+        format.json { head :ok }
+      else
+        flash[:error] = t("ubiquo.<%= singular_name %>.edit_error")
+        format.html { render action: "edit" }
+        format.json { render json: @<%= singular_name %>.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /<%= plural_name %>/1
+  # DELETE /<%= plural_name %>/1.json
+  def destroy
+    @<%= singular_name %> = <%= class_name %>.find(params[:id])
+
+    <%- if options[:translatable] -%>
+    destroyed = false
+    if params[:destroy_content]
+      destroyed = @<%= singular_name %>.destroy_content
+    else
+      destroyed = @<%= singular_name %>.destroy
+    end
+    if destroyed
+      flash[:notice] = t("ubiquo.<%= singular_name %>.destroyed")
+    else
+      flash[:error] = t("ubiquo.<%= singular_name %>.destroy_error")
+    end
+    <%- else -%>
+    if @<%= singular_name %>.destroy
+      flash[:notice] = t("ubiquo.<%= singular_name %>.destroyed")
+    else
+      flash[:error] = t("ubiquo.<%= singular_name %>.destroy_error")
+    end
+    <%- end -%>
+
+    respond_to do |format|
+      format.html { redirect_to(ubiquo_<%= plural_name %>_url) }
+      format.xml  { head :ok }
+    end
+  end
+end

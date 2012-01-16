@@ -1,0 +1,89 @@
+require 'test_helper'
+
+class Ubiquo::<%= controller_class_name %>Test < ActionController::TestCase
+
+  setup :prepare
+  teardown :clear
+
+  test "should get index" do
+    get :index
+
+    assert_response :success
+    assert_not_nil assigns(:<%= plural_name %>)
+  end
+
+  test "should get new" do
+    get :new
+
+    assert_response :success
+  end
+
+  test "should get show" do
+    get :show, id: @<%= singular_name %>.to_param
+
+    assert_response :success
+  end
+
+  test "should create <%= file_name %>" do
+    assert_difference('<%= class_name %>.count') do
+      post :create, <%= singular_name %>: <%= singular_name %>_attributes
+    end
+
+    assert_redirected_to ubiquo_<%= plural_name %>_url
+  end
+
+  test "should get edit" do
+    get :edit, id: @<%= singular_name %>.to_param
+
+    assert_response :success
+  end
+
+  test "should update <%= singular_name %>" do
+    put :update,
+        id: @<%= singular_name %>.to_param,
+        <%= singular_name %>: <%= singular_name %>_attributes
+
+    assert_redirected_to ubiquo_<%= plural_name %>_url
+  end
+
+  test "should destroy <%= singular_name %>" do
+    assert_difference('<%= class_name %>.count', -1) do
+      delete :destroy, id: @<%= singular_name %>.to_param
+    end
+
+    assert_redirected_to ubiquo_<%= plural_name %>_url
+  end
+  <%- if options[:translatable] -%>
+
+  test "should redirect to correct locale" do
+    get :edit, id: @<%= singular_name %>.to_param, locale: 'es'
+
+    assert_redirected_to ubiquo_<%= plural_name %>_url
+  end
+  <%- end -%>
+
+  private
+
+  def prepare
+    @<%= singular_name %> = create_<%= singular_name %>
+  end
+
+  def clear
+    <%= class_name %>.delete_all
+  end
+
+  def <%= singular_name %>_attributes(options = {})
+    default_options = {
+      <%- attributes.each do |attribute| -%>
+      <%= attribute.name %>: '<%= attribute.default %>', # <%= attribute.type.to_s %>
+      <%- end -%>
+    }
+
+    default_options.merge(options)
+  end
+
+  def create_<%= singular_name %>(options = {})
+    <%= class_name %>.create(<%= singular_name %>_attributes(options))
+  end
+
+end

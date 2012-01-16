@@ -1,1 +1,0 @@
-require 'ubiquo_scaffold'

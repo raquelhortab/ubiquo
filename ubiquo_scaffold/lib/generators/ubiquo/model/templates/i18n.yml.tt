@@ -1,0 +1,19 @@
+<%= @current_locale %>:
+  activerecord:
+    models:
+      <%= singular_name %>: "<%= singular_name.capitalize %>"
+    attributes:
+      <%= "#{singular_name}:" %>
+        <%- translated_attributes.each do |attribute| -%>
+        <%= "#{attribute[:name]}:" %> "<%= attribute[:translation] %>"
+        <%- end -%>
+        <%- if options[:belongs_to] -%>
+          <%- options[:belongs_to].each do |bt| -%>
+        <%= "#{bt.singularize}:" %> "<%= bt.singularize.humanize %>"
+          <%- end -%>
+        <%- end -%>
+        <%- if options[:has_many] -%>
+          <%- options[:has_many].each do |hm| -%>
+        <%= "#{hm.pluralize}:" %> "<%= hm.pluralize.humanize %>"
+          <%- end -%>
+        <%- end -%>

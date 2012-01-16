@@ -1,0 +1,41 @@
+class <%= class_name %> < ActiveRecord::Base
+  <%- if options[:versionable] -%>
+
+  versionable<%= versionable_options %>
+  <%- end -%>
+  <%- if options[:translatable] -%>
+
+  translatable <%= translatable_options %>
+  <%- end -%>
+  <%- if options[:belongs_to] -%>
+
+    <%- options[:belongs_to].each do |rl| -%>
+  belongs_to :<%= rl.singularize %>
+    <%- end -%>
+  <%- end -%>
+  <%- if options[:has_many] -%>
+    <%- options[:has_many].each do |rl| -%>
+  has_many :<%= rl.pluralize %>
+    <%- end -%>
+  <%- end -%>
+  <%- if options[:media] -%>
+
+    <%- options[:media].each do |m| -%>
+  media_attachment :<%= m %>, types: %w(image doc video audio flash)
+    <%- end -%>
+  <%- end -%>
+  <%- if options[:categorized] -%>
+
+    <%- options[:categorized].each do |category| -%>
+  categorized_with :<%= category %>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if labeled? -%>
+
+  validates_presence_of :<%= label_name %>
+  <%- end -%>
+
+  filtered_search_scopes
+
+end
