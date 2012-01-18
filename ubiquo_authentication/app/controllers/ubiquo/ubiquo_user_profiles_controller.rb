@@ -16,7 +16,7 @@ class Ubiquo::UbiquoUserProfilesController < UbiquoController
     respond_to do |format|
       if @ubiquo_user.update_attributes(params[:ubiquo_user])
         flash[:notice] = t("ubiquo.auth.user_edited")
-        format.html { redirect_to(edit_ubiquo_ubiquo_user_profile_path) }
+        format.html { redirect_to(ubiquo.edit_ubiquo_user_profile_path) }
         format.xml  { head :ok }
       else
         flash[:error] = t("ubiquo.auth.user_edited_error")

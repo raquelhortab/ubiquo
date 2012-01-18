@@ -1,6 +1,6 @@
-<%= I18n.t("ubiquo.auth.confirm_creation_message", 
+<%= I18n.t("ubiquo.auth.confirm_creation_message",
       :app_title => Ubiquo::Config.get(:app_title),
-      :url => ubiquo_home_url(:host => @host),
+      :url => ubiquo.home_url(:host => @host),
       :locale => @locale
       ) %>
 
@@ -8,7 +8,7 @@
 <%= UbiquoUser.human_attribute_name("password", :locale => @locale) %>: <%= @user.password %>
 
 <% unless @welcome_message.blank? -%>
-<%= I18n.t("ubiquo.auth.confirm_creation_welcome_message", 
+<%= I18n.t("ubiquo.auth.confirm_creation_welcome_message",
         :welcome_message => @welcome_message,
         :locale => @locale
       ) %>

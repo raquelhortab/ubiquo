@@ -26,7 +26,7 @@
 	    <% else %>
 	      <p id='feedback_notice'><%= t 'ubiquo.auth.forgotted_password_notice' %></p>
 	    <% end %>
-	    <% form_tag ubiquo_password_path do -%>
+	    <% form_tag ubiquo.password_path do -%>
 	      <p>
 	        <label for="ubiquo_user_login"><%= UbiquoUser.human_attribute_name("email") %>:</label>
 	        <%= text_field_tag 'email', nil, :class => 'text', :id=>'ubiquo_user_login' %>

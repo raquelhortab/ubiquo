@@ -33,8 +33,8 @@ module Ubiquo::UbiquoUsersHelper
   #return the actios related to an ubiquo_user
   def ubiquo_user_actions(ubiquo_user, options = {})
     actions = []
-    actions << link_to(t("ubiquo.edit"), ubiquo.edit_ubiquo_user(ubiquo_user), :class => "edit")
-    actions << link_to(t("ubiquo.remove"), ubiquo.ubiquo_user(ubiquo_user),
+    actions << link_to(t("ubiquo.edit"), ubiquo.edit_ubiquo_user_path(ubiquo_user), :class => "edit")
+    actions << link_to(t("ubiquo.remove"), ubiquo.ubiquo_user_path(ubiquo_user),
       :confirm => t("ubiquo.auth.confirm_user_removal"), :method => :delete, :class => "delete")
     actions
   end

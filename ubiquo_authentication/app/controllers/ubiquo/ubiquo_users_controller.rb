@@ -2,9 +2,7 @@ class Ubiquo::UbiquoUsersController < UbiquoController
   
   #eval this option is a lambda that will be called in that context. Normally contains the access control method invocation
   ubiquo_config_call(:user_access_control, {:context => :ubiquo_authentication})
-  
-  before_filter :load_roles
-  
+
   # GET /ubiquo_users
   # GET /ubiquo_users.xml
   def index
@@ -61,7 +59,7 @@ class Ubiquo::UbiquoUsersController < UbiquoController
             )
         end
         flash[:notice] = t("ubiquo.auth.user_created")
-        format.html { redirect_to(ubiquo_ubiquo_users_path) }
+        format.html { redirect_to(ubiquo.ubiquo_users_path) }
         format.xml  { render :xml => @ubiquo_user, :status => :created, :location => @ubiquo_user }
       else
         flash[:error] = t("ubiquo.auth.user_create_error")
@@ -83,7 +81,7 @@ class Ubiquo::UbiquoUsersController < UbiquoController
     respond_to do |format|
       if is_admin_to_allow_admin && @ubiquo_user.update_attributes(params[:ubiquo_user])
         flash[:notice] = t("ubiquo.auth.user_edited")
-        format.html { redirect_to(ubiquo_ubiquo_users_path) }
+        format.html { redirect_to(ubiquo.ubiquo_users_path) }
         format.xml  { head :ok }
       else
         flash[:error] = t("ubiquo.auth.user_edit_error")
@@ -105,14 +103,9 @@ class Ubiquo::UbiquoUsersController < UbiquoController
     end
 
     respond_to do |format|
-      format.html { redirect_to(ubiquo_ubiquo_users_path) }
+      format.html { redirect_to(ubiquo.ubiquo_users_path) }
       format.xml  { head :ok }
     end
   end
-  
-  private
-  
-  def load_roles 
-    @roles = Role.all
-  end
+
 end
