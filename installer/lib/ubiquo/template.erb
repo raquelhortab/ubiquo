@@ -262,7 +262,7 @@ jruby_adapter_gem = adapter_gem == "pg" ? "postgres" : adapter_gem
 ubiquo_gems = (selected_plugins).map do |plugin|
   <% if @opts[:gem_path] %>
     "  gem \"#{plugin}\""
-  <% else %>>
+  <% else %>
     "  gem \"#{plugin}\", :git => #{plugin_repo(plugin)}"
   <% end %>
 end.join("\n")

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ubiquo"
-  s.version = "0.9.0.b5"
+  s.version = "0.9.0.b6"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Albert Callarisa", "Jordi Beltran", "Bernat Foj", "Eric Garc\303\255a", "Felip Ladr\303\263n", "David Lozano", "Antoni Reina", "Ramon Salvad\303\263", "Arnau S\303\241nchez"]
-  s.date = "2012-01-13"
+  s.date = "2012-01-18"
   s.description = "This gem provides a command-line interface to speed up the creation of ubiquo based apps."
   s.email = "rsalvado@gnuine.com"
   s.executables = ["ubiquo"]
