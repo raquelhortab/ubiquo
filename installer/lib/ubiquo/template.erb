@@ -28,7 +28,7 @@ case choosen_plugin_set
 end
 
 # temporally overriden to the gemified set of plugins
-selected_plugins = %w[ubiquo_core ubiquo_authentication ubiquo_access_control]
+selected_plugins = minimal_plugins + [ubiquo_jobs]
 
 # File railties/lib/rails/generators/rails/app/app_generator.rb, line 238
 def file(*args, &block)
