@@ -1067,11 +1067,6 @@ form label {
 			width: auto;
                   }
 
-                  #content .datetime input {
-			display: inline;
-			width: auto;
-                  }
-
     input[type="hidden"] {
       display: none!important;
 			/*width: 40%;
@@ -1331,26 +1326,27 @@ form#new_ubiquo_setting .setting-info{
   overflow: hidden;
   display:inline;
   width: 70%;
- }
+}
 
 form#new_ubiquo_setting .setting-actions{
   float: left;
   display:inline;
   width: 29%;
- }
+}
 form#new_ubiquo_setting .setting-actions ul.actions {
   margin-top: .4em;
   padding-left: 0;
- }
+}
 
 form#new_ubiquo_setting .save_all {
   margin-top: 1em;
- }
+}
 
 #content .settings .form-item input, #content .settings .form-item select, #content .settings .form-item textarea, #content .settings .form-item .mceEditor, #content .form-item .checkbox {
   width: 70%;
   font-size: 1em;
- }
+}
+
 
 .ubiquo_boolean_setting{
   width:100%;
@@ -1358,21 +1354,19 @@ form#new_ubiquo_setting .save_all {
 
 form#new_ubiquo_setting input.checkbox{
 
- }
+}
 form#new_ubiquo_setting input.password:first-child{
   width:20%
- }
-
+}
 form#new_ubiquo_setting input.password:last-child{
   width:19%
- }
+}
 
 form#new_ubiquo_setting .setting-actions .actions li {
     vertical-align: top;
   display:inline;
   margin-left: 0.5em;
- }
-
+}
 form#new_ubiquo_setting .setting-actions .actions li a{
     vertical-align: top;
     background: url("../../../images/ubiquo/bg-button.png") no-repeat scroll left bottom transparent;
@@ -1384,21 +1378,22 @@ form#new_ubiquo_setting .setting-actions .actions li a{
     padding: 0.3em;
     text-decoration: none;
     text-transform: lowercase;
- }
+}
 
 
 form#new_ubiquo_setting span.setting-value{
   min-width: 25em;
- }
+}
 
 form#new_ubiquo_setting .ubiquo_password_setting{
   display:inline;
- }
+}
 
 
 form#new_ubiquo_setting .generated, form#new_ubiquo_setting .translatable{
   display:inline;
- }
+}
+
 
 /* --- Tabbed content --- */
 .tabbed {}
