@@ -1,9 +1,9 @@
 class Ubiquo::SessionsController < ApplicationController
+  layout :false
 
   Ubiquo::Extensions.load_extensions_for UbiquoController, self
 
   before_filter :cookies_required
-
   skip_before_filter :verify_authenticity_token, :only => [:create]
 
   #shows the login form
@@ -60,14 +60,14 @@ class Ubiquo::SessionsController < ApplicationController
   def cookies_required
     return if has_cookies_enabled?
     unless cookie_redirected?
-      redirect_to(ubiquo_login_path(:cookies => true))
+      redirect_to(ubiquo.login_path(:cookies => true))
       return false
     end
   end
 
   def has_cookies_enabled?
     Rails.env.test? ||
-      !request.cookies[ActionController::Base.session_options[:key]].to_s.blank?
+      !request.cookies[Rails.application.config.session_options[:key]].to_s.blank?
   end
 
   # Returns true if we have been already redirected to the login form
