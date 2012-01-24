@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../../../../../../../../test/test_helper.rb"
+require File.dirname(__FILE__) + "/../../../../test_helper.rb"
 
 module Connectors
   class I18nTest < ActiveSupport::TestCase
@@ -6,12 +6,12 @@ module Connectors
     if Ubiquo::Plugin.registered[:ubiquo_i18n]
 
       def setup
-      
+
         @initial_contexts =  Ubiquo::Settings.settings.keys
         @old_configuration = Ubiquo::Settings.settings[Ubiquo::Settings.default_context].clone
-        
+
         UbiquoSetting.destroy_all
-        
+
         if Ubiquo::Settings[:settings_connector] != :i18n
           Ubiquo::Settings[:settings_connector] = :i18n
           Ubiquo::SettingsConnectors.load!
@@ -19,12 +19,12 @@ module Connectors
 
         enable_settings_override
         Ubiquo::Settings.load_from_backend!
-        Locale.current = 'test'     
+        Locale.current = 'test'
       end
-      
+
       def teardown
         clear_settings
-        Locale.current = nil     
+        Locale.current = nil
         Ubiquo::SettingsConnectors.load!
       end
 
@@ -33,7 +33,7 @@ module Connectors
 #      end
 
       test "should load localized values from i18n database backend" do
-        
+
         create_settings_test_case = lambda {
           Ubiquo::Settings.create_context(:foo)
           Ubiquo::Settings.create_context(:foo2)
@@ -66,28 +66,28 @@ module Connectors
         create_settings_test_case.call
 
         assert_equal 'value1', Ubiquo::Settings[:foo].get(:first)
-             
+
         enable_settings_override
         create_overrides_test_case.call
         assert_equal 'value1_redefinido', Ubiquo::Settings[:foo].get(:first, Locale.current)
-       
+
         clear_settings
         assert !Ubiquo::Settings.context_exists?(:foo)
 
         create_settings_test_case.call
         enable_settings_override
         create_overrides_test_case.call
-        
-        
+
+
         assert_equal 'value2_redefinido', Ubiquo::Settings[:foo].get(:second, 'es_ES')
         Ubiquo::Settings.reset_overrides
         assert_raise Ubiquo::Settings::ValueNeverSet do
           Ubiquo::Settings[:foo].get(:second, 'es_ES')
         end
-        Ubiquo::Settings.load_from_backend!                     
-        
+        Ubiquo::Settings.load_from_backend!
+
         assert_equal Ubiquo::Settings.default_locale, :any
-        
+
         # if translatable, locale by default by default_locale
         assert_equal 'value1', Ubiquo::Settings[:foo][:first]
         assert_equal 'value1', Ubiquo::Settings[:foo].get(:first)
@@ -95,12 +95,12 @@ module Connectors
         assert_equal 'value1', Ubiquo::Settings[:foo].get(:first, Ubiquo::Settings.default_locale.to_s)
         assert_equal 'value1', Ubiquo::Settings[:foo].get(:first, Ubiquo::Settings.default_locale.to_sym)
         assert_equal 'value1', Ubiquo::Settings[:foo].get(:first, :locale => :any)
-                
+
         assert_equal 'value2_redefinido', Ubiquo::Settings[:foo].get(:second, 'es_ES')
         assert_equal 'value2_redefinit', Ubiquo::Settings[:foo].get(:second, 'ca_ES')
         assert_equal 'value2_overriden', Ubiquo::Settings[:foo].get(:second, 'en_UK')
         assert_equal 'value4_redefinit', Ubiquo::Settings[:foo2].get(:first, 'ca_ES')
-        
+
         # if no value for default_locale, raise error
         Ubiquo::Settings.settings[:foo][:first][:value].delete(Ubiquo::Settings.default_locale)
         assert_raise Ubiquo::Settings::ValueNeverSet do
@@ -108,7 +108,7 @@ module Connectors
         end
         assert_raise Ubiquo::Settings::ValueNeverSet do
           Ubiquo::Settings[:foo][:first]
-        end        
+        end
         # get any translation
         Ubiquo::Settings[:foo].get(:first, :any_value => true)
       end
@@ -124,20 +124,20 @@ module Connectors
 
       test "should accept translation if setting is translatable" do
         Ubiquo::Settings.create_context(:foo_context_1)
-        Ubiquo::Settings[:foo_context_1].add(:new_setting, 
+        Ubiquo::Settings[:foo_context_1].add(:new_setting,
                                          'hola',
                                          {
                                            :is_editable => true,
                                            :is_translatable => true,
                                          })
-                                       
+
         s1 = UbiquoStringSetting.new(:context => :foo_context_1, :key => :new_setting, :value => 'hola_redefinido', :locale => "es_ES")
         s1.save
-        assert_equal 'hola_redefinido', Ubiquo::Settings[:foo_context_1].get(:new_setting, 'es_ES')        
+        assert_equal 'hola_redefinido', Ubiquo::Settings[:foo_context_1].get(:new_setting, 'es_ES')
 
         s2 = UbiquoSetting.find(s1.id).translate('ca_ES')
-        s2.save 
-        assert s2.id 
+        s2.save
+        assert s2.id
         assert_equal 'hola_redefinido', Ubiquo::Settings[:foo_context_1].get(:new_setting, :es_ES)
         s2.update_attribute :value, 'hola_redefinit'
         assert_equal 'hola_redefinit', Ubiquo::Settings[:foo_context_1].get(:new_setting, :ca_ES)
@@ -145,7 +145,7 @@ module Connectors
 
       test "should overwrite value if setting is not translatable" do
         Ubiquo::Settings.create_context(:foo_context_2)
-        Ubiquo::Settings[:foo_context_2].add(:new_setting, 
+        Ubiquo::Settings[:foo_context_2].add(:new_setting,
                                          'hola',
                                          {
                                           :is_editable => true,
@@ -156,10 +156,10 @@ module Connectors
 
         s2 = UbiquoStringSetting.create(:context => :foo_context_2, :key => :new_setting, :value => 'hola_redefinit_no_locale')
         assert s2.errors.present?
-        
+
         s3 = UbiquoStringSetting.create(:context => :foo_context_2, :key => :new_setting, :value => 'hola_redefinit', :locale => 'es_ES')
         assert s3.errors.present?
-        
+
       end
 
       test 'uhook_edit_ubiquo_setting should redirect if not current locale' do
@@ -184,7 +184,7 @@ module Connectors
           :is_translatable => true
         }
       }.merge(options)
-      Ubiquo::Settings[default_options[:context].to_sym].add(default_options[:key], 
+      Ubiquo::Settings[default_options[:context].to_sym].add(default_options[:key],
                                                     default_options[:value],
                                                     default_options[:options])
     end

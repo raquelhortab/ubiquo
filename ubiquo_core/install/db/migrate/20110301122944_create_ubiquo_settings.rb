@@ -11,7 +11,6 @@ class CreateUbiquoSettings < ActiveRecord::Migration
 
       t.timestamps
 
-      t.index :context
     end
   end
 

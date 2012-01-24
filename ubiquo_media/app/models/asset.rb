@@ -1,7 +1,8 @@
 require "fileutils"
 
 # An asset is a resource with name, description and one associated
-# file.+#
+# file.
+#
 # This model has no associated file right away. The sublcasses AssetPublic and
 # AssetProtected have the attribute :resource as a file_attachment and so they
 # are the models to work with.
@@ -11,7 +12,6 @@ class Asset < ActiveRecord::Base
 
   has_many :asset_relations, :dependent => :destroy
   has_many :asset_areas, :dependent => :destroy
-
   has_many :asset_geometries, :dependent => :destroy
 
   validates_presence_of :name, :asset_type_id, :type
@@ -56,7 +56,7 @@ filtered_search_scopes :text => [:name, :description],
   end
 
   # To mantain backwards compatibility with old filters
-   def self.filtered_search(filters = {}, options = {})
+  def self.filtered_search(filters = {}, options = {})
     new_filters = {}
     filters.each do |key, value|
       if key == :type
@@ -71,11 +71,11 @@ filtered_search_scopes :text => [:name, :description],
         new_filters["filter_created_end"] = value
       else
         new_filters[key] = value
-       end
-     end
+      end
+    end
 
     super new_filters, options
-   end
+  end
 
   def self.visibilize(visibility)
     "asset_#{visibility}".classify.constantize
@@ -130,6 +130,40 @@ filtered_search_scopes :text => [:name, :description],
     obj
   end
 
+  def clone?
+    self.cloned_from ? true : false
+  end
+
+  def geometry(style = :original)
+    asset_geometry = self.asset_geometries.find_by_style(style.to_s)
+
+    unless asset_geometry
+      asset_geometry = calculate_geometry(style)
+      if asset_geometry
+        asset_geometry.asset_id = self.id
+        asset_geometry.save
+      end
+    end
+
+    asset_geometry.generate if asset_geometry
+  end
+
+  def keep_backup
+    # keep backups only in filesystem
+    return false unless self.resource.options[:storage] == :filesystem
+
+    self[:keep_backup]
+  end
+
+  def resource_file(style = :original)
+    if self.resource
+      return self.resource.to_file(style) if self.resource.options[:storage] == :filesystem
+
+      @tmp_files ||= {}
+      @tmp_files[style] ||= self.resource.to_file(style)
+    end
+  end
+
   private
 
   def set_asset_type
@@ -155,12 +189,47 @@ filtered_search_scopes :text => [:name, :description],
       FileUtils.cp( self.cloned_from.backup_path, self.backup_path )
     end
   end
-  
+
   def update_backup
     unless self.keep_backup
       # Delete backup
       File.unlink( self.backup_path ) if File.exists?( self.backup_path )
     end
+  end
+
+  def generate_geometries
+    self.asset_geometries.destroy_all
+
+    unless self.clone?
+      @asset_geometries_to_save = []
+
+      if self.resource && self.resource_content_type.include?('image')
+        self.resource.styles.map { |s| s.first }.each do |style|
+          @asset_geometries_to_save << calculate_geometry(style)
+        end
+        @asset_geometries_to_save << calculate_geometry
+      end
+    end
+  end
+
+  def save_geometries
+    unless self.clone?
+      @asset_geometries_to_save ||= []
+
+      self.asset_geometries.destroy_all unless @asset_geometries_to_save.empty?
+      @asset_geometries_to_save.each do |asset_geometry|
+        asset_geometry.asset_id = self.id
+        asset_geometry.save
+      end
+    end
+  end
+
+  def calculate_geometry(style = :original)
+    AssetGeometry.from_file(self.resource_file(style), style)
+  end
+
+  def clean_tmp_files
+    @tmp_files = nil
   end
 
 end

@@ -361,7 +361,7 @@ module Ubiquo
             if self.config_exists? &&
                 !Ubiquo::Settings[self.context].translatable?(self.key)
                 existing_value = ::UbiquoSetting.context(self.context.to_s).key(self.key.to_s).first
-              if existing_value && existing_value != self                
+              if existing_value && existing_value != self
                 self.errors.add :key, "not translatable setting"
               end
             end

@@ -64,7 +64,16 @@ module Ubiquo
     initializer :register_ubiquo_plugin do
 #      require 'ubiquo/init_settings.rb'
     end
+
+    initializer :load_settings_connector do
+      if Ubiquo::Plugin.registered[:ubiquo_i18n]
+        Ubiquo::Settings[:settings_connector] = :i18n
+      end
+      Ubiquo::SettingsConnectors.load!
+    end
     include Ubiquo::Engine::Base
+
+
   end
 
   def self.supported_locales

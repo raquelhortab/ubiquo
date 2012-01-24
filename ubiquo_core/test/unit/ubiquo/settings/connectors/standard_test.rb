@@ -1,16 +1,16 @@
-require File.dirname(__FILE__) + "/../../../../../../../../test/test_helper.rb"
+require File.dirname(__FILE__) + "/../../../../test_helper.rb"
 
 module Connectors
   class StandardTest < ActiveSupport::TestCase
 
       def setup
-        save_current_settings_connector 
+        save_current_settings_connector
         Ubiquo::Settings[:settings_connector] = :standard
         clean_translatable_settings
         Ubiquo::SettingsConnectors.load!
         Ubiquo::Settings.regenerate_settings
       end
-      
+
       def teardown
         clear_settings
         reload_old_settings_connector
@@ -21,7 +21,7 @@ module Connectors
 #      end
 
       test "should load values from database backend" do
-        
+
         create_settings_test_case = lambda {
           Ubiquo::Settings.create_context(:foo)
           Ubiquo::Settings.create_context(:foo2)
@@ -37,32 +37,32 @@ module Connectors
           UbiquoStringSetting.create(:context => :foo2, :key => 'first', :value => 'value3_redefinido')
         }
 
-        Ubiquo::Settings[:ubiquo][:settings_overridable] = true        
+        Ubiquo::Settings[:ubiquo][:settings_overridable] = true
         create_settings_test_case.call
         create_overrides_test_case.call
-        
+
         assert_equal 'value1_redefinido', Ubiquo::Settings[:foo][:first]
 
         Ubiquo::Settings.reset_overrides
         clear_settings
-        Ubiquo::Settings[:ubiquo][:settings_overridable] = true        
+        Ubiquo::Settings[:ubiquo][:settings_overridable] = true
         create_settings_test_case.call
 
         assert_equal 'value1', Ubiquo::Settings[:foo][:first]
-             
+
         create_overrides_test_case.call
         assert_equal 'value1_redefinido', Ubiquo::Settings[:foo].get(:first)
-       
+
         clear_settings
         assert !Ubiquo::Settings.context_exists?(:foo)
-                
+
         UbiquoStringSetting.any_instance.stubs(:apply).returns(false)
         create_settings_test_case.call
-        
+
         UbiquoStringSetting.create(:context => :foo, :key => 'first', :value => 'value1_redefinido')
         assert_equal 'value1', Ubiquo::Settings[:foo][:first]
         enable_settings_override
-        Ubiquo::Settings.load_from_backend!     
+        Ubiquo::Settings.load_from_backend!
         assert_equal 'value1_redefinido', Ubiquo::Settings[:foo][:first]
       end
 
@@ -75,16 +75,16 @@ module Connectors
 
         Ubiquo::Settings[:ubiquo][:settings_overridable] = true
         Ubiquo::Settings.create_context(:foo_context_1)
-        Ubiquo::Settings[:foo_context_1].add(:new_setting, 
+        Ubiquo::Settings[:foo_context_1].add(:new_setting,
                                          'hola',
                                          {
                                            :is_editable => false,
                                          })
-                        
+
         s1 = UbiquoStringSetting.create(:context => :foo_context_1, :key => :new_setting, :value => 'hola_redefinido')
         assert s1.errors
 
-        Ubiquo::Settings[:foo_context_1].set(:new_setting, 
+        Ubiquo::Settings[:foo_context_1].set(:new_setting,
                                          'hola',
                                          {
                                            :is_editable => true,
@@ -110,7 +110,7 @@ module Connectors
           :is_editable => true,
         }
       }.merge(options)
-      Ubiquo::Settings[default_options[:context].to_sym].add(default_options[:key], 
+      Ubiquo::Settings[default_options[:context].to_sym].add(default_options[:key],
                                                     default_options[:value],
                                                     default_options[:options])
     end
@@ -125,13 +125,13 @@ module Connectors
       @old_connector = Ubiquo::SettingsConnectors::Base.current_connector
       @initial_contexts =  Ubiquo::Settings.settings.keys
       @old_configuration = Ubiquo::Settings.settings[Ubiquo::Settings.default_context].clone
-      
+
       Ubiquo::SettingsConnectors.load!
     end
 
     def reload_old_settings_connector
       clear_settings
-      @old_connector.load!      
+      @old_connector.load!
     end
 
     def clean_translatable_settings

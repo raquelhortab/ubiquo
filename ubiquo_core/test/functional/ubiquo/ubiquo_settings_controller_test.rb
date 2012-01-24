@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
+#  use_ubiquo_fixtures
 
   def setup
     save_current_settings

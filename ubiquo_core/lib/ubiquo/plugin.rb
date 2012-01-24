@@ -6,13 +6,8 @@ module Ubiquo
     self.registered ||= {}
 
     def self.register(name, &block)
-      if name.present?
-        Ubiquo::Settings.create_context(name)
-        Ubiquo::Settings.context(name, &block)      
-      else
-        yield Ubiquo::Settings if block_given
-
-      end
+      Ubiquo::Settings.create_context(name)
+      Ubiquo::Settings.context(name, &block)
       self.registered[name] = name
     end
 

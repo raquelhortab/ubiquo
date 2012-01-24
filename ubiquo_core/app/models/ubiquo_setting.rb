@@ -21,15 +21,15 @@ class UbiquoSetting < ActiveRecord::Base
   after_save :apply
   after_destroy :push_config
 
-  named_scope :context, lambda { |value| { :conditions => {:context => value} } }
-  named_scope :key,     lambda { |value| { :conditions => {:key => value} } }
+  scope :context, lambda { |value| where(:context => value) }
+  scope :key,     lambda { |value| where(:key => value) }
 
   # Check if the value is included in the alloweds
   def value_acceptable?
     self.allowed_values.blank? ||
       self.allowed_values.include?(self.value)
   end
-  
+
   # Check if the context of the setting exists
   def context_exists?
     Ubiquo::Settings.context_exists?(self.context)
@@ -52,7 +52,7 @@ class UbiquoSetting < ActiveRecord::Base
     config_exists? &&
     Ubiquo::Settings[self.context].editable?(self.key).present?
   end
-  
+
   def config_value_same?
     uhook_config_value_same?
   end
@@ -60,7 +60,7 @@ class UbiquoSetting < ActiveRecord::Base
   def check_config_acceptance
     self.errors.add :value, 'value is not included in the alloweds' if !value_acceptable?
   end
-  
+
   def check_config_value_same
     self.errors.add :value, 'cannot override a value with the same' if config_value_same?
   end
@@ -82,14 +82,14 @@ class UbiquoSetting < ActiveRecord::Base
   def override_enabled?
     self.class.override_enabled?
   end
-  
+
   # Check if overriden settings are enabled
   def self.override_enabled?
     Ubiquo::Settings.overridable?
   end
 
-  # Tries to enable a specific setting 
-  def apply 
+  # Tries to enable a specific setting
+  def apply
     Ubiquo::Settings[self.context].add(self)
   end
 
@@ -100,7 +100,7 @@ class UbiquoSetting < ActiveRecord::Base
   def push_config
     self.class.push_config
   end
-    
+
   # Tries to load and enable all overriden setting from db
   def self.push_config
     Ubiquo::Settings.load_from_backend!
@@ -125,7 +125,7 @@ class UbiquoSetting < ActiveRecord::Base
     self[:context] =  self[:context].to_s if self[:context].present?
     self[:key] = self[:key].to_s if self[:key].present?
   end
- 
+
   # Accessor, format the key to a symbol
   def key
     self[:key].to_sym if self[:key].present?
@@ -152,7 +152,7 @@ class UbiquoSetting < ActiveRecord::Base
       "Ubiquo#{value.class}Setting".constantize rescue UbiquoSetting
     end
   end
-  
+
   def generated_from_another_value?
     uhook_generated_from_another_value?
   end
@@ -172,7 +172,7 @@ class UbiquoSetting < ActiveRecord::Base
   def self.context_translated context
     I18n.t!("ubiquo.ubiquo_settings.#{context}.name") rescue context
   end
-  
+
 #  def to_s
 #   "#{key}:#{value}"
 # end
