@@ -66,18 +66,13 @@ class Ubiquo::JobsController < UbiquoController
   def generic_index(finished)
     respond_to do |format|
       format.html {
-        order_by = params[:order_by] || 'id'
-        sort_order = params[:sort_order] || 'desc'
+        filters = params
+        if finished
+          filters["filter_state"] = UbiquoJobs::Jobs::Base::STATES[:finished]
+        else
+          filters["filter_state_not"] = UbiquoJobs::Jobs::Base::STATES[:finished]
+        end
 
-        filters = {
-          :text => params[:filter_text],
-          :date_start => params[:filter_date_start],
-          :date_end => params[:filter_date_end],
-          :state => (UbiquoJobs::Jobs::Base::STATES[:finished] if finished),
-          :state_not => (UbiquoJobs::Jobs::Base::STATES[:finished] unless finished),
-          :page => params[:page],
-          :order => "#{order_by.gsub(/^.*\./, '')} #{sort_order}"
-        }
         @jobs_pages, @jobs = UbiquoJobs.manager.list(filters)
       } # index.html.erb or history.html.erb
       format.xml  {

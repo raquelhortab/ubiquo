@@ -45,9 +45,7 @@ module UbiquoJobs
       # Returns an array with the format [pages_information, list_of_jobs]
       #
       def self.list(filters = {})
-        job_class.paginate(:page => filters[:page], :per_page => filters[:per_page] || 10) do
-          job_class.filtered_search filters, :order => filters[:order]
-        end
+        job_class.paginated_filtered_search(filters.reverse_merge(:per_page => 10))
       end
 
       # TODO: see if this can be merged in recovery

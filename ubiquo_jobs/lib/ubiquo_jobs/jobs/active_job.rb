@@ -28,6 +28,20 @@ module UbiquoJobs
 
       attr_accessor :options
 
+      filtered_search_scopes :text => [:name], :enable => [:date_start, :date_end, :state, :state_not]
+      scope :date_start, lambda{ |value|
+        where("created_at > ?", value)
+      }
+      scope :date_end, lambda{ |value|
+        where("created_at < ?", value)
+      }
+      scope :state, lambda{ |value|
+        where("state = ?", value)
+      }
+      scope :state_not, lambda{ |value|
+        where("state != ?", value)
+      }
+
       # Save updated attributes.
       # Optimistic locking is handled automatically by Active Record
       def set_property(property, value)
@@ -42,30 +56,6 @@ module UbiquoJobs
       # Returns the error messages produced by the job execution, if any
       def error_log
         self.result_error
-      end
-
-      # Ubiquo finder method
-      # See vendor/plugins/ubiquo_core/lib/extensions/active_record.rb to see an example of usage.
-      def self.filtered_search(filters = {}, options = {})
-
-        scopes = create_scopes(filters) do |filter, value|
-          case filter
-          when :text
-            {:conditions => ["upper(name) LIKE upper(?)", "%#{value}%"]}
-          when :date_start
-            {:conditions => ["created_at > ?", "#{value}"]}
-          when :date_end
-            {:conditions => ["created_at < ?", "#{value}"]}
-          when :state
-            {:conditions => ["state = ?", value]}
-          when :state_not
-            {:conditions => ["state != ?", value]}
-          end
-        end
-
-        apply_find_scopes(scopes) do
-          find(:all, options)
-        end
       end
 
       # Set a job to be executed (again), giving it a planification time
