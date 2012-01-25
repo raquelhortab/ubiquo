@@ -52,6 +52,7 @@ module UbiquoJobs
         end
 
         # Update state accordingly to the result
+
         new_state = unless job_successfully_done
           tries >= 3 ? STATES[:error] : STATES[:waiting]
         else

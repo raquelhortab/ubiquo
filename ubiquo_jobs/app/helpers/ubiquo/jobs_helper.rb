@@ -41,9 +41,9 @@ module Ubiquo::JobsHelper
   end
 
   def job_actions(job, context = 'index')
-    remove_action = link_to(t('ubiquo.jobs.remove'), ubiquo_job_path(job.id), :confirm => t('ubiquo.jobs.remove_confirmation'), :method => :delete)
-    repeat_action  = link_to(t('ubiquo.jobs.repeat'), repeat_ubiquo_job_path(job.id), :confirm => t('ubiquo.jobs.repeat_confirmation'), :method => :put)
-    output_action = link_to(t('ubiquo.jobs.read_output'), output_ubiquo_job_path(job.id), :class => "lightwindow", :type => "page", :params => "lightwindow_width=610")
+    remove_action = link_to(t('ubiquo.jobs.remove'), ubiquo.job_path(job.id), :confirm => t('ubiquo.jobs.remove_confirmation'), :method => :delete)
+    repeat_action  = link_to(t('ubiquo.jobs.repeat'), ubiquo.repeat_job_path(job.id), :confirm => t('ubiquo.jobs.repeat_confirmation'), :method => :put)
+    output_action = link_to(t('ubiquo.jobs.read_output'), ubiquo.output_job_path(job.id), :class => "lightwindow", :type => "page", :params => "lightwindow_width=610")
     if context == 'index'
       if job.state == UbiquoJobs::Jobs::Base::STATES[:error]
         [remove_action, repeat_action, output_action]

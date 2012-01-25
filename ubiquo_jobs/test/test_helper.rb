@@ -12,3 +12,5 @@ Rails.backtrace_cleaner.remove_silencers!
 
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
+
+ENV['foo'] = "0"

@@ -21,18 +21,18 @@ class Ubiquo::JobsController < UbiquoController
     end
 
     respond_to do |format|
-      format.html { redirect_to(ubiquo_jobs_path) }
+      format.html { redirect_to(ubiquo.jobs_path) }
       format.xml  { head :ok }
     end
   end
-  
+
   # PUT /jobs/1
   # PUT /jobs/1.xml
   def update
     respond_to do |format|
       if UbiquoJobs.manager.update(params[:id], params[:job])
         flash[:notice] = t("ubiquo.jobs.job_edited")
-        format.html { redirect_to(ubiquo_jobs_path) }
+        format.html { redirect_to(ubiquo.jobs_path) }
         format.xml  { head :ok }
         format.js
       else
@@ -45,11 +45,11 @@ class Ubiquo::JobsController < UbiquoController
   end
 
   # PUT /jobs/1/repeat
-  def repeat    
+  def repeat
     UbiquoJobs.manager.repeat(params[:id])
     respond_to do |format|
       flash[:notice] = t("ubiquo.jobs.job_repeated")
-      format.html { redirect_to(ubiquo_jobs_path) }
+      format.html { redirect_to(ubiquo.jobs_path) }
       format.xml  { head :ok }
       format.js
     end
@@ -62,13 +62,13 @@ class Ubiquo::JobsController < UbiquoController
   end
 
   private
-  
+
   def generic_index(finished)
     respond_to do |format|
       format.html {
         order_by = params[:order_by] || 'id'
         sort_order = params[:sort_order] || 'desc'
-        
+
         filters = {
           :text => params[:filter_text],
           :date_start => params[:filter_date_start],
@@ -78,12 +78,12 @@ class Ubiquo::JobsController < UbiquoController
           :page => params[:page],
           :order => "#{order_by.gsub(/^.*\./, '')} #{sort_order}"
         }
-        @jobs_pages, @jobs = UbiquoJobs.manager.list(filters) 
+        @jobs_pages, @jobs = UbiquoJobs.manager.list(filters)
       } # index.html.erb or history.html.erb
       format.xml  {
         @jobs = UbiquoJobs.manager.list
         render :xml => @jobs
       }
-    end    
+    end
   end
 end

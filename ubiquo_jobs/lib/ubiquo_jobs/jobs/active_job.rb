@@ -8,6 +8,7 @@ module UbiquoJobs
 
       before_create :set_default_state
       before_save :store_options
+      after_find :load_options
 
       has_many :active_job_dependants,
         :foreign_key => 'previous_job_id',
@@ -102,7 +103,7 @@ module UbiquoJobs
       end
 
       # Load the stored options (which are stored in yaml) into the options hash
-      def after_find
+      def load_options
         begin
           self.options = YAML::load(self.stored_options.to_s)
           # Fix for http://dev.rubyonrails.org/ticket/7537

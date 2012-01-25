@@ -11,19 +11,17 @@ module UbiquoJobs
       #
       def self.get(runner)
         recovery(runner)
-        candidate_jobs = job_class.all(
-          :conditions => [
-            'planified_at <= ? AND state = ?',
-            Time.now.utc,
-            UbiquoJobs::Jobs::Base::STATES[:waiting]
-          ],
-          :order => 'priority asc'
-        )
+        candidate_jobs = job_class.where('planified_at <= ? AND state = ?',
+                                         Time.now.utc,
+                                         UbiquoJobs::Jobs::Base::STATES[:waiting]).order('priority asc')
+
         job = first_without_dependencies(candidate_jobs)
+
         job.update_attributes({
             :state => UbiquoJobs::Jobs::Base::STATES[:instantiated],
             :runner => runner
           }) if job
+
         job
       end
 
@@ -59,17 +57,11 @@ module UbiquoJobs
       #   runner: name of the worker that is asking for a job
       #
       def self.get_assigned(runner)
-        job_class.first(
-          :conditions => [
-            "runner = ? AND state NOT IN (%i,%i)" %
-            [
-              UbiquoJobs::Jobs::Base::STATES[:finished],
-              UbiquoJobs::Jobs::Base::STATES[:error]
-            ],
-            runner
-          ],
-          :order => 'priority asc'
-        )
+        job_class.where("runner = ? AND state NOT IN (?)", runner,
+                        [UbiquoJobs::Jobs::Base::STATES[:finished],
+                         UbiquoJobs::Jobs::Base::STATES[:error]]).
+          order('priority asc').first
+
       end
 
       # Creates a job using the given options, and planifies it

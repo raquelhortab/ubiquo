@@ -7,7 +7,7 @@ module UbiquoJobs
           tab.text =  I18n.t("ubiquo.jobs.tab_name")
           tab.title =  I18n.t("ubiquo.jobs.tab_title")
           tab.highlights_on({:controller => "ubiquo/jobs"})
-          tab.link = ubiquo_jobs_path  
+          tab.link = ubiquo.jobs_path
         end
       end
     end

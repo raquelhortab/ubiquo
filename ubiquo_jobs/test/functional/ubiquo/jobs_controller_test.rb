@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::JobsControllerTest < ActionController::TestCase
+  include Ubiquo::Engine.routes.url_helpers
+  include Rails.application.routes.mounted_helpers
   def test_should_get_index
     get :index
     assert_response :success
@@ -20,14 +22,14 @@ class Ubiquo::JobsControllerTest < ActionController::TestCase
   def test_should_update_job
     job = create_job
     put :update, :id => job.id, :job => {:priority => 2}
-    assert_redirected_to ubiquo_jobs_path
+    assert_redirected_to ubiquo.jobs_path
     assert_equal 2, job.reload.priority
   end
 
   def test_should_repeat_job
     job = create_job
     put :repeat, :id => job.id
-    assert_redirected_to ubiquo_jobs_path
+    assert_redirected_to ubiquo.jobs_path
     assert_equal UbiquoJobs::Jobs::Base::STATES[:waiting], job.reload.state
   end
 
@@ -42,20 +44,20 @@ class Ubiquo::JobsControllerTest < ActionController::TestCase
     job = create_job
     UbiquoJobs::manager.expects(:delete).with(job.id.to_s)
     delete :destroy, :id => job.id
-    assert_redirected_to ubiquo_jobs_path
+    assert_redirected_to ubiquo.jobs_path
   end
-  
+
   private
 
   def job_attributes(options = {})
     default_options = {
       :priority => 1000 # Default value when using run_async
     }
-    default_options.merge(options)  
+    default_options.merge(options)
   end
 
   def create_job(options = {})
     UbiquoJobs.manager.add(UbiquoJobs.manager.job_class, job_attributes(options))
   end
-      
+
 end

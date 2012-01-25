@@ -2,22 +2,22 @@ require File.dirname(__FILE__) + "/../../../test_helper.rb"
 require 'mocha'
 
 class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
-  
+
   ActiveJob = UbiquoJobs::Jobs::ActiveJob
   ActiveManager = UbiquoJobs::Managers::ActiveManager
-  
+
   def test_should_create_job
     assert_difference 'ActiveJob.count' do
       job = create_job
       assert !job.new_record?, "#{job.errors.full_messages.to_sentence}"
     end
   end
-  
+
   def test_should_create_with_waiting_state
     job = create_job
-    assert_equal UbiquoJobs::Jobs::Base::STATES[:waiting], job.state    
+    assert_equal UbiquoJobs::Jobs::Base::STATES[:waiting], job.state
   end
-    
+
   def test_should_access_properties
     job = create_job
     ActiveJob::PROPERTIES.each do |property|
@@ -43,14 +43,14 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
       job.update_attribute(:state, 3)
     end
   end
-  
+
   def test_should_not_run_if_not_instantiated
     job = create_job
     assert_raise RuntimeError do
       job.run!
     end
   end
-    
+
   def test_should_filter_by_name
     create_job(:name => "I don't appear")
     assert_equal [], ActiveJob.filtered_search({:text => "notsocommon"})
@@ -118,34 +118,37 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
     assert_equal job_4, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
     job_4.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
-    
+
     # 3 can't trigger until 2
     assert_equal job_2, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
     job_2.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
-    
+
     # job_3 turn, then 1 can run
     assert_equal job_3, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
     job_3.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
     assert_equal job_1, ActiveManager.get('me')
   end
-  
+
   def test_should_store_options
-    create_job(:planified_at => nil)
+    other_job = create_job(:planified_at => nil)
+    ENV['foo'] = "1"
     options = {
       :string => 'String',
       :number => 1,
-      :time => Time.now,
+#      :time => Time.now,
       :model => ActiveJob.first,
       :hash => {:hash => 'Hash'}
     }
     job = create_job({:options => options})
-    assert_equal options, job.options 
+
+    assert_equal options, job.options
     assert_equal options.to_yaml, job.stored_options
     assert_equal options, ActiveManager.get('me').options
+    ENV['foo'] = "0"
   end
-    
+
   private
 
   def create_job(options = {})
@@ -156,5 +159,5 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
     }
     ActiveJob.create(default_options.merge(options))
   end
-  
+
 end
