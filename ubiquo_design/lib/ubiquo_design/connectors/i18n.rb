@@ -76,8 +76,9 @@ module UbiquoDesign
             end
           end
 
-          def uhook_static_section_widget(locale)
-            block_type = Ubiquo::Settings.context(:ubiquo_design).get(:block_type_for_static_section_widget)
+          def uhook_static_section_widget(locale = nil)
+            locale ||= Locale.current
+            block_type = Ubiquo::Config.context(:ubiquo_design).get(:block_type_for_static_section_widget)
             block = self.blocks.select { |b| b.block_type == block_type }.first
             if block
               ::Widget.locale(locale).first(:conditions => {
@@ -162,8 +163,13 @@ module UbiquoDesign
 
         module Helper
           def uhook_static_page_actions(page)
+<<<<<<< HEAD
             if page.uhook_static_section_widget(current_locale)
               edit_link = link_to(t('ubiquo.edit'), ubiquo.edit_static_page_path(page))
+=======
+            if page.uhook_static_section_widget
+              edit_link = link_to(t('ubiquo.edit'), edit_ubiquo_static_page_path(page))
+>>>>>>> Fixing StaticPagesController to not call current_locale when i18n plugin is not present [#706 state:resolved]
             else
               edit_link = link_to(t('ubiquo.translate'),
                                   ubiquo.edit_static_page_path(page, :from => page.uhook_static_section_widget(:all).try(:content_id)))
