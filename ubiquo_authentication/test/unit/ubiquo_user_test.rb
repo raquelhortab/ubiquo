@@ -1,9 +1,8 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class UbiquoUserTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
-  
-  # fixtures :ubiquo_users
+  fixtures :ubiquo_users
+
   def test_should_create_ubiquo_user
     assert_difference 'UbiquoUser.count' do
       ubiquo_user = create_ubiquo_user
@@ -15,7 +14,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
     UbiquoUser.destroy_all
     assert_difference 'UbiquoUser.count' do
       ubiquo_user = UbiquoUser.create_first('mylogin','mypassword')
-      assert true, ubiquo_user.is_superadmin
+      assert ubiquo_user.is_superadmin
     end
   end
 
@@ -33,7 +32,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
       assert_nil UbiquoUser.create_first('mylogin','mypassword')
     end
   end
-  
+
   def test_should_require_name
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:name => nil)
@@ -54,19 +53,20 @@ class UbiquoUserTest < ActiveSupport::TestCase
       assert u.errors[:login].any?
     end
   end
-  
+
   def test_should_require_email
     assert_no_difference 'UbiquoUser.count' do
       u = create_ubiquo_user(:email => nil)
       assert u.errors[:email].any?
     end
   end
+
   def test_should_require_unique_email
     assert_difference 'UbiquoUser.count', 1 do
       email = "unique.mail@mail.com"
       u = create_ubiquo_user(:email => email)
       assert !u.new_record?
-      
+
       u = create_ubiquo_user(:email => email)
       assert u.errors[:email].any?
 
@@ -74,7 +74,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
       assert u.errors[:email].any?
     end
   end
-  
+
   def test_should_require_valid_email
     valid_mails = ["quire@quire.com", "qui.re@qui.re.com", "quire#spam@quire.com" ]
     not_valid_mails = ["qui re@quire.com", "quire quire.com", "quire.com", "quire@quire@quire.com", "quire@quire"]
@@ -174,62 +174,21 @@ class UbiquoUserTest < ActiveSupport::TestCase
     assert ubiquo_users(:josep).remember_token_expires_at.between?(before, after)
   end
 
-  # Permissions tests:
-
-  def test_should_add_simple_role
-    u=ubiquo_users(:eduard)
-    r=roles(:role_1)
-    p=permissions(:permission_1)
-    
-    r.add_permission(p)
-
-    assert !u.has_permission?(p)
-    assert r.has_permission?(p)
-    assert_difference "UbiquoUserRole.count" do
-      assert u.add_role(r)
-    end
-    assert u.has_permission?(p)
-  end
-
-  def test_should_remove_simple_role
-    u=ubiquo_users(:josep)
-    r=roles(:role_1)
-    p=permissions(:permission_1)
-    
-    r.add_permission(p)
-    u.add_role(r)
-
-    assert u.has_permission?(p)
-    assert_difference "UbiquoUserRole.count",-1 do
-      assert u.remove_role(r)
-    end
-    assert !u.has_permission?(p)
-  end
-
-  def test_should_be_admin
-    ubiquo_user = create_ubiquo_user(:is_admin => true)
-    Permission.find(:all).each do |permission|
-      assert ubiquo_user.has_permission?(permission)
-    end
-  end
-
   def test_should_filter_by_admin
-    admin_ubiquo_users = [ubiquo_users(:admin)]
+    admin_ubiquo_users = [ubiquo_users(:admin), ubiquo_users(:superadmin)]
     non_admin_ubiquo_users = [ubiquo_users(:josep), ubiquo_users(:inactive), ubiquo_users(:eduard)]
-    assert UbiquoUser.filtered_search({"filter_admin" => "true"}).to_set == admin_ubiquo_users.to_set
-    assert UbiquoUser.filtered_search({"filter_admin" => "false"}).to_set == non_admin_ubiquo_users.to_set      
+    assert_equal admin_ubiquo_users.to_set, UbiquoUser.filtered_search({"filter_admin" => "true"}).to_set
+    assert_equal non_admin_ubiquo_users.to_set, UbiquoUser.filtered_search({"filter_admin" => "false"}).to_set
   end
-  
+
   def test_should_filter_by_active
-    active_ubiquo_users = [ubiquo_users(:admin)]
-    non_active_ubiquo_users = [ubiquo_users(:josep), ubiquo_users(:inactive), ubiquo_users(:eduard)]
-    active_ubiquo_users.each{|u| u.update_attribute :is_active, true}
-    non_active_ubiquo_users.each{|u| u.update_attribute :is_active, false}
-    
-    assert UbiquoUser.filtered_search({"filter_active" => "true"}).to_set == active_ubiquo_users.to_set
-    assert UbiquoUser.filtered_search({"filter_active" => "false"}).to_set == non_active_ubiquo_users.to_set      
+    active_ubiquo_users = [ubiquo_users(:admin), ubiquo_users(:josep), ubiquo_users(:eduard), ubiquo_users(:superadmin)]
+    non_active_ubiquo_users = [ubiquo_users(:inactive)]
+
+    assert_equal active_ubiquo_users.to_set, UbiquoUser.filtered_search({"filter_active" => "true"}).to_set
+    assert_equal non_active_ubiquo_users.to_set, UbiquoUser.filtered_search({"filter_active" => "false"}).to_set
   end
-  
+
   def test_should_filter_by_name
     users = [
       create_ubiquo_user(:login => 'log1', :email => '1@prova.com', :name => "find me"),
@@ -238,7 +197,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
     ]
     assert_equal_set users[0..1], UbiquoUser.filtered_search({"filter_text" => "find"})
   end
-  
+
   def test_should_filter_by_surname
     users = [
       create_ubiquo_user(:login => 'log1', :email => '1@prova.com', :surname => "find me"),
@@ -247,7 +206,7 @@ class UbiquoUserTest < ActiveSupport::TestCase
     ]
     assert_equal_set users[0..1], UbiquoUser.filtered_search({"filter_text" => "find"})
   end
-  
+
   def test_should_filter_by_login
     users = [
       create_ubiquo_user(:login => 'findme',      :email => '1@prova.com'),
@@ -256,22 +215,22 @@ class UbiquoUserTest < ActiveSupport::TestCase
     ]
     assert_equal_set users[0..1], UbiquoUser.filtered_search({"filter_text" => "find"})
   end
-  
+
   def test_should_generate_random_password
     password = ubiquo_users(:josep).reset_password!
     assert_equal ubiquo_users(:josep), UbiquoUser.authenticate('josep', password)
   end
-  
+
   protected
-  
+
   def create_ubiquo_user(options = {})
     UbiquoUser.create({
         :name => "name",
         :surname => "surname",
-        :login => 'quire', 
-        :email => "quire@quire.com", 
-        :password => 'quire', 
-        :password_confirmation => 'quire' 
+        :login => 'quire',
+        :email => "quire@quire.com",
+        :password => 'quire',
+        :password_confirmation => 'quire'
       }.merge(options))
   end
 

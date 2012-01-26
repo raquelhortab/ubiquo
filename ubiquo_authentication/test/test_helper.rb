@@ -9,6 +9,19 @@ ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.default_url_options[:host] = "test.com"
 
 Rails.backtrace_cleaner.remove_silencers!
-
 # Run any available migration
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
+
+class ActiveSupport::TestCase
+  fixtures :ubiquo_users
+  include Ubiquo::Engine.routes.url_helpers
+  include Rails.application.routes.mounted_helpers
+
+  private
+
+  def login(username = :josep)
+    session[:ubiquo] ||= {}
+    session[:ubiquo][:ubiquo_user_id] = ubiquo_users(username)
+  end
+
+end
