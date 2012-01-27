@@ -1,9 +1,6 @@
 require 'digest/sha1'
 class UbiquoUser < ActiveRecord::Base
 
-  has_many :ubiquo_user_roles
-  has_many :roles, :through => :ubiquo_user_roles
-
   # Creates the photo attachment to the user and a resized thumbnail
   file_attachment(:photo, {
     :visibility => "protected",
@@ -40,20 +37,6 @@ class UbiquoUser < ActiveRecord::Base
   filtered_search_scopes :text => [:name, :surname, :login],
                          :enable => [:admin, :active]
 
-  # Magic finder. It's like find_by_id_or_login
-  def self.gfind(something, options={})
-    case something
-    when Fixnum
-      find_by_id(something, options)
-    when String, Symbol
-      find_by_login(something.to_s, options)
-    when UbiquoUser
-      something
-    else
-      nil
-    end
-  end
-
   # Creates first user. Used when installing ubiquo. It shouldn't work in production mode.
   def self.create_first(login,password)
     unless Rails.env.production? || self.count > 0
@@ -76,7 +59,7 @@ class UbiquoUser < ActiveRecord::Base
       user
     end
   end
-  
+
   # Authenticates a ubiquo_user by their login name and unencrypted password.  Returns the ubiquo_user or nil.
   def self.authenticate(login, password)
     u = find_by_login(login) # need to get the salt
@@ -103,7 +86,7 @@ class UbiquoUser < ActiveRecord::Base
 
   # These create and unset the fields required for remembering ubiquo_users between browser closes
   def remember_me
-    remember_me_for Ubiquo::Config.context(:ubiquo_authentication).get(:remember_time)
+    remember_me_for Ubiquo::Settings.context(:ubiquo_authentication).get(:remember_time)
   end
 
   def remember_me_for(time)
@@ -114,16 +97,16 @@ class UbiquoUser < ActiveRecord::Base
   def remember_me_until(time)
     self.remember_token_expires_at = time
     self.remember_token            = encrypt("--#{remember_token_expires_at}--")
-    save(false)
+    self.save
   end
 
   # Expire current_ubiquo_user inmediately
   def forget_me
     self.remember_token_expires_at = nil
     self.remember_token            = nil
-    save(false)
+    self.save
   end
-  
+
   def reset_password!
     (password = SecureRandom.base64(6)).tap do
       self.password = password
@@ -132,43 +115,12 @@ class UbiquoUser < ActiveRecord::Base
     end
   end
 
-  # Permission methods
-
-  # adds a role to this ubiquo_user
-  def add_role(role)
-    role=Role.gfind(role)
-    return false if role.nil?
-    UbiquoUserRole.create_for_ubiquo_user_and_role(self, role)
-    self.reload
-    true
-  end
-
-  # removes a role from this ubiquo_user
-  def remove_role(role)
-    role=Role.gfind(role)
-    return false if role.nil? || !roles.include?(role)
-    UbiquoUserRole.destroy_for_ubiquo_user_and_role(self, role)
-    self.reload
-    true
-  end
-
-  # true if this ubiquo_user has specified permission
-  def has_permission?(permission)
-    return true if self.is_admin?
-    permission = Permission.gfind(permission)
-    self.roles.each do |role|
-      return true if role.has_permission?(permission)
-    end
-    false
-  end
-  
-  #gives the full name of the user, with name and surname.
   def full_name
     "#{self.surname}, #{self.name}"
   end
 
-
   protected
+
   # before filter
   def encrypt_password
     return if password.blank?

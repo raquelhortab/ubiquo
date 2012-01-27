@@ -20,7 +20,6 @@
       [<%= t("ubiquo.auth.is_active.#{user.is_active}") %>]
     </span>
   </h3>
-  <p class="user-role"><%= user.roles.map(&:name).join(', ') %></p>
   <p class="user-mail"><%= user.email %></p>
 <% end %>
 
