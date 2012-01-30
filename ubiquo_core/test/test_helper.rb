@@ -23,8 +23,13 @@ require 'rake' # For cron job testing
 
 def enable_settings_override
   Ubiquo::Settings[:ubiquo][:settings_overridable] = true
-end    
+end
 
 def disable_settings_override
   Ubiquo::Settings[:ubiquo][:settings_overridable] = false
-end    
+end
+
+class ActiveSupport::TestCase
+  include Ubiquo::Engine.routes.url_helpers
+  include Rails.application.routes.mounted_helpers
+end
