@@ -8,11 +8,6 @@
     <meta name="description" content="<%= Ubiquo::Config.get(:app_description) %>" />
     <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <%= ubiquo_stylesheet_link_tag :ubiquo, :login %>
-    <!--[if lte IE 6]>
-    <%= ubiquo_stylesheet_link_tag :ubiquo_ie6, :login_ie6 %>
-    <![endif]-->
-    <%= javascript_include_tag :defaults %>
-    <%= ubiquo_javascript_include_tag :ubiquo %>
   </head>
   <body id="login">
     <div id="wrapper">
@@ -26,7 +21,7 @@
 	    <% else %>
 	      <p id='feedback_notice'><%= t 'ubiquo.auth.forgotted_password_notice' %></p>
 	    <% end %>
-	    <% form_tag ubiquo.password_path do -%>
+	    <%= form_tag ubiquo.password_path do -%>
 	      <p>
 	        <label for="ubiquo_user_login"><%= UbiquoUser.human_attribute_name("email") %>:</label>
 	        <%= text_field_tag 'email', nil, :class => 'text', :id=>'ubiquo_user_login' %>
@@ -39,9 +34,14 @@
 	</div>
       </div>
       <div id="footer">
-	<%= link_to ubiquo_image_tag("app_logo_grey.png"), "http://www.ubiquo.me" %>® <%= Time.now.year -%> ubiquo <br/>
-        <%= link_to 'MIT license', 'http://www.opensource.org/licenses/mit-license.php' %>
-        <%= link_to 'ubiquo website', 'http://www.ubiquo.me' %>
+        <div class="logo_ubiquo">
+          <%= link_to 'Ubiquo', 'http://www.ubiquo.me' %>
+        </div>
+        <div class="links_ubiquo">
+          <span class="copy">® <%= Time.now.year %> ubiquo</span>
+          <%= link_to 'MIT license', 'http://www.opensource.org/licenses/mit-license.php' %>
+          <%= link_to 'ubiquo website', 'http://www.ubiquo.me' %>
+        </div>
       </div>
     </div>
   </body>

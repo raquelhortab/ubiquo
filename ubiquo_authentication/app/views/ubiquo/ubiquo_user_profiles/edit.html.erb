@@ -5,9 +5,8 @@
 
 <%= ubiquo_form_for(@ubiquo_user, :url => ubiquo.ubiquo_user_profile_path, :html => { :method => :put, :multipart => true }) do |form| %>
   <%= render :partial => 'form', :locals => { :form => form } %>
-  <% form.submit_group do %>
+  <%= form.submit_group do %>
     <%= form.update_button %>
-    <%= form.back_button %>
   <% end %>
 <% end %>
 

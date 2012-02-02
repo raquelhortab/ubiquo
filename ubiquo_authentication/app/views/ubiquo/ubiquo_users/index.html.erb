@@ -6,7 +6,7 @@
 
 <%= show_filter_info %>
 
-<% ubiquo_user_list(@ubiquo_users, @ubiquo_users_pages) do |user| %>
+<%= ubiquo_user_list(@ubiquo_users, @ubiquo_users_pages) do |user| %>
   <div class="user-icon">
     <% if user.photo.original_filename %>
       <%= image_tag(url_for_file_attachment(user, :photo, :thumb)) %>
