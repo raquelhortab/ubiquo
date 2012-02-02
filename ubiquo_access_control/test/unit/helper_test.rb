@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class UbiquoAccessControl::Extensions::HelperTest < ActionView::TestCase
-  use_ubiquo_fixtures
 
   def test_user_permission_fields
     @roles = []

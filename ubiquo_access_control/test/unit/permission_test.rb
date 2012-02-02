@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PermissionTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
 
   def test_should_create_permission
     assert_difference 'Permission.count' do

@@ -1,8 +1,7 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class AccessControlControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
-  
+
   def test_redirection_when_not_logged_in
     @request.session[:ubiquo] ||= {}
     @request.session[:ubiquo][:ubiquo_user_id] = nil
