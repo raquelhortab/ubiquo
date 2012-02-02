@@ -1,15 +1,14 @@
 <h1><%= render :partial => 'title' %></h1>
-<h2>
-  <%= render :partial => "submenu" %>
-</h2>
+<h2><%= render :partial => 'submenu' %></h2>
+
 <%= error_messages_for 'role' %>
 
-<% form_for([:ubiquo, @role]) do |form| %>
-	<%= render :partial => 'form', :locals => {:form => form} %>
-	  <div class="form-item-submit">
-	    <%= form.submit t('ubiquo.save'), :class => "bt-update" %>
-	    <%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo.roles_path}'", :class => "bt-back"%>
-	  </div>
+<%= ubiquo_form_for @role do |form| %>
+  <%= render :partial => 'form', :locals => { :form => form } %>
+  <%= form.submit_group do %>
+    <%= form.create_button %>
+    <%= form.back_button %>
+  <% end %>
 <% end %>
 
 <% content_for :sidebar do %>
