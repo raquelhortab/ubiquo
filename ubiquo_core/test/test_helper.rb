@@ -1,8 +1,11 @@
+# -*- encoding: utf-8 -*-
+
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
+require "rails/generators"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -32,4 +35,17 @@ end
 class ActiveSupport::TestCase
   include Ubiquo::Engine.routes.url_helpers
   include Rails.application.routes.mounted_helpers
+end
+
+class ::Rails::Generators::TestCase
+  destination File.join(Rails.root, "tmp")
+  setup :prepare_destination
+  teardown :destroy_destination
+
+  protected
+
+  def destroy_destination
+    rm_rf(destination_root)
+  end
+
 end

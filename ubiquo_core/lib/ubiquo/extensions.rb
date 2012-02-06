@@ -1,8 +1,4 @@
-begin
-  require "rails_generator"
-rescue LoadError
-  puts $!
-end
+# -*- encoding: utf-8 -*-
 
 module Ubiquo::Extensions
   autoload :Loader, 'ubiquo/extensions/loader'
@@ -23,14 +19,6 @@ Object.send(:include, Ubiquo::Extensions::Object)
 Proc.send(:include, Ubiquo::Extensions::Proc)
 Array.send(:include, Ubiquo::Extensions::Array)
 String.send(:include, Ubiquo::Extensions::String)
-
-begin
-  Rails::Generator::Commands::Create.send(:include, Ubiquo::Extensions::RailsGenerator::Create)
-  Rails::Generator::Commands::Destroy.send(:include, Ubiquo::Extensions::RailsGenerator::Destroy)
-  Rails::Generator::Commands::List.send(:include, Ubiquo::Extensions::RailsGenerator::List)
-rescue NameError
-  puts $!
-end
 
 if Rails.env.test?
   require 'action_controller/test_case'
