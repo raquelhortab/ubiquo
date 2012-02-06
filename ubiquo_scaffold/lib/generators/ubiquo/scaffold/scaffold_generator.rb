@@ -14,7 +14,7 @@ module Ubiquo
     def run_migration
       if options[:migration] && options[:run_migration]
         say_status 'migrations', 'Running pending migrations', :white
-        ::Kernel.system 'rake db:migrate'
+        ubiquo_migration
       end
     end
   end

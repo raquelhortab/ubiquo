@@ -2,10 +2,13 @@
 
 require 'rails/generators'
 require 'rails/generators/named_base'
+require 'ubiquo/generators'
 
 module UbiquoScaffold
   module Generators
     class Base < ::Rails::Generators::NamedBase
+      include ::Ubiquo::Generators::Actions
+
       SPECIAL_LABELS = [:title, :name]
 
       argument :attributes,
@@ -62,6 +65,12 @@ module UbiquoScaffold
                    desc:     "Creates media relations with f1, f2...",
                    banner:   "[f1 f2]",
                    type:     :array,
+                   required: false
+
+      class_option :nested_from,
+                   desc:     "Adds the generated resource under an existing parent",
+                   banner:   "parent_resource",
+                   type:     :string,
                    required: false
 
       def self.source_root

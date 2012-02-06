@@ -37,9 +37,10 @@ class Ubiquo::ScaffoldGeneratorTest < ::Rails::Generators::TestCase
   end
 
   test "should run migration" do
-    Kernel.expects(:system).with('rake db:migrate').returns(true)
-    run_generator %w(Post title:string --run-migration)
+    self.generator_class.any_instance.stubs(:ubiquo_migration).returns(true)
+    stdout = run_generator %w(Post title:string --run-migration)
 
     assert_migration 'db/migrate/create_posts.rb'
+    assert_match 'Running pending migrations', stdout
   end
 end

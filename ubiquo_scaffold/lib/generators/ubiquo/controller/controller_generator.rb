@@ -13,6 +13,7 @@ module Ubiquo
     end
 
     def create_view_files
+      ubiquo_tab plural_name
       directory 'views/navigators', 'app/views/navigators'
       directory 'views/ubiquo', "app/views/ubiquo/#{namespaced_path}"
     end
@@ -34,12 +35,11 @@ module Ubiquo
     end
 
     def add_ubiquo_routes
-      namespaces = ['ubiquo'] + regular_class_path
-      routes     = namespaces.reverse.inject("resources :#{plural_name}") do |acc, namespace|
-        "namespace(:#{namespace}) { #{acc} }"
+      if options[:nested_from]
+        nested_route_resources options[:nested_from], plural_name
+      else
+        namespaced_route_resources 'ubiquo', plural_name
       end
-
-      route routes
     end
 
     protected
