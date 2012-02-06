@@ -86,6 +86,18 @@ class Ubiquo::ControllerGeneratorTest < ::Rails::Generators::TestCase
     end
   end
 
+  # ---------------------------------------
+  # -*- helper test file generation -*-
+  # ---------------------------------------
+  test "should create helper test" do
+    run_generator %w(Post title:string body:text published_at:date)
+
+    assert_file 'test/unit/helpers/ubiquo/posts_helper_test.rb' do |content|
+      assert_match /class Ubiquo::PostsHelperTest < ActionView::TestCase/, content
+      assert_match /end/, content
+    end
+  end
+
   # -----------------------------
   # -*- i18n files generation -*-
   # -----------------------------

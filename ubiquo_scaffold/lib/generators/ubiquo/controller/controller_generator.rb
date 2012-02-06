@@ -25,6 +25,10 @@ module Ubiquo
       template 'functional_test.rb.tt', "test/functional/ubiquo/#{namespaced_path}#{controller_file_name}_test.rb"
     end
 
+    def create_helper_test_file
+      template 'helper_test.rb.tt', "test/unit/helpers/ubiquo/#{namespaced_path}#{plural_name}_helper_test.rb"
+    end
+
     def create_i18n_files
       directory 'locales', 'config/locales'
     end
