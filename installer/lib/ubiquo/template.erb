@@ -237,10 +237,10 @@ file 'config/routes.rb', <<-CODE
 #{appname.camelize}::Application.routes.draw do
   mount Ubiquo::Engine => '/ubiquo'
 
-#  map.namespace :ubiquo do |ubiquo|
-#  end
+  namespace :ubiquo do
+  end
 
-#  Translate::Routes.translation_ui(map) unless Rails.env.production?
+# Translate::Routes.translation_ui(map) unless Rails.env.production?
 end
 CODE
 # default rails environment.rb
