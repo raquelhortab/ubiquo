@@ -13,14 +13,14 @@ class CategoryTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference 'Category.count' do
       category = create_category(:name => "")
-      assert category.errors.on(:name)
+      assert category.errors[:name]
     end
   end
 
   def test_should_require_category_set
     assert_no_difference 'Category.count' do
       category = create_category(:category_set => nil)
-      assert category.errors.on(:category_set)
+      assert category.errors[:category_set]
     end
   end
 

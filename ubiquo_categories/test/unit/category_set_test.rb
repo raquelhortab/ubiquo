@@ -13,16 +13,16 @@ class CategorySetTest < ActiveSupport::TestCase
     assert_difference 'CategorySet.count', 1 do
       category_set = create_category_set :key=> 'my_key'
       category_set = create_category_set :key=> category_set.key
-      assert category_set.errors.on(:key)
+      assert category_set.errors[:key]
       category_set = create_category_set :key=> category_set.key.upcase
-      assert category_set.errors.on(:key)
+      assert category_set.errors[:key]
     end
   end
 
   def test_should_require_name
     assert_no_difference 'CategorySet.count' do
       category_set = create_category_set(:name => "")
-      assert category_set.errors.on(:name)
+      assert category_set.errors[:name]
     end
   end
 

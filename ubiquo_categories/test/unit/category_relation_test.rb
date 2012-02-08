@@ -12,28 +12,28 @@ class CategoryRelationTest < ActiveSupport::TestCase
   def test_should_require_category
     assert_no_difference "CategoryRelation.count" do
       category_relation = create_category_relation :category_id => nil
-      assert category_relation.errors.on(:category)
+      assert category_relation.errors[:category]
     end
   end
 
   def test_should_require_attr_name
     assert_no_difference "CategoryRelation.count" do
       category_relation = create_category_relation :attr_name => nil
-      assert category_relation.errors.on(:attr_name)
+      assert category_relation.errors[:attr_name]
     end
   end
 
   def test_should_require_related_object_id
     assert_no_difference "CategoryRelation.count" do
       category_relation = create_category_relation :related_object_id => nil
-      assert category_relation.errors.on(:related_object)
+      assert category_relation.errors[:related_object]
     end
   end
 
   def test_should_require_related_object_type
     assert_no_difference "CategoryRelation.count" do
       category_relation = create_category_relation :related_object_type => nil
-      assert category_relation.errors.on(:related_object)
+      assert category_relation.errors[:related_object]
     end
   end
 
