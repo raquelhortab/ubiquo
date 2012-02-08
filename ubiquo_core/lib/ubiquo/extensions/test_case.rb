@@ -127,7 +127,7 @@ module Ubiquo
                 end
               CONN
 
-              unless instance_methods.include?('test_without_connector')
+              unless instance_methods.include?(:test_without_connector)
                 alias_method :test_without_connector, :test
               end
               alias_method :test, :test_with_connector
