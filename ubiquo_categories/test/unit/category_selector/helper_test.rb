@@ -209,10 +209,10 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     object = CategoryTestModel.new
     output = category_selector 'name', :tags, {:object => object, :name => 'legend', :type => 'select', :required_field => false}
     doc = HTML::Document.new(output)
-    
+
     assert_select doc.root, 'label', :text => 'legend'
     assert_select doc.root, 'select[name=legend]', 0
-    
+
   end
 
 
@@ -229,7 +229,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     invalidate_presence_of_category :tags
   end
 
-  
+
   def test_category_selector_has_category_error_class_if_model_has_error_and_type_is_autocomplete
     categorize :tags
     c = CategoryTestModel.new
@@ -238,7 +238,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     doc = HTML::Document.new(output)
     assert_select doc.root, 'div.category-error', 1
   end
-  
+
   def test_category_selector_has_category_error_class_if_model_has_error_and_type_is_select
     categorize :tags
     c = CategoryTestModel.new
@@ -302,7 +302,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   end
 
   def test_category_select_selector_should_ignore_default_option_if_itsnt_new_record
-    object = CategoryTestModel.create(:field => 'test')
+    object = CategoryTestModel.create(:my_field => 'test')
     options = {:default => 'Red'}
     output = category_select_selector object, 'name', :tags, @set.categories, @set, options
     doc = HTML::Document.new(output)
@@ -334,7 +334,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
 
   def test_category_checkbox_selector_should_ignore_default_option_if_itsnt_new_record
     categorize :tags
-    object = CategoryTestModel.create(:field => 'test')
+    object = CategoryTestModel.create(:my_field => 'test')
     options = {:default => 'Red'}
     output = category_checkbox_selector object, 'name', :tags, @set.categories, @set, options
     doc = HTML::Document.new(output)

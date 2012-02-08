@@ -65,15 +65,15 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     categorize :cities
     CategoryTestModel.class_eval do
       named_scope :city, lambda{|value|
-        category_conditions_for(:cities, value).merge(:order => 'field asc')
+        category_conditions_for(:cities, value).merge(:order => 'my_field asc')
       }
     end
 
     c = Category.create(:name => 'city1', :category_set_id => CategorySet.find_by_key('cities').id)
-    model = CategoryTestModel.create(:field => 'name_field')
+    model = CategoryTestModel.create(:my_field => 'name_field')
     model.cities << c
-    ctm = CategoryTestModel.city('city1').find(:first, :conditions => ['field = ?', 'name_field'])
-    ctm.field = 'name_field_2'
+    ctm = CategoryTestModel.city('city1').find(:first, :conditions => ['my_field = ?', 'name_field'])
+    ctm.my_field = 'name_field_2'
     assert_nothing_raised do
       ctm.save
     end
@@ -148,9 +148,9 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     section_set.categories = %( admin shop design ).map { |s| Category.create(:name => s) }
     colors_set.categories  = %( blue red green ).map { |c| Category.create(:name => c) }
     m = create_category_model.class # We create a record without categories
-    m.create(:field => 'one',   :section => 'admin',  :colors => 'red')
-    m.create(:field => 'two',   :section => 'design', :colors => 'blue')
-    m.create(:field => 'three', :section => 'shop',   :colors => 'green')
+    m.create(:my_field => 'one',   :section => 'admin',  :colors => 'red')
+    m.create(:my_field => 'two',   :section => 'design', :colors => 'blue')
+    m.create(:my_field => 'three', :section => 'shop',   :colors => 'green')
     assert [1,2,3,4], m.find(:all, :include => :sections, :order => 'categories.name asc').map(&:id)
     assert [4,3,2,1], m.find(:all, :include => :sections, :order => 'categories.name desc')
     assert [1,3,4,2], m.find(:all, :include => :colors,   :order => 'categories.name asc').map(&:id)

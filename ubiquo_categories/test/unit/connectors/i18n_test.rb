@@ -380,7 +380,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
 
     def i18n_categorize attr, options = {}
       CategoryTranslatableTestModel.class_eval do
-        translatable :field
+        translatable :my_field
         categorized_with attr, options
       end
     end

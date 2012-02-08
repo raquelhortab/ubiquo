@@ -42,7 +42,7 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
 
     test 'uhook_categorized_with should not raise' do
       assert_nothing_raised do
-        CategorySet.uhook_categorized_with :field, {}
+        CategorySet.uhook_categorized_with :my_field, {}
       end
     end
 

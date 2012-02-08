@@ -22,7 +22,7 @@ def create_categories_test_model_backend
     translatable = table != 'category_test_models'
 
     conn.create_table table, :translatable => translatable do |t|
-      t.string :field
+      t.string :my_field
     end unless conn.tables.include?(table)
 
     Object.const_set(model_name, Class.new(ActiveRecord::Base)) unless Object.const_defined? model_name
