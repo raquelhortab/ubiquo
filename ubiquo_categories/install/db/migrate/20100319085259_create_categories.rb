@@ -4,11 +4,11 @@ class CreateCategories < ActiveRecord::Migration
       t.string :name
       t.text :description
       t.integer :category_set_id
-      
-      t.timestamps
 
-      t.index :category_set_id
+      t.timestamps
     end
+
+    add_index(:categories, :category_set_id)
   end
 
   def self.down

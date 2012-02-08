@@ -4,11 +4,11 @@ class CreateCategorySets < ActiveRecord::Migration
       t.string :name
       t.string :key
       t.boolean :is_editable
-      
-      t.timestamps
 
-      t.index :key
+      t.timestamps
     end
+
+    add_index(:category_sets, :key)
   end
 
   def self.down
