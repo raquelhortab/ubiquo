@@ -1,4 +1,3 @@
-# -*- coding: undecided -*-
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 require 'ubiquo_categories/filters/category_filter'
 

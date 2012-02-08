@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::CategoriesControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
+
   def setup
     session[:locale] = "en_US"
   end
-  
+
   def test_should_get_index
     get :index, :category_set_id => category_sets(:one).id
     assert_response :success
@@ -25,7 +25,7 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
     get :new, :category_set_id => category_sets(:one).id
     assert_response :success
   end
-  
+
   def test_should_get_show
     get :show, :id => categories(:one).id, :category_set_id => category_sets(:one).id
     assert_response :success
@@ -71,7 +71,7 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
     end
     assert_redirected_to ubiquo_category_set_categories_url
   end
-  
+
   private
 
   def category_attributes(options = {})
@@ -79,11 +79,11 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
               :name => 'MyString', # string
               :description => 'MyText', # text
           }
-    default_options.merge(options)  
+    default_options.merge(options)
   end
 
   def create_category(options = {})
     Category.create(category_attributes(options))
   end
-      
+
 end

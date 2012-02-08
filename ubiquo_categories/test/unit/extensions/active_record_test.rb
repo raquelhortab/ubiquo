@@ -2,7 +2,6 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 require 'mocha'
 
 class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
 
   def test_categorized_with
     assert_nothing_raised do

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class CategoryTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+  fixtures :all
 
   def test_should_create_category
     assert_difference 'Category.count' do
@@ -94,3 +94,5 @@ class CategoryTest < ActiveSupport::TestCase
     Category.create(default_options.merge(options))
   end
 end
+
+create_categories_test_model_backend

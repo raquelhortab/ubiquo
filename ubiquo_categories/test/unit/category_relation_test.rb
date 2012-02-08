@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class CategoryRelationTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
 
   def test_should_create_category_relation
     assert_difference 'CategoryRelation.count' do
@@ -72,7 +71,7 @@ class CategoryRelationTest < ActiveSupport::TestCase
   end
 
   private
-  
+
   def create_category_relation(options = {})
     related = CategoryTestModel.create
     default_options = {
