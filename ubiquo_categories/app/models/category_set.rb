@@ -20,12 +20,11 @@ class CategorySet < ActiveRecord::Base
       end
       categories.flatten.reject(&:blank?).each do |category|
         # skip if already added
-        load_target
-        next if proxy_target.map(&:to_s).include? category.to_s
-
+        proxy_association.load_target
+        next if proxy_association.target.map(&:to_s).include? category.to_s
         case category
         when String
-          raise UbiquoCategories::CreationNotAllowed unless proxy_owner.is_editable?
+          raise UbiquoCategories::CreationNotAllowed unless proxy_association.owner.is_editable?
           self.concat(Category.uhook_new_from_name(category, options))
         when Hash
           parent = category.keys.first
@@ -44,10 +43,10 @@ class CategorySet < ActiveRecord::Base
 
   filtered_search_scopes :text => [:name]
 
-  def initialize(attrs = {})
+  def initialize(attrs = {}, options = {})
     attrs ||= {}
     attrs.reverse_merge!(:is_editable => true)
-    super attrs
+    super attrs, options
   end
 
   #For backwards compatibility
