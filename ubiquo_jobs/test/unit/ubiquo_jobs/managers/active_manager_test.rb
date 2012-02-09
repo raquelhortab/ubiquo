@@ -4,10 +4,10 @@ require 'ubiquo_jobs/jobs/base'
 
 
 class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
-  
+
   ActiveJob = UbiquoJobs::Jobs::ActiveJob
   ActiveManager = UbiquoJobs::Managers::ActiveManager
-  
+
   def test_should_get_job
     job = create_job
     assert_equal job, ActiveManager.get('me')
@@ -18,7 +18,7 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     exceptions << ActiveRecord::JDBCError if ActiveRecord.const_defined?(:JDBCError)
     assert_raise(*exceptions) { create_job(:priority => nil) }
   end
-  
+
   def test_should_get_job_higher_priority_first
     job_1 = create_job(:priority => 5)
     job_2 = create_job(:priority => 1)
@@ -32,19 +32,19 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     create_job(:planified_at => 5.minutes.from_now)
     assert_nil ActiveManager.get('me')
   end
-  
+
   def test_should_not_get_unplanified_job
     create_job(:planified_at => nil)
     assert_nil ActiveManager.get('me')
   end
-  
+
   def test_should_fail_to_run
     create_job
     assert_raise NotImplementedError do
       ActiveManager.get('me').run!
     end
   end
-  
+
   def test_should_recover_from_failure
     ActiveJob.delete_all
     old_job = create_job(
@@ -70,11 +70,25 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     assert_equal job_1, ActiveManager.get('you')
     assert_nil ActiveManager.get('him')
   end
-  
+
   def test_should_add_job
     assert_difference 'ActiveJob.count' do
       ActiveManager.add(ActiveJob, :priority => 1000)
     end
+  end
+
+  def test_get_should_use_pessimistic_locking_for_protection_against_concurrency_problems
+    create_job(:priority => 2)
+    # We can't do a real test here as we would need a threaded environment so
+    #   we can only assure that ActiveRecord's mechanism for pessimistic locking are being
+    #   used
+    ActiveRecord::Relation.any_instance.expects(:lock).with(true).returns([])
+    ActiveManager.get('me')
+  end
+
+  def test_get_should_wrap_the_db_access_in_a_transaction
+    ActiveJob.expects(:transaction)
+    ActiveManager.get('me')
   end
 
   private
@@ -87,5 +101,5 @@ class UbiquoJobs::Managers::ActiveManagerTest < ActiveSupport::TestCase
     }
     ActiveJob.create(default_options.merge(options))
   end
-  
+
 end
