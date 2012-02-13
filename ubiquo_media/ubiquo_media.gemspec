@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency "ubiquo_core", ["~> 0.9.0.b1"]
+  s.add_dependency "ubiquo_core", "~> 0.9.0.b1"
+  s.add_dependency "paperclip", "~> 2.0"
   s.add_development_dependency "sqlite3", "~> 1.3.5"
   s.add_development_dependency "mocha", "~> 0.10.0"
 

@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class AssetGeometryTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
 
   def test_should_create_asset_geometry
     assert_difference "AssetGeometry.count" do
@@ -13,28 +12,28 @@ class AssetGeometryTest < ActiveSupport::TestCase
   def test_should_require_asset_id
     assert_no_difference "AssetGeometry.count" do
       asset_geometry = create_asset_geometry(:asset_id => nil)
-      assert asset_geometry.errors.on(:asset_id)
+      assert asset_geometry.errors.include?(:asset_id)
     end
   end
 
   def test_should_require_width
     assert_no_difference "AssetGeometry.count" do
       asset_geometry = create_asset_geometry(:width=> nil)
-      assert asset_geometry.errors.on(:width)
+      assert asset_geometry.errors.include?(:width)
     end
   end
 
   def test_should_require_height
     assert_no_difference "AssetGeometry.count" do
       asset_geometry = create_asset_geometry(:height=> nil)
-      assert asset_geometry.errors.on(:height)
+      assert asset_geometry.errors.include?(:height)
     end
   end
 
   def test_should_require_style
     assert_no_difference "AssetGeometry.count" do
       asset_geometry = create_asset_geometry(:style=> nil)
-      assert asset_geometry.errors.on(:style)
+      assert asset_geometry.errors.include?(:style)
     end
   end
 
@@ -44,16 +43,16 @@ class AssetGeometryTest < ActiveSupport::TestCase
     assert_no_difference "AssetGeometry.count" do
       asset_geometry = create_asset_geometry(:style    => 'unique',
                                              :asset_id => first_geometry.asset_id)
-      assert asset_geometry.errors.on(:style)
+      assert asset_geometry.errors.include?(:style)
       asset_geometry = create_asset_geometry(:style    => 'UNIQUE',
                                              :asset_id => first_geometry.asset_id)
-      assert asset_geometry.errors.on(:style)
+      assert asset_geometry.errors.include?(:style)
     end
 
     assert_difference "AssetGeometry.count" do
       asset_geometry = create_asset_geometry(:style => 'unique',
                                              :asset => assets(:other))
-      assert !asset_geometry.errors.on(:style)
+      assert !asset_geometry.errors.include?(:style)
     end
   end
 
@@ -81,7 +80,7 @@ class AssetGeometryTest < ActiveSupport::TestCase
 
   def create_asset_geometry(options = {})
     default_options = {
-      :asset => assets(:image),
+      :asset => assets(:doc),
       :style => "original",
       :width => 1,
       :height => 1,

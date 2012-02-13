@@ -5,6 +5,7 @@ class UbiquoMedia::Connectors::I18nTest < ActiveSupport::TestCase
   I18n = UbiquoMedia::Connectors::I18n
 
   if Ubiquo::Plugin.registered[:ubiquo_i18n]
+    TestSupport::Database.i18n_setup
 
     def setup
       save_current_connector(:ubiquo_media)

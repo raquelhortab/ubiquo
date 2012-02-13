@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class MediaFileTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
 
   def test_simple
     item = AssetType.first
@@ -271,7 +270,7 @@ class MediaFileTest < ActiveSupport::TestCase
 
     begin
       assert !item.valid?
-      assert item.errors.on(:sized)
+      assert item.errors.include?(:sized)
 
       item.update_attributes :sized => [asset_one, asset_two]
       assert item.valid?
@@ -289,7 +288,7 @@ class MediaFileTest < ActiveSupport::TestCase
 
     begin
       assert !item.valid?
-      assert item.errors.on(:sized)
+      assert item.errors.include?(:sized)
 
       item.update_attributes :sized => [asset_one, asset_two]
       assert item.valid?
@@ -308,19 +307,19 @@ class MediaFileTest < ActiveSupport::TestCase
 
     begin
       assert !item.valid?
-      assert item.errors.on(:sized)
+      assert item.errors.include?(:sized)
 
       item.update_attributes :sized => [asset_one]
       assert !item.valid?
-      assert item.errors.on(:sized)
+      assert item.errors.include?(:sized)
 
       item.update_attributes :sized => item.sized + [Asset.first(:offset => 2)]
       assert item.valid?
-      assert !item.errors.on(:sized)
+      assert !item.errors.include?(:sized)
 
       item.update_attributes :sized => item.sized + [Asset.first(:offset => 3)]
       assert item.valid?
-      assert !item.errors.on(:sized)
+      assert !item.errors.include?(:sized)
     ensure
       # cleanup
       item.sized.options[:required] = false
@@ -351,7 +350,7 @@ class MediaFileTest < ActiveSupport::TestCase
 
     begin
       assert !item.valid?
-      assert item.errors.on(:sized)
+      assert item.errors.include?(:sized)
 
       item.update_attributes :sized => [asset_one]
       assert item.valid?
@@ -384,7 +383,7 @@ class MediaFileTest < ActiveSupport::TestCase
 
     begin
       assert !item.valid?
-      assert item.errors.on(:multiple)
+      assert item.errors.include?(:multiple)
 
       item.update_attributes :multiple => [asset_one]
       assert item.valid?
@@ -417,7 +416,7 @@ class MediaFileTest < ActiveSupport::TestCase
 
     begin
       item.update_attributes :multiple_attributes => [two_asset_relation_attributes.first]
-      assert 2, item.multiple.size
+      assert_equal 2, item.multiple.size
       assert item.valid?
       assert !item.update_attributes(:multiple_attributes => {})
     ensure
@@ -437,7 +436,7 @@ class MediaFileTest < ActiveSupport::TestCase
     # short way to recursivelly clone
     styles_hash_copy = Marshal.load(Marshal.dump(styles_hash))
 
-    Ubiquo::Config.context(:ubiquo_media).set do |config|
+    Ubiquo::Settings.context(:ubiquo_media).set do |config|
       config.media_styles_list = styles_hash_copy
     end
     begin
@@ -449,7 +448,7 @@ class MediaFileTest < ActiveSupport::TestCase
       asset = AssetPublic.new
       asset.attachment_for(:resource).styles
 
-      assert_equal styles_hash, Ubiquo::Config.context(:ubiquo_media).get(:media_styles_list)
+      assert_equal styles_hash, Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list)
       assert !styles_hash[:style_name].blank?
     ensure
       # cleanup
@@ -477,7 +476,7 @@ class MediaFileTest < ActiveSupport::TestCase
     AssetType.expects(:get_by_keys).once.returns([AssetType.first])
     AssetType.send(:media_attachment, :test_should_defer_asset_type_loading_2, :types => %w{audio video} )
     a = AssetType.new
-    a.test_should_defer_asset_type_loading_2.accepts? assets(:image) # Trigger loading
+    a.test_should_defer_asset_type_loading_2.accepts? assets(:doc) # Trigger loading
   end
 
   protected

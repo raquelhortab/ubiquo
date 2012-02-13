@@ -87,7 +87,7 @@ module UbiquoMedia
               :order => "asset_relations.position ASC"
           }) unless self.respond_to?(:asset_relations)
 
-          proc = Proc.new do
+          prc = Proc.new do
             def is_full?
               return false if self.options[:size].to_sym == :many
               self.size >= self.options[:size]
@@ -98,13 +98,13 @@ module UbiquoMedia
             end
 
             define_method('options') do
-              proxy_owner.send("#{field}_initialize_asset_types")
+              proxy_association.owner.send("#{field}_initialize_asset_types")
               options
             end
 
             define_method('reset_positions') do |assets|
               assets.each_with_index do |asset, i|
-                relation = proxy_owner.send("#{field}_asset_relations").select do |ar|
+                relation = proxy_association.owner.send("#{field}_asset_relations").select do |ar|
                   ar.asset == asset
                 end.first
                 relation.update_attribute :position, i+1 if relation
@@ -113,7 +113,7 @@ module UbiquoMedia
 
             # Automatically set the required attr_name when creating through the through
             define_method 'construct_owner_attributes' do |reflection|
-              super.merge(:field_name => field.to_s).merge(AssetRelation.default_values(proxy_owner, reflection))
+              super.merge(:field_name => field.to_s).merge(AssetRelation.default_values(proxy_association.owner, reflection))
             end
           end
 
@@ -136,7 +136,7 @@ module UbiquoMedia
             :class_name => "::Asset",
             :source => :asset,
             :order => "asset_relations.position ASC"
-          },&proc)
+          },&prc)
 
           accepts_nested_attributes_for :"#{field}_asset_relations", :reject_if => :all_blank, :allow_destroy => true
 

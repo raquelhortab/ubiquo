@@ -8,6 +8,7 @@ require "action_mailer/railtie"
 
 Bundler.require
 require "ubiquo_core"
+require "ubiquo_media"
 
 module Dummy
   class Application < Rails::Application

@@ -33,7 +33,7 @@ class UbiquoMedia::Extensions::HelperTest < ActionView::TestCase
         test.images.map do |asset|
           content_tag(:li) do
             content_tag(:span, image_tag(url_for_media_attachment(asset))) +
-            content_tag(:p, test.name_for_asset(:field, asset))
+            content_tag(:p, test.name_for_asset(:name, asset))
           end
         end.join
       end + tag(:br, :style => 'clear:both')
@@ -55,13 +55,13 @@ class UbiquoMedia::Extensions::HelperTest < ActionView::TestCase
   end
 
   def create_media_test
-    test = MediaTestModel.create(:field => "value")
+    test = MediaTestModel.create(:name => "value")
     test.images = Asset.all
     test
   end
 
   ActiveRecord::Base.connection.create_table(:media_test_models, :force => true) do |t|
-    t.string :field
+    t.string :name
   end
 
 class MediaTestModel < ActiveRecord::Base

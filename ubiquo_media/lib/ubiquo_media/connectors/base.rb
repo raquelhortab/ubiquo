@@ -4,7 +4,7 @@ module UbiquoMedia
 
       # Load all the modules required for an UbiquoMedia connector
       def self.load!
-        [::Asset, ::AssetPublic, ::AssetPrivate, ::AssetRelation].each(&:reset_column_information)
+        # [::Asset, ::AssetPublic, ::AssetPrivate, ::AssetRelation].each(&:reset_column_information)
         if current = UbiquoMedia::Connectors::Base.current_connector
           current.unload!
         end

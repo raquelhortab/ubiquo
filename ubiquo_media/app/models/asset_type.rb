@@ -1,6 +1,6 @@
 class AssetType < ActiveRecord::Base
   has_many :assets
-  
+
   # Generic find (ID, key or record)
   def self.gfind(something, options={})
     case something
@@ -25,5 +25,5 @@ class AssetType < ActiveRecord::Base
       types.map{|o|AssetType.gfind(o)}
     end
   end
-    
+
 end

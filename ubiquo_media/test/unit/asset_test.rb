@@ -16,7 +16,7 @@ class AssetMock < Asset
 end
 
 class AssetTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+
   def test_should_create_asset
     assert_difference "Asset.count" do
       asset = create_asset
@@ -27,14 +27,14 @@ class AssetTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference "Asset.count" do
       asset = create_asset(:name => nil)
-      assert asset.errors.on(:name)
+      assert asset.errors.include?(:name)
     end
   end
 
   def test_should_require_resource
     assert_no_difference "Asset.count" do
       asset = create_asset(:resource => nil)
-      assert asset.errors.on(:resource_file_name)
+      assert asset.errors.include?(:resource_file_name)
     end
   end
 
@@ -42,7 +42,7 @@ class AssetTest < ActiveSupport::TestCase
     assert_no_difference "Asset.count" do
       #if asset hasn't resource, it can't set asset type
       asset = create_asset(:resource => nil)
-      assert asset.errors.on(:asset_type_id)
+      assert asset.errors.include?(:asset_type_id)
     end
   end
 
@@ -86,14 +86,14 @@ class AssetTest < ActiveSupport::TestCase
 
   def test_should_be_stored_in_public_path
      asset = create_asset(:name => "FAKE")
-    assert asset.resource.path =~ /#{File.join(Rails.root, Ubiquo::Config.get(:attachments)[:public_path])}/
+    assert asset.resource.path =~ /#{File.join(Rails.root, Ubiquo::Settings.get(:attachments)[:public_path])}/
   end
 
   def test_should_be_stored_in_protected_path
     asset = AssetPrivate.create(:name => "FAKE2",
                                 :resource => test_file,
                                 :asset_type_id => AssetType.find(:first).id)
-    assert asset.resource.path =~ /#{File.join(Rails.root, Ubiquo::Config.get(:attachments)[:private_path])}/
+    assert asset.resource.path =~ /#{File.join(Rails.root, Ubiquo::Settings.get(:attachments)[:private_path])}/
   end
 
   def test_should_destroy_relations_on_destroy

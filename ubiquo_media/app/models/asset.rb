@@ -15,30 +15,30 @@ class Asset < ActiveRecord::Base
   has_many :asset_geometries, :dependent => :destroy
 
   validates_presence_of :name, :asset_type_id, :type
-  before_validation_on_create :set_asset_type
+  before_validation :set_asset_type, :on => :create
   after_update :uhook_after_update
   attr_accessor :cloned_from
   after_create :save_backup_on_clone
   after_save :update_backup
   after_save :save_geometries
 
-  named_scope :type, lambda {|type|{
-    :conditions => ["asset_type_id IN (?)", type.to_s.split(',').map(&:to_i)]
-  }}
+  scope :type, lambda { |type|
+    where("asset_type_id IN (?)", type.to_s.split(',').map(&:to_i))
+  }
 
-  named_scope :visibility, lambda {|visibility|{
-    :conditions => {:type => "asset_#{visibility}".classify}
-  }}
+  scope :visibility, lambda { |visibility|
+    where(:type => "asset_#{visibility}".classify)
+  }
 
-  named_scope :created_start, lambda {|created_start|{
-    :conditions => ["created_at >= ?", parse_date(created_start)]
-  }}
+  scope :created_start, lambda { |created_start|
+    where("created_at >= ?", parse_date(created_start))
+  }
 
-  named_scope :created_end, lambda {|created_end|{
-    :conditions => ["created_at <= ?", parse_date(created_end, :time_offset => 1.day)]
-  }}
+  scope :created_end, lambda { |created_end|
+    where("created_at <= ?", parse_date(created_end, :time_offset => 1.day))
+  }
 
-filtered_search_scopes :text => [:name, :description],
+  filtered_search_scopes :text => [:name, :description],
                          :enable => [:type, :visibility, :created_start, :created_end]
 
   # Generic find (ID, key or record)
@@ -84,7 +84,7 @@ filtered_search_scopes :text => [:name, :description],
   # Correct parameters to the resize_and_crop processor.
   # If the processor is other, the extra params will be ignored
   def self.correct_styles(styles_list = {})
-    global_options = Ubiquo::Config.context(:ubiquo_media).get(:media_styles_options)
+    global_options = Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_options)
 
     styles_list.map do |style, value|
       extra_options = global_options.is_a?(Proc) ? global_options.call(style, value) : global_options
@@ -169,7 +169,7 @@ filtered_search_scopes :text => [:name, :description],
   def set_asset_type
     if self.resource_file_name && self.resource.errors.blank?
       # mime_types hash is here momentarily but maybe its must be in ubiquo config
-      mime_types = Ubiquo::Config.context(:ubiquo_media).get(:mime_types)
+      mime_types = Ubiquo::Settings.context(:ubiquo_media).get(:mime_types)
       content_type = self.resource_content_type.split('/') rescue []
       mime_types.each do |type_relations|
         type_relations.last.each do |mime|
