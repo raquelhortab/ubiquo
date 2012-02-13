@@ -4,20 +4,18 @@
 <%= render :partial => "shared/ubiquo/feedback" %>
 
 <% if @contexts.present? %>
-
-  <% ubiquo_form_for(UbiquoSetting.new) do |form| %>
+  <%= ubiquo_form_for(UbiquoSetting.new) do |form| %>
     <div class="settings">
       <%= ubiquo_setting_list(@contexts, form) %>
     </div>
   <% end %>
 
-  <% form_tag(ubiquo.ubiquo_settings_path, :id => 'bulk_submit', :style => 'display:none') do %>
+  <%= form_tag(ubiquo.ubiquo_settings_path, :id => 'bulk_submit', :style => 'display:none') do %>
   <% end %>
-
 <% else %>
   <%= render_empty_list_message %>
 <% end %>
 
 <% content_for :sidebar do %>
-  <% help_block_sidebar t("ubiquo.ubiquo_setting.index.help_message") %>
+  <%= help_block_sidebar t("ubiquo.ubiquo_setting.index.help_message") %>
 <% end %>

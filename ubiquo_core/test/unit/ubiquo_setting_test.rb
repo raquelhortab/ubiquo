@@ -1,12 +1,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UbiquoSettingTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
-  
   def setup
     save_current_settings
   end
-  
+
   def teardown
     clear_settings
   end
@@ -38,7 +36,7 @@ class UbiquoSettingTest < ActiveSupport::TestCase
      ubiquo_setting = create_ubiquo_setting(UbiquoStringSetting, :key => "foooo")
      assert ubiquo_setting.errors[:key]
    end
-   
+
   end
 
   def test_requires_existent_context

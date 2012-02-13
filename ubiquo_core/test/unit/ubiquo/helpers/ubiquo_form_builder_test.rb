@@ -13,7 +13,7 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     # Testing the tester.
     the_form do |ufb|
       assert_equal Ubiquo::Helpers::UbiquoFormBuilder, ufb.class
-      concat("mytext")
+      "mytext"
     end
     assert_select "form" do |list|
       assert_equal "/ubiquo/users", list.first.attributes["action"]
@@ -66,9 +66,9 @@ class UbiquoFormBuilderTest < ActionView::TestCase
 
     the_form do |f|
       f.submit_group do
-        f.create_button
-        f.back_button
-        f.update_button
+        f.create_button +
+          f.back_button +
+          f.update_button
       end
     end
 
@@ -90,11 +90,11 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     the_form do |f|
       f.submit_group(:class => "alter-submit") do
         # Custom params
-        f.create_button( "c-custom", :class => "bt-create2" )
-        f.create_button( nil, :i18n_label_key => "ubiquo.create-custom")
-        f.back_button( "back-custom", {:js_function => "alert('foo');", :class => "bt-back2"} )
-        f.update_button( "u-custom", :class => "bt-update2" )
-        f.update_button( nil, :i18n_label_key => "ubiquo.save-custom")
+        f.create_button("c-custom", :class => "bt-create2") +
+        f.create_button( nil, :i18n_label_key => "ubiquo.create-custom") +
+        f.back_button("back-custom", { :js_function => "alert('foo');", :class => "bt-back2" }) +
+        f.update_button("u-custom", :class => "bt-update2") +
+        f.update_button(nil, :i18n_label_key => "ubiquo.save-custom")
       end
     end
 
@@ -137,23 +137,23 @@ class UbiquoFormBuilderTest < ActionView::TestCase
       end
     }
   end
+
   test "show description, help info and translatable hints" do
     self.expects(:t).with("ubiquo.translatable_field").returns("ubiquo.translatable_field")
 
-    a = the_form do |form|
+    the_form do |form|
       form.group(:class => "a0") do
         form.text_field :lastname, :translatable => true
-      end
+      end +
       form.group(:class => "a1") do
        form.text_field :lastname, :class=> "alter", :translatable => "foo"
-      end
+      end +
       form.group(:class => "a2") do
         form.text_field :lastname, :class=> "alter2", :description => "foo2", :help => "Info text"
-      end
+      end +
       form.group(:class => "a3") do
         form.text_field :lastname, :class=> "alter3", :translatable => "foo3", :description => "bar"
       end
-
     end
 
     assert_select "form" do |list|
@@ -192,10 +192,9 @@ class UbiquoFormBuilderTest < ActionView::TestCase
 
   test "show checkox correctly" do
     the_form do |form|
-       form.group(:class => "a0") do
-       form.check_box :is_admin
-      end
-
+      form.group(:class => "a0") do
+        form.check_box :is_admin
+      end +
       form.group(:class => "a1") do
         form.check_box :is_admin, :translatable => true
       end
@@ -205,7 +204,6 @@ class UbiquoFormBuilderTest < ActionView::TestCase
       assert_select ".a0" do
         assert_select ".form-item" do
           assert_equal ["label", "input","input"], css_select(".form-item *").map(&:name)
-
           assert_select "input[label_on_bottom='false']", 0
         end
       end
@@ -225,14 +223,14 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     self.expects(:t).with("rights").returns("rights").at_least_once
 
     the_form do |form|
-       form.group(:type => :tabbed, :class=> "a-group-of-tabs") do |group|
-         group.add(t("personal_data")) do
-           form.text_field :lastname
-         end
-         group.add(t("rights"), :class => "custom-tab-class") do
-           form.check_box :is_admin
-         end
-       end
+      form.group(:type => :tabbed, :class=> "a-group-of-tabs") do |group|
+        group.add(t("personal_data")) do
+          form.text_field :lastname
+        end +
+        group.add(t("rights"), :class => "custom-tab-class") do
+          form.check_box :is_admin
+        end
+      end
     end
 
     assert_select ".form-tab-container.a-group-of-tabs .form-tab" do |tabs|
@@ -252,7 +250,7 @@ class UbiquoFormBuilderTest < ActionView::TestCase
                form.text_field :is_admin
              end
            end
-         end
+         end +
          form.tab(("rights"), :class => "custom-tab-class") do
            form.check_box :is_admin
          end
@@ -299,10 +297,11 @@ class UbiquoFormBuilderTest < ActionView::TestCase
 
   test "can append content inside the field, after and before the content" do
     the_form do |form|
-      form.text_field :lastname, :group => { :after => '<div class="after">A</div>'.html_safe }
-      form.text_field :lastname, :class=> "alter", :group => { :before => '<div class="before">A</div>'.html_safe }
+      form.text_field(:lastname, :group => { :after => '<div class="after">A</div>'.html_safe}) +
+      form.text_field(:lastname, :class=> "alter", :group => { :before => '<div class="before">A</div>'.html_safe })
     end
-    assert_select "form .form-item" do |form_items|
+
+    assert_select "form .form-item"  do |form_items|
       assert_select form_items.first, ".after"
       assert_select form_items.first, "div *" do |items|
         assert_equal "after", items.last.attributes["class"]
@@ -317,9 +316,9 @@ class UbiquoFormBuilderTest < ActionView::TestCase
   test "use check_box with all options" do
     the_form do |form|
       # Weird use but useful sometimes
-      form.check_box( :lastname )
-      form.check_box( :lastname, {:class => "simple"})
-      form.check_box( :lastname, {:class => "complex"}, "GARCIA", "OFF" )
+      form.check_box(:lastname) +
+      form.check_box(:lastname, { :class => "simple" }) +
+      form.check_box(:lastname, { :class => "complex" }, "GARCIA", "OFF")
     end
     assert_select "form input[type=hidden][value=0]",2
     assert_select "form input[type=checkbox][class=checkbox][value=1]"
@@ -384,20 +383,20 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     end
   end
 
-  test "support calendar_date_select" do
-    self.expects(:calendar_date_select).returns('<input name="calendar"/>')
-    the_form do |form|
-      form.calendar_date_select( :born_at )
-    end
-    assert_select "form .form-item.datetime label"
-    assert_select "form .form-item.datetime input"
-  end
+##  test "support calendar_date_select" do
+##    self.expects(:calendar_date_select).returns('<input name="calendar"/>')
+##    the_form do |form|
+##      form.calendar_date_select(:born_at)
+##    end
+##    assert_select "form .form-item.datetime label"
+##    assert_select "form .form-item.datetime input"
+##  end
 
   test "do not forward options as attributes" do
     the_form do |form|
-      form.text_field :lastname, :group => { :class => "aclass", :attx => "attxvalue" }
-      form.text_field :lastname, :label => "MYLABEL", :label_as_legend => true,
-        :group => { :type => :fieldset, :class => "custom_class"}
+      form.text_field(:lastname, :group => { :class => "aclass", :attx => "attxvalue" }) +
+      form.text_field(:lastname, :label => "MYLABEL", :label_as_legend => true,
+        :group => { :type => :fieldset, :class => "custom_class"})
     end
     assert_select "form *[group]", 0
     assert_select "fieldset[label]", 0

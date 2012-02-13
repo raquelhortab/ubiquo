@@ -5,17 +5,15 @@ module Ubiquo::UbiquoSettingsHelper
   end
 
   def ubiquo_setting_list(contexts, form, options = {})
-    capture do
-      form.group(:type => :tabbed) do
-        contexts.map do |context, setting_keys|
-          content_tag(:div, :id => "context_#{context}", :class => 'context') do
-            form.tab UbiquoSetting.context_translated(context) do
-              context_data(context, setting_keys)
-            end
+    form.group(:type => :tabbed) do
+      contexts.map do |context, setting_keys|
+        content_tag(:div, :id => "context_#{context}", :class => 'context') do
+          form.tab UbiquoSetting.context_translated(context) do
+            context_data(context, setting_keys)
           end
-        end.join
-      end + submit_all_button
-    end
+        end
+      end.join.html_safe
+    end + submit_all_button
   end
 
   private
@@ -26,7 +24,7 @@ module Ubiquo::UbiquoSettingsHelper
         setting_info(ubiquo_setting) +
         setting_actions(ubiquo_setting)
       end
-    end.join
+    end.join.html_safe
   end
 
   def submit_all_button

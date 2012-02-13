@@ -2,7 +2,7 @@ module Ubiquo
   module NavigationTabs
     class NavigatorTabs
       attr_accessor :tabs, :html_options, :tab_options
-      
+
       def initialize(options = {})
         # Get default options for each Tab
         if options[:tab_options] && options[:tab_options].kind_of?(Hash)

@@ -21,6 +21,8 @@ Ubiquo::Plugin.register(:ubiquo) do |setting|
   setting.add :settings_access_control, lambda{
     access_control :DEFAULT => "settings_management"
   }
+  setting.add(:prioritary_settings, [])
+  setting.add(:prioritary_contexts, [])
   setting.add :settings_permit, lambda{
     permit?("ubiquo_settings_management")
   }
@@ -39,7 +41,7 @@ Ubiquo::Settings.add(:edit_on_row_click, true)
 
 Ubiquo::Settings.create_context(:ubiquo_form_builder)
 Ubiquo::Settings.context(:ubiquo_form_builder) do |context|
-  context.add( :default_tag_options, {
+  context.add(:default_tag_options, {
     :text_area => { :class => "visual_editor" },
     :relation_selector => { :append_class => "relation" },
     :check_box => {
@@ -100,7 +102,7 @@ Ubiquo::Settings.context(:ubiquo_form_builder) do |context|
     },
     :calendar_date_select => {:group => {:append_class => "datetime"}}
   })
-  context.add( :groups_configuration,{
+  context.add(:groups_configuration,{
       :div => {:content_tag => :div, :class => "form-item"},
       :fieldset => {
         :content_tag => :fieldset,
@@ -132,7 +134,7 @@ Ubiquo::Settings.context(:ubiquo_form_builder) do |context|
       :description  => {:content_tag => :p, :class => "description"},
       :help         => {:partial => "/shared/ubiquo/form_parts/form_help"}
     })
-  context.add( :default_group_type, :div )
+  context.add(:default_group_type, :div)
   # Set to false to unfold the group(:type => :tabbed)
-  context.add( :unfold_tabs, false)
+  context.add(:unfold_tabs, false)
 end

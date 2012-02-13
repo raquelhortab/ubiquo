@@ -33,8 +33,7 @@ module Ubiquo
       end
 
       def self.unload!
-        ::UbiquoSetting.instance_variable_set :@translatable, false
-
+        ::UbiquoSetting.untranslatable
       end
 
       module Settings
@@ -50,6 +49,7 @@ module Ubiquo
         end
 
         module ClassMethods
+          include Standard::Settings::ClassMethods
 
           # Returns the default value for the setting
           def uhook_default_value(name = nil, options = {})
@@ -86,15 +86,6 @@ module Ubiquo
             else
               return settings[current_context][name][:options][:allowed_values]
             end
-          end
-
-          # Load all settings from a i18n database backend
-          def uhook_load_from_backend!
-            regenerate_settings
-            return 0 if !overridable?
-            ::UbiquoSetting.all.map{|s|
-              context(s.context).add(s)
-            }.length
           end
 
           # Add a Setting
@@ -159,7 +150,7 @@ module Ubiquo
                     value = { locale.to_sym => value }
                     options.merge!(:default_value => { locale.to_sym => default_value })
                   end
-                  check_type(options[:value_type], value.values) if loaded && options[:value_type]
+                  check_type(options[:value_type], value.values) if self.loaded && options[:value_type]
                 else
                   check_type(options[:value_type], value) if
                   loaded && options[:value_type]
@@ -189,11 +180,14 @@ module Ubiquo
               options = settings[current_context][name][:options].merge(options)
               if options[:is_translatable]
                 value = settings[current_context][name][:value].merge({ locale => value })
-                check_type(options[:value_type], value.values) if loaded && options[:value_type]
+                check_type(options[:value_type], value.values) if self.loaded && options[:value_type]
               else
-                check_type(options[:value_type], value) if loaded && options[:value_type]
+                check_type(options[:value_type], value) if self.loaded && options[:value_type]
               end
-              options.merge!(:default_value => value) if !options.delete(:is_a_override)
+              if !options.delete(:is_a_override)
+                options.merge!(:default_value => value)
+                options[:original_parameters].merge!({:default_value => value})
+              end
               options.delete(:inherits)
               settings[current_context][name] = {
                 :options => options,
@@ -386,6 +380,8 @@ module Ubiquo
         end
 
         module Helper
+          include Standard::UbiquoSettingsController::Helper
+
           # Adds a locale filter to the received filter_set
           def uhook_ubiquo_setting_filters filter_set
             filter_set.locale
@@ -428,8 +424,8 @@ module Ubiquo
             (form.hidden_field :content_id) + (hidden_field_tag(:from, params[:from]))
           end
 
-          def uhook_get_ubiquo_setting(context, setting_key)
-            ::UbiquoSetting.find_or_build(context, setting_key, :locale => current_locale.to_sym)
+          def uhook_get_ubiquo_setting(context, setting_key, options = {})
+            super(context, setting_key, options.merge(:locale => current_locale.to_sym))
           end
 
           def uhook_print_key_label ubiquo_setting
@@ -445,16 +441,7 @@ module Ubiquo
 
         end
         module InstanceMethods
-
-          def uhook_index
-            Ubiquo::Settings.get_contexts.inject({}) do |result, context|
-              settings = Ubiquo::Settings[context].get_editable_settings
-              if settings.present?
-                result[context] = Ubiquo::Settings[context].get_editable_settings
-              end
-              result
-            end
-          end
+          include Standard::UbiquoSettingsController::InstanceMethods
 
           def uhook_is_ubiquo_setting_overriden? context, key
             Ubiquo::Settings[context].options_exists?(key) &&
@@ -475,31 +462,9 @@ module Ubiquo
             end
           end
 
-          # For password settings two inputs will be generated. One with the key
-          # of the setting and the other with the prefix "confirmation_"
-          def confirmation?(key, data)
-            !(key !~ /^confirmation_/)  && data.keys.find{|k| k == key.gsub('confirmation_','')}.present?
-          end
-
           # Creates or updates a new instance of setting.
-          def uhook_create_ubiquo_setting
-            valids = []
-            errors = []
-            params[:ubiquo_settings].each do |context, data|
-              data.each do |key, value_array|
-                 unless confirmation?(key, data)
-                  ubiquo_setting = ::UbiquoSetting.find_or_build(context, key, :locale => current_locale)
-                  ubiquo_setting.handle_confirmation(data) if ubiquo_setting.respond_to?(:handle_confirmation)
-                  ubiquo_setting.value = value_array
-                  if ubiquo_setting.config_value_same? || ubiquo_setting.save
-                    valids << ubiquo_setting
-                  else
-                    errors << ubiquo_setting
-                  end
-                end
-              end
-            end if params[:ubiquo_settings].present?
-            {:valids => valids, :errors => errors}
+          def uhook_create_ubiquo_setting options_for_find_or_build = {}
+            super(options_for_find_or_build.merge(:locale => current_locale))
           end
 
           #destroys an setting instance. returns a boolean that means if the destroy was done.

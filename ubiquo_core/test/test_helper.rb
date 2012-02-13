@@ -14,7 +14,7 @@ ActionMailer::Base.default_url_options[:host] = "test.com"
 Rails.backtrace_cleaner.remove_silencers!
 
 # Run any available migration
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
 
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
   ActiveRecord::Base.connection.client_min_messages = "ERROR"

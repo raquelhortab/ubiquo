@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
-#  use_ubiquo_fixtures
 
   def setup
     save_current_settings
@@ -9,7 +8,6 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
     Ubiquo::Settings.create_context(:controller_test) rescue nil
     Ubiquo::Settings.create_context(:controller_test_2) rescue nil
     session[:locale] = "en_US"
-#    login_as :admin
   end
 
   def teardown
@@ -123,7 +121,7 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
     )
 
     assert_difference('UbiquoSetting.count') do
-      post_ubiquo_setting :controller_test, :test_index, "2"
+      post_ubiquo_setting :controller_test, :test_index, 2
     end
 
     get :index
@@ -160,12 +158,10 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
         }
     end
 
-
     get :index
     assert_select '#context_controller_test input[name="test_index_1"][value="11"]', 1
     assert_select '#context_controller_test input[name="test_index_2"][value="22"]', 1
     assert_select '#context_controller_test_2 input[name="test_index_3"][value="33"]', 1
-
   end
 
   # destroy = restore default
@@ -186,7 +182,6 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
     assert_difference('UbiquoSetting.count', -1) do
       delete :destroy, :id => setting.id
     end
-
 
     assert_equal 'yes please', Ubiquo::Settings[:controller_test][:test_index]
     get :index
@@ -244,8 +239,8 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
     )
     assert_equal 'yes please', Ubiquo::Settings[:controller_test][:test_index]
     get :index
-    assert_select '#context_controller_test textarea[name="test_index"]', 1,
-        :html => "yes please"
+    assert_select '#context_controller_test textarea[name="test_index"]',
+      { :count => 1, :html => "yes please" }
   end
 
   def test_should_handle_passwords
@@ -339,7 +334,7 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
       setting.list :list_of_things_with_allowed_values, ["element1", "element2", "element3"],
         :is_editable => true, :allowed_values => allowed_values
     end
-    new_values = ['heroes', 'of', 'might' , 'and', 'magic', 2, :a, 3, 1]
+    new_values = ['heroes', 'of', 'might' , 'and', 'magic', '2', 'a', '3', '1']
     assert_difference('UbiquoListSetting.count', 1) do
       post_ubiquo_settings :controller_test => {
         :list_of_things => new_values
@@ -352,7 +347,7 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
     assert_equal new_values, Ubiquo::Settings[:controller_test][:list_of_things]
 
     # test allowed_values
-    new_values = ['element1', 2]
+    new_values = ['element1', '2']
     assert_difference('UbiquoListSetting.count', 1) do
       post_ubiquo_settings :controller_test => {
         :list_of_things_with_allowed_values => new_values,

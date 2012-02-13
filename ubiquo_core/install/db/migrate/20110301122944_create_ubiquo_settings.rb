@@ -15,6 +15,6 @@ class CreateUbiquoSettings < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :settings
+    drop_table :ubiquo_settings
   end
 end

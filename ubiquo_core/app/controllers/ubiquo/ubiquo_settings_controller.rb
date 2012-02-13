@@ -1,12 +1,12 @@
 class Ubiquo::UbiquoSettingsController < UbiquoController
 
   ubiquo_config_call :settings_access_control
+  before_filter :clean_result
 
   # GET /settings
   # GET /settings.xml
   # GET /settings.json
   def index
-
     find_settings
     respond_to do |format|
       format.html # index.html.erb
@@ -26,7 +26,7 @@ class Ubiquo::UbiquoSettingsController < UbiquoController
       flash[:error] = t("ubiquo.ubiquo_setting.destroy_error")
     end
     respond_to do |format|
-      format.html { redirect_to(ubiquo_ubiquo_settings_url) }
+      format.html { redirect_to(ubiquo.ubiquo_settings_url) }
       format.xml  { head :ok }
     end
   end
@@ -76,5 +76,9 @@ class Ubiquo::UbiquoSettingsController < UbiquoController
 
   def load_setting
     @ubiquo_setting = UbiquoSetting.find(params[:id])
+  end
+
+  def clean_result
+    @result = nil
   end
 end

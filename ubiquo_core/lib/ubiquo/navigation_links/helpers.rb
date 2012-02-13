@@ -5,6 +5,7 @@
 module Ubiquo
   module NavigationLinks
     module Helpers
+      include ActionView::Context
 
       # Render a partial view that contains navigaton links elements
       #

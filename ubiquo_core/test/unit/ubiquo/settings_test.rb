@@ -458,13 +458,7 @@ class Ubiquo::SettingsTest < ActiveSupport::TestCase
     assert !Ubiquo::Settings.settings[default_context][:d][:options].include?(:value_type)
 
     # do not show is_translatable
-    Ubiquo::Settings.string(:e,
-                            { 'en_US' => 'dungeon',
-                              'es_ES' => 'mazmorra',
-                              'ca_ES' => 'masmorra',
-                            },
-                            :is_translatable => true
-                            )
+    Ubiquo::Settings.string(:e, 'dungeon', :is_translatable => true)
     assert !Ubiquo::Settings.options(:a).include?(:is_translatable)
 
     # do not show default_value
@@ -548,6 +542,42 @@ class Ubiquo::SettingsTest < ActiveSupport::TestCase
     assert_equal [:foo_first, :foo_second, :foo_third], Ubiquo::Settings.get_contexts[index..(index+2)]
   end
 
+  def test_get_contexts_should_list_first_some_contexts
+    Ubiquo::Settings[:prioritary_contexts] = [:foo_first, :foo_third, :foo_second]
+
+    Ubiquo::Settings.create_context(:foo_first)
+    Ubiquo::Settings.create_context(:foo_second)
+    Ubiquo::Settings.create_context(:foo_third)
+
+    assert_equal [:foo_first, :foo_third, :foo_second], Ubiquo::Settings.get_contexts.select{ |c| c.to_s.index('foo') == 0 }
+
+    Ubiquo::Settings[:prioritary_contexts] = []
+
+    assert_equal [:foo_first, :foo_second, :foo_third], Ubiquo::Settings.get_contexts.select{ |c| c.to_s.index('foo') == 0 }
+
+    Ubiquo::Settings.send(:settings)[:ubiquo].delete(:prioritary_contexts)
+
+    assert_equal [:foo_first, :foo_second, :foo_third], Ubiquo::Settings.get_contexts.select{ |c| c.to_s.index('foo') == 0 }
+  end
+
+  def test_get_editable_settings_should_list_first_some_settings
+    Ubiquo::Settings[:prioritary_settings] = [:foo_b]
+
+    Ubiquo::Settings.add(:foo_aa,  1, :is_editable => true)
+    Ubiquo::Settings.add(:foo_b,   1, :is_editable => true)
+    Ubiquo::Settings.add(:foo_ccc, 1, :is_editable => true)
+
+    assert_equal [:foo_b, :foo_aa, :foo_ccc], Ubiquo::Settings.get_editable_settings.select{ |c| c.to_s.index('foo') == 0 }
+
+    Ubiquo::Settings[:prioritary_settings] = []
+
+    assert_equal [:foo_aa, :foo_b, :foo_ccc], Ubiquo::Settings.get_editable_settings.select{ |c| c.to_s.index('foo') == 0 }
+
+    Ubiquo::Settings.send(:settings)[:ubiquo].delete(:prioritary_settings)
+
+    assert_equal [:foo_aa, :foo_b, :foo_ccc], Ubiquo::Settings.get_editable_settings.select{ |c| c.to_s.index('foo') == 0 }
+  end
+
   def dummy_method(options = {})
     options = {:word => "world"}.merge(options)
     "hello #{options[:word]}"
@@ -556,7 +586,7 @@ class Ubiquo::SettingsTest < ActiveSupport::TestCase
   protected
 
   def clear_settings
-    UbiquoSetting.destroy_all
+    UbiquoSetting.delete_all
     Ubiquo::Settings.settings[:ubiquo] = @old_configuration.clone
     Ubiquo::Settings.settings.reject! { |k, v| !@initial_contexts.include?(k)}
   end

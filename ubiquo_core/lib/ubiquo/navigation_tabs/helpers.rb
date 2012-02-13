@@ -5,6 +5,7 @@
 module Ubiquo
   module NavigationTabs
     module Helpers  
+      include ActionView::Context
 
       protected 
       
