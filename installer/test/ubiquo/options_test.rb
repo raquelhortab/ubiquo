@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../helper.rb'
+require_relative '../helper.rb'
 
 class TestOptions < Test::Unit::TestCase
 
@@ -12,7 +12,7 @@ class TestOptions < Test::Unit::TestCase
     @templates = [ :stable, :edge ]
     @profiles  = [ :complete, :minimal ]
   end
-  
+
   def test_should_set_the_default_options
     opts = Options.new(%w[ appname ])
     @defaults.each { |k,v| assert_equal v, opts[k] }
@@ -58,11 +58,11 @@ class TestOptions < Test::Unit::TestCase
     assert_equal "r@r.com", opts[:exception_recipient]
     assert_equal "s@s.com", opts[:sender_address]
   end
-  
+
   def test_should_be_able_to_add_custom_plugins
     opts = Options.new(%w[ --custom ubiquo_media myapp ])
     assert_equal :custom, opts[:profile]
     assert_equal ["ubiquo_media"].inspect, opts[:plugins].inspect
   end
-  
+
 end

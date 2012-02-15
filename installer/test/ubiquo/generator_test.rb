@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../helper.rb'
+require_relative '../helper.rb'
 
 class TestGenerator < Test::Unit::TestCase
 
@@ -12,7 +12,7 @@ class TestGenerator < Test::Unit::TestCase
     assert_match 'choosen_plugin_set = "minimal"', rails_template
     assert_match 'ubiquo_branch = nil', rails_template
   end
-  
+
   def test_should_generate_expected_template_from_custom_profile
     skeleton = File.join(File.dirname(__FILE__), "../fixtures", "template.erb")
     opts = Options.new(%w[ --custom ubiquo_media myapp ])
