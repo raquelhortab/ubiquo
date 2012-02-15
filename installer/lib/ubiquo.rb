@@ -15,7 +15,7 @@ module Ubiquo
         # We need this because sometimes we upgrade edge but no stable
         options[:rails] = options[:template] == :edge ? '3.2.0.rc2' : '2.3.14'
 
-        unless Gem.available?('rails', options[:rails])
+        unless Gem::Specification::find_by_name('rails', options[:rails])
           $stderr.puts "Sorry ubiquo needs rails #{options[:rails]} to work properly."
           options[:show_help] = true
         end
