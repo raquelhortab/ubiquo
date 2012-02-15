@@ -5,20 +5,20 @@
 
 Gem::Specification.new do |s|
   s.name = "ubiquo"
-  s.version = "0.9.0.b8"
+  s.version = "0.9.0.b9"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Albert Callarisa", "Jordi Beltran", "Bernat Foj", "Eric Garc\303\255a", "Felip Ladr\303\263n", "David Lozano", "Antoni Reina", "Ramon Salvad\303\263", "Arnau S\303\241nchez"]
-  s.date = "2012-01-18"
+  s.authors = ["Albert Callarisa", "Jordi Beltran", "Bernat Foj", "Eric Garc\u{ed}a", "Felip Ladr\u{f3}n", "David Lozano", "Antoni Reina", "Ramon Salvad\u{f3}", "Arnau S\u{e1}nchez"]
+  s.date = "2012-02-15"
   s.description = "This gem provides a command-line interface to speed up the creation of ubiquo based apps."
   s.email = "rsalvado@gnuine.com"
   s.executables = ["ubiquo"]
   s.extra_rdoc_files = [
-    "LICENSE",
     "README.rdoc"
   ]
   s.files = [
     ".document",
+    ".gitignore",
     "LICENSE",
     "README.rdoc",
     "Rakefile",
@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://www.ubiquo.me"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.12"
+  s.rubygems_version = "1.8.15"
   s.summary = "command line application for building ubiquo based applications."
 
   if s.respond_to? :specification_version then
