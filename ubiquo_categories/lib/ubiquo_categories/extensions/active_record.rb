@@ -80,30 +80,28 @@ module UbiquoCategories
 
             define_method "<<" do |categories|
               set, categories = assign_to_set.call(categories, proxy_association.owner)
-
               categories.each do |category|
                 unless has_category? category.to_s
                   raise UbiquoCategories::LimitError if is_full?
                   proxy_association.reflection.through_reflection.klass.create(
-#                  @reflection.through_reflection.klass.create(
                     :attr_name => association_name,
                     :related_object => proxy_association.owner,
                     :category => category
                   )
                 end
               end
-              reset
+              proxy_association.reset
             end
 
             if options[:size] == 1
               # Returns directly the instance if only one category is allowed
               def method_missing(method, *args)
                 if load_target
-                  if @target.first.respond_to?(method)
+                  if target.first.respond_to?(method)
                     if block_given?
-                      @target.first.send(method, *args)  { |*block_args| yield(*block_args) }
+                      target.first.send(method, *args)  { |*block_args| yield(*block_args) }
                     else
-                      @target.first.send(method, *args)
+                      target.first.send(method, *args)
                     end
                   else
                     super
