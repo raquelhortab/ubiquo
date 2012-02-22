@@ -2,6 +2,11 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 require 'mocha'
 
 class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
+  fixtures :all
+
+  def setup
+    create_categories_test_model_backend
+  end
 
   def test_categorized_with
     assert_nothing_raised do
@@ -64,7 +69,7 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
   def test_category_filter_should_not_return_read_only_instances
     categorize :cities
     CategoryTestModel.class_eval do
-      named_scope :city, lambda{|value|
+      scope :city, lambda{|value|
         category_conditions_for(:cities, value).merge(:order => 'my_field asc')
       }
     end
@@ -145,16 +150,18 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     categorize :colors
     section_set = CategorySet.create(:key => 'section', :name => 'Section')
     colors_set  = CategorySet.create(:key => 'colors', :name => 'Colors')
-    section_set.categories = %( admin shop design ).map { |s| Category.create(:name => s) }
-    colors_set.categories  = %( blue red green ).map { |c| Category.create(:name => c) }
+
+    section_set.categories = %w{ admin shop design }.map { |s| Category.create(:name => s) }
+    colors_set.categories  = %w{ blue red green }.map { |c| Category.create(:name => c) }
+
     m = create_category_model.class # We create a record without categories
     m.create(:my_field => 'one',   :section => 'admin',  :colors => 'red')
     m.create(:my_field => 'two',   :section => 'design', :colors => 'blue')
     m.create(:my_field => 'three', :section => 'shop',   :colors => 'green')
-    assert [1,2,3,4], m.find(:all, :include => :sections, :order => 'categories.name asc').map(&:id)
-    assert [4,3,2,1], m.find(:all, :include => :sections, :order => 'categories.name desc')
-    assert [1,3,4,2], m.find(:all, :include => :colors,   :order => 'categories.name asc').map(&:id)
-    assert [2,4,3,1], m.find(:all, :include => :colors,   :order => 'categories.name desc').map(&:id)
+    assert_equal [1,2,3,4], m.find(:all, :include => :sections, :order => 'categories.name asc').map(&:id)
+    assert_equal [4,3,2,1], m.find(:all, :include => :sections, :order => 'categories.name desc').map(&:id)
+    assert_equal [1,3,4,2], m.find(:all, :include => :colors,   :order => 'categories.name asc').map(&:id)
+    assert_equal [2,4,3,1], m.find(:all, :include => :colors,   :order => 'categories.name desc').map(&:id)
   end
 
   def test_should_raise_if_set_does_not_exist
@@ -303,6 +310,7 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model.cities = ['Barcelona']
     model.save
     assert_equal ['Barcelona'], model.cities.map(&:name)
+    assert_equal 1, model.category_relations.size
     assert_equal 'cities', model.category_relations.first.attr_name
   end
 
@@ -376,7 +384,6 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model_3 = create_category_model
     model_3.cities = []
     model_3.genre = 'Male'
-
     assert_equal_set([model_1], CategoryTestModel.cities('Barcelona').genre('Male'))
     assert_equal_set([model_2], CategoryTestModel.genre('Female').cities('London'))
 
@@ -400,5 +407,3 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
   end
 
 end
-
-create_categories_test_model_backend
