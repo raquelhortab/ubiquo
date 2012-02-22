@@ -26,7 +26,7 @@ module Ubiquo::CategoriesHelper
         :link_to_new => (
           link_to(
             t("ubiquo.category.index.new"),
-            new_ubiquo_category_set_category_path, :class => 'new'
+            ubiquo.new_category_set_category_path, :class => 'new'
           ) if options[:category_set].is_editable?)
       })
   end
