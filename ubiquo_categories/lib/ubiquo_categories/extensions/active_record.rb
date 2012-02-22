@@ -112,25 +112,21 @@ module UbiquoCategories
               end
             end
 
-            define_method 'to_a' do
-              Array(self)
-            end
-
             define_method 'is_full?' do
-              return false if options[:size].to_sym == :many
-              Array(self).size >= options[:size]
+              return false if options[:size].to_s.to_sym == :many
+              self.size >= options[:size]
             end
 
             define_method 'will_be_full?' do |categories|
-              return false if options[:size].to_sym == :many
+              return false if options[:size].to_s.to_sym == :many
               categories.size > options[:size]
             end
 
             define_method 'has_category?' do |category|
               if category.is_a? Category
-                Array(self).include? category
+                self.include? category
               else
-                Array(self).map(&:to_s).include? category.to_s
+                self.map(&:to_s).include? category.to_s
               end
             end
 
