@@ -51,7 +51,7 @@ table_class += " edit_on_row_click" if edit_on_row_click
         <tr class="<%= cycle('even', 'odd') %>" id="<%= name %>_<%= row[:id] %>">
           <% row[:columns].each do |col| %>
             <td>
-              <%=
+              <%= case col
                  when ActiveSupport::TimeWithZone
                    l(col)
                  when TrueClass, FalseClass
