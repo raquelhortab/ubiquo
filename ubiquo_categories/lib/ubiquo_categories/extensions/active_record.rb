@@ -159,7 +159,7 @@ module UbiquoCategories
             alias_method_chain "#{association_name}=", 'categories'
           end
 
-          scope "#{association_name}_scope", lambda{ |*values|
+          scope "#{association_name}", lambda{ |*values|
             category_conditions_for field, values
           }
 
@@ -169,7 +169,7 @@ module UbiquoCategories
             alias_method "#{field}=", "#{association_name}="
 
             # alias for the builtin named_scope
-            singleton_class.send :alias_method,  "#{field}", "#{association_name}"
+            singleton_class.send :alias_method, field, association_name
           end
 
           prepare_categories_join_sql field
