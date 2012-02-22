@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::CategoriesControllerTest < ActionController::TestCase
+  fixtures :all
 
   def setup
     session[:locale] = "en_US"

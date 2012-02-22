@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
+  fixtures :all
 
   def test_should_get_index
     get :index

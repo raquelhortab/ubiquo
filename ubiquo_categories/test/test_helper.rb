@@ -121,3 +121,7 @@ if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
 
+class ActiveSupport::TestCase
+  include Ubiquo::Engine.routes.url_helpers
+  include Rails.application.routes.mounted_helpers
+end
