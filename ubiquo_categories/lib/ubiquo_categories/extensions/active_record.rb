@@ -152,7 +152,12 @@ module UbiquoCategories
             self.send("#{association_name}_without_categories=", categories)
           end
 
-          alias_method_chain "#{association_name}=", 'categories'
+          # If we have already categorized this model we just overwrite the "#{association_name}=" method with "#{association_name}_with_categories=" one.
+          if instance_methods.include?(:"#{association_name}_without_categories=")
+            alias_method "#{association_name}=", "#{association_name}_with_categories="
+          else
+            alias_method_chain "#{association_name}=", 'categories'
+          end
 
           scope "#{association_name}_scope", lambda{ |*values|
             category_conditions_for field, values
