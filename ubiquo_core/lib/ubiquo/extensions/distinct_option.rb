@@ -22,7 +22,7 @@ module Ubiquo
 
       # Applies the :distinct option when constructing sql queries
       def apply_finder_options_with_distinct(options)
-        if options[:distinct]
+        if options[:distinct] && !self.using_distinct
           options_with_distinct = options.merge(:select => select_distinct(options))
           self.using_distinct = true
         end

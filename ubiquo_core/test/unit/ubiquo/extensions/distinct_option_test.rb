@@ -20,6 +20,22 @@ class Ubiquo::Extensions::DistinctOptionTest < ActiveSupport::TestCase
     assert_equal 1, results.size, ':distinct option does not work as expected in scopes'
   end
 
+  def test_distinct_option_enabled_in_chained_scopes
+    TestOnlyModel.destroy_all
+    TestOnlyModel.create!(:name => "test1")
+    TestOnlyModel.create!(:name => "test2")
+    scope1 = {
+      :distinct => true,
+      :conditions => ["name like ?", "te%"]
+    }
+    scope2 = {
+      :distinct => true,
+      :conditions => ["name like ?", "%test%"]
+    }
+    results = TestOnlyModel.scoped(scope1).scoped(scope2).all
+    assert_equal 2, results.size
+  end
+
   def test_distinct_option_does_not_affect_order_and_select
     complex_order = 'name DESC, test_only_models.id ASC, test_only_model_twos.title'
     %w{all scoped}.each do |method|
