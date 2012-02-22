@@ -47,7 +47,7 @@ class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
       post :create, :category_set => category_set_attributes
     end
 
-    assert_redirected_to ubiquo.category_sets_url
+    assert_redirected_to ubiquo.category_sets_path
   end
 
   def test_should_get_edit
@@ -57,14 +57,14 @@ class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
 
   def test_should_update_category_set
     put :update, :id => category_sets(:one).id, :category_set => category_set_attributes
-    assert_redirected_to ubiquo.category_sets_url
+    assert_redirected_to ubiquo.category_sets_path
   end
 
   def test_should_destroy_category_set
     assert_difference('CategorySet.count', -1) do
       delete :destroy, :id => category_sets(:one).id
     end
-    assert_redirected_to ubiquo.category_sets_url
+    assert_redirected_to ubiquo.category_sets_path
   end
 
   private
