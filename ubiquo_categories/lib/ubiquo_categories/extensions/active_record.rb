@@ -79,14 +79,15 @@ module UbiquoCategories
           proc = Proc.new do
 
             define_method "<<" do |categories|
-              set, categories = assign_to_set.call(categories, proxy_owner)
+              set, categories = assign_to_set.call(categories, proxy_association.owner)
 
               categories.each do |category|
                 unless has_category? category.to_s
                   raise UbiquoCategories::LimitError if is_full?
-                  @reflection.through_reflection.klass.create(
+                  proxy_association.reflection.through_reflection.klass.create(
+#                  @reflection.through_reflection.klass.create(
                     :attr_name => association_name,
-                    :related_object => proxy_owner,
+                    :related_object => proxy_association.owner,
                     :category => category
                   )
                 end
@@ -159,7 +160,7 @@ module UbiquoCategories
 
           alias_method_chain "#{association_name}=", 'categories'
 
-          named_scope "#{association_name}", lambda{ |*values|
+          scope "#{association_name}_scope", lambda{ |*values|
             category_conditions_for field, values
           }
 
