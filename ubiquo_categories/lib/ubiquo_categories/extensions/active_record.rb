@@ -57,7 +57,7 @@ module UbiquoCategories
           self.has_many(:"#{field}_category_relations", {
               :as => :related_object,
               :class_name => "::CategoryRelation",
-              :conditions => ["category_relations.attr_name = ?", association_name],
+              :conditions => { :attr_name => association_name }, #["category_relations.attr_name = ?", association_name],
               :dependent => :destroy,
               :order => "category_relations.position ASC"
           })
@@ -144,7 +144,6 @@ module UbiquoCategories
               :through => :"#{field}_category_relations",
               :class_name => "::Category",
               :source => :category,
-              :conditions => ["category_relations.attr_name = ?", association_name],
               :order => "category_relations.position ASC",
             },&proc)
 
@@ -155,10 +154,7 @@ module UbiquoCategories
 
             raise UbiquoCategories::LimitError if send(association_name).will_be_full? categories
 
-            CategoryRelation.send(:with_scope, :create => {:attr_name => association_name}) do
-              self.send("#{association_name}_without_categories=", categories)
-            end
-
+            self.send("#{association_name}_without_categories=", categories)
           end
 
           alias_method_chain "#{association_name}=", 'categories'
