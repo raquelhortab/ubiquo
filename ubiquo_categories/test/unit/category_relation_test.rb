@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class CategoryRelationTest < ActiveSupport::TestCase
-
+  fixtures :all
   def test_should_create_category_relation
     assert_difference 'CategoryRelation.count' do
       category_relation = create_category_relation
