@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
+require 'ruby-debug'
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -33,6 +34,23 @@ def create_categories_test_model_backend
 
   Object.const_set("EmptyTestModelSubOne", Class.new(EmptyTestModelBase)) unless Object.const_defined? "EmptyTestModelSubOne"
   Object.const_set("EmptyTestModelSubTwo", Class.new(EmptyTestModelSubOne)) unless Object.const_defined? "EmptyTestModelSubTwo"
+end
+
+def destroy_categories_test_model_backend
+    conn = ActiveRecord::Base.connection
+
+  %w{CategoryTranslatableTestModel CategoryTestModelBase EmptyTestModelBase CategoryTestModel}.each do |model_name|
+    table = model_name.tableize
+    translatable = table != 'category_test_models'
+
+    conn.drop_table table if conn.tables.include?(table)
+
+    Object.send(:remove_const, model_name) if Object.const_defined? model_name
+  end
+
+  %w{ CategoryTestModelSubOne CategoryTestModelSubTwo EmptyTestModelSubOne EmptyTestModelSubTwo}.each do |model_name|
+    Object.send(:remove_const, model_name) if Object.const_defined? model_name
+  end
 end
 
 def categorize attr, options = {}
@@ -102,3 +120,4 @@ end
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
+
