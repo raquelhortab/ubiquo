@@ -1,6 +1,8 @@
+# -*- encoding: utf-8 -*-
+
 class AssetPublic < Asset
   file_attachment :resource,
-                  :visibility => "public",
+                  :visibility => 'public',
                   :styles     => self.correct_styles(Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list)),
                   :processors => Ubiquo::Settings.context(:ubiquo_media).get(:media_processors_list),
                   :storage    => Ubiquo::Settings.context(:ubiquo_media).get(:media_storage)

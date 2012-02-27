@@ -363,18 +363,6 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
     create_asset( default_options.merge( options ) )
   end
 
-  # Nasty thigns to configure assets as expected
-  def reload_asset_classes
-    list = [:Asset, :AssetPublic, :AssetPrivate]
-    list.each do |sym|
-      Object.send(:remove_const, sym)
-    end
-    list.each do |sym|
-      Object.send(:load, sym.to_s.underscore)
-    end
-
-  end
-
   # To recover the configuration after the changes.
   def preserve_configuration
     @old_media_styles_list = Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list).dup

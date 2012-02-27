@@ -22,8 +22,8 @@ class Asset < ActiveRecord::Base
   after_save :update_backup
   after_save :save_geometries
 
-  scope :type, lambda { |type|
-    where("asset_type_id IN (?)", type.to_s.split(',').map(&:to_i))
+  scope :type, lambda { |t|
+    where("asset_type_id IN (?)", t.to_s.split(',').map(&:to_i))
   }
 
   scope :visibility, lambda { |visibility|

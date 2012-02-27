@@ -428,9 +428,9 @@ class MediaFileTest < ActiveSupport::TestCase
   # Test for the issue detected in #268
   def test_should_not_modify_config_when_defining_paperclip_styles
     styles_hash = {
-        :style_name => {
-          :processors => [:example_processor],
-        }
+      :style_name => {
+        :processors => [:example_processor],
+      }
     }
 
     # short way to recursivelly clone
@@ -439,10 +439,15 @@ class MediaFileTest < ActiveSupport::TestCase
     Ubiquo::Settings.context(:ubiquo_media).set do |config|
       config.media_styles_list = styles_hash_copy
     end
+
     begin
       # Reload the AssetPublic class, that uses this defined option
-      Object.send :remove_const, 'AssetPublic'
-      require File.dirname(__FILE__) + '/../../app/models/asset_public'
+      path = File.expand_path(File.join(File.dirname(__FILE__),
+                                        '..',
+                                        '..',
+                                        'app/models/asset_public.rb'))
+      # NOTE: The Kernel#load method is enough to reload the class definition
+      load path
 
       # this triggers the Style initialization, which uses the hash
       asset = AssetPublic.new
