@@ -187,6 +187,7 @@ module UbiquoMedia
       end
 
       def self.prepare_mocks
+<<<<<<< HEAD
         ubiquo_stub = Class.new do
           def edit_asset_path(*); ''; end
           def asset_path(*); ''; end
@@ -194,6 +195,11 @@ module UbiquoMedia
         end.new
 
         add_mock_helper_stubs(:ubiquo => ubiquo_stub)
+=======
+        add_mock_helper_stubs({
+          :edit_asset_path => '', :asset_path => '',
+        })
+>>>>>>> media: changed engine routes to be rails 3 compatible.
       end
     end
   end
