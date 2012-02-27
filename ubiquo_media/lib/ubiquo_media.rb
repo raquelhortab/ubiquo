@@ -8,6 +8,7 @@ module UbiquoMedia
     include Ubiquo::Engine::Base
 
     engine_name :ubiquo_media
+    isolate_namespace UbiquoMedia
 
     initializer :load_extensions do
       # NOTE: if the paperclip extension is not loaded here, the app
@@ -24,9 +25,9 @@ module UbiquoMedia
       _load
     end
 
-    initializer :load_connector, :after => :load_config_initializers do
-      _load
-    end
+    # initializer :load_connector, :after => :load_config_initializers do
+      # _load
+    # end
 
     protected
 

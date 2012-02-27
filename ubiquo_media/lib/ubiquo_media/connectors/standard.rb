@@ -76,10 +76,10 @@ module UbiquoMedia
           # Returns the available actions links for a given asset
           def uhook_asset_index_actions asset
             actions = [
-              link_to(t('ubiquo.edit'), edit_ubiquo_asset_path(asset), :class => 'btn-edit'),
-              link_to(t('ubiquo.remove'), ubiquo_asset_path(asset), :confirm => t('ubiquo.media.confirm_asset_removal'), :method => :delete, :class => 'btn-delete'),
+              link_to(t('ubiquo.edit'), ubiquo.edit_asset_path(asset), :class => 'btn-edit'),
+              link_to(t('ubiquo.remove'), ubiquo.asset_path(asset), :confirm => t('ubiquo.media.confirm_asset_removal'), :method => :delete, :class => 'btn-delete'),
             ]
-            actions << link_to(t('ubiquo.media.advanced_edit'), advanced_edit_ubiquo_asset_path(asset),advanced_edit_link_attributes) if asset.is_resizeable?
+            actions << link_to(t('ubiquo.media.advanced_edit'), ubiquo.advanced_edit_asset_path(asset),advanced_edit_link_attributes) if asset.is_resizeable?
             actions
           end
 
@@ -180,7 +180,7 @@ module UbiquoMedia
 
       def self.prepare_mocks
         add_mock_helper_stubs({
-          :edit_ubiquo_asset_path => '', :ubiquo_asset_path => '',
+          :edit_asset_path => '', :asset_path => '',
         })
       end
     end

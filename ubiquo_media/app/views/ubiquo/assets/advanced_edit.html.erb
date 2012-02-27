@@ -7,7 +7,7 @@
   </div>
   <div id="resize-content">
     <%= render(:partial => "shared/ubiquo/feedback") %>
-    <% remote_form_for(:asset, @asset, :url => advanced_update_ubiquo_asset_path(@asset),
+    <% remote_form_for(:asset, @asset, :url => ubiquo.advanced_update_asset_path(@asset),
       # We want to update ourselves and as we dont know who is our father, we do an #up on ourselves.
       :update => "' + $('crop-resize-container').up().identify() +'",
       :before => "myLightWindow.innerLoadingStart();",

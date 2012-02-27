@@ -1,6 +1,6 @@
 <%
   options = {
-    :url => search_ubiquo_assets_path,
+    :url => ubiquo.search_assets_path,
     :method => :get,
     :before => "Element.show(\"search_spinner_#{counter}\")",
     :success => "Element.hide(\"search_spinner_#{counter}\")",

@@ -65,7 +65,7 @@ class Ubiquo::AssetsController < UbiquoController
       if ok
         format.html do 
           flash[:notice] = t('ubiquo.media.asset_created')
-          redirect_to(ubiquo_assets_path)
+          redirect_to(ubiquo.assets_path)
         end
         format.xml  { render :xml => @asset, :status => :created, :location => @asset }
         format.js {
@@ -125,7 +125,7 @@ class Ubiquo::AssetsController < UbiquoController
     respond_to do |format|
       if @asset.update_attributes(params[:asset])
         flash[:notice] = t('ubiquo.media.asset_updated')
-        format.html { redirect_to(ubiquo_assets_path) }
+        format.html { redirect_to(ubiquo.assets_path) }
         format.xml  { head :ok }
       else
         flash[:error] = t('ubiquo.media.asset_update_error')
@@ -148,7 +148,7 @@ class Ubiquo::AssetsController < UbiquoController
     end
 
     respond_to do |format|
-      format.html { redirect_to(ubiquo_assets_path) }
+      format.html { redirect_to(ubiquo.assets_path) }
       format.xml  { head :ok }
     end
   end
@@ -248,12 +248,12 @@ class Ubiquo::AssetsController < UbiquoController
         end
 
         if params[:apply] || params[:save_as_new]
-          format.any{ redirect_to( advanced_edit_ubiquo_asset_path(@asset, :target => params[:target]) )}
+          format.any{ redirect_to(ubiquo.advanced_edit_asset_path(@asset, :target => params[:target]) )}
         elsif params[:target]
           flash.delete :notice
           format.any{ render "advanced_update_target", :layout => false }
         else
-          format.html { redirect_to(ubiquo_assets_path) }
+          format.html { redirect_to(ubiquo.assets_path) }
           format.xml  { head :ok }
         end
       else
@@ -285,7 +285,7 @@ class Ubiquo::AssetsController < UbiquoController
     else
       flash[:error] = t('ubiquo.media.asset_update_error')
     end
-    redirect_to advanced_edit_ubiquo_asset_path(@asset, :target => params[:target])
+    redirect_to ubiquo.advanced_edit_asset_path(@asset, :target => params[:target])
   end
 
 

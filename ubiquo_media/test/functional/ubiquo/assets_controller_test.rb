@@ -12,6 +12,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
 
   def test_should_get_index
     get :index
+
     assert_response :success
     assert_not_nil assigns(:assets)
   end
@@ -37,18 +38,18 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
   def test_should_create_asset
     assert_difference('Asset.count') do
       post :create, :asset => { :name => "new asset",
-                                :resource => test_file,
+                                :resource => _test_file,
                                 :is_protected => false
       }
     end
-    assert_redirected_to ubiquo_assets_path
+    assert_redirected_to ubiquo.assets_path
     assert flash[:notice]
   end
 
   def test_should_create_asset_by_xhr
     assert_difference('Asset.count') do
       xhr :post, :create, :asset => { :name => "new asset",
-                                :resource => test_file,
+                                :resource => _test_file,
                                 :is_protected => false
       }
     end
@@ -58,10 +59,10 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
 
   def test_should_create_asset_by_xhr_and_validate_type
     assert_no_difference('Asset.count') do
-      xhr :post, :create,{ 
-          :asset => { 
+      xhr :post, :create,{
+          :asset => {
             :name => "new asset",
-            :resource => test_file,
+            :resource => _test_file,
             :is_protected => false
           },
           :accepted_types => ["image"]
@@ -72,11 +73,11 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
     # no add_element is called as it has failed
     assert !@response.body.include?("add_element")
   end
-  
+
   def test_should_create_asset_by_xhr_and_validate_type_unless_fails
     assert_no_difference('Asset.count') do
-      xhr :post, :create,{ 
-          :asset => { 
+      xhr :post, :create,{
+          :asset => {
             :name => "asd",
             :resource => nil,
             :is_protected => false
@@ -104,9 +105,9 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
   def test_should_update_asset
     put :update, :id => assets(:video).id,
         :asset => { :name => "new asset",
-                    :resource => test_file,
+                    :resource => _test_file,
                     :is_protected => false }
-    assert_redirected_to ubiquo_assets_path
+    assert_redirected_to ubiquo.assets_path
   end
 
   def test_should_destroy_asset
@@ -114,7 +115,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
       delete :destroy, :id => assets(:video).id
     end
 
-    assert_redirected_to ubiquo_assets_path
+    assert_redirected_to ubiquo.assets_path
   end
 
   def test_should_filter_by_text_ubiquo_user_and_asset_type
@@ -219,14 +220,14 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
 
   def test_advanced_edit_hides_tabs_when_formats
     preserve_configuration do
-      Ubiquo::Settings.context(:ubiquo_media).set(:media_styles_list,{})
+      Ubiquo::Settings.context(:ubiquo_media).set(:media_styles_list, {})
 
       asset = create_image_asset
 
       get :advanced_edit, :id => asset.id
       assert_response :success
 
-      assert_select "#resize-actions li",0
+      assert_select "#resize-actions li", 0
     end
   end
 
@@ -255,7 +256,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
           "top"=>"0",
           "width"=>"30"},
         }
-    assert_redirected_to ubiquo_assets_path
+    assert_redirected_to ubiquo.assets_path
     assert_equal 0, assigns(:asset).asset_areas.count
   end
 
@@ -275,14 +276,14 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
   end
 
   private
-  
+
   def update_asset_formats_test( options = {} )
     preserve_configuration do
       Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list).merge!({
-          :thumb => "100x100>",
-          :base_to_crop => "320x200>",
-          :long => "30x180#" #Very vertical image
-        })
+        :thumb        => "100x100>",
+        :base_to_crop => "320x200>",
+        :long         => "30x180#" #Very vertical image
+      })
 
       asset = create_image_asset
 
@@ -327,7 +328,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
       assert_equal 60, thumb.height
       assert_equal 2, thumb.top
 
-      assert_redirected_to ubiquo_assets_path
+      assert_redirected_to ubiquo.assets_path
 
       #Return data
       {:asset => asset}
@@ -341,7 +342,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
       :name => "Created asset",
       :description => "Description",
       :asset_type_id => AssetType.find(:first).id,
-      :resource => test_file(file_contents, file_ext ),
+      :resource => _test_file(file_contents, file_ext ),
       :is_protected => false,
     }
 

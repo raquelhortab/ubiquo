@@ -91,7 +91,7 @@ class AssetTest < ActiveSupport::TestCase
 
   def test_should_be_stored_in_protected_path
     asset = AssetPrivate.create(:name => "FAKE2",
-                                :resource => test_file,
+                                :resource => _test_file,
                                 :asset_type_id => AssetType.find(:first).id)
     assert asset.resource.path =~ /#{File.join(Rails.root, Ubiquo::Settings.get(:attachments)[:private_path])}/
   end
@@ -218,7 +218,7 @@ class AssetTest < ActiveSupport::TestCase
     default_options = {
       :name        => "Created asset",
       :description => "Description",
-      :resource    => test_file,
+      :resource    => _test_file,
     }
     a = AssetPublic.create(default_options.merge(options))
   end
@@ -227,7 +227,7 @@ class AssetTest < ActiveSupport::TestCase
     default_options = {
       :name        => "Created asset",
       :description => "Description",
-      :resource    => test_file,
+      :resource    => _test_file,
     }
     a = AssetMock.create(default_options.merge(options))
   end

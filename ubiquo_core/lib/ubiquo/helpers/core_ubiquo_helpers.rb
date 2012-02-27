@@ -111,7 +111,7 @@ module Ubiquo
       # with a default theme, basedir and locale
       def calendar_includes(options = {})
         iso639_locale = options[:locale] || I18n.locale.to_s
-        CalendarDateSelect.format = options[:format] || :italian
+        ::CalendarDateSelect.format = options[:format] || :italian
         calendar_date_select_includes "ubiquo", :locale => iso639_locale
       end
 

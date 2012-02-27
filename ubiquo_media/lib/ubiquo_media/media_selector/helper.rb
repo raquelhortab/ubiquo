@@ -57,7 +57,7 @@ module UbiquoMedia
       #
       # More options are added to other assets, its told to the view here.
       def advanced_asset_form_for( asset, options = nil)
-        advanced_edit_ubiquo_asset_path( asset, options ) if asset.is_resizeable?
+        ubiquo.advanced_edit_asset_path( asset, options ) if asset.is_resizeable?
       end
 
       # Parameters to append to a link that brings to advanced_edit form

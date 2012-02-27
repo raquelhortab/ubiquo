@@ -89,7 +89,7 @@ module UbiquoMedia
 
           prc = Proc.new do
             def is_full?
-              return false if self.options[:size].to_sym == :many
+              return false if self.options[:size].to_s.to_sym == :many
               self.size >= self.options[:size]
             end
 

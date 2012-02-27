@@ -159,7 +159,7 @@
                 :before => "myLightWindow.innerLoadingStart();",
                 :after => "myLightWindow.innerLoadingEnd();",
                 :type => :synchronous,
-                :url => restore_ubiquo_asset_path(@asset, :target => params[:target]),
+                :url => ubiquo.restore_asset_path(@asset, :target => params[:target]),
                 :method => :post,
                 :allow_scripts => true,
                 :confirm => shared_asset_msg.to_s + " "+ t('ubiquo.media.confirm_asset_restore')

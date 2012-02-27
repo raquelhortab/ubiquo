@@ -34,7 +34,7 @@ table_class += " edit_on_row_click" if edit_on_row_click
 %>
 <% if rows.size > 0 %>
   <% content_for :sidebar do %>
-	<%= link_to_new.html_safe %>
+  <%= link_to_new.html_safe %>
   <% end %>
   <table id="<%= table_id %>" class="<%= table_class %>" width="100%" border="1" cellspacing="0" cellpadding="3">
     <% unless hide_headers %>

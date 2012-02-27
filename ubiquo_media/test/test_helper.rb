@@ -17,11 +17,17 @@ TestSupport::Database.migrate!
 TestSupport::Database.create_test_model
 
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
+
 class ActiveSupport::TestCase
+  include Ubiquo::Engine.routes.url_helpers
+  include Rails.application.routes.mounted_helpers
+
   fixtures :all
 
+  protected
+
   # Create a test file for tests
-  def test_file(contents = "contents", ext = "txt")
+  def _test_file(contents = "contents", ext = "txt")
     Tempfile.new("test." + ext).tap do |file|
       file.write contents
       file.flush
@@ -33,7 +39,7 @@ class ActiveSupport::TestCase
               "/fixtures/resources/sample.png"))
   end
 
-  def mock_asset_params params = {}
+  def mock_asset_params(params = {})
     mock_params(params, Ubiquo::AssetsController)
   end
 
@@ -48,8 +54,8 @@ end
 
 class AssetType # Using this model because is very simple and has no validations
   media_attachment :simple
-  media_attachment :multiple,   :size => :many
-  media_attachment :sized,      :size => 2
+  media_attachment :multiple,   :size =>  :many
+  media_attachment :sized,      :size =>  2
   media_attachment :all_types,  :types => :ALL
   media_attachment :some_types, :types => %w{audio video}
 end
