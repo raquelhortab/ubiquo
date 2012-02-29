@@ -154,7 +154,7 @@ module UbiquoCategories
           []
         end
         autocomplete_options = {
-          :url => ubiquo_category_set_categories_path(url_params),
+          :url => ubiquo.category_set_categories_path(url_params),
           :current_values => Array(object.send(key)).to_json(:only => [:id, :name]),
           :style => style
         }
