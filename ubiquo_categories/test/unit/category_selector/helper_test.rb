@@ -15,8 +15,8 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   def test_category_selector_in_form_object
     categorize :tags
     object = CategoryTestModel.new
-    self.expects(:category_selector).with(:post, :tags, {:object => object}, {})
-    form_for(:post, object, :url => '') do |f|
+    self.expects(:category_selector).with("category_test_model", :tags, {:object => object}, {})
+    form_for([:category_test_model, object], :url => '') do |f|
       f.category_selector :tags
     end
   end
@@ -29,12 +29,12 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
 
     categorize :section
 
-    form_for(:post, CategoryTestModel.new, :url => '') do |f|
+    output = form_for([:category_test_model, CategoryTestModel.new], :url => '') do |f|
       concat f.category_selector(:section, :type => 'checkbox')
       concat f.category_selector(:section, :type => 'select')
     end
 
-    doc = HTML::Document.new(output_buffer)
+    doc = HTML::Document.new(output)
     assert_select doc.root, 'form' do
       assert_select 'input[type=checkbox]'
       assert_select 'select'
@@ -43,12 +43,12 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
 
   def test_prints_selector_with_explicit_type
     categorize :tags
-    form_for(:post, CategoryTestModel.new, :url => '') do |f|
+    output = form_for([:category_test_model, CategoryTestModel.new], :url => '') do |f|
       concat f.category_selector(:tags, :type => 'checkbox')
       concat f.category_selector(:tags, :type => 'select')
     end
 
-    doc = HTML::Document.new(output_buffer)
+    doc = HTML::Document.new(output)
     assert_select doc.root, 'form' do
       assert_select 'input[type=checkbox]'
       assert_select 'select'
@@ -61,7 +61,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     categorize(:using_from, :from => :cities)
 
     assert_nothing_raised do
-      form_for(:post, CategoryTestModel.new, :url => '') do |f|
+      form_for([:category_test_model, CategoryTestModel.new], :url => '') do |f|
         concat f.category_selector(:using_from)
       end
     end
@@ -291,6 +291,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   end
 
   def test_category_select_selector_respect_value_as_selected_option
+    categorize :tags
     object = CategoryTestModel.new
     object.tags << 'Blue'
     options = {:default => 'Red'}
@@ -307,7 +308,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     output = category_select_selector object, 'name', :tags, @set.categories, @set, options
     doc = HTML::Document.new(output)
     red_option = doc.root.find(:tag => "option", :attributes => { :value => 'Red' })
-    assert red_option.match(:attributes => { :selected => false })
+    assert_equal red_option.match(:attributes => { :selected => false }), true
   end
 
   def test_category_checkbox_selector_with_default_option
@@ -339,7 +340,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
     output = category_checkbox_selector object, 'name', :tags, @set.categories, @set, options
     doc = HTML::Document.new(output)
     red_check = doc.root.find({:attributes => { :type => 'checkbox', :value => 'Red' }})
-    assert red_check.match(:attributes => { :checked => false })
+    assert_equal red_check.match(:attributes => { :checked => false }), true
   end
 
   def test_category_checkbox_selector_respect_values_as_checked_options
