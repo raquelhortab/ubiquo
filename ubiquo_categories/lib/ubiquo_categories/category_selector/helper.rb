@@ -32,7 +32,7 @@ module UbiquoCategories
         if object.respond_to?(:required_fields) && object.required_fields.include?(key) && options[:required_field].nil?
           options[:required_field] = true
         end
-        if !object.try(:errors).try(:on, key).nil?
+        if !object.try(:errors).try(:[], key).nil?
             html_options[:class] ||= ""
             html_options[:class] = html_options[:class].split(" ").push("category-error").join(" ")
         end
