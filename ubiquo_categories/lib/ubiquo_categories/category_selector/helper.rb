@@ -29,6 +29,7 @@ module UbiquoCategories
         html_options.reverse_merge!({
           :class => "group relation-selector relation-type-#{selector_type}"
         })
+
         if object.respond_to?(:required_fields) && object.required_fields.include?(key) && options[:required_field].nil?
           options[:required_field] = true
         end
@@ -39,7 +40,7 @@ module UbiquoCategories
         wrapper_type = selector_type == :checkbox ? :fieldset : :div
         output = content_tag(wrapper_type, html_options) do
           wrapper_title = options[:name] || object.class.human_attribute_name(key)
-          (wrapper_type == :fieldset ? content_tag(:legend, wrapper_title) : "") +
+          (wrapper_type == :fieldset ? content_tag(:legend, wrapper_title) : "".html_safe) +
             send("category_#{selector_type}_selector",
                object, object_name, key, categories, options.delete(:set), options)
         end
@@ -80,23 +81,21 @@ module UbiquoCategories
             content_tag(:div, :class => "form-item-inline") do
               check_box_tag("#{object_name}[#{key}][]", category.name,
                 is_checked,
-                { :id => "#{object_name}_#{key}_#{category.id}" }.merge(options)) + ' ' +
-                label_tag("#{object_name}_#{key}_#{category.id}", category) +
-                options[:extra].to_s
+                { :id => "#{object_name}_#{key}_#{category.id}" }.merge(options))
             end
-          end.join
+          end.join.html_safe
         end
       end
 
       def category_checkbox_selector(object, object_name, key, categories, set, options = {})
         tree = convert_to_tree(categories)
-        output = ''
+        output = ''.html_safe
         if tree.keys.size == 1
-          output = checkbox_area(object, object_name, key, categories,
+          output = checkbox_area(object, object_name.html_safe, key, categories,
             { :default => options[:default] })
         else
           tree.each_pair do |parent, children|
-            output << checkbox_area(object, object_name, key,
+            output << checkbox_area(object, object_name.html_safe, key,
               categories.select{|c| c.id == parent},
               {
                 :default => options[:default],
@@ -129,7 +128,7 @@ module UbiquoCategories
         end
         output = content_tag(:div, :class => "form-item") do
           label_caption = options.delete(:name) || object.class.human_attribute_name(key)
-          label_tag("#{object_name}[#{key}][]", label_caption, "append_asterisk" => options.delete(:required_field)) +
+          label_tag("#{object_name}[#{key}][]", label_caption.html_safe, "append_asterisk" => options.delete(:required_field)) +
             select_tag(
             "#{object_name}[#{key}][]",
             options_for_select(categories_for_select, :selected => selected_value),
@@ -180,10 +179,10 @@ module UbiquoCategories
         label_caption = options[:name] || object.class.human_attribute_name(key)
         output = javascript_tag(js_code)
         output << content_tag(:div, :class => "form-item") do
-          label_tag("#{object_name}[#{key}][]", label_caption, "append_asterisk" => options.delete(:required_field)) +
-          text_field_tag("#{object_name}[#{key}][]", "",
-                         :id => "#{object_name}_#{key}_autocomplete")
+          label_tag("#{object_name}[#{key}][]", label_caption.html_safe, "append_asterisk" => options.delete(:required_field)) +
+            text_field_tag("#{object_name}[#{key}][]", "",:id => "#{object_name}_#{key}_autocomplete")
         end
+
         output
       end
 
