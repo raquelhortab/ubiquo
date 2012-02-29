@@ -61,13 +61,26 @@ end
 
 def validate_presence_of_category attr, options = {}
   CategoryTestModel.class_eval do
-    validates_presence_of attr, :identifier => :category_test_presence
+    validates attr, :presence => true
   end
 end
 def invalidate_presence_of_category attr, options = {}
-  CategoryTestModel.validate.delete_if do |v|
-    v.identifier == :category_test_presence
-  end if CategoryTestModel.validate.respond_to?(:delete_if)
+  callbacks = CategoryTestModel._validate_callbacks
+  callbacks.delete_if do |callback|
+    filter = callback.raw_filter
+    if filter.is_a?(ActiveModel::Validations::PresenceValidator)
+      if callback.raw_filter.attributes.size > 1
+        callback.raw_filter.attributes.delete(attr)
+        false
+      else
+        true
+      end
+    else
+      false
+    end
+
+  end
+  CategoryTestModel._validate_callbacks = callbacks
 end
 
 def categorize_base attr, options = {}
