@@ -342,7 +342,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
       :name => "Created asset",
       :description => "Description",
       :asset_type_id => AssetType.find(:first).id,
-      :resource => _test_file(file_contents, file_ext ),
+      :resource => _test_file(file_contents, file_ext),
       :is_protected => false,
     }
 
