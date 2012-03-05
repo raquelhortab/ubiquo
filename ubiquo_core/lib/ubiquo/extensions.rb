@@ -37,3 +37,5 @@ ActionView::Base.send(:extend, Ubiquo::Extensions::ConfigCaller)
 
 ActionController::Base.helper(Ubiquo::Extensions::Helper)
 ActionView::Base.send(:include, Ubiquo::Extensions::Helper)
+
+ActionController::Base.send(:include, Ubiquo::Extensions::RespondsToParent)
