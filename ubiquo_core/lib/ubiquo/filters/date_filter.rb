@@ -18,7 +18,9 @@ module Ubiquo
         lateral_filter(@options) do |keepable_params|
           @context.calendar_includes + \
           @context.content_tag(:div, :id => 'date_filter_content') do
-            @context.form_tag(@options[:url_for_options], :method => :get, :id => "frm_calendar") do
+            _url_for_options = @options[:url_for_options]
+            _url_for_options = '' if _url_for_options.nil?
+            @context.form_tag(_url_for_options, :method => :get, :id => "frm_calendar") do
               hidden_fields(keepable_params) + \
               @context.content_tag(:div, :class => 'form-item') do
                 @context.content_tag(:label, :for => "filter_" + date_start_field.to_s) { I18n.t('ubiquo.base.from') } + \
