@@ -61,7 +61,14 @@ module Ubiquo
         define_method("#{field}_is_public?") do
           visibility.to_sym == :public
         end
-        styles = Marshal.load(Marshal.dump(options[:styles])) || {}
+
+        # Styles could be a lambda
+        styles = if options[:styles].respond_to?(:call)
+                   options[:styles].clone
+                 else
+                   Marshal.load(Marshal.dump(options[:styles])) || {}
+                 end
+
         processors = options[:processors] || [:thumbnail]
         s3 = {:key => '', :secret =>'', :bucket => ''}
         if File.exists?("#{Rails.root}/config/s3.yml")

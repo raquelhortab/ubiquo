@@ -83,13 +83,26 @@ class Asset < ActiveRecord::Base
 
   # Correct parameters to the resize_and_crop processor.
   # If the processor is other, the extra params will be ignored
+  #
+  # @return <lambda> It will be processed by paperclip to get the styles
   def self.correct_styles(styles_list = {})
     global_options = Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_options)
 
-    styles_list.map do |style, value|
+    _styles = styles_list.map do |style, value|
       extra_options = global_options.is_a?(Proc) ? global_options.call(style, value) : global_options
       [style, {:geometry => value, :style_name => style}.merge(extra_options)]
     end.to_hash
+
+    # Only process images
+    # link: http://stackoverflow.com/questions/5289674/paperclip-process-images-only
+    lambda do |a|
+      result = {}
+      if a.nil? || a.content_type.nil? || a.content_type.include?('image')
+        result = _styles
+      end
+
+      result
+    end
   end
 
   def is_resizeable?
