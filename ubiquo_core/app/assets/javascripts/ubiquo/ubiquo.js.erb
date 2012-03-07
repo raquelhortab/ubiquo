@@ -21,9 +21,6 @@ document.observe("dom:loaded", function() {
           del_btn.remove();
           e.insert('<td class="delete"></td>');
           e.down('td.delete').insert(del_btn);
-          del_btn.observe('click', function(ev){
-            Event.stop(ev);
-          });
       }
 
       edit_url = null;
