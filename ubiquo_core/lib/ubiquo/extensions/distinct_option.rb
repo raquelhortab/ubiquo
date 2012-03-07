@@ -46,6 +46,7 @@ module Ubiquo
       def select_distinct(options)
         select_in_scope_attributes = select_values.join if select_values.present?
         rails_select = options[:select] || select_in_scope_attributes || default_select
+        return rails_select if rails_select =~ /DISTINCT/
 
         if connection.adapter_name == 'PostgreSQL'
           # By default table.id is the distinct on clause.
