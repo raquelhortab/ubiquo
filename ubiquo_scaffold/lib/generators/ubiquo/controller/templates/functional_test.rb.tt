@@ -29,7 +29,7 @@ class Ubiquo::<%= controller_class_name %>Test < ActionController::TestCase
       post :create, <%= singular_name %>: <%= singular_name %>_attributes
     end
 
-    assert_redirected_to ubiquo_<%= plural_name %>_url
+    assert_redirected_to ubiquo.<%= plural_name %>_url
   end
 
   test "should get edit" do
@@ -43,7 +43,7 @@ class Ubiquo::<%= controller_class_name %>Test < ActionController::TestCase
         id: @<%= singular_name %>.to_param,
         <%= singular_name %>: <%= singular_name %>_attributes
 
-    assert_redirected_to ubiquo_<%= plural_name %>_url
+    assert_redirected_to ubiquo.<%= plural_name %>_url
   end
 
   test "should destroy <%= singular_name %>" do
@@ -51,14 +51,14 @@ class Ubiquo::<%= controller_class_name %>Test < ActionController::TestCase
       delete :destroy, id: @<%= singular_name %>.to_param
     end
 
-    assert_redirected_to ubiquo_<%= plural_name %>_url
+    assert_redirected_to ubiquo.<%= plural_name %>_url
   end
   <%- if options[:translatable] -%>
 
   test "should redirect to correct locale" do
     get :edit, id: @<%= singular_name %>.to_param, locale: 'es'
 
-    assert_redirected_to ubiquo_<%= plural_name %>_url
+    assert_redirected_to ubiquo.<%= plural_name %>_url
   end
   <%- end -%>
 

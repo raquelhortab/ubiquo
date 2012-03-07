@@ -25,7 +25,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     @<%= singular_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] -%>
     unless @<%= singular_name %>.in_locale?(current_locale)
-      redirect_to ubiquo_<%= plural_name %>_url
+      redirect_to ubiquo.<%= plural_name %>_url
       return
     end
     <%- end -%>
@@ -53,7 +53,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     @<%= singular_name %> = <%= class_name %>.find(params[:id])
     <%- if options[:translatable] -%>
     unless @<%= singular_name %>.in_locale?(current_locale)
-      redirect_to ubiquo_<%= plural_name %>_url
+      redirect_to ubiquo.<%= plural_name %>_url
       return
     end
     <%- end -%>
@@ -72,7 +72,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     respond_to do |format|
       if @<%= singular_name %>.save
         flash[:notice] = t("ubiquo.<%= singular_name %>.created")
-        format.html { redirect_to(ubiquo_<%= plural_name %>_url) }
+        format.html { redirect_to(ubiquo.<%= plural_name %>_url) }
         format.json { render json: @<%= singular_name %>, status: :created, location: @<%= singular_name %> }
       else
         flash[:error] = t("ubiquo.<%= singular_name %>.create_error")
@@ -99,7 +99,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     respond_to do |format|
       if ok
         flash[:notice] = t("ubiquo.<%= singular_name %>.edited")
-        format.html { redirect_to(ubiquo_<%= plural_name %>_url) }
+        format.html { redirect_to(ubiquo.<%= plural_name %>_url) }
         format.json { head :ok }
       else
         flash[:error] = t("ubiquo.<%= singular_name %>.edit_error")
@@ -135,7 +135,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     <%- end -%>
 
     respond_to do |format|
-      format.html { redirect_to(ubiquo_<%= plural_name %>_url) }
+      format.html { redirect_to(ubiquo.<%= plural_name %>_url) }
       format.xml  { head :ok }
     end
   end

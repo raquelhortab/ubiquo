@@ -8,15 +8,15 @@
   <%%= render :partial => '<%= singular_name %>', :object => <%= singular_name %> %>
 <%% end %>
 
-<%% ubiquo_form_for([:ubiquo, @<%= singular_name %>]) do |f| %>
+<%%= ubiquo_form_for([ubiquo, @<%= singular_name %>]) do |f| %>
   <%%= render :partial => 'form', :locals => { :f => f } %>
-  <%% f.submit_group do %>
+  <%%= f.submit_group do %>
     <%%= f.update_button %>
     <%%= f.back_button %>
   <%% end %>
 <%% end %>
 
-<%% content_for :sidebar do %>
+<%%= content_for :sidebar do %>
   <%- if options[:translatable] -%>
   <%%= show_translations(@<%= singular_name %>) %>
   <%- end -%>

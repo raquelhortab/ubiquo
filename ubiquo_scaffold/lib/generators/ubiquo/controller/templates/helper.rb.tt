@@ -29,7 +29,7 @@ module Ubiquo::<%= class_name.pluralize %>Helper
              },
              pages:       pages,
              link_to_new: link_to(t("ubiquo.<%= singular_name %>.index.new"),
-                                  new_ubiquo_<%= singular_name %>_path, class: 'new')
+                                  ubiquo.new_<%= singular_name %>_path, class: 'new')
            }
     )
   end
@@ -41,32 +41,32 @@ module Ubiquo::<%= class_name.pluralize %>Helper
     <%- if options[:translatable] -%>
     if <%= singular_name %>.in_locale?(current_locale)
       actions << link_to(t("ubiquo.edit"),
-                         [:edit, :ubiquo, <%= singular_name %>],
+                         [ubiquo, :edit, <%= singular_name %>],
                          class: 'btn-edit')
     else
       actions << link_to(t("ubiquo.translate"),
-                         new_ubiquo_<%= singular_name %>_path(from: <%= singular_name %>.content_id))
+                         ubiquo.new_<%= singular_name %>_path(from: <%= singular_name %>.content_id))
     end
 
     actions << link_to(t("ubiquo.remove"),
-                       ubiquo_<%= singular_name %>_path(<%= singular_name %>, destroy_content: true),
+                       ubiquo.<%= singular_name %>_path(<%= singular_name %>, destroy_content: true),
                        confirm: t("ubiquo.<%= singular_name %>.index.confirm_removal"),
                        method:  :delete,
                        class:   'btn-delete')
 
     if <%= singular_name %>.in_locale?(current_locale, skip_any: true) && !<%= singular_name %>.translations.empty?
       actions << link_to(t("ubiquo.remove_translation"),
-                         [:ubiquo, <%= singular_name %>],
+                         [ubiquo, <%= singular_name %>],
                          confirm: t("ubiquo.<%= singular_name %>.index.confirm_removal"),
                          method:  :delete)
     end
 
     <%- else -%>
     actions << link_to(t("ubiquo.edit"),
-                       [:edit, :ubiquo, <%= singular_name %>],
+                       [ubiquo, :edit, <%= singular_name %>],
                        class: 'btn-edit')
     actions << link_to(t("ubiquo.remove"),
-               [:ubiquo, <%= singular_name %>],
+               [ubiquo, <%= singular_name %>],
                confirm: t("ubiquo.<%= singular_name %>.index.confirm_removal"),
                method:  :delete,
                class:   'btn-delete')
