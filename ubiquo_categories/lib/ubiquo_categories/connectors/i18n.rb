@@ -135,14 +135,14 @@ module UbiquoCategories
             unless category.in_locale?(current_locale)
               actions << link_to(
                 t("ubiquo.translate"),
-                new_ubiquo_category_set_category_path(
+                ubiquo.new_category_set_category_path(
                   :from => category.content_id
                   )
                 )
             end
 
             actions << link_to(t("ubiquo.remove"),
-              ubiquo_category_set_category_path(category_set, category, :destroy_content => true),
+              ubiquo.category_set_category_path(category_set, category, :destroy_content => true),
               :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete, :class => 'btn-delete'
               )
 

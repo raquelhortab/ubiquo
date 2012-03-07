@@ -37,7 +37,7 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
       post :create, :category => category_attributes, :category_set_id => category_sets(:one).id
     end
 
-    assert_redirected_to ubiquo_category_set_categories_path
+    assert_redirected_to ubiquo.category_set_categories_path
   end
 
   def test_should_create_category_from_current_category_set
@@ -55,7 +55,7 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
   def test_edit_should_redirect_to_correct_locale
     get :edit, :id => categories(:one).id, :category_set_id => category_sets(:one).id, :locale => 'jp'
     if Ubiquo::Config.context(:ubiquo_categories).get(:connector).to_sym == :i18n
-      assert_redirected_to ubiquo_category_set_categories_path
+      assert_redirected_to ubiquo.category_set_categories_path
     else
       assert_response :success
     end
@@ -63,14 +63,14 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
 
   def test_should_update_category
     put :update, :id => categories(:one).id, :category => category_attributes, :category_set_id => category_sets(:one).id
-    assert_redirected_to ubiquo_category_set_categories_path
+    assert_redirected_to ubiquo.category_set_categories_path
   end
 
   def test_should_destroy_category
     assert_difference('Category.count', -1) do
       delete :destroy, :id => categories(:one).id, :category_set_id => category_sets(:one).id
     end
-    assert_redirected_to ubiquo_category_set_categories_path
+    assert_redirected_to ubiquo.category_set_categories_path
   end
 
   private

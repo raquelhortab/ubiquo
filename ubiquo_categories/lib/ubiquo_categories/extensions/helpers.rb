@@ -9,7 +9,7 @@ module UbiquoCategories
           tab.title = I18n.t("ubiquo.categories.categories")
           tab.highlights_on "ubiquo/category_sets"
           tab.highlights_on "ubiquo/categories"
-          tab.link = ubiquo_category_sets_path
+          tab.link = ubiquo.category_sets_path
         end if ubiquo_config_call(:categories_permit, {:context => :ubiquo_categories})
       end
 
