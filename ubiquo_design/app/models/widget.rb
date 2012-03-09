@@ -139,7 +139,6 @@ class Widget < ActiveRecord::Base
     self.previewable_attr = (value == true)
   end
 
-<<<<<<< HEAD
   def self.clonation_exception(value)
     exceptions = clonation_exceptions + [value.to_sym]
     self.clonation_exceptions_attr = exceptions.uniq
@@ -151,7 +150,7 @@ class Widget < ActiveRecord::Base
 
   def self.is_a_clonable_has_one?(reflection)
     reflection = self.reflections[reflection.to_sym] unless reflection.is_a?(ActiveRecord::Reflection::AssociationReflection)
-    reflection.macro == :has_one && !reflection.options.include?(:through) && is_relation_clonable?(reflection.name)
+    reflection.macro == :has_one && is_relation_clonable?(reflection.name)
   end
 
   def self.is_a_clonable_has_many?(reflection)
