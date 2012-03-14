@@ -17,7 +17,7 @@ module Ubiquo
 
       def render
         filter_field = @options[:field]
-        header_option = @options[:all_caption] ? "<option value=''>" + @options[:all_caption] + "</option>" : ""
+        header_option = @options[:all_caption] ? "<option value=''>".html_safe + @options[:all_caption] + "</option>".html_safe : "".html_safe
         field_value = (@context.params[filter_field] =~ /^\d+/)? @context.params[filter_field].to_i : @context.params[filter_field]
         field_value = @context.params[filter_field].map(&:to_i) if @context.params[filter_field].is_a?(Array)
         lateral_filter(@options) do |keepable_params|

@@ -43,7 +43,7 @@ module Ubiquo
           else
             @context.hidden_field_tag field, value, :id => nil
           end
-        end.join("\n")
+        end.join("\n").html_safe
       end
 
       def add_filter_prefix(field)
