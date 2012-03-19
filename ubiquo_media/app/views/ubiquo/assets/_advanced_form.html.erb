@@ -45,7 +45,7 @@
                 <ul class="styles">
                   <% media_styles_croppable_list.each do |style, format| %>
                     <li>
-                        <% link_to( "#",:rel => "#resize_style_wrapper_#{form_scope}_#{style} .resize-box-content" ) do %>
+                        <%= link_to( "#",:rel => "#resize_style_wrapper_#{form_scope}_#{style} .resize-box-content" ) do %>
                       <div class="resize-box-detail-title">
                         <strong><%= t("ubiquo.media.styles.#{style}.name", :default => style.to_s.humanize) %></strong>
                         <span><%= [Paperclip::Geometry.parse(format)].map{|e|"#{e.width.to_i}x#{e.height.to_i}"}.first %></span>
@@ -77,7 +77,7 @@
       <% end %>
     </div>
 
-      <% javascript_tag do %>
+      <%= javascript_tag do %>
       (function(){
         Ubiquo.Media.CropResize.InitTabs = function(){
             Ubiquo.Media.CropResize.TabbedContent.init( {

@@ -30,7 +30,7 @@
          end %>
   </div>
 </div>
-<% javascript_tag do %>
+<%= javascript_tag do %>
   $("new_<%= counter %>_form").observe('keypress', function(event){
     if(event.keyCode == Event.KEY_RETURN) {
       Event.stop(event);

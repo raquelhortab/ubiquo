@@ -13,31 +13,30 @@
     <fieldset>
       <legend><%= t('ubiquo.media.media_item_new') %></legend>
       <div class="add" id="add_<%= counter%>">
-	<%= render :partial => 'ubiquo/asset_relations/asset_form.html.erb',
-	    :locals => {
+  <%= render :partial => 'ubiquo/asset_relations/asset_form.html.erb',
+      :locals => {
               :field => field,
               :counter => counter,
               :types => field_options[:asset_types],
-              :accepted_types => field_options[:asset_types].map(&:key),
+              :accepted_types => field_options[:types],
               :visibility => visibility } %>
       </div>
     </fieldset>
     <fieldset>
       <legend><%= t('ubiquo.media.select_existing_media_item') %></legend>
       <div class="search-block" id="search_<%= counter%>">
-	<%= render :partial => 'ubiquo/asset_relations/asset_search.html.erb',
-	    :locals => {
-              :counter => counter,
-              :field => field,
-              :types => field_options[:asset_types],
-              :visibility => visibility } %>
+        <%= render :partial => 'ubiquo/asset_relations/asset_search.html.erb',
+                   :locals  => { :counter => counter,
+                                 :field => field,
+                                 :types => field_options[:asset_types].compact,
+                                 :visibility => visibility } %>
       </div>
       <div id="asset_search_results_<%= counter %>" class="search-results">
       </div>
     </fieldset>
   </div>
 </div>
-<% javascript_tag do %>
+<%= javascript_tag do %>
   <% # Extra options passed to js
   forwarded_options = {
     :crop_resize_options => {
@@ -47,21 +46,22 @@
     }
   %>
   media_fields.add_field('<%= counter %>', '<%= field %>', 
-    <%= field_options[:size].to_i %>, '<%= object_name %>',
-    <%= forwarded_options.to_json %>);
+    <%= field_options[:size].to_s.to_i %>, '<%= object_name %>',
+    <%= raw forwarded_options.to_json %>);
 
   <% asset_relations.each do |ar| %>
     <% next if ar.marked_for_destruction? %>
+    <% advanced_form_options = {:advanced_form => advanced_asset_form_for(ar.asset)} -%>
     media_fields.add_element(
-      '<%= field %>',
-      <%= ar.id.to_json %>,
-      <%= ar.asset_id %>,
-      <%= ar.name.to_json %>,
-      <%= counter %>,
-      <%= thumbnail_url(ar.asset).to_json %>,
-      <%= view_asset_link(ar.asset).to_json %>,
-      <%= ar.asset.name.to_json %>,
-      <%= {:advanced_form => advanced_asset_form_for(ar.asset)}.to_json %>
+      <%= raw field.to_json %>,
+      <%= raw ar.id.to_json %>,
+      <%= raw ar.asset_id %>,
+      <%= raw ar.name.to_json %>,
+      <%= raw counter %>,
+      <%= raw thumbnail_url(ar.asset).to_json %>,
+      <%= raw view_asset_link(ar.asset).to_json %>,
+      <%= raw ar.asset.name.to_json %>,
+      <%= raw advanced_form_options.to_json %>
     );
   <% end %>
 

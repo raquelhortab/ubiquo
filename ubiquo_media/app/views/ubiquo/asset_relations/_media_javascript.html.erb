@@ -54,9 +54,9 @@ if @is_media_included != true
             'id="#\{field}_#\{counter}_ubiquo_media_advanced_edit_#\{unique_id}" '+
             'class="<%= advanced_edit_link_attributes[:class] %>" '+
             'params="<%= advanced_edit_link_attributes[:params] %>" >' +
-<%= (h t('ubiquo.media.advanced')).to_json %> + "</a></li>" : "") +
+'<%= t('ubiquo.media.advanced') %>' + "</a></li>" : "") +
           "#{content}"+
-          "</li>")
+          "</li>");
         var elem = templ.evaluate({
           counter: counter,
           field: field,
@@ -190,9 +190,9 @@ if @is_media_included != true
         if(f['size'] == 0){
           e.innerHTML="<input type='hidden' name='"+this.fields[counter]['name']+"["+field+"_attributes][][asset_id]' />";
         } else if(f['size'] == 1){
-          e.innerHTML= <%= "<h4>#{t('ubiquo.media.selected_media_element')}:</h4><p>#{t('ubiquo.media.footer_text')}</p>".to_json %>;
+          e.innerHTML= '<%= raw "<h4>#{t('ubiquo.media.selected_media_element')}:</h4><p>#{t('ubiquo.media.footer_text')}</p>" %>';
         } else{
-          e.innerHTML= <%= "<h4>#{t('ubiquo.media.selected_media_elements')}:</h4><p>#{t('ubiquo.media.footer_text')}</p>".to_json %>;
+          e.innerHTML= '<%= raw "<h4>#{t('ubiquo.media.selected_media_elements')}:</h4><p>#{t('ubiquo.media.footer_text')}</p>" %>';
         }
         action(selector.select(".select-assets").first());
       }

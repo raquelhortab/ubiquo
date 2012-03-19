@@ -11,7 +11,7 @@
 #The media library allows to insert a media field into a model. On this example we include a _media_attachment_ attribute called _images_, with a maximum of 2 elements and accepting only images.
 #
 #  class ExampleModel
-#	  media_attachment :images, :size => 2, :types => ["image"]
+#    media_attachment :images, :size => 2, :types => ["image"]
 #    ...
 #  end
 #
@@ -25,10 +25,10 @@
 #
 #In your views you only need to use the _media_selector_ helper:
 #
-#  <% form_for ... do |form| %>
-#	  ....
-#	  <%= media_selector form, :images %>
-#	  ....
+#  <%= form_for ... do |form| %>
+#    ....
+#    <%= media_selector form, :images %>
+#    ....
 #  <% end %>
 #
 #== Add media to your views

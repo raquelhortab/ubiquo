@@ -7,7 +7,7 @@
   </div>
   <div id="resize-content">
     <%= render(:partial => "shared/ubiquo/feedback") %>
-    <% remote_form_for(:asset, @asset, :url => ubiquo.advanced_update_asset_path(@asset),
+    <%= remote_form_for(:asset, @asset, :url => ubiquo.advanced_update_asset_path(@asset),
       # We want to update ourselves and as we dont know who is our father, we do an #up on ourselves.
       :update => "' + $('crop-resize-container').up().identify() +'",
       :before => "myLightWindow.innerLoadingStart();",
@@ -18,7 +18,7 @@
 
     <% end %>
     <% if params[:target] %>
-      <% javascript_tag do %>
+      <%= javascript_tag do %>
         // We update the target!
         <%= render :partial => "update_target.rjs"%>
       <% end %>
@@ -28,7 +28,7 @@
     </div>
   </div>
 </div>
-<% javascript_tag do %>
+<%= javascript_tag do %>
   //Load inner actions when an ajax reload is done
   window.myLightWindow._setupActions();
 <% end %>

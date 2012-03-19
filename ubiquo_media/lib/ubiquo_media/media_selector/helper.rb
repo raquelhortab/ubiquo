@@ -29,8 +29,26 @@ module UbiquoMedia
       end
 
       # Returns a url where the given asset is accessible
-      def url_for_media_attachment(asset, style = nil)
-        url_for_file_attachment(asset, :resource, style)
+      #
+      # params:
+      #   asset - The Asset with the media attachment.
+      #   style - The Symbol with the name of the style to use (default: nil).
+      #   options - The Hash with the options to generate the url (default: {}):
+      #             :add_timestamp - Boolean that indicates if a timestamp
+      #                              should be added to the end of the url
+      #                              as follows:
+      #                              /media/url/file.jpg?123456
+      def url_for_media_attachment(asset, *args)
+        options = args.extract_options!
+        style   = args.first
+        url = url_for_file_attachment(asset, :resource, style)
+
+        if options[:add_timestamp]
+          time = asset.updated_at || asset.created_at || Time.now
+          url += "?#{time.to_i.to_s}"
+        end
+
+        url
       end
 
       # Return a selector containing all allowed types for a media_attachment field

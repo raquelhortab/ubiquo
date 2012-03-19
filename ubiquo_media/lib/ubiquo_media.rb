@@ -7,9 +7,6 @@ module UbiquoMedia
   class Engine < Rails::Engine
     include Ubiquo::Engine::Base
 
-    engine_name :ubiquo_media
-    isolate_namespace UbiquoMedia
-
     initializer :load_extensions do
       # NOTE: if the paperclip extension is not loaded here, the app
       #       doesn't know where to find it
@@ -24,10 +21,6 @@ module UbiquoMedia
       require 'ubiquo_media/init_settings.rb'
       _loader
     end
-
-    # initializer :load_connector, :after => :load_config_initializers do
-      # _load
-    # end
 
     protected
 

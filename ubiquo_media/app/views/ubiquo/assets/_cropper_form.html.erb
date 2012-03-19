@@ -2,7 +2,7 @@
   show_current = true unless show_current === false
   hidden= false unless hidden
   preview = true unless preview == false
-  allow_restore = style.to_s == "original" && 
+  allow_restore = style.to_s == "original" &&
     ( Ubiquo::Settings.context(:ubiquo_media).get(:advanced_edit_allow_restore_from_media_selector) ||
     params[:target].blank? )
   allow_save_as = ( style.to_s == "original" ||
@@ -23,10 +23,10 @@
 <% if asset.resource.original_filename -%>
   <% asset_area = asset.asset_areas.find_by_style(style.to_s) || asset.asset_areas.from_format(format) %>
 <div class="resize_zone resize-box-content" <%= "style='display:none;'" if hidden %>>
-   
+
   <div class="resize-box-content-left to_resize">
     <div class="resize-box-image-container">
-      <%= image_tag(url_for_media_attachment(asset, :base_to_crop),
+      <%= image_tag(url_for_media_attachment(asset, :base_to_crop, :add_timestamp => true),
        :id => "original_to_resize_#{style_scope}"
      ) %>
     </div>
@@ -35,7 +35,7 @@
     <%= hidden_field_tag "crop_resize[#{style_scope}][left]", asset_area.left %>
     <%= hidden_field_tag "crop_resize[#{style_scope}][width]", asset_area.width %>
     <%= hidden_field_tag "crop_resize[#{style_scope}][height]", asset_area.height %>
-    <% javascript_tag do %>
+    <%= javascript_tag do %>
     (function(){
       function saveCoords_<%= style_scope %>  (coords, dimensions)
       {
@@ -43,7 +43,7 @@
           //Transform values to original size
           var initial= serialize_crop_<%= style_scope %>();
 
-          var ratio = <%= ratio.to_json %>;
+          var ratio = <%= raw ratio.to_json %>;
           $( 'crop_resize_<%= style_scope %>_left').value = Math.round(coords.x1 * ratio);
           $( 'crop_resize_<%= style_scope %>_top').value = Math.round(coords.y1 * ratio);
           $( 'crop_resize_<%= style_scope %>_width' ).value = Math.round(dimensions.width * ratio);
@@ -73,7 +73,7 @@
           'original_to_resize_<%= style_scope %>',
           {
             <% if previewable %>
-              previewWrap: <%= "original_to_resize_#{style_scope}_preview".to_json %>,
+              previewWrap: <%= raw "original_to_resize_#{style_scope}_preview".to_json %>,
             <% end %>
             onEndCrop: saveCoords_<%= style_scope %>,
             captureKeys: false, //this feature does not support more than one cropper per page.
@@ -106,8 +106,8 @@
             <% end %>
               //Setting width and height to work with IEx when the base to crop is in a display:none container.
               //Changes to Cropper were required.
-              width: <%= base_to_crop_geometry.width.to_i.to_json %>,
-              height: <%= base_to_crop_geometry.height.to_i.to_json %>
+              width: <%= raw base_to_crop_geometry.width.to_i.to_json %>,
+              height: <%= raw base_to_crop_geometry.height.to_i.to_json %>
           });
           //Hack. Otherways a click NEAR the crop item gets the "undo" link shown
           cropper_instance_<%= style_scope %>.reset();
@@ -179,7 +179,7 @@
         <div class="resize-box-widget-content">
           <div class="resize-box-widget-preview-left current">
             <h5><%= t('ubiquo.media.current_image') %></h5>
-            <%= image_tag(url_for_media_attachment(asset, style.to_sym)) %>
+            <%= image_tag(url_for_media_attachment(asset, style.to_sym, :add_timestamp => true)) %>
           </div>
           <div class="resize-box-widget-preview-right new">
             <h5><%= t('ubiquo.media.new_image') %></h5>
@@ -208,7 +208,7 @@
               <fieldset>
                 <p>
                   <%= label_tag "name", Asset.human_attribute_name("name") %>
-                  <%= text_field_tag "asset_name_#{style}", @asset.name, 
+                  <%= text_field_tag "asset_name_#{style}", @asset.name,
                     :class => "resize-form-name" %>
                 </p>
                 <p class="buttons">
