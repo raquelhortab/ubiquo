@@ -1,3 +1,8 @@
+# -*- encoding: utf-8 -*-
+
+require 'rails'
+require 'prototype-rails'
+
 module Ubiquo
 
   class Engine < Rails::Engine
@@ -46,6 +51,7 @@ module Ubiquo
     end
 
     initializer :load_ubiquo_core_extensions do
+      require 'prototype-rails'
       require 'ubiquo/version'
       require 'ubiquo/plugin'
       require 'ubiquo/extensions'

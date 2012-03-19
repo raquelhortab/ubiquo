@@ -58,12 +58,12 @@ class Ubiquo::AssetsController < UbiquoController
       if !params[:accepted_types].include?( @asset.asset_type.key )
         ok = false
         @asset.destroy
-        @asset.errors.add_to_base(t("ubiquo.media.invalid_asset_type"))
+        @asset.errors[:base] << t("ubiquo.media.invalid_asset_type")
       end
     end
     respond_to do |format|
       if ok
-        format.html do 
+        format.html do
           flash[:notice] = t('ubiquo.media.asset_created')
           redirect_to(ubiquo.assets_path)
         end
@@ -90,6 +90,7 @@ class Ubiquo::AssetsController < UbiquoController
                 })
               @asset = saved_asset
             end
+            return
           end
         }
       else
@@ -112,6 +113,7 @@ class Ubiquo::AssetsController < UbiquoController
                   :accepted_types => params[:accepted_types]
                 })
             end
+            return
           end
         }
       end
@@ -129,9 +131,7 @@ class Ubiquo::AssetsController < UbiquoController
         format.xml  { head :ok }
       else
         flash[:error] = t('ubiquo.media.asset_update_error')
-        format.html {
-          render :action => "edit"
-        }
+        format.html { render :action => "edit" }
         format.xml  { render :xml => @asset.errors, :status => :unprocessable_entity }
       end
     end
@@ -178,7 +178,7 @@ class Ubiquo::AssetsController < UbiquoController
     @asset = Asset.find(params[:id])
     if !@asset.is_resizeable?
       flash[:error] = t('ubiquo.media.asset_not_resizeable')
-      redirect_to :action => "index"
+      redirect_to(ubiquo.assets_path)
     else
       render :layout => false
     end
@@ -191,9 +191,10 @@ class Ubiquo::AssetsController < UbiquoController
 
     unless params[:crop_resize_save_as_new].blank?
       original_asset = @asset
-      @asset = @asset.clone
+      @asset = original_asset.dup
       @asset.name = params[:asset_name] || @asset.name
       @asset.save!
+      @asset
     end
 
     @asset.keep_backup = ( params[:asset][:keep_backup] rescue Ubiquo::Settings.context(:ubiquo_media).get(:assets_default_keep_backup))
@@ -257,7 +258,7 @@ class Ubiquo::AssetsController < UbiquoController
           format.xml  { head :ok }
         end
       else
-        #Destroy cloned
+        # Destroy duplicate
         if original_asset
           @asset.destroy
           @asset = original_asset

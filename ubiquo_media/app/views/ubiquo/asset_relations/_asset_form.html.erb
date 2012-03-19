@@ -26,7 +26,7 @@
     <%= file_field :asset, :resource %>
     <%= link_to_function t('ubiquo.save'), :class => 'bt-upload' do |page|
            page << "$('new_#{counter}_loader').toggle();"
-           page << "send_as_form('new_#{counter}_form', '#{ubiquo_assets_url(:format => :js)}', 'POST');"
+           page << "send_as_form('new_#{counter}_form', '#{ubiquo.assets_url(:format => :js)}', 'POST');"
          end %>
   </div>
 </div>

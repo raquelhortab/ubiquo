@@ -415,7 +415,7 @@ class MediaFileTest < ActiveSupport::TestCase
     item.multiple.options[:required] = true
 
     begin
-      item.update_attributes :multiple_attributes => [two_asset_relation_attributes.first]
+      item.update_attributes :multiple_attributes => two_asset_relation_attributes
       assert_equal 2, item.multiple.size
       assert item.valid?
       assert !item.update_attributes(:multiple_attributes => {})

@@ -19,9 +19,6 @@ TestSupport::Database.create_test_model
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
 
 class ActiveSupport::TestCase
-  include Ubiquo::Engine.routes.url_helpers
-  include Rails.application.routes.mounted_helpers
-
   fixtures :all
 
   protected

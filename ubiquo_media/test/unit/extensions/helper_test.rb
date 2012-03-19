@@ -1,9 +1,11 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
+require File.dirname(__FILE__) + "/../../test_support/url_helper.rb"
 
 class UbiquoMedia::Extensions::HelperTest < ActionView::TestCase
 
   include UbiquoMedia::MediaSelector::Helper
   include Ubiquo::Helpers::CorePublicHelpers
+  include TestSupport::UrlHelper
 
   def test_ubiquo_show_media_attachment_images
     list_html = ubiquo_show_media_attachment_images(
@@ -55,17 +57,9 @@ class UbiquoMedia::Extensions::HelperTest < ActionView::TestCase
   end
 
   def create_media_test
-    test = MediaTestModel.create(:name => "value")
+    test = TestModel.create(:name => "value")
     test.images = Asset.all
+
     test
   end
-
-  ActiveRecord::Base.connection.create_table(:media_test_models, :force => true) do |t|
-    t.string :name
-  end
-
-class MediaTestModel < ActiveRecord::Base
-  media_attachment :images, :size => :many
-end
-
 end

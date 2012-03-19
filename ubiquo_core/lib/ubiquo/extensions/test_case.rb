@@ -43,8 +43,10 @@ module Ubiquo
 
         def mock_routes controller = nil
           (controller || stubbed_controller).any_instance.stubs(:request).returns(ActionController::TestRequest.new)
-          Ubiquo::CategoriesController.any_instance.stubs(:redirect_to)
-          Ubiquo::CategoriesController.any_instance.stubs(:url_for).returns('')
+          if Ubiquo.const_defined?('CategoriesController')
+            Ubiquo::CategoriesController.any_instance.stubs(:redirect_to)
+            Ubiquo::CategoriesController.any_instance.stubs(:url_for).returns('')
+          end
         end
 
         def mock_response controller = nil
@@ -61,7 +63,7 @@ module Ubiquo
           stubs.each_pair do |method, retvalue|
             connector = plugin_class(plugin)::Connectors::Base.current_connector
             helpers = connector.constants.select do |name|
-              connector.const_get(name).constants.include?('Helper')
+              connector.const_get(name).constants.map(&:to_s).include?('Helper')
             end
             helpers.each do |helper|
               connector.const_get(helper)::Helper.stubs(method).returns(retvalue)

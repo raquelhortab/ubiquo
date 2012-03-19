@@ -22,7 +22,7 @@ module UbiquoMedia
 
     initializer :register_ubiquo_plugin do
       require 'ubiquo_media/init_settings.rb'
-      _load
+      _loader
     end
 
     # initializer :load_connector, :after => :load_config_initializers do
@@ -31,7 +31,7 @@ module UbiquoMedia
 
     protected
 
-    def _load
+    def _loader
       UbiquoMedia::Connectors.load!
 
       key = :ubiquo_form_builder_media_selector_tag_options

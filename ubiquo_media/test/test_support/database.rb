@@ -29,6 +29,7 @@ module TestSupport
 
         # create models
         create_model('TestModel') do
+          media_attachment :images, :size => :many
           media_attachment :sized, :size => 2, :required => false
         end
       end

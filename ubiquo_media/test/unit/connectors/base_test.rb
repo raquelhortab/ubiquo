@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + "/../../test_helper"
+require File.dirname(__FILE__) + "/../../test_support/url_helper.rb"
 
 class UbiquoMedia::Connectors::BaseTest < ActiveSupport::TestCase
+  include TestSupport::UrlHelper
 
   Base = UbiquoMedia::Connectors::Base
 

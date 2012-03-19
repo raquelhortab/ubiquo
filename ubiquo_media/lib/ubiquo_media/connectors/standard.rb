@@ -16,8 +16,8 @@ module UbiquoMedia
           def uhook_after_update
           end
 
-          # Prepare the instance after being cloned, and still not saved
-          def uhook_cloned_object( obj )
+          # Prepare the instance after being duplicated, and still not saved
+          def uhook_duplicated_object(obj)
           end
         end
 
@@ -76,10 +76,18 @@ module UbiquoMedia
           # Returns the available actions links for a given asset
           def uhook_asset_index_actions asset
             actions = [
-              link_to(t('ubiquo.edit'), ubiquo.edit_asset_path(asset), :class => 'btn-edit'),
-              link_to(t('ubiquo.remove'), ubiquo.asset_path(asset), :confirm => t('ubiquo.media.confirm_asset_removal'), :method => :delete, :class => 'btn-delete'),
+              link_to(t('ubiquo.edit'),
+                      ubiquo.edit_asset_path(asset),
+                      :class => 'btn-edit'),
+              link_to(t('ubiquo.remove'),
+                      ubiquo.asset_path(asset),
+                      :confirm => t('ubiquo.media.confirm_asset_removal'),
+                      :method => :delete,
+                      :class => 'btn-delete'),
             ]
-            actions << link_to(t('ubiquo.media.advanced_edit'), ubiquo.advanced_edit_asset_path(asset),advanced_edit_link_attributes) if asset.is_resizeable?
+            actions << link_to(t('ubiquo.media.advanced_edit'),
+                               ubiquo.advanced_edit_asset_path(asset),
+                               advanced_edit_link_attributes) if asset.is_resizeable?
             actions
           end
 
@@ -179,9 +187,13 @@ module UbiquoMedia
       end
 
       def self.prepare_mocks
-        add_mock_helper_stubs({
-          :edit_asset_path => '', :asset_path => '',
-        })
+        ubiquo_stub = Class.new do
+          def edit_asset_path(*); ''; end
+          def asset_path(*); ''; end
+          def advanced_edit_asset_path(*); ''; end
+        end.new
+
+        add_mock_helper_stubs(:ubiquo => ubiquo_stub)
       end
     end
   end

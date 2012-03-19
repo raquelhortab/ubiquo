@@ -17,8 +17,8 @@ class Asset < ActiveRecord::Base
   validates_presence_of :name, :asset_type_id, :type
   before_validation :set_asset_type, :on => :create
   after_update :uhook_after_update
-  attr_accessor :cloned_from
-  after_create :save_backup_on_clone
+  attr_accessor :duplicated_from
+  after_create :save_backup_on_dup
   after_save :update_backup
   after_save :save_geometries
 
@@ -132,19 +132,29 @@ class Asset < ActiveRecord::Base
     File.exists? backup_path
   end
 
-  # clone the asset (not the related models) and the resource
-  def clone
-    obj                    = super
-    obj.resource           = self.resource_file
-    obj.resource_file_name = self.resource_file_name
-    obj.cloned_from        = self
-    uhook_cloned_object( obj )
+  # dup the asset (not the related models) and the resource
+  # NOTE: We want the dup method, not the clone. From the Rails 3 doc:
+  #
+  # ActiveRecord::Base#dup and ActiveRecord::Base#clone semantics have changed
+  # to closer match normal Ruby dup and clone semantics.
+  #
+  # Calling ActiveRecord::Base#clone will result in a shallow copy of the
+  # record, including copying the frozen state. No callbacks will be called.
+  #
+  # Calling ActiveRecord::Base#dup will duplicate the record, including calling
+  # after initialize hooks. Frozen state will not be copied, and all
+  # associations will be cleared. A duped record will return true for
+  # new_record?, have a nil id field, and is saveable.
+  def dup
+    obj                 = super
+    obj.duplicated_from = self
+    uhook_duplicated_object(obj)
 
     obj
   end
 
-  def clone?
-    self.cloned_from ? true : false
+  def dup?
+    self.duplicated_from ? true : false
   end
 
   def geometry(style = :original)
@@ -195,11 +205,11 @@ class Asset < ActiveRecord::Base
     end
   end
 
-  # Keeps the backup file when an asset has been cloned
-  def save_backup_on_clone
-    if self.cloned_from && self.cloned_from.restorable? && self.keep_backup
+  # Keeps the backup file when an asset has been duplicated
+  def save_backup_on_dup
+    if self.duplicated_from && self.duplicated_from.restorable? && self.keep_backup
       FileUtils.mkdir_p( File.dirname( self.backup_path ))
-      FileUtils.cp( self.cloned_from.backup_path, self.backup_path )
+      FileUtils.cp( self.duplicated_from.backup_path, self.backup_path )
     end
   end
 
@@ -213,7 +223,7 @@ class Asset < ActiveRecord::Base
   def generate_geometries
     self.asset_geometries.destroy_all
 
-    unless self.clone?
+    unless self.dup?
       @asset_geometries_to_save = []
 
       if self.resource && self.resource_content_type.include?('image')
@@ -226,7 +236,7 @@ class Asset < ActiveRecord::Base
   end
 
   def save_geometries
-    unless self.clone?
+    unless self.dup?
       @asset_geometries_to_save ||= []
 
       self.asset_geometries.destroy_all unless @asset_geometries_to_save.empty?
