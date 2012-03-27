@@ -45,7 +45,8 @@ module Ubiquo
           html_options.reverse_merge!({
             :class => "group relation-selector relation-type-#{selector_type}"
           })
-          wrapper_type = selector_type == :checkbox ? :fieldset : :div
+          wrapper_type = options[:group] if options.key?(:group)
+          wrapper_type ||= selector_type == :checkbox ? :fieldset : :div
           output = content_tag(wrapper_type, html_options) do
             inst_name = options[:name] || object.class.human_attribute_name(key)
             caption = options[:required] == true ? "#{inst_name} *" : inst_name
@@ -226,6 +227,7 @@ module Ubiquo
         field_autocomplete = content_tag(:div, :class => "form-item") do
           label_tag("#{object_name}[#{key}][]", label_caption) +
             text_field_tag(options[:initial_text_field_tag_name], "",
+                           :class => "#{object_name}_#{options[:key_field]}_autocomplete",
                            :id => "#{object_name}_#{options[:key_field]}_autocomplete")
         end
         output << field_autocomplete
