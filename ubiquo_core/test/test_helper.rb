@@ -33,7 +33,6 @@ def disable_settings_override
 end
 
 class ActiveSupport::TestCase
-  include Ubiquo::Engine.routes.url_helpers
   include Rails.application.routes.mounted_helpers
 end
 

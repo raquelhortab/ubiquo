@@ -51,7 +51,6 @@ module Ubiquo
     end
 
     initializer :load_ubiquo_core_extensions do
-      require 'prototype-rails'
       require 'ubiquo/version'
       require 'ubiquo/plugin'
       require 'ubiquo/extensions'
@@ -65,10 +64,6 @@ module Ubiquo
       require 'ubiquo/relation_selector'
       require 'ubiquo/permissions_interface'
       require 'ubiquo/init_settings.rb'
-    end
-
-    initializer :register_ubiquo_plugin do
-#      require 'ubiquo/init_settings.rb'
     end
 
     initializer :load_settings_connector do
