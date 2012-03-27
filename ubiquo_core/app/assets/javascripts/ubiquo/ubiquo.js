@@ -25,9 +25,9 @@ document.observe("dom:loaded", function() {
             Event.stop(ev);
           });
       }
-      
+
       edit_url = null;
-      if(edit_btn != undefined){ 
+      if(edit_btn != undefined){
           e.addClassName("editable");
           edit_url = edit_btn.readAttribute('href');
           e.writeAttribute('title',edit_btn.readAttribute('title'));
@@ -47,8 +47,8 @@ document.observe("dom:loaded", function() {
           });
 
       }
-      
-      
+
+
       // Is there any action left?
       // otherways remove the "actions" cell from everywhere
       if( e.select(".actions a").length > 0 ) remove_actions_cell = false;
@@ -122,7 +122,7 @@ document.observe("dom:loaded", function() {
   if (first_form) {
     var first_input = first_form.select('input[type!=hidden]').first();
     if (first_input) { //Ubiquo form
-      first_input.focus(); 
+      first_input.focus();
     }
   }
 });
@@ -298,7 +298,7 @@ function isSingleIput(dom, settingKey){
 }
 function isCheckbox(dom, settingKey){
   var input = dom.getElementsBySelector('input[name="' + settingKey + '"]').first();
-  return input && input.type == 'checkbox' && input.checked == true
+  return input && input.type == 'checkbox'
 }
 function isPassword(dom, settingKey){
   var input = dom.getElementsBySelector('input[name="' + settingKey + '"]').first();
@@ -383,7 +383,7 @@ function collectAndSendValues(selectedContext, selectedSettingKey){
   var form = $('bulk_submit');
   addHiddenFieldsForSettings(form, settings);
   form.submit();
-
+  return false;
 }
 //Init tabs before page load but after required dom objects loaded.
 //This initalization could be done on dom:loaded but it creates a strange effect.
