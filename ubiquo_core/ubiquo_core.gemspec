@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "rails", ["~> 3.2.0"]
   s.add_runtime_dependency "prototype-rails", ["~> 3.2.0"]
   s.add_runtime_dependency "paperclip", ["~> 2.5.2"]
+  s.add_runtime_dependency "calendar_date_select"
   s.add_development_dependency "mocha", "~> 0.10.0"
   s.add_development_dependency "sqlite3", "~> 1.3.5"
   s.add_development_dependency 'linecache19'
