@@ -8,13 +8,7 @@ end
 # To use or not this backend to fallback the ymls is a decision left to the end app.
 I18n::Backend::Fallbacks
 
-require 'ubiquo_i18n'
-
-config.after_initialize do
-  Locale.current = Locale.default if Locale.table_exists?
-end
-
-Ubiquo::Plugin.register(:ubiquo_i18n, directory, config) do |config|
+Ubiquo::Plugin.register(:ubiquo_i18n) do |config|
 
   config.add :locales_default_order_field, "native_name"
   config.add :locales_default_sort_order, "ASC"
