@@ -1,6 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require "bundler/gem_tasks"
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -8,7 +9,6 @@ task :default => :test
 desc 'Test the ubiquo_activity plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
-  t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
