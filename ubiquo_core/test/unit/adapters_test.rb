@@ -110,22 +110,12 @@ class Ubiquo::AdaptersTest < ActiveSupport::TestCase
     ActiveRecord::Base.connection.drop_table(:test)
   end
 
-  def test_should_same_create_table_options_that_drop_table_options
-    options = { :force => true, :test => "test" }
-    ActiveRecord::Base.connection.expects(:table_exists?).with(:table_name).returns(true)
-    ActiveRecord::Base.connection.expects(:drop_table).with do |table_name, opts|
-      # Sometimes adapters can add the options parameters like MySQL for InnoDB for example
-      table_name == :table_name && options == opts.slice(*options.keys)
-    end
-    ActiveRecord::Base.connection.expects(:execute).at_least_once.returns([])
-    ActiveRecord::Base.connection.create_table(:table_name, options) { }
-  end
-
-  def test_drop_table_doesnt_use_force_option
-    options = stub
-    options.expects("[]").with(:force).never
-    ActiveRecord::Base.connection.create_table(:test, { :force => true }) { }
-    ActiveRecord::Base.connection.drop_table(:test, options) { }
+  def test_create_table_with_force_and_dropping_does_not_deletes_fresh_sequences
+    ActiveRecord::Base.connection.create_table(:test, :force => true){}
+    ActiveRecord::Base.connection.create_table(:test, :force => true){|table|
+      table.sequence :test, :content_id
+    }
+    assert ActiveRecord::Base.connection.list_sequences("test_").include?("test_$_content_id")
   end
 
 end
