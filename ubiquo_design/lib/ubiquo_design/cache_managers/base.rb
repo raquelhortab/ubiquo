@@ -163,7 +163,7 @@ module UbiquoDesign
           procs_key = ''
           if policies[:procs].present?
             proc_ids = policies[:procs].map do |proc_raw|
-              proc = case proc_raw
+              _proc = case proc_raw
               when Proc
                 next unless options[:scope].respond_to?(:params)
                 proc_raw
@@ -174,13 +174,13 @@ module UbiquoDesign
                   proc_raw.last
                 end
               end
-              if proc.is_a?(Proc)
-                "###{proc.bind(options[:scope]).call(options[:widget])}"
-              elsif proc.is_a?(Symbol)
+              if _proc.is_a?(Proc)
+                "###{_proc.bind(options[:scope]).call(options[:widget])}"
+              elsif _proc.is_a?(Symbol)
                 if options[:scope].respond_to?(:params)
-                  "###{options[:scope].send(:params)[proc]}"
+                  "###{options[:scope].send(:params)[_proc]}"
                 else
-                  "###{options[:scope].send(proc)}"
+                  "###{options[:scope].send(_proc)}"
                 end
               end
             end

@@ -67,7 +67,7 @@ class UbiquoDesign::CacheManagers::BaseTest < ActiveSupport::TestCase
   test 'calculate_key for a widget with procs' do
     UbiquoDesign::CachePolicies.define(:test) do
       {
-        :free => [lambda{ one }, lambda{ two }]
+        :free => [lambda { |*a| one }, lambda { |*a| two }]
       }
     end
     widget = create_widget
@@ -85,7 +85,7 @@ class UbiquoDesign::CacheManagers::BaseTest < ActiveSupport::TestCase
   test 'calculate_key for a widget with params and procs' do
     UbiquoDesign::CachePolicies.define(:test) do
       {
-        :free => [lambda{ one }, :params]
+        :free => [lambda { |*a| one }, :params]
       }
     end
     widget = create_widget
@@ -140,12 +140,14 @@ class UbiquoDesign::CacheManagers::BaseTest < ActiveSupport::TestCase
   end
 
   test 'calculate_key for widget with proc mappings' do
+    page = pages(:one)
+
     UbiquoDesign::CachePolicies.define(:test) do
       {
-        :free => [{'Page' => {:id => lambda{|a| one}}}]
+        :free => [{'Page' => { :id => lambda { |*a| one } } }]
       }
     end
-    page = pages(:one)
+
     widget = create_widget
     key = @manager.send(
       :calculate_key,

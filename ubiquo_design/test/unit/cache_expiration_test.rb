@@ -125,9 +125,10 @@ class UbiquoDesign::CacheExpirationTest < ActiveSupport::TestCase
   test 'should_expire_correct_widgets_on_different_model_instance_updates_with_proc_mapping' do
     UbiquoDesign::CachePolicies.define(:test) do
       {
-        :free => [{'Page' => { :id => lambda{one}}}, 'Free']
+        :free => [{ 'Page' => { :id => lambda { |*a| one } } }, 'Free']
       }
     end
+
     free_widget = Free.first
     widget = widgets(:one)
     page = pages(:one)
