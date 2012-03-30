@@ -5,21 +5,18 @@ class <%= model_name %>WidgetUbiquoTest < ActionController::TestCase
   tests Ubiquo::WidgetsController
 
   test "edit new form" do
-    login_as
     widget, page = create_widget(:<%= name %>)
     get :show, :page_id => page.id, :id => widget.id
     assert_response :success
   end
 
   test "edit form" do
-    login_as
     widget, page = create_widget(:<%= name %>)
     get :show, :page_id => page.id, :id => widget.id
     assert_response :success
   end
 
   test "form submit" do
-    login_as
     widget, page = create_widget(:<%= name %>)
     xhr :post, :update, :page_id => page.id,
                         :id => widget.id,
@@ -29,7 +26,6 @@ class <%= model_name %>WidgetUbiquoTest < ActionController::TestCase
 
   # Uncomment if it is a configurable widget, otherwise it should never return errors
   #test "form submit with errors" do
-  #  login_as
   #  widget, page = create_widget(:<%= name %>)
   #  xhr :post, :update, :page_id => page.id,
   #                      :id => widget.id,

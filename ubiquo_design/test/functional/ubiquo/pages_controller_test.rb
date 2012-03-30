@@ -4,7 +4,6 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
 
   def setup
-    login_as
   end
 
   def test_should_get_index
@@ -16,12 +15,6 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
     pages.each do |page|
       assert_equal page.is_the_published?, false
     end
-  end
-
-  def test_shouldnt_get_index_without_permission
-    login_as :eduard
-    get :index
-    assert_response :forbidden
   end
 
   def test_should_get_index_without_remove_for_keyed_pages

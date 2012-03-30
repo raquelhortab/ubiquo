@@ -4,7 +4,6 @@ class FreeWidgetUbiquoTest < ActionController::TestCase
   tests Ubiquo::WidgetsController
 
   test "edit new form" do
-    login_as
     widget, page = create_widget(:free)
     get :show, :page_id => page.id,
                :id => widget.id
@@ -12,7 +11,6 @@ class FreeWidgetUbiquoTest < ActionController::TestCase
   end
 
   test "edit form" do
-    login_as
     widget, page = create_widget(:free)
     get :show, :page_id => page.id,
                :id => widget.id
@@ -20,7 +18,6 @@ class FreeWidgetUbiquoTest < ActionController::TestCase
   end
 
   test "form submit" do
-    login_as
     widget, page = create_widget(:free)
     xhr :post, :update, :page_id => page.id,
                         :id => widget.id,
@@ -29,7 +26,6 @@ class FreeWidgetUbiquoTest < ActionController::TestCase
   end
 
   test "form submit with errors" do
-    login_as
     widget, page = create_widget(:free)
     xhr :post, :update, :page_id => page.id,
                         :id => widget.id,

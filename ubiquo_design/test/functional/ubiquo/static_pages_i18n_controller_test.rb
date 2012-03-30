@@ -12,7 +12,6 @@ class Ubiquo::StaticPagesI18nControllerTest < ActionController::TestCase
     def setup
       save_current_connector(:ubiquo_design)
       UbiquoDesign::Connectors::I18n.load!
-      login_as
     end
 
     def teardown

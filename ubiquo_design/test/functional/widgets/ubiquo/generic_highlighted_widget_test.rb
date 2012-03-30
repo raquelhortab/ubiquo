@@ -7,21 +7,18 @@ class GenericHighlightedWidgetUbiquoTest < ActionController::TestCase
   end
 
   test "edit new form" do
-    login_as
     widget, page = create_widget(:generic_highlighted)
     get :show, :page_id => page.id, :id => widget.id
     assert_response :success
   end
 
   test "edit form" do
-    login_as
     widget, page = create_widget(:generic_highlighted)
     get :show, :page_id => page.id, :id => widget.id
     assert_response :success
   end
 
   test "form submit" do
-    login_as
     widget, page = create_widget(:generic_highlighted)
     xhr :post, :update, :page_id => page.id,
                         :id => widget.id,
@@ -30,7 +27,6 @@ class GenericHighlightedWidgetUbiquoTest < ActionController::TestCase
   end
 
   test "form submit with errors" do
-    login_as
     widget, page = create_widget(:generic_listing)
     xhr :post, :update, :page_id => page.id,
                         :id => widget.id,

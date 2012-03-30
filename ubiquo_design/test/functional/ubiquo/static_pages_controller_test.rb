@@ -5,7 +5,6 @@ class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
 
   def setup
-    login_as
     Ubiquo::Settings.context(:ubiquo_design).set(:block_type_for_static_section_widget, :main)
   end
 
@@ -26,12 +25,6 @@ class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
     pages.each do |page|
       assert_equal page.is_the_published?, false
     end
-  end
-
-  def test_shouldnt_get_index_without_permission
-    login_as :eduard
-    get :index
-    assert_response :forbidden
   end
 
   def test_should_get_new
