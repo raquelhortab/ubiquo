@@ -62,9 +62,11 @@ class Page < ActiveRecord::Base
   end
 
   # Initialize pages as drafts.
-  def initialize(attrs = {})
-    attrs ||= {}
-    super attrs.reverse_merge!(:is_modified => true)
+  def initialize(attributes = nil, options = {})
+    attributes ||= {}
+    attributes.reverse_merge!(:is_modified => true)
+
+    super attributes, options
   end
 
   # filters:

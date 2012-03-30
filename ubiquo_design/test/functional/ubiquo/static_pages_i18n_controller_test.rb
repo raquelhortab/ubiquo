@@ -32,7 +32,7 @@ class Ubiquo::StaticPagesI18nControllerTest < ActionController::TestCase
 
       static_section = StaticSection.new(:name => "Sección en español",
         :title => "esto es una sección en español",
-        :locale => "es_ES",
+        :locale => "es",
         :body => "")
 
       page.add_widget(:main, static_section)

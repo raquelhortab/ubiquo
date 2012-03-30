@@ -316,9 +316,9 @@ class PageTest < ActiveSupport::TestCase
     Free.create(
       :name => "Test widget",
       :block_id => page.blocks.first.id,
-      :content => "content for test widget")    
+      :content => "content for test widget")
     page.save
-    assert page.is_previewable?    
+    assert page.is_previewable?
   end
 
   def test_shouldnt_be_previewable_with_no_previewable_widgets
@@ -327,9 +327,9 @@ class PageTest < ActiveSupport::TestCase
     Free.create(
       :name => "Test widget",
       :block_id => page.blocks.first.id,
-      :content => "content for test widget")        
+      :content => "content for test widget")
     page.save
-    assert !page.is_previewable?    
+    assert !page.is_previewable?
   end
 
   private

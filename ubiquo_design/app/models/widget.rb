@@ -59,13 +59,16 @@ class Widget < ActiveRecord::Base
     self.allowed_options_storage = opts
     opts.each do |option|
       define_method(option) do
-        self.options[option]
+        unserialized_opts = self.options.unserialize
+        unserialized_opts[option]
       end
       define_method("#{option}=") do |value|
-        self.options[option] = value
+        unserialized_opts = self.options.unserialize
+        unserialized_opts[option] = value
+        self.options = unserialized_opts
       end
       define_method("#{option}_before_type_cast") do
-        self.options[option]
+        send(option)
       end
     end
   end

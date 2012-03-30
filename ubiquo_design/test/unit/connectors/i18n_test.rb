@@ -57,7 +57,7 @@ module Connectors
           page = create_page
           static_section = StaticSection.new(:name => "Sección en español",
             :title => "esto es una sección en español",
-            :locale => "es_ES",
+            :locale => "es",
             :body => "")
 
           page.add_widget(:main, static_section)
@@ -116,12 +116,13 @@ module Connectors
         Ubiquo::WidgetsController.new.uhook_prepare_widget(widget)
         assert_equal 'any', widget.locale
       end
-    end
 
-    test "show create two widgets for each locale"  do
-      assert_difference "StaticSection.count", 2 do
-        widget, page = create_widget(:static_section, :locale => "es_ES")
+      test "show create two widgets for each locale"  do
+        assert_difference "StaticSection.count", 2 do
+          widget, page = create_widget(:static_section, :locale => "es")
+        end
       end
+
     end
 
     private

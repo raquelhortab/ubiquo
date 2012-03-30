@@ -43,7 +43,7 @@ class UbiquoDesign::CacheManagers::MemcacheTest < ActiveSupport::TestCase
 
   test 'connection should open only one connection with memcached' do
     @manager.instance_variable_set("@cache", mock())
-    MemCache.expects(:new).never
+    Memcache.expects(:new).never
     2.times { @manager.send(:connection) }
   end
 

@@ -19,7 +19,7 @@ module UbiquoDesign
         def retrieve content_id
           begin
             connection.get crypted_key(content_id)
-          rescue MemCache::MemCacheError, MemcacheNotAvailable
+          rescue Memcache::Error, MemcacheNotAvailable
             raise CacheNotAvailable.new("Cache is not available, impossible to retrieve")
           end
         end
@@ -36,7 +36,7 @@ module UbiquoDesign
           end
           begin
             connection.get_multi crypted_content_ids
-          rescue MemCache::MemCacheError, MemcacheNotAvailable
+          rescue Memcache::Error, MemcacheNotAvailable
             raise CacheNotAvailable.new("Cache is not available, impossible to multi_retrieve")
           end
         end
@@ -46,7 +46,7 @@ module UbiquoDesign
           begin
             exp_time = expiration_time || DATA_TIMEOUT
             connection.set crypted_key(content_id), contents, exp_time
-          rescue MemCache::MemCacheError, MemcacheNotAvailable
+          rescue Memcache::Error, MemcacheNotAvailable
             raise CacheNotAvailable.new("Cache is not available, memcached can not store the content")
           end
         end
@@ -56,7 +56,7 @@ module UbiquoDesign
           Rails.logger.debug "Widget cache expiration request for key #{content_id}"
           begin
             connection.delete crypted_key(content_id)
-          rescue MemCache::MemCacheError, MemcacheNotAvailable
+          rescue Memcache::Error, MemcacheNotAvailable
             raise CacheNotAvailable.new("Cache is not available, impossible to delete cache")
           end
         end
@@ -65,7 +65,7 @@ module UbiquoDesign
         def connection
           if @cache.blank?
             begin
-              @cache = MemCache.new(CONFIG[:server])
+              @cache = Memcache.new(CONFIG[:server])
             rescue
               Rails.logger.warn "Memcache Error: memcached servers are not available"
               raise MemcacheNotAvailable, "Memcache Error: memcached servers are not available"
