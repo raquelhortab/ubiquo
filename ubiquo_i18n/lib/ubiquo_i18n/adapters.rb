@@ -5,4 +5,4 @@ module UbiquoI18n
 end
 
 
-ActiveRecord::ConnectionAdapters::SchemaStatements.send(:include, UbiquoI18n::Adapters::SchemaStatements)
+ActiveRecord::ConnectionAdapters::AbstractAdapter.send(:include, UbiquoI18n::Adapters::SchemaStatements)
