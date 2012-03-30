@@ -306,10 +306,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
             "width"  => "30"
           },
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> media: changed engine routes to be rails 3 compatible.
     assert_redirected_to ubiquo.assets_path
     assert_equal 0, assigns(:asset).asset_areas.count
   end
@@ -332,11 +329,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
 
   private
 
-<<<<<<< HEAD
   def update_asset_formats_test(options = {})
-=======
-  def update_asset_formats_test( options = {} )
->>>>>>> media: changed engine routes to be rails 3 compatible.
     preserve_configuration do
       Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list).merge!({
         :thumb        => "100x100>",
@@ -404,13 +397,8 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
       :name          => "Created asset",
       :description   => "Description",
       :asset_type_id => AssetType.find(:first).id,
-<<<<<<< HEAD
       :resource      => _test_file(file_contents, file_ext),
       :is_protected  => false,
-=======
-      :resource => _test_file(file_contents, file_ext ),
-      :is_protected => false,
->>>>>>> media: changed engine routes to be rails 3 compatible.
     }
 
     asset = AssetPublic.create(default_options.merge(options))

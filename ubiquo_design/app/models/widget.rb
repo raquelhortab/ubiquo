@@ -1,14 +1,19 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
+
 class Widget < ActiveRecord::Base
 
   INACCEPTABLE_OPTIONS = %w{options widget widget_id block block_id position}
 
   @@behaviours = {}
 
-  @inheritable_attributes = inheritable_attributes.merge(
-    :previewable => true,
-    :clonation_exceptions => [:asset_relations]
-  )
+  # @inheritable_attributes = inheritable_attributes.merge(
+    # :previewable => true,
+    # :clonation_exceptions => [:asset_relations]
+  # )
+  # link: https://github.com/rails/rails/commit/e5ab4b0d07ade8d89d633ca744c0eafbc53ee921
+  class_attribute :previewable, :clonation_exceptions
+  self.previewable = true
+  self.clonation_exceptions = [:asset_relations]
 
   cattr_accessor :behaviours
 

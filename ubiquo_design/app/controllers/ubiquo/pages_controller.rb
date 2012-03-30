@@ -3,20 +3,20 @@ class Ubiquo::PagesController < UbiquoController
   before_filter :load_page_templates
   before_filter :load_page, :only => [:edit, :update, :destroy]
   before_filter :load_parent_pages, :only => [:new, :edit]
-  
+
   # GET /pages
   # GET /pages.xml
   def index
-    order_by = params[:order_by] || Ubiquo::Config.context(:ubiquo_design).get(:pages_default_order_field)
-    sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_design).get(:pages_default_sort_order)
+    order_by = params[:order_by] || Ubiquo::Settings.context(:ubiquo_design).get(:pages_default_order_field)
+    sort_order = params[:sort_order] || Ubiquo::Settings.context(:ubiquo_design).get(:pages_default_sort_order)
 
     filters = { :text => params[:filter_text] }
-    per_page = Ubiquo::Config.context(:ubiquo_design).get(:pages_elements_per_page)
+    per_page = Ubiquo::Settings.context(:ubiquo_design).get(:pages_elements_per_page)
 
     @pages_pages, @pages = Page.paginate(:page => params[:page], :per_page => per_page) do
       uhook_find_private_pages(filters, order_by, sort_order)
     end
-    
+
     respond_to do |format|
       format.html {} # index.html.erb
       format.xml  {
@@ -92,17 +92,17 @@ class Ubiquo::PagesController < UbiquoController
   end
 
   private
-  
+
   def load_page_templates
     @page_templates = Page.templates
   end
 
   def load_page
-    @page = Page.find(params[:id])    
+    @page = Page.find(params[:id])
   end
-  
+
   def load_parent_pages
     @pages = Page.drafts.all(:conditions => ["url_name != ''"]) - [@page]
   end
-  
+
 end

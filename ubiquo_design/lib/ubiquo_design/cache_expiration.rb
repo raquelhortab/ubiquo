@@ -19,7 +19,7 @@ module UbiquoDesign
           klass.alias_method_chain :destroy, :cache_expiration
           attr_accessor :cache_expiration_denied
         end
-        
+
         def without_cache_expiration
           self.cache_expiration_denied = true
           yield

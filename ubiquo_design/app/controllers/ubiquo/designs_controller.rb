@@ -3,7 +3,8 @@ class Ubiquo::DesignsController < UbiquoController
   include UbiquoDesign::RenderPage
   helper 'ubiquo/widgets'
   ubiquo_config_call :design_access_control, {:context => :ubiquo_design}
-  uses_tiny_mce(:options => default_tiny_mce_options.merge(:entities => ''))
+  # FIXME: tiny_mce causes problems with Rails 3.2. It calls the method javascript_expansions
+  # uses_tiny_mce(:options => default_tiny_mce_options.merge(:entities => ''))
 
   def show
     @page = Page.find(params[:page_id])
@@ -41,13 +42,13 @@ class Ubiquo::DesignsController < UbiquoController
     end
     redirect_to :action => "show"
   end
-  
+
   private
 
   def render_ubiquo_design_template(page)
     template_file = Rails.root.join("app/views/page_templates/ubiquo/#{page.page_template}.html.erb")
     if File.exists?(template_file)
-      template_contents = render_to_string(:file => template_file, 
+      template_contents = render_to_string(:file => template_file,
                                            :locals => { :page => page })
     else
       template_contents = render_to_string(:inline => <<-EOS, :locals => { :page => page })

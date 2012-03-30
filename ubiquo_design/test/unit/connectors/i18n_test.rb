@@ -1,4 +1,6 @@
-require File.dirname(__FILE__) + "/../../../../../../test/test_helper.rb"
+# -*- encoding: utf-8 -*-
+
+require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 module Connectors
   class I18nTest < ActiveSupport::TestCase

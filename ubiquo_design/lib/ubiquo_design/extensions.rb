@@ -1,11 +1,13 @@
+# -*- encoding: utf-8 -*-
+
 module UbiquoDesign
   module Extensions
     autoload :Helper, "ubiquo_design/extensions/helper"
     autoload :TestHelper, "ubiquo_design/extensions/test_helper"
 
-    module RailsGenerator
-      [:Create, :Destroy].each { |m| autoload m, 'ubiquo_design/extensions/rails_generator' }
-    end
+    # module RailsGenerator
+      # [:Create, :Destroy].each { |m| autoload m, 'ubiquo_design/extensions/rails_generator' }
+    # end
   end
 end
 
@@ -16,9 +18,10 @@ if Rails.env.test?
   ActiveSupport::TestCase.send(:include, UbiquoDesign::Extensions::TestHelper)
 end
 
-begin
-  Rails::Generator::Commands::Create.send(:include, UbiquoDesign::Extensions::RailsGenerator::Create)
-  Rails::Generator::Commands::Destroy.send(:include, UbiquoDesign::Extensions::RailsGenerator::Destroy)
-rescue NameError
-  puts $!
-end
+# TODO: use the new rails generators
+# begin
+  # Rails::Generator::Commands::Create.send(:include, UbiquoDesign::Extensions::RailsGenerator::Create)
+  # Rails::Generator::Commands::Destroy.send(:include, UbiquoDesign::Extensions::RailsGenerator::Destroy)
+# rescue NameError
+  # puts $!
+# end

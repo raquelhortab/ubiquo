@@ -1,0 +1,19 @@
+source "http://rubygems.org"
+
+# Specify your gem's dependencies in ubiquo_media.gemspec
+gemspec
+
+group :development, :test do
+  # Using the git version to get 1.9.3 support
+  gem 'linecache19', :git => 'git://github.com/mark-moseley/linecache'
+  gem 'ruby-debug-base19x', '~> 0.11.30.pre4'
+  gem 'ruby-debug19', "~> 0.11.6"
+end
+
+path "../" do
+  gem "ubiquo_core"
+  gem "ubiquo_media"
+end
+
+gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+gem 'tiny_mce', :git => 'git://github.com/gnuine/tiny_mce'

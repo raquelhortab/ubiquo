@@ -36,12 +36,9 @@ class Page < ActiveRecord::Base
     end
   end
 
-  named_scope :published,
-              :conditions => ["pages.published_id IS NULL AND pages.is_modified = ?", false]
-  named_scope :drafts,
-              :conditions => ["pages.published_id IS NOT NULL OR pages.is_modified = ?", true]
-  named_scope :statics,
-              :conditions => ["pages.is_static = ?", true]
+  scope :published, :conditions => ["pages.published_id IS NULL AND pages.is_modified = ?", false]
+  scope :drafts, :conditions => ["pages.published_id IS NOT NULL OR pages.is_modified = ?", true]
+  scope :statics, :conditions => ["pages.is_static = ?", true]
 
   DEFAULT_TEMPLATE_OPTIONS = {
     :layout => 'main',
@@ -175,7 +172,7 @@ class Page < ActiveRecord::Base
 
   # Returns true if the page can be previewed.
   def is_previewable?
-    Ubiquo::Config.context(:ubiquo_design).get(:allow_page_preview) &&
+    Ubiquo::Settings.context(:ubiquo_design).get(:allow_page_preview) &&
       self.blocks.map(&:widgets).flatten.reject(&:is_previewable?).blank?
   end
 

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class WidgetTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
 
   def test_should_create_widget
     assert_difference "Widget.count" do
@@ -13,14 +13,14 @@ class WidgetTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference "Widget.count" do
       widget = create_widget :name => ""
-      assert widget.errors.on(:name)
+      assert widget.errors.include?(:name)
     end
   end
 
   def test_should_require_block
     assert_no_difference "Widget.count" do
       widget = create_widget :block_id => nil
-      assert widget.errors.on(:block)
+      assert widget.errors.include?(:block)
     end
   end
 
@@ -111,7 +111,7 @@ class WidgetTest < ActiveSupport::TestCase
       assert !widget.new_record?, "#{widget.errors.full_messages.to_sentence}"
     end
     widget = create_widget_with_validations
-    assert widget.errors.on(:number)
+    assert widget.errors.include?(:number)
   end
 
 

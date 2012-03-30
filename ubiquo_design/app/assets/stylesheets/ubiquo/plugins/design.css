@@ -11,12 +11,12 @@
 #template .draggable_target {
   background: #E9E9E9 url(../../../images/ubiquo/bg_dragdrop_en.jpg) no-repeat center center;
   -moz-border-radius:0px 0px 10px 10px;
- 	-webkit-border-radius:0px 0px 10px 10px;
+	-webkit-border-radius:0px 0px 10px 10px;
 }
 #template .non_draggable_target {
   background: #F7F7F7 url(../../../images/ubiquo/bg_no_dragdrop.jpg) no-repeat center center;
   -moz-border-radius:0px 0px 10px 10px;
- 	-webkit-border-radius:0px 0px 10px 10px;
+	-webkit-border-radius:0px 0px 10px 10px;
 }
 .share_block_options {
 	background-color: #bbb;
@@ -26,7 +26,7 @@
   font-size: 11px;
 	position:relative;
 	-moz-border-radius:10px 10px 0px 0px;
- 	-webkit-border-radius:10px 10px 0px 0px;
+	-webkit-border-radius:10px 10px 0px 0px;
 }
 .share_block_options div{
 	margin: auto 0px;
@@ -64,7 +64,7 @@ ul.block_type_holder li.inherited {
 	clear:both;
 	position: relative;
 	-moz-border-radius:10px;
- 	-webkit-border-radius:10px;
+	-webkit-border-radius:10px;
 }
 #widgets .widget_categories{
 	background-color: #bbb;
@@ -87,7 +87,7 @@ ul.block_type_holder li.inherited {
   padding: 6px 10px;
   border-bottom: none!important;
   -moz-border-radius:10px 10px 0px 0px;
- 	-webkit-border-radius:10px 10px 0px 0px;
+	-webkit-border-radius:10px 10px 0px 0px;
 }
 
 #widgets .sidebar_title h3{
@@ -201,7 +201,7 @@ li.widget .editor_field {
   padding: 6px 10px;
   border-bottom: none!important;
   -moz-border-radius:10px 10px 0px 0px;
- 	-webkit-border-radius:10px 10px 0px 0px;
+	-webkit-border-radius:10px 10px 0px 0px;
 }
 
 #page_info .sidebar_title h3{
@@ -218,7 +218,7 @@ li.widget .editor_field {
   position: relative;
   clear:both;
   -moz-border-radius:0px 0px 10px 10px;
- 	-webkit-border-radius:0px 0px 10px 10px;
+	-webkit-border-radius:0px 0px 10px 10px;
 }
 .status_indicator {
   margin: 5px 0px 10px 0px;
@@ -227,7 +227,7 @@ li.widget .editor_field {
   color: #fff;
   position: relative;
   -moz-border-radius:10px;
- 	-webkit-border-radius:10px;
+	-webkit-border-radius:10px;
 }
 .status_indicator.published { background: #75c308 url(../../../images/ubiquo/bg_published.png) no-repeat 95%;}
 .status_indicator.pending { background: #e4b62c url(../../../images/ubiquo/bg_pending.png) no-repeat 95%;}
@@ -284,10 +284,10 @@ background-color: #f48c8c;
 }
 #shadow {
 	background-image:url(../../../images/ubiquo/shade1x1.png);
-	position:absolute; 
-	left:0; 
-	top:0; 
-	width:100%; 
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
 	z-index:100;
 }
 

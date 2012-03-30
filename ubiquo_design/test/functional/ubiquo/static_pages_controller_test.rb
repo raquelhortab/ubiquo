@@ -2,11 +2,11 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
 
   def setup
     login_as
-    Ubiquo::Config.context(:ubiquo_design).set(:block_type_for_static_section_widget, :main)
+    Ubiquo::Settings.context(:ubiquo_design).set(:block_type_for_static_section_widget, :main)
   end
 
   def test_should_get_index_with_only_static_pages

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class UbiquoDesign::CacheManagers::BaseTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
 
   def setup
     @manager = UbiquoDesign::CacheManagers::RubyHash

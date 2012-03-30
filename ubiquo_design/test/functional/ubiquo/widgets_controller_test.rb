@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::WidgetsControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
 
   def test_should_add_widget_through_html
     login_as

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PagesControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
   
   def test_should_get_show
     get :show, :url => Page.published.first.url_name

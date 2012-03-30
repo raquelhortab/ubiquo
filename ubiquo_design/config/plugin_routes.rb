@@ -7,8 +7,8 @@ map.namespace :ubiquo do |ubiquo|
     end
   end
 end
-  
-# Proposal for public routes. 
+
+# Proposal for public routes.
 
 map.with_options :controller => 'pages' do |pages|
   # Default catch-all routes

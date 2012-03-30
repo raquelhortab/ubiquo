@@ -1,7 +1,22 @@
-require File.dirname(__FILE__) + "/../../../../../test/test_helper.rb"
+# -*- encoding: utf-8 -*-
+
+require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class BlockTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
+  def setup
+    UbiquoDesign::Structure.define do
+      page_template :home do
+        block :top
+        block :sidebar, :cols => 1
+        block :main, :cols => 3
+      end
+      page_template :static do
+        block :top, :main
+      end
+      widget :free, :static_section, :generic_highlighted, :generic_detail, :generic_listing
+    end
+  end
 
   def test_should_create_block
     assert_difference "Block.count" do
@@ -13,14 +28,14 @@ class BlockTest < ActiveSupport::TestCase
   def test_should_require_block_type
     assert_no_difference "Block.count" do
       block = create_block :block_type => nil
-      assert block.errors.on(:block_type)
+      assert block.errors.include?(:block_type)
     end
   end
 
   def test_should_require_page_id
     assert_no_difference "Block.count" do
       block = create_block :page_id => nil
-      assert block.errors.on(:page)
+      assert block.errors.include?(:page)
     end
   end
 

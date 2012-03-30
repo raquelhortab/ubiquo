@@ -1,0 +1,12 @@
+*.gem
+.bundle
+Gemfile.lock
+pkg/*
+/nbproject
+.rvmrc
+test/dummy/log
+test/dummy/db/*.sqlite3
+test/dummy/protected
+test/dummy/public
+test/dummy/tmp
+test/dummy/config/tiny_mce.yml

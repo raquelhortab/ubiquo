@@ -5,7 +5,7 @@ Class: Scroller
 	setting any properties necessary on the divs to make it all work. The scrollbar can be styled using
 	CSS. The track of the scrollbar has class 'scroll-track', 'scroll-track-top' and 'scroll-track-bot',
 	the thumb has class 'scroll-handle', 'scroll-handle-top' and 'scroll-handle-bot'.
-	
+
 properties:
 	myIndex - an integer used to generate a unique ID for use in, for example, div ids.
 	outerBox - the div that holds the scrollpane + scrollbar
@@ -18,7 +18,7 @@ properties:
 	handleHeight - the height of the thumb
 	slider - the script.aculo.us slider itself
 	ieDecreaseBy - a fudge factor used when calculating the width of innerBox
-	
+
 */
 var Scroller = Class.create();
 
@@ -36,28 +36,28 @@ Scroller.i = 0;
 
 Scroller.prototype = {
 	/*
-	constructor: initialize	
+	constructor: initialize
 		Wrap the passed div in a scrollpane.
-	
-	parameters:	
+
+	parameters:
 		el - the div to add a scrollbar to.
 	 */
   initialize: function(el) {
     this.outerBox = el;
     this.decorate();
   },
-  
+
   /*
-  function: decorate  
-  	create the necessary elements to implement the scrollbar and wire up events.
+  function: decorate
+	create the necessary elements to implement the scrollbar and wire up events.
    */
   decorate: function() {
 	//$(this.outerBox).makePositioned(); // Fix IE
-	
+
 	// Seed a unique ID
 	Scroller.i = Scroller.i + 1;
 	this.myIndex = Scroller.i;
-	
+
 	//wrap the existing content in an intermediate inner box
 	this.innerBox = document.createElement("DIV");
 	this.innerBox.className="scroll-innerBox";
@@ -65,7 +65,7 @@ Scroller.prototype = {
 	this.innerBox.style.cssFloat=this.innerBox.style.styleFloat='left';	// Need the scrollbar to appear next to the scrollpane
 	this.innerBox.id="scroll-innerBox-"+Scroller.i;
 	this.innerBox.style.top = "0px";
-	
+
 	//Transfer the contents of Outer Box to Inner Box
 	while (this.outerBox.hasChildNodes()) {
 		this.innerBox.appendChild(this.outerBox.firstChild);
@@ -91,7 +91,7 @@ Scroller.prototype = {
 	this.tracktop.id="scroll-track-top-"+Scroller.i;
 	// Fix IE line-height bug. Sigh.
 	this.tracktop.appendChild(document.createComment(''));
-	
+
 	// Create the bottom button
 	this.trackbot=document.createElement('div');
 	this.trackbot.className="scroll-track-bot";
@@ -153,26 +153,26 @@ Scroller.prototype = {
     this.mouseWheelCB = this.MouseWheelEvent.bindAsEventListener(this, this.slider);
     this.trackTopCB = this.tracktopEvent.bindAsEventListener(this, this.slider);
     this.trackBotCB = this.trackbotEvent.bindAsEventListener(this, this.slider);
-    
+
 	//Events control
 	$(this.outerBox).observe('DOMMouseScroll', this.domMouseCB); // Mozilla
 	$(this.outerBox).observe('mousewheel', this.mouseWheelCB);// IE/Opera
 	$(this.tracktop).observe('mousedown', this.trackTopCB);
 	$(this.trackbot).observe('mousedown', this.trackBotCB);
   },
-  
+
   release: function() {
     $(this.outerBox).stopObserving('DOMMouseScroll', this.domMouseCB);
 	$(this.outerBox).stopObserving('mousewheel', this.mouseWheelCB);// IE/Opera
 	$(this.tracktop).stopObserving('mousedown', this.trackTopCB);
 	$(this.trackbot).stopObserving('mousedown', this.trackBotCB);
   },
-  
+
   /*
-  function: resetScrollbar  
-  	Re-calculate the geometry of the scrollbar. Typically called from an event handler.
-	
-	args:	
+  function: resetScrollbar
+	Re-calculate the geometry of the scrollbar. Typically called from an event handler.
+
+	args:
 		repeat - if true, set timer to re-calculate to fix IE bug on resize window.
    */
   resetScrollbar: function(repeat) {
@@ -184,23 +184,23 @@ Scroller.prototype = {
 		this.innerBox.style.height = this.innerHeight + "px";
 		var newWidth = $(this.outerBox).clientWidth;
 
-    	var tth = Element.getStyle(this.tracktop,"height");
-    	if (tth)
-    	   tth = tth.replace("px","");
-    	else
-    	   tth = 0;
-    
+	var tth = Element.getStyle(this.tracktop,"height");
+	if (tth)
+	   tth = tth.replace("px","");
+	else
+	   tth = 0;
+
         var hth = Element.getStyle(this.handletop,"height");
         if (hth)
-    	   hth = hth.replace("px","");
-    	else
-    	   hth = 0;
-    
+	   hth = hth.replace("px","");
+	else
+	   hth = 0;
+
 		if (this.innerHeight < this.innerBox.scrollHeight) {
 			this.viewportHeight = this.innerHeight - tth*2;
 			this.slider.trackLength = this.viewportHeight;
-			this.track.style.height = this.viewportHeight + "px";		
-			this.handleHeight = Math.round(this.viewportHeight * this.innerHeight / this.innerBox.scrollHeight);	
+			this.track.style.height = this.viewportHeight + "px";
+			this.handleHeight = Math.round(this.viewportHeight * this.innerHeight / this.innerBox.scrollHeight);
 			if(this.handleHeight < (hth*2))
 				this.handleHeight = (hth*2);
 			if (this.handleHeight < 10)
@@ -224,12 +224,12 @@ Scroller.prototype = {
 		}
 		//Set the width of of the scrollpane (aka innerBox).
 		this.innerBox.style.width = newWidth + "px";
-		//Fix IE resize event Bug 
+		//Fix IE resize event Bug
 		if(repeat) {
 			setTimeout(this.resetScrollbar.bind(this, false), 10);
 		}
   },
-  
+
 	//Mouse wheel code from http://adomas.org/javascript-mouse-wheel/
 	MouseWheelEvent: function(event, slider) {
 		var delta = 0;
@@ -248,7 +248,7 @@ Scroller.prototype = {
 	},
 
 	trackbotEvent: function(event, slider) {
-		if (Event.isLeftClick(event)) {	
+		if (Event.isLeftClick(event)) {
 			slider.setValueBy(0.2);
 			Event.stop(event);
 		}
@@ -262,10 +262,10 @@ Scroller.prototype = {
 	},
 
   /*
-  function: onChange  
-  	Called when the script.aculo.us slider has changed (i.e. when it has been dragged). Scroll the inner box.
-	
-	args:	
+  function: onChange
+	Called when the script.aculo.us slider has changed (i.e. when it has been dragged). Scroll the inner box.
+
+	args:
 		val - not used.
    */
 	onChange: function(val) {
@@ -292,7 +292,7 @@ Scroller.reset = function (body_id) {
 	if ($(body_id).className.match(new RegExp("(^|\\s)makeScroll(\\s|$)"))) {
 	   if (Scroller.ids[body_id])
 	       Scroller.ids[body_id].release();
-	       
+
 		Scroller.ids[body_id] = new Scroller($(body_id));
 	}
 }

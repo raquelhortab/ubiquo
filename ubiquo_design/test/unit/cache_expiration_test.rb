@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class UbiquoDesign::CacheExpirationTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
 
   # load these independently of the perform_caching flag to correctly test their effects
   unless ActionController::Base.included_modules.include? UbiquoDesign::CacheRendering

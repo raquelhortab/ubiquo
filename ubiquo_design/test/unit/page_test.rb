@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + "/../../../../../test/test_helper.rb"
+require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PageTest < ActiveSupport::TestCase
-  use_ubiquo_fixtures
+  # use_ubiquo_fixtures
 
   # Page.publish is a transaction
   self.use_transactional_fixtures = false
@@ -25,14 +25,14 @@ class PageTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference "Page.count" do
       page = create_page :name => ""
-      assert page.errors.on(:name)
+      assert page.errors.include?(:name)
     end
   end
 
   def test_should_require_page_template
     assert_no_difference "Page.count" do
       page = create_page :page_template => nil
-      assert page.errors.on(:page_template)
+      assert page.errors.include?(:page_template)
     end
   end
 
@@ -40,7 +40,7 @@ class PageTest < ActiveSupport::TestCase
     assert_no_difference "Page.count" do
       ["no spaces", "Lower_Case_only", "no:wrong*symbols", nil].each do |url|
         page = create_page :url_name => url
-        assert page.errors.on(:url_name), "Url name should be wrong: '#{url}'"
+        assert page.errors.include?(:url_name), "Url name should be wrong: '#{url}'"
       end
     end
   end
@@ -245,7 +245,7 @@ class PageTest < ActiveSupport::TestCase
         assert !page.add_widget(:main, StaticSection.new(:name => 'Test static', :title => 'Test'))
       end
     end
-    assert page.errors.on(:name)
+    assert page.errors.include?(:name)
   end
 
   def test_should_rollback_if_widget_has_error_on_add_widget
@@ -256,7 +256,7 @@ class PageTest < ActiveSupport::TestCase
           assert !page.add_widget(:main, widget)
       end
     end
-    assert widget.errors.on(:name)
+    assert widget.errors.include?(:name)
   end
 
   def test_should_use_existing_block_on_add_widget
@@ -305,9 +305,9 @@ class PageTest < ActiveSupport::TestCase
   def test_should_check_ubiquo_config_in_is_previewable
     page = create_page
     assert page.is_previewable?
-    Ubiquo::Config.context(:ubiquo_design).set(:allow_page_preview, false)
+    Ubiquo::Settings.context(:ubiquo_design).set(:allow_page_preview, false)
     assert !page.is_previewable?
-    Ubiquo::Config.context(:ubiquo_design).set(:allow_page_preview, true)    
+    Ubiquo::Settings.context(:ubiquo_design).set(:allow_page_preview, true)
   end
 
   def test_should_be_previewable_with_previewable_widgets
