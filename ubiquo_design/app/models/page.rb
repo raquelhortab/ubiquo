@@ -95,38 +95,36 @@ class Page < ActiveRecord::Base
   end
 
   def publish
-    begin
-      transaction do
-        self.clear_published_page
-        published_page = self.dup
-        published_page.attributes = {
-          :is_modified => false,
-          :published_id => nil
-        }
+    transaction do
+      self.clear_published_page
+      published_page = self.dup
+      published_page.attributes = {
+        :is_modified => false,
+        :published_id => nil
+      }
 
-        published_page.save!
+      published_page.save!
 
-        published_page.blocks.destroy_all
-        self.blocks.each do |block|
-          new_block = block.dup
-          new_block.page = published_page
-          new_block.save!
-          uhook_publish_block_widgets(block, new_block) do |widget, new_widget|
-            uhook_publish_widget_relations(widget, new_widget)
-          end
+      published_page.blocks.destroy_all
+      self.blocks.each do |block|
+        new_block = block.dup
+        new_block.page = published_page
+        new_block.save!
+        uhook_publish_block_widgets(block, new_block) do |widget, new_widget|
+          uhook_publish_widget_relations(widget, new_widget)
         end
-
-        published_page.reload.update_attribute(:is_modified, false)
-
-        self.update_attributes(
-          :is_modified => false,
-          :published_id => published_page.id
-        )
       end
-      return true
-    rescue Exception => e
-      return false
+
+      published_page.reload.update_attribute(:is_modified, false)
+
+      self.update_attributes(
+        :is_modified => false,
+        :published_id => published_page.id
+      )
     end
+    return true
+  rescue Exception => e
+    return false
   end
 
   # Destroy the published page copy if exists.

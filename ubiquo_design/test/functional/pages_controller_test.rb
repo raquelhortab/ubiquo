@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PagesControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
-  
+
   def test_should_get_show
     get :show, :url => Page.published.first.url_name
     assert_response :success
@@ -41,7 +41,7 @@ class PagesControllerTest < ActionController::TestCase
       ""
     )
   end
-  
+
   def test_should_recognize_single_page
     assert_recognizes(
       { :controller => "pages", :action => "show", :url => ['url'] },

@@ -6,31 +6,31 @@ Ubiquo::Engine.routes.draw do
       put :publish
       put :unpublish
     end
+  end
 
-    resources :pages do
-      resources :design do
-        member do
-          get :preview
-          put :publish
-          put :unpublish
-        end
-
-        resources :widgets do
-          collection do
-            # TODO: review this action
-            get :change_order
-            post :change_order
-            put :change_order
-            delete :change_order
-          end
-
-          member do
-            post :change_name
-          end
-        end
-
-        resources :blocks
+  resources :pages do
+    resources :design do
+      member do
+        get :preview
+        put :publish
+        put :unpublish
       end
+
+      resources :widgets do
+        collection do
+          # TODO: review this action
+          get :change_order
+          post :change_order
+          put :change_order
+          delete :change_order
+        end
+
+        member do
+          post :change_name
+        end
+      end
+
+      resources :blocks
     end
   end
 end

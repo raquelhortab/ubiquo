@@ -81,7 +81,7 @@ module UbiquoDesign
               new_widget = widget.clone
               new_widget.block = new_block
               new_widget.content_id = next_content_id
-              new_widget.save_without_validation!
+              new_widget.save!(:validate => false)
 
               mapped_content_ids[widget.content_id] = new_widget.content_id
 
@@ -113,9 +113,9 @@ module UbiquoDesign
         module Helper
           def uhook_link_to_edit_widget(widget)
             if widget.locale == current_locale
-              link_to t('ubiquo.design.widget_edit'), ubiquo_page_design_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_edit'), :title=>t('ubiquo.design.widget_edit')
+              link_to t('ubiquo.design.widget_edit'), ubiquo.page_design_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_edit'), :title=>t('ubiquo.design.widget_edit')
             else
-              link_to t('ubiquo.design.widget_translate'), ubiquo_page_design_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_translate'), :title=>t('ubiquo.design.widget_translate')
+              link_to t('ubiquo.design.widget_translate'), ubiquo.page_design_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_translate'), :title=>t('ubiquo.design.widget_translate')
             end
           end
           def uhook_load_widgets(block)

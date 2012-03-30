@@ -19,7 +19,7 @@ module UbiquoDesign
             block.widgets.each do |widget|
               new_widget = widget.clone
               new_widget.block = new_block
-              new_widget.save_without_validation!
+              new_widget.save!(:validate => false)
               yield widget, new_widget
               new_widget.without_page_expiration do
                 new_widget.save! # must validate now
@@ -75,7 +75,7 @@ module UbiquoDesign
         end
         module Helper
           def uhook_link_to_edit_widget(widget)
-            link_to t('ubiquo.design.widget_edit'), ubiquo_page_design_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_edit'), :title=>t('ubiquo.design.widget_edit')
+            link_to t('ubiquo.design.widget_edit'), ubiquo.page_design_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_edit'), :title=>t('ubiquo.design.widget_edit')
           end
           def uhook_load_widgets(block)
             block.widgets

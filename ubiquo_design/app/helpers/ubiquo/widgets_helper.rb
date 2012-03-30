@@ -3,15 +3,15 @@ module Ubiquo::WidgetsHelper
     form_remote_for(
       :widget,
       widget,
-      :url => ubiquo_page_design_widget_path(page, widget),
+      :url => ubiquo.page_design_widget_path(page, widget),
       :before => "killeditor()",
-      :html => {  
+      :html => {
         :method => :put,
         :name => "widget_edit_form",
         :id => "widget_form",
       }, &block)
   end
-  
+
   def widget_submit
     %{
       <p class="form_buttons">
@@ -39,5 +39,5 @@ module Ubiquo::WidgetsHelper
     end
     attrs.join(' ')
   end
-  
+
 end

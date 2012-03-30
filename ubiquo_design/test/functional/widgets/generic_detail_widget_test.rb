@@ -28,7 +28,7 @@ class GenericDetailWidgetTest < ActionController::TestCase
       :model => 'GenericDetail'
     }
   end
-  
+
   def create_widget(type, options = {})
     insert_widget_in_page(type, widget_attributes.merge(options))
   end

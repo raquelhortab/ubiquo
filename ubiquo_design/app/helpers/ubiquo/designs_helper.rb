@@ -10,9 +10,9 @@ module Ubiquo::DesignsHelper
   def block_for_design(page, type, num_cols, subblocks = [], options = {})
     default_margin = 1.5
     col_width = ((100 / page.template_cols) * num_cols) - default_margin
-    options.reverse_merge!(:class => "column", :style => "width: #{col_width}%")    
+    options.reverse_merge!(:class => "column", :style => "width: #{col_width}%")
     if subblocks.present?
-      content_tag(:div, :class => options.delete(:class), :style => options.delete(:style) + ";margin:0") do      
+      content_tag(:div, :class => options.delete(:class), :style => options.delete(:style) + ";margin:0") do
         subblocks.map do |subblock, sb_cols|
           sb_width = (100.to_f * (sb_cols.to_f / num_cols.to_f)) - default_margin
           block_for_design(page, subblock, sb_cols, [], { :style => "width: #{sb_width}%" })
@@ -26,10 +26,10 @@ module Ubiquo::DesignsHelper
       content_tag(:div, :class => options.delete(:class), :style => options.delete(:style)) do
         block_actions(page, block) +
           block_type_holder(page, type, block, options)
-      end      
+      end
     end
   end
-  
+
   def make_blocks_sortables(page)
     keys = page.blocks.map(&:block_type).uniq
     page.blocks.collect do |block|
@@ -84,7 +84,7 @@ module Ubiquo::DesignsHelper
     end
     options_for_select(options)
   end
-  
+
   def widgets_for_block_type_holder(block)
     widgets = uhook_load_widgets(block)
     render :partial => "ubiquo/widgets/widget", :collection => widgets
@@ -100,7 +100,7 @@ module Ubiquo::DesignsHelper
       :with => "Sortable.serialize('block_type_holder_#{id}',{name: 'block[#{id}]'})"}
     ]
   end
-  
+
   def sortable_block_type_holder(id,url, containments=[])
     id, opts = sortable_block_type_holder_options(id,url, containments)
     sortable_element id, opts
