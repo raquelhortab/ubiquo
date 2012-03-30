@@ -3,7 +3,9 @@ module Ubiquo::WidgetsHelper
     form_remote_for(
       :widget,
       widget,
-      :url => ubiquo.page_design_widget_path(page, widget),
+      :url => ubiquo.page_design_widget_path(:page_id => page.id,
+                                             :design_id => 1,
+                                             :id => widget.id),
       :before => "killeditor()",
       :html => {
         :method => :put,

@@ -29,7 +29,7 @@ module Ubiquo::StaticPagesHelper
              end,
              :pages => pages,
              :link_to_new => link_to(t("ubiquo.design.static_pages.new"),
-                                     new_ubiquo_static_page_path, :class => 'new')})
+                                     ubiquo.new_static_page_path, :class => 'new')})
   end
 
 end

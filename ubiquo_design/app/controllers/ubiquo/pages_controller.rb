@@ -50,7 +50,7 @@ class Ubiquo::PagesController < UbiquoController
     respond_to do |format|
       if @page.valid?
         flash[:notice] = t('ubiquo.design.page_created')
-        format.html { redirect_to(ubiquo_pages_path) }
+        format.html { redirect_to(ubiquo.pages_path) }
         format.xml  { render :xml => @page, :status => :created, :location => @page }
       else
         flash[:error] = t('ubiquo.design.page_create_error')
@@ -66,7 +66,7 @@ class Ubiquo::PagesController < UbiquoController
     respond_to do |format|
       if uhook_update_page(@page)
         flash[:notice] = t('ubiquo.design.page_edited')
-        format.html { redirect_to(ubiquo_pages_path) }
+        format.html { redirect_to(ubiquo.pages_path) }
         format.xml  { head :ok }
       else
         flash[:error] = t('ubiquo.design.page_edit_error')
@@ -86,7 +86,7 @@ class Ubiquo::PagesController < UbiquoController
     end
 
     respond_to do |format|
-      format.html { redirect_to(ubiquo_pages_path) }
+      format.html { redirect_to(ubiquo.pages_path) }
       format.xml  { head :ok }
     end
   end

@@ -34,7 +34,8 @@ module Ubiquo::DesignsHelper
     keys = page.blocks.map(&:block_type).uniq
     page.blocks.collect do |block|
       if block == block.real_block
-        sortable_block_type_holder block.block_type,  change_order_ubiquo_page_design_widgets_path(page), keys
+        sortable_block_type_holder block.block_type,
+                                   ubiquo.change_order_page_design_widgets_path(page), keys
       end
     end
   end
@@ -55,7 +56,7 @@ module Ubiquo::DesignsHelper
     if block == block.real_block
       result += drop_receiving_element(
         options[:id],
-        :url => ubiquo_page_design_widgets_path(@page),
+        :url => ubiquo.page_design_widgets_path(@page),
         :method => :post,
         :accept => 'widget',
         :with => "'widget='+element.id.gsub(/^widget_/, '')+'&block=#{block.id}'"
@@ -63,7 +64,7 @@ module Ubiquo::DesignsHelper
       drop_functions = "function activate_droppable_" + options[:id] + "() {"
       drop_functions += drop_receiving_element_js(
         options[:id],
-        :url => ubiquo_page_design_widgets_path(@page),
+        :url => ubiquo.page_design_widgets_path(@page),
         :method => :post,
         :accept => 'widget',
         :with => "'widget='+element.id.gsub(/^widget_/, '')+'&block=#{block.id}'"
@@ -113,7 +114,7 @@ module Ubiquo::DesignsHelper
       if block.is_shared?
         content_tag(:div) do
           link_to_remote(t('ubiquo.design.stop_share_block'),
-            :url => ubiquo_page_design_block_path(page, block),
+            :url => ubiquo.page_design_block_path(page, block),
             :method => :put,
             :confirm => t('ubiquo.design.stop_share_block_confirm'),
             :with => "'is_shared=false'")
@@ -121,14 +122,14 @@ module Ubiquo::DesignsHelper
       elsif block.shared_id
         content_tag(:div) do
           link_to_remote(t('ubiquo.design.stop_use_shared_block', :key => block.shared.block_type),
-            :url => ubiquo_page_design_block_path(page, block),
+            :url => ubiquo.page_design_block_path(page, block),
             :method => :put,
             :with => "'shared_id='")
         end
       else
         content_tag(:div) do
           link_to_remote(t('ubiquo.design.share_block'),
-            :url => ubiquo_page_design_block_path(page, block),
+            :url => ubiquo.page_design_block_path(page, block),
             :method => :put,
             :with => "'is_shared=true'") + " #{t('ubiquo.or')} " +
             link_to_function(t('ubiquo.design.use_shared_block'), "toggleShareActions('share_options_#{block.id}')")
@@ -136,7 +137,7 @@ module Ubiquo::DesignsHelper
           content_tag(:div, :id => 'select_shared_block', :style => 'display:none') do
             select_tag("shared_blocks_#{block.id}", options_for_shared_blocks_select(block)) +
             link_to_remote(t('ubiquo.add'),
-            :url => ubiquo_page_design_block_path(page, block),
+            :url => ubiquo.page_design_block_path(page, block),
             :method => :put,
             :confirm => t('ubiquo.design.replace_block_confirm'),
             :with => "'shared_id='+$F('shared_blocks_#{block.id}')") +

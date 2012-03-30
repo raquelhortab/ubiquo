@@ -62,7 +62,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
     assert_equal ["top", "main"], page.blocks.map(&:block_type)
     assert_equal page.is_the_published?, false
 
-    assert_redirected_to ubiquo_pages_path
+    assert_redirected_to ubiquo.pages_path
   end
 
   def test_should_get_edit
@@ -78,7 +78,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
           :url_name => "custom_page",
           :page_template => "static"
         })
-    assert_redirected_to ubiquo_pages_path
+    assert_redirected_to ubiquo.pages_path
   end
 
   def test_should_destroy_page
@@ -87,6 +87,6 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
       delete :destroy, :id => pages(:one_design).id
     end
 
-    assert_redirected_to ubiquo_pages_path
+    assert_redirected_to ubiquo.pages_path
   end
 end

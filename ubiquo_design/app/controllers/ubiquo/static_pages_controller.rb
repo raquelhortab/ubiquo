@@ -47,7 +47,7 @@ class Ubiquo::StaticPagesController < UbiquoController
     respond_to do |format|
       if ok
         flash[:notice] = t("ubiquo.design.page_created")
-        format.html { redirect_to ubiquo_static_pages_path }
+        format.html { redirect_to ubiquo.static_pages_path }
         format.xml  { render :xml => @static_page,
                              :status => :created,
                              :location => @static_page }
@@ -82,7 +82,7 @@ class Ubiquo::StaticPagesController < UbiquoController
     respond_to do |format|
       if ok
         flash[:notice] = t("ubiquo.design.page_edited")
-        format.html { redirect_to ubiquo_static_pages_path }
+        format.html { redirect_to ubiquo.static_pages_path }
         format.xml { head :ok }
       else
         flash[:error] = t("ubiquo.design.page_edit_error")
@@ -102,7 +102,7 @@ class Ubiquo::StaticPagesController < UbiquoController
     end
 
     respond_to do |format|
-      format.html { redirect_to ubiquo_static_pages_path }
+      format.html { redirect_to ubiquo.static_pages_path }
       format.xml  { head :ok }
     end
   end

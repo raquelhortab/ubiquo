@@ -11,7 +11,7 @@ class Ubiquo::BlocksController < UbiquoController
       @block.widgets.map(&:destroy)
     end
     respond_to do |format|
-      format.html { redirect_to(ubiquo_page_design_path(@page)) }
+      format.html { redirect_to(ubiquo.page_design_path(@page)) }
       format.js
     end
   end

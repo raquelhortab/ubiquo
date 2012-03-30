@@ -7,7 +7,7 @@ class Ubiquo::WidgetsControllerTest < ActionController::TestCase
     assert_difference('Widget.count') do
       post :create, :page_id => pages(:one_design).id, :block => pages(:one_design).blocks.first, :widget => widgets(:one).class.to_s
     end
-    assert_redirected_to(ubiquo_page_design_path(pages(:one_design)))
+    assert_redirected_to(ubiquo.page_design_path(pages(:one_design)))
     widget = assigns(:widget)
     assert_not_nil widget
     assert_equal widget.block, pages(:one_design).blocks.first
@@ -38,7 +38,7 @@ class Ubiquo::WidgetsControllerTest < ActionController::TestCase
     assert_difference('Widget.count',-1) do
       delete :destroy, :page_id => pages(:one_design).id, :id => widgets(:one)
     end
-    assert_redirected_to(ubiquo_page_design_path(pages(:one_design)))
+    assert_redirected_to(ubiquo.page_design_path(pages(:one_design)))
   end
 
   def test_should_destroy_widget_through_js
@@ -73,12 +73,12 @@ class Ubiquo::WidgetsControllerTest < ActionController::TestCase
 
     get :change_order, :page_id => pages(:one_design).id, "block" => {block.block_type => original.reverse}
     assert_equal original.reverse, block.reload.widgets.map(&:id)
-    assert_redirected_to(ubiquo_page_design_path(pages(:one_design)))
+    assert_redirected_to(ubiquo.page_design_path(pages(:one_design)))
   end
 
   def test_should_change_order_with_empty_blocks
     get :change_order, :page_id => pages(:one_design).id
-    assert_redirected_to(ubiquo_page_design_path(pages(:one_design)))
+    assert_redirected_to(ubiquo.page_design_path(pages(:one_design)))
   end
 
   def test_should_change_name

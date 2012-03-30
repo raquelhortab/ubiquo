@@ -1,10 +1,11 @@
 require File.dirname(__FILE__) + '/../../../test_helper'
 
 class GenericDetailWidgetUbiquoTest < ActionController::TestCase
+  tests Ubiquo::WidgetsController
 
-  def setup
-    @controller = Ubiquo::WidgetsController.new
-  end
+  # def setup
+    # @controller = Ubiquo::WidgetsController.new
+  # end
 
   test "edit new form" do
     widget, page = create_widget(:generic_detail)
@@ -14,7 +15,10 @@ class GenericDetailWidgetUbiquoTest < ActionController::TestCase
 
   test "edit form" do
     widget, page = create_widget(:generic_detail)
-    get :show, :page_id => page.id, :id => widget.id
+    get :show,
+        :page_id   => page.id,
+        :design_id => 1,
+        :id        => widget.id
     assert_response :success
   end
 

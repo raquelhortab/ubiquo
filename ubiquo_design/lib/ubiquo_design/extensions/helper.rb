@@ -8,7 +8,7 @@ module UbiquoDesign
           tab.highlights_on({:controller => "ubiquo/pages"})
           tab.highlights_on({:controller => "ubiquo/page_templates"})
           tab.highlights_on({:controller => "ubiquo/designs"})
-          tab.link = ubiquo_pages_path
+          tab.link = ubiquo.pages_path
         end if ubiquo_config_call :design_permit, {:context => :ubiquo_design}
       end
 
@@ -17,10 +17,10 @@ module UbiquoDesign
           tab.text =  I18n.t("ubiquo.design.static_pages.title")
           tab.title =  I18n.t("ubiquo.design.static_pages.title")
           tab.highlights_on({:controller => "ubiquo/static_pages"})
-          tab.link = ubiquo_static_pages_path  
+          tab.link = ubiquo.static_pages_path
         end if ubiquo_config_call :static_pages_permit, {:context => :ubiquo_design}
       end
-      
+
       def render_generator_partial(name, options)
         render(options.merge(:partial => "/" + name))
       end

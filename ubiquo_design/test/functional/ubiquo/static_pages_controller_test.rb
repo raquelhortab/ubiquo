@@ -67,7 +67,7 @@ class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
     assert_equal StaticSection, page.uhook_static_section_widget.class
     assert_equal page.is_the_published?, false
 
-    assert_redirected_to ubiquo_static_pages_path
+    assert_redirected_to ubiquo.static_pages_path
   end
 
   def test_should_get_edit
@@ -94,7 +94,7 @@ class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
           :title => "About Ubiquo updated",
           :body => "updated description"
         })
-    assert_redirected_to ubiquo_static_pages_path
+    assert_redirected_to ubiquo.static_pages_path
   end
 
   def test_should_destroy_page
@@ -103,6 +103,6 @@ class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
       delete :destroy, :id => pages(:one_design).id
     end
 
-    assert_redirected_to ubiquo_static_pages_path
+    assert_redirected_to ubiquo.static_pages_path
   end
 end

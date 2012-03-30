@@ -30,7 +30,8 @@ module Ubiquo::PagesHelper
         end,
         :pages => pages,
         :link_to_new => link_to(t("ubiquo.design.new_page"),
-          new_ubiquo_page_path, :class => 'new')})
+                                ubiquo.new_page_path,
+                                :class => 'new')})
   end
 
   def publish_status(page)

@@ -38,12 +38,12 @@
           <% if page_type == "static_page" %>
             <li>
               <%= button_to t('ubiquo.design.publish'),
-                            publish_ubiquo_static_page_path(page), :method => :put, :class => 'publish' %>
+                            ubiquo.publish_static_page_path(page), :method => :put, :class => 'publish' %>
             </li>
           <% else %>
             <li>
               <%= button_to page.published? ? t('ubiquo.design.publish_changes') : t('ubiquo.design.publish'),
-                            publish_ubiquo_page_design_path(page), :method => :put, :class => 'publish',
+                            ubiquo.publish_page_design_path(page), :method => :put, :class => 'publish',
                             :style => page.published? ? 'width: 105px' : '' %>
             </li>
           <% end %>
@@ -52,12 +52,12 @@
           <% if page_type == "static_page" %>
             <li>
               <%= button_to t('ubiquo.design.unpublish'),
-                            unpublish_ubiquo_static_page_path(page), :method => :put, :class => 'unpublish' %>
+                            ubiquo.unpublish_static_page_path(page), :method => :put, :class => 'unpublish' %>
             </li>
           <% else %>
             <li>
               <%= button_to t('ubiquo.design.unpublish'),
-                            unpublish_ubiquo_page_design_path(page), :method => :put, :class => 'unpublish' %>
+                            ubiquo.unpublish_page_design_path(page), :method => :put, :class => 'unpublish' %>
             </li>
           <% end %>
         <% end %>
