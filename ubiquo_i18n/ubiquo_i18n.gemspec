@@ -18,7 +18,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "ubiquo_core", "~> 0.9.0.b1"
+  s.add_dependency "routing-filter"
   s.add_development_dependency "sqlite3", "~> 1.3.5"
   s.add_development_dependency "mocha", "~> 0.10.0"
+  s.add_development_dependency "sqlite3", "~> 1.3.5"
+  s.add_development_dependency 'linecache19'
+  s.add_development_dependency 'ruby-debug-base19x', '~> 0.11.30.pre4'
+  s.add_development_dependency 'ruby-debug19', "~> 0.11.6"
 
 end

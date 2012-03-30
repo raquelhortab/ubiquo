@@ -1,10 +1,10 @@
 class Ubiquo::LocalesController < UbiquoController
-  
+
   ubiquo_config_call(:locales_access_control, {:context => :ubiquo_i18n})
-  
+
   def show
-    order_by = params[:order_by] || Ubiquo::Config.context(:ubiquo_i18n).get(:locales_default_order_field)
-    sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_i18n).get(:locales_default_sort_order)
+    order_by = params[:order_by] || Ubiquo::Settings.context(:ubiquo_i18n).get(:locales_default_order_field)
+    sort_order = params[:sort_order] || Ubiquo::Settings.context(:ubiquo_i18n).get(:locales_default_sort_order)
     @locales =  Locale.all(:order => order_by + " " + sort_order)
 
     respond_to do |format|
@@ -14,7 +14,7 @@ class Ubiquo::LocalesController < UbiquoController
       }
     end
   end
-  
+
   def update
     if params[:selected_locales].include?(params[:default_locale])
     Locale.transaction{
@@ -30,5 +30,5 @@ class Ubiquo::LocalesController < UbiquoController
     end
     redirect_to ubiquo_locales_path
   end
-  
+
 end

@@ -5,9 +5,9 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   def test_should_save_translatable_attributes_list
     ar = create_ar
     ar.class_eval do
-      translatable :field1, :field2
+      translatable :my_field, :my_other_field
     end
-    [:field1, :field2].each do |field|
+    [:my_field, :my_other_field].each do |field|
       assert ar.instance_variable_get('@translatable_attributes').include?(field)
     end
   end
@@ -15,7 +15,7 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   def test_untranslatable_method_reverts_translatable
     ar = create_ar
     ar.class_eval do
-      translatable :field
+      translatable :my_field
       untranslatable
     end
     assert !ar.is_translatable?
@@ -25,35 +25,35 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   def test_untranslatable_method_maintains_parent_translatable
     ar = create_ar
     ar.class_eval do
-      translatable :field
+      translatable :my_field
     end
     son = Class.new(ar)
     son.class_eval do
-      translatable :field2
+      translatable :my_other_field
       untranslatable
     end
 
     assert ar.is_translatable?
-    assert [:field], ar.instance_variable_get('@translatable_attributes')
+    assert [:my_field], ar.instance_variable_get('@translatable_attributes')
   end
 
   def test_should_accumulate_translatable_attributes_list_from_parent
     ar = create_ar
     ar.class_eval do
-      translatable :field1, :field2
+      translatable :my_field, :my_other_field
     end
     son = Class.new(ar)
     son.class_eval do
       translatable :field3, :field4
     end
-    [:field1, :field2, :field3, :field4].each do |field|
+    [:my_field, :my_other_field, :field3, :field4].each do |field|
       assert son.instance_variable_get('@translatable_attributes').include?(field)
     end
     gson = Class.new(son)
     gson.class_eval do
       translatable :field5
     end
-    [:field1, :field2, :field3, :field4, :field5].each do |field|
+    [:my_field, :my_other_field, :field3, :field4, :field5].each do |field|
       assert gson.instance_variable_get('@translatable_attributes').include?(field)
     end
   end
@@ -61,7 +61,7 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   def test_should_not_set_translatable_timestamps
     ar = create_ar
     ar.class_eval do
-      translatable :field1, :field2, :timestamps => false
+      translatable :my_field, :my_other_field, :timestamps => false
     end
     assert !ar.instance_variable_get('@translatable_attributes').include?(:created_at)
     assert !ar.instance_variable_get('@translatable_attributes').include?(:updated_at)
@@ -104,9 +104,9 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   end
 
   def test_should_store_locale
-    model = create_model(:field1 => 'ca', :locale => 'ca')
+    model = create_model(:my_field => 'ca', :locale => 'ca')
     assert String === model.locale
-    assert_equal model.field1, model.locale
+    assert_equal model.my_field, model.locale
   end
 
   def test_should_store_string_locale_in_dual_format
@@ -137,56 +137,56 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   end
 
   def test_should_update_non_translatable_attributes_in_instances_sharing_content_id_on_create
-    test_1 = create_model(:field1 => 'f1', :field2 => 'f2', :locale => 'ca')
-    test_2 = create_model(:field1 => 'newf1', :field2 => 'newf2', :locale => 'es', :content_id => test_1.content_id)
-    create_model(:field1 => 'newerf1', :field2 => 'newerf2')
-    assert_equal 'newf2', test_1.reload.field2
-    assert_equal 'f1', test_1.field1
-    assert_equal 'newf1', test_2.field1
-    assert_equal 'newf2', test_2.field2
+    test_1 = create_model(:my_field => 'f1', :my_other_field => 'f2', :locale => 'ca')
+    test_2 = create_model(:my_field => 'newf1', :my_other_field => 'newf2', :locale => 'es', :content_id => test_1.content_id)
+    create_model(:my_field => 'newerf1', :my_other_field => 'newerf2')
+    assert_equal 'newf2', test_1.reload.my_other_field
+    assert_equal 'f1', test_1.my_field
+    assert_equal 'newf1', test_2.my_field
+    assert_equal 'newf2', test_2.my_other_field
   end
 
   def test_should_update_non_translatable_attributes_in_instances_sharing_content_id_on_update
-    ca = create_model(:field1 => 'f1', :field2 => 'f2', :locale => 'ca')
-    es = create_model(:field1 => 'newf1', :field2 => 'newf2', :locale => 'es', :content_id => ca.content_id)
-    ca.update_attribute :field2, 'common'
-    assert_equal 'common', es.reload.field2
-    es.update_attribute :field1, 'mine'
-    assert_equal 'f1', ca.reload.field1
+    ca = create_model(:my_field => 'f1', :my_other_field => 'f2', :locale => 'ca')
+    es = create_model(:my_field => 'newf1', :my_other_field => 'newf2', :locale => 'es', :content_id => ca.content_id)
+    ca.update_attribute :my_other_field, 'common'
+    assert_equal 'common', es.reload.my_other_field
+    es.update_attribute :my_field, 'mine'
+    assert_equal 'f1', ca.reload.my_field
   end
 
   def test_should_not_update_non_translatable_attributes_if_using_without_updating_translations
-    test_1 = create_model(:field1 => 'f1', :field2 => 'f2', :locale => 'ca')
-    test_2 = create_model(:field1 => 'newf1', :field2 => 'newf2', :locale => 'es', :content_id => test_1.content_id)
+    test_1 = create_model(:my_field => 'f1', :my_other_field => 'f2', :locale => 'ca')
+    test_2 = create_model(:my_field => 'newf1', :my_other_field => 'newf2', :locale => 'es', :content_id => test_1.content_id)
     test_1.without_updating_translations do
-      test_1.update_attribute :field2, 'common'
+      test_1.update_attribute :my_other_field, 'common'
     end
-    assert_equal 'newf2', test_2.reload.field2
+    assert_equal 'newf2', test_2.reload.my_other_field
   end
 
   def test_should_allow_nested_without_updating_translation_calls
-    test_1 = create_model(:field1 => 'f1', :field2 => 'f2', :locale => 'ca')
-    test_2 = create_model(:field1 => 'newf1', :field2 => 'newf2', :locale => 'es', :content_id => test_1.content_id)
+    test_1 = create_model(:my_field => 'f1', :my_other_field => 'f2', :locale => 'ca')
+    test_2 = create_model(:my_field => 'newf1', :my_other_field => 'newf2', :locale => 'es', :content_id => test_1.content_id)
 
     test_1.without_updating_translations do
       test_1.without_updating_translations do
-        test_1.update_attribute :field2, 'common1'
+        test_1.update_attribute :my_other_field, 'common1'
       end
-      assert_equal 'newf2', test_2.reload.field2
+      assert_equal 'newf2', test_2.reload.my_other_field
 
-      test_1.update_attribute :field2, 'common2'
+      test_1.update_attribute :my_other_field, 'common2'
     end
-    assert_equal 'newf2', test_2.reload.field2
+    assert_equal 'newf2', test_2.reload.my_other_field
   end
 
   def test_should_update_translatable_fields_on_subclasses_with_them_enabled
-    in_ca = InheritanceTestModel.create(:field => 'ca', :mixed => 'ca', :locale => 'ca')
-    in_es = InheritanceTestModel.create(:field => 'es', :mixed => 'es', :locale => 'es', :content_id => in_ca.content_id)
-    assert_equal 'ca', in_ca.reload.field
+    in_ca = InheritanceTestModel.create(:my_field => 'ca', :mixed => 'ca', :locale => 'ca')
+    in_es = InheritanceTestModel.create(:my_field => 'es', :mixed => 'es', :locale => 'es', :content_id => in_ca.content_id)
+    assert_equal 'ca', in_ca.reload.my_field
     assert_equal 'es', in_ca.mixed
-    sub_ca = SecondSubclass.create(:field => 'ca', :mixed => 'ca', :locale => 'ca')
-    sub_es = SecondSubclass.create(:field => 'es', :mixed => 'es', :locale => 'es', :content_id => sub_ca.content_id)
-    assert_equal 'ca', sub_ca.reload.field
+    sub_ca = SecondSubclass.create(:my_field => 'ca', :mixed => 'ca', :locale => 'ca')
+    sub_es = SecondSubclass.create(:my_field => 'es', :mixed => 'es', :locale => 'es', :content_id => sub_ca.content_id)
+    assert_equal 'ca', sub_ca.reload.my_field
     assert_equal 'ca', sub_ca.mixed
   end
 

@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::LocalesControllerTest < ActionController::TestCase
 
-  use_ubiquo_fixtures
-
   def teardown
     Locale.current = nil
   end

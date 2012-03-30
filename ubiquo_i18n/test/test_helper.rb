@@ -39,76 +39,79 @@ end
 Object.const_set("InheritanceTestModel", Class.new(ActiveRecord::Base)) unless Object.const_defined? "InheritanceTestModel"
 
 def create_test_model_backend
-  conn = ActiveRecord::Base.connection
+  return if @already_built
 
-  conn.create_table :test_models, :translatable => true do |t|
-    t.string :field1
-    t.string :field2
+  conn = ActiveRecord::Base.connection
+  options = {:translatable => true, :force => true}
+
+  conn.create_table :test_models, options do |t|
+    t.string :my_field
+    t.string :my_other_field
     t.integer :test_model_id
     t.integer :related_test_model_id
-  end unless conn.tables.include?('test_models')
+  end
 
-  conn.create_table :related_test_models do |t|
+  conn.create_table :related_test_models, options.except(:translatable) do |t|
     t.integer :test_model_id
     t.integer :tracked_test_model_id
-    t.string :field1
-  end unless conn.tables.include?('related_test_models')
+    t.string :my_field
+  end
 
-  conn.create_table :unshared_related_test_models do |t|
+  conn.create_table :unshared_related_test_models, options.except(:translatable) do |t|
     t.integer :test_model_id
-    t.string :field1
-  end unless conn.tables.include?('unshared_related_test_models')
+    t.string :my_field
+  end
 
-  conn.create_table :translatable_related_test_models, :translatable => true do |t|
+  conn.create_table :translatable_related_test_models, options do |t|
     t.integer :test_model_id
     t.integer :related_test_model_id
     t.integer :shared_related_test_model_id
-    t.string :field
+    t.string :my_field
     t.string :common
     t.integer :lock_version, :default => 0
-  end unless conn.tables.include?('translatable_related_test_models')
+  end
 
-  conn.create_table :chain_test_model_as, :translatable => true do |t|
+  conn.create_table :chain_test_model_as, options do |t|
     t.integer :chain_test_model_b_id
-    t.string :field
-  end unless conn.tables.include?('chain_test_model_as')
+    t.string :my_field
+  end
 
-  conn.create_table :chain_test_model_bs, :translatable => true do |t|
+  conn.create_table :chain_test_model_bs, options do |t|
     t.integer :chain_test_model_c_id
-    t.string :field
-  end unless conn.tables.include?('chain_test_model_bs')
+    t.string :my_field
+  end
 
-  conn.create_table :chain_test_model_cs, :translatable => true do |t|
+  conn.create_table :chain_test_model_cs, options do |t|
     t.integer :chain_test_model_a_id
-    t.string :field
-  end unless conn.tables.include?('chain_test_model_cs')
+    t.string :my_field
+  end
 
-  conn.create_table :one_one_test_models, :translatable => true do |t|
+  conn.create_table :one_one_test_models, options do |t|
     t.integer :one_one_test_model_id
     t.string :independent
     t.string :common
-  end unless conn.tables.include?('one_one_test_models')
+  end
 
-  conn.create_table :inheritance_test_models, :translatable => true do |t|
+  conn.create_table :inheritance_test_models, options do |t|
     t.integer :translatable_related_test_model_id
     t.integer :related_test_model_id
     t.integer :test_model_id
-    t.string :field
+    t.string :my_field
     t.string :mixed
     t.string :type
-  end unless conn.tables.include?('inheritance_test_models')
+  end
 
-  conn.create_table :callback_test_models, :translatable => true do |t|
-    t.string :field
-  end unless conn.tables.include?('callback_test_models')
+  conn.create_table :callback_test_models, options do |t|
+    t.string :my_field
+  end
 
   # Models used to test extensions
   TestModel.class_eval do
     belongs_to :related_test_model
-    named_scope :field1_is_1, {:conditions => {:field1 => '1'}}
-    named_scope :field1_is_2, {:conditions => {:field1 => '2'}}
+    scope :my_field_is_1, {:conditions => {:my_field => '1'}}
+    scope :my_field_is_2, {:conditions => {:my_field => '2'}}
 
-    translatable :field1
+    translatable :my_field
     filtered_search_scopes
     has_many :related_test_models
     has_many :unshared_related_test_models
@@ -150,7 +153,7 @@ def create_test_model_backend
   end
 
   TranslatableRelatedTestModel.class_eval do
-    translatable :field
+    translatable :my_field
     belongs_to :test_model
     belongs_to :related_test_model, :translation_shared => true
     has_many :inheritance_test_models, :translation_shared => true
@@ -160,18 +163,18 @@ def create_test_model_backend
   end
 
   ChainTestModelA.class_eval do
-    translatable :field
+    translatable :my_field
     belongs_to :chain_test_model_b, :translation_shared => true
     has_many :chain_test_model_cs, :translation_shared => true
     has_many :chain_test_model_as, :translation_shared => true, :through => :chain_test_model_cs, :source => :chain_test_model_a
   end
   ChainTestModelB.class_eval do
-    translatable :field
+    translatable :my_field
     belongs_to :chain_test_model_c, :translation_shared => true
     has_many :chain_test_model_as, :translation_shared => true
   end
   ChainTestModelC.class_eval do
-    translatable :field, :shared_relations => :chain_test_model_bs
+    translatable :my_field, :shared_relations => :chain_test_model_bs
     belongs_to :chain_test_model_a, :translation_shared => true
     has_many :chain_test_model_bs, :translation_shared => true
   end
@@ -184,7 +187,7 @@ def create_test_model_backend
   end
 
   InheritanceTestModel.class_eval do
-    translatable :field
+    translatable :my_field
     belongs_to :test_model
     belongs_to :related_test_model, :translation_shared => true
     belongs_to :translatable_related_test_model, :translation_shared => true
@@ -199,7 +202,7 @@ def create_test_model_backend
   end
 
   Object.const_set('GrandsonClass', Class.new(FirstSubclass)) unless Object.const_defined? 'GrandsonClass'
-
+  @already_built = true
 end
 
   class CallbackTestModel < ActiveRecord::Base

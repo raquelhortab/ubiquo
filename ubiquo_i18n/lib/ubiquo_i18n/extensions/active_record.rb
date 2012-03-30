@@ -45,7 +45,7 @@ module UbiquoI18n
 
           # try to generate the attribute setter
           self.new.send(:locale=, :generate) rescue nil
-          if instance_methods.include?('locale=') && !instance_methods.include?('locale_with_duality=')
+          if instance_methods.include?(:locale=) && !instance_methods.include?(:locale_with_duality=)
             # give the proper behaviour to the locale setter
             define_method('locale_with_duality=') do |locale|
               locale = case locale
@@ -61,7 +61,7 @@ module UbiquoI18n
 
           end
 
-          unless instance_methods.include?("in_locale")
+          unless instance_methods.include?(:in_locale)
             define_method('in_locale') do |*locales|
               self.class.locale(*locales).first(:conditions => {:content_id => self.content_id})
             end
@@ -87,7 +87,7 @@ module UbiquoI18n
           # find all content in spanish or any other locale if spanish dosn't exist: Model.locale('es', :all)
           # find all content in any locale: Model.locale(:all)
           #
-          named_scope :locale, lambda{|*locales|
+          scope :locale, lambda{|*locales|
             if locales.delete(:ALL)
               locales << :all
               ActiveSupport::Deprecation.warn('Use :all instead of :ALL in locale()', caller(5))
@@ -99,7 +99,7 @@ module UbiquoI18n
           # Using localized is like using locale(current_locale, :all),
           # but automatically using the possibly defined locale fallback list
           # if the Locale.use_fallbacks flag is enabled
-          named_scope :localized, lambda{
+          scope :localized, lambda{
             locales = Locale.use_fallbacks ? Locale.fallbacks(Locale.current) : [Locale.current]
             {:locale_list => locales}
           }
@@ -107,7 +107,7 @@ module UbiquoI18n
           # usage:
           # find all items of one content: Model.content(1).first
           # find all items of some contents: Model.content(1,2,3)
-          named_scope :content, lambda{|*content_ids|
+          scope :content, lambda{|*content_ids|
             {:conditions => {:content_id => content_ids}}
           }
 
@@ -115,7 +115,7 @@ module UbiquoI18n
           # find all translations of a given content: Model.translations(content)
           # will use the defined scopes to discriminate what are translations
           # remember it won't return 'content' itself
-          named_scope :translations, lambda{|content|
+          scope :translations, lambda{|content|
             scoped_conditions = []
             @translatable_scopes.each do |scope|
                 scoped_conditions << (String === scope ? scope : scope.call(content))
@@ -129,9 +129,9 @@ module UbiquoI18n
           }
 
           # Apply these named scopes to any possible already loaded subclass
-          subclasses.each do |klass|
-            klass.scopes.merge! scopes.slice(:locale, :translations, :content)
-          end
+#          descendants.each do |klass|
+#            klass.scopes.merge! scopes.slice(:locale, :translations, :content)
+#          end
 
           # Instance method to find translations
           define_method('translations') do
@@ -342,8 +342,8 @@ module UbiquoI18n
                     end
                   end
 
-                  # build the complete proxy_target and replace its contents
-                  target = association.proxy_target
+                  # build the complete proxy_association.target and replace its contents
+                  target = association.proxy_association.target
                   target.clear
 
                   if reflection.has_many_through_translatable?
@@ -395,34 +395,34 @@ module UbiquoI18n
               alias_method_chain association_id, :shared_translations
 
               # Syncs the deletion of association elements across translations
-              add_association_callbacks(
-                association_id,
-                :after_remove => Proc.new { |record, removed|
-                  record.class.translating_relations do
-                    if reflections[association_id].is_translation_shared?
-
-                      # Tell to the record translations that this element has been removed
-                      record.translations.each do |translation|
-                        to_remove = removed.class.is_translatable? ? removed.with_translations : removed
-                        translation.send(association_id).delete to_remove
-                      end if is_translatable?
-
-                      # The translations of the removed item have to be also removed
-                      # from this record's association
-                      if removed.class.is_translatable?
-                        record.send(association_id).delete removed.translations
-                      end
-
-                    end
-                  end
-                }
-              )
+#              add_association_callbacks(
+#                association_id,
+#                :after_remove => Proc.new { |record, removed|
+#                  record.class.translating_relations do
+#                    if reflections[association_id].is_translation_shared?
+#
+#                      # Tell to the record translations that this element has been removed
+#                      record.translations.each do |translation|
+#                        to_remove = removed.class.is_translatable? ? removed.with_translations : removed
+#                        translation.send(association_id).delete to_remove
+#                      end if is_translatable?
+#
+#                      # The translations of the removed item have to be also removed
+#                      # from this record's association
+#                      if removed.class.is_translatable?
+#                        record.send(association_id).delete removed.translations
+#                      end
+#
+#                    end
+#                  end
+#                }
+#              )
 
               # Modifies the behaviour of :dependent option to take into account
               # translation-shared associations
-              if reflection.macro == :has_many && is_translatable?
-                reflection.configure_dependency_for_has_many_with_shared_translations
-              end
+#              if reflection.macro == :has_many && is_translatable?
+#                reflection.configure_dependency_for_has_many_with_shared_translations
+#              end
 
               # Marker to avoid recursive redefinition
               initialize_translation_shared association_id
@@ -604,12 +604,12 @@ module UbiquoI18n
         # when we merge scopes. We use later this information to easily
         # discriminate which conditions are to be applied in only one
         # translation or for all translations
-        def with_scope_with_locale_filter(method_scoping = {}, action = :merge, &block)
-          if (method_scoping[:find][:conditions] rescue false)
-            method_scoping[:find][:unmerged_conditions] = method_scoping[:find][:conditions]
-          end
-          with_scope_without_locale_filter(method_scoping, action, &block)
-        end
+#        def with_scope_with_locale_filter(method_scoping = {}, action = :merge, &block)
+#          if (method_scoping[:find][:conditions] rescue false)
+#            method_scoping[:find][:unmerged_conditions] = method_scoping[:find][:conditions]
+#          end
+#          with_scope_without_locale_filter(method_scoping, action, &block)
+#        end
 
 
         # Attributes that are always 'translated' (not copied between languages)
@@ -636,8 +636,6 @@ module UbiquoI18n
 
         @@translatable_inheritable_instance_variables = %w{global_translatable_attributes translatable_scopes}
 
-        ASSOCIATION_TYPES = %w{ has_one belongs_to has_many has_and_belongs_to_many }
-
         def self.extended(klass)
           # Ensure that the needed variables are inherited
           @@translatable_inheritable_instance_variables.each do |inheritable|
@@ -651,14 +649,15 @@ module UbiquoI18n
             class << self
               alias_method_chain :find, :locale_filter
               alias_method_chain :count, :locale_filter
-              alias_method_chain :with_scope, :locale_filter
-              VALID_FIND_OPTIONS << :locale_list << :unmerged_conditions
+#              alias_method_chain :with_scope, :locale_filter
+              ::ActiveRecord::SpawnMethods::VALID_FIND_OPTIONS << :locale_list << :unmerged_conditions
             end
           end
 
           # Accept the :translation_shared option when defining associations
-          ASSOCIATION_TYPES.each do |type|
-            klass.send("valid_keys_for_#{type}_association") << :translation_shared
+          association_builder = ::ActiveRecord::Associations::Builder::Association
+          ([association_builder] + association_builder.descendants).each do |builder|
+            builder.valid_options << :translation_shared
           end
         end
 
@@ -672,9 +671,9 @@ module UbiquoI18n
         end
 
         def clear_validation identifier
-          self.validate.delete_if do |v|
-            v.identifier == identifier
-          end if self.validate.respond_to?(:delete_if)
+#          self.validate.delete_if do |v|
+#            v.identifier == identifier
+#          end if self.validate.respond_to?(:delete_if)
         end
 
         def uniqueness_per_entity_validation_identifier
@@ -698,7 +697,7 @@ module UbiquoI18n
               humanized_locale = humanized_locale.native_name if humanized_locale
               I18n.t(
                 'ubiquo.i18n.locale_uniqueness_per_entity',
-                :model => self.human_name,
+                :model => self.model_name.human,
                 :object_locale => humanized_locale
               )
             }
@@ -846,8 +845,8 @@ module UbiquoI18n
               self.class_eval do
                 def after_find_with_neutralize; end
                 def after_initialize_with_neutralize; end
-                alias_method_chain :after_find, :neutralize if self.instance_methods.include?("after_find")
-                alias_method_chain :after_initialize, :neutralize if self.instance_methods.include?("after_initialize")
+                alias_method_chain :after_find, :neutralize if self.instance_methods.include?(:after_find)
+                alias_method_chain :after_initialize, :neutralize if self.instance_methods.include?(:after_initialize)
               end
 
               begin
@@ -894,8 +893,8 @@ module UbiquoI18n
               ensure
                 # restore after_find callback method
                 self.class_eval do
-                  alias_method :after_find, :after_find_without_neutralize if self.instance_methods.include?("after_find")
-                  alias_method :after_initialize, :after_initialize_without_neutralize if self.instance_methods.include?("after_initialize")
+                  alias_method :after_find, :after_find_without_neutralize if self.instance_methods.include?(:after_find)
+                  alias_method :after_initialize, :after_initialize_without_neutralize if self.instance_methods.include?(:after_initialize)
                 end
               end
 
@@ -1075,9 +1074,9 @@ module UbiquoI18n
                 reset = original_association && !original_association.loaded?
                 without_current_locale(self.locale) do
                   [self.send(name)].flatten.compact.each do |record|
-                    if record.class.is_translatable? && record.in_locale?(self.locale) && record.send(reflection.primary_key_name) != self.class.primary_key
+                    if record.class.is_translatable? && record.in_locale?(self.locale) && record.send(reflection.association_foreign_key) != self.class.primary_key
                       record.without_updating_translations do
-                        record.update_attribute reflection.primary_key_name, send(self.class.primary_key)
+                        record.update_attribute reflection.association_foreign_key, send(self.class.primary_key)
                       end
                     end
                   end
@@ -1133,7 +1132,7 @@ module UbiquoI18n
                 ref.macro != :belongs_to ||
                 !ref.is_translation_shared? ||
                 ((model = [send(name)].first) && model.class.is_translatable?)
-            end.map{|name, ref| ref.primary_key_name})
+            end.map{|name, ref| ref.association_foreign_key})
           attribute_names - translatable_attributes.map{|attr| attr.to_s}
         end
 
@@ -1147,7 +1146,7 @@ module UbiquoI18n
 
         # Returns true if the primary_key for +reflection+ has been changed, and it was not nil before
         def has_updated_existing_primary_key reflection
-          send("#{reflection.primary_key_name}_changed?") && send("#{reflection.primary_key_name}_was")
+          send("#{reflection.association_foreign_key}_changed?") && send("#{reflection.association_foreign_key}_was")
         end
 
         def attributes_except_unique_for_translation
