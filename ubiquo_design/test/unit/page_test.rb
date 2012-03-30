@@ -158,7 +158,7 @@ class PageTest < ActiveSupport::TestCase
     assert_not_nil widget
     assert_equal widget.class, Free
     widget.content = ""
-    widget.save_without_validation
+    widget.save(:validate => false)
     widget.reload
     assert !widget.valid?
 

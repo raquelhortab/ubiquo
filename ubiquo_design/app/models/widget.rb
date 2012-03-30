@@ -11,9 +11,10 @@ class Widget < ActiveRecord::Base
     # :clonation_exceptions => [:asset_relations]
   # )
   # link: https://github.com/rails/rails/commit/e5ab4b0d07ade8d89d633ca744c0eafbc53ee921
-  class_attribute :previewable, :clonation_exceptions
-  self.previewable = true
-  self.clonation_exceptions = [:asset_relations]
+  # NOTE: use of the suffix _attr for compatibility reasons
+  class_attribute :previewable_attr, :clonation_exceptions_attr
+  self.previewable_attr = true
+  self.clonation_exceptions_attr = [:asset_relations]
 
   cattr_accessor :behaviours
 
@@ -130,20 +131,20 @@ class Widget < ActiveRecord::Base
   end
 
   def self.is_previewable?
-    read_inheritable_attribute :previewable
+    previewable_attr
   end
 
   def self.previewable(value)
-    write_inheritable_attribute :previewable, (value == true)
+    previewable_attr = (value == true)
   end
 
   def self.clonation_exception(value)
     exceptions = clonation_exceptions + [value.to_sym]
-    write_inheritable_attribute :clonation_exceptions, exceptions.uniq
+    clonation_exceptions_attr = exceptions.uniq
   end
 
   def self.clonation_exceptions
-    Array(read_inheritable_attribute(:clonation_exceptions))
+    Array(clonation_exceptions_attr)
   end
 
   def self.is_a_clonable_has_one?(reflection)

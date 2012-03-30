@@ -98,7 +98,7 @@ class Page < ActiveRecord::Base
     begin
       transaction do
         self.clear_published_page
-        published_page = self.clone
+        published_page = self.dup
         published_page.attributes = {
           :is_modified => false,
           :published_id => nil
@@ -108,7 +108,7 @@ class Page < ActiveRecord::Base
 
         published_page.blocks.destroy_all
         self.blocks.each do |block|
-          new_block = block.clone
+          new_block = block.dup
           new_block.page = published_page
           new_block.save!
           uhook_publish_block_widgets(block, new_block) do |widget, new_widget|
