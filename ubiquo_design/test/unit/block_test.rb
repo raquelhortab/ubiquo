@@ -96,7 +96,7 @@ class BlockTest < ActiveSupport::TestCase
     page = pages(:one_design)
     block = Block.create_for_block_type_and_page("static", page)
     page.destroy
-    assert_nothing_raised {block.destroy}
+    assert_nothing_raised { block.destroy }
   end
 
   def test_should_return_available_shared_blocks

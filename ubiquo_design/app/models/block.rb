@@ -59,5 +59,7 @@ class Block < ActiveRecord::Base
     if self.page && self.page.reload
       self.page.update_modified(true) unless self.page.is_modified?
     end
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
 end
