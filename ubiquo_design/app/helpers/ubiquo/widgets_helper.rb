@@ -3,15 +3,14 @@ module Ubiquo::WidgetsHelper
     form_remote_for(
       :widget,
       widget,
-      :url => ubiquo.page_design_widget_path(:page_id => page.id,
-                                             :design_id => 1,
-                                             :id => widget.id),
+      :url => ubiquo.page_widget_path(:page_id   => page.id,
+                                             :id        => widget.id),
       :before => "killeditor()",
-      :html => {
+      :html   => {
         :method => :put,
-        :name => "widget_edit_form",
-        :id => "widget_form",
-      }, &block)
+        :name   => "widget_edit_form",
+        :id     => "widget_form", },
+       &block)
   end
 
   def widget_submit

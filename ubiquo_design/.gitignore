@@ -7,6 +7,7 @@ pkg/*
 test/dummy/log
 test/dummy/db/*.sqlite3
 test/dummy/protected
-test/dummy/public
+test/dummy/public/media
+test/dummy/public/javascripts/tiny_mce/
 test/dummy/tmp
 test/dummy/config/tiny_mce.yml

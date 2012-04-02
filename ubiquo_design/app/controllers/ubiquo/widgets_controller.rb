@@ -30,7 +30,7 @@ class Ubiquo::WidgetsController < UbiquoController
           page.hide "widget_#{@widget.id}"
           page.visual_effect :slide_down, "widget_#{@widget.id}"
           id, opts = sortable_block_type_holder_options(@block.block_type,
-                                                        ubiquo.change_order_page_design_widgets_path(@page),
+                                                        ubiquo.change_order_page_widgets_path(@page),
                                                         @page.blocks.map(&:block_type))
           page.sortable id, opts
           page << "myLightWindow._processLink($('edit_widget_#{@widget.id}'));" if @widget.is_configurable?
@@ -81,7 +81,7 @@ class Ubiquo::WidgetsController < UbiquoController
       end
     else
       respond_to do |format|
-        format.html { redirect_to(ubiquo.page_design_widget_path(@page, @widget))}
+        format.html { redirect_to(ubiquo.page_widget_path(@page, @widget))}
         format.js {
           render :update do |page|
             self.uhook_extra_rjs_on_update(page, false) do |page|

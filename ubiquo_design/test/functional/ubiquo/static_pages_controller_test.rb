@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
+  include TestSupport::UrlHelper
 
   def setup
     Ubiquo::Settings.context(:ubiquo_design).set(:block_type_for_static_section_widget, :main)

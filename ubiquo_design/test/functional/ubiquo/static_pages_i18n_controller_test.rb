@@ -6,6 +6,7 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 # translatable
 class Ubiquo::StaticPagesI18nControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
+  include TestSupport::UrlHelper
 
   if Ubiquo::Plugin.registered[:ubiquo_i18n]
 

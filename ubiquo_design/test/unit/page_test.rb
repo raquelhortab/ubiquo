@@ -232,7 +232,7 @@ class PageTest < ActiveSupport::TestCase
     # end
     page = create_page
     page.blocks = []
-    widget = StaticSection.create(:name => 'Test static', :title => 'Test')
+    widget = Free.create(:name => 'Test static', :content => 'Test')
     assert_difference 'Block.count' do
       page.add_widget(:main, widget)
     end
@@ -242,7 +242,7 @@ class PageTest < ActiveSupport::TestCase
     page = Page.new(:url_name => "test", :name => "", :page_template => "static")
     assert_no_difference 'Page.count' do
       assert_no_difference 'Widget.count' do
-        assert !page.add_widget(:main, StaticSection.new(:name => 'Test static', :title => 'Test'))
+        assert !page.add_widget(:main, Free.new(:name => 'Test static', :content => 'Test'))
       end
     end
     assert page.errors.include?(:name)
@@ -250,7 +250,7 @@ class PageTest < ActiveSupport::TestCase
 
   def test_should_rollback_if_widget_has_error_on_add_widget
     page = Page.new(:url_name => "test", :name => "test", :page_template => "static")
-    widget = StaticSection.new(:name => '', :title => '')
+    widget = Free.new(:name => '', :content => '')
     assert_no_difference 'Page.count' do
       assert_no_difference 'Widget.count' do
           assert !page.add_widget(:main, widget)
@@ -262,7 +262,7 @@ class PageTest < ActiveSupport::TestCase
   def test_should_use_existing_block_on_add_widget
     page = create_page
     page.blocks.create(:block_type => 'main')
-    widget = StaticSection.create(:name => 'Test static', :title => 'Test')
+    widget = Free.create(:name => 'Test static', :content => 'Test')
     assert_no_difference 'Block.count' do
       page.add_widget(:main, widget)
     end

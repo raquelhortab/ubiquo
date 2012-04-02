@@ -1,10 +1,8 @@
 require File.dirname(__FILE__) + '/../../../test_helper'
 
 class GenericListingWidgetUbiquoTest < ActionController::TestCase
-
-  def setup
-    @controller = Ubiquo::WidgetsController.new
-  end
+  include TestSupport::UrlHelper
+  tests Ubiquo::WidgetsController
 
   test "edit new form" do
     widget, page = create_widget(:generic_listing)

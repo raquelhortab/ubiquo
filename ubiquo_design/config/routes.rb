@@ -9,35 +9,39 @@ Ubiquo::Engine.routes.draw do
   end
 
   resources :pages do
-    resources :design do
+    resources :widgets do
+      collection do
+        # TODO: review this action
+        get :change_order
+        post :change_order
+        put :change_order
+        delete :change_order
+      end
+
       member do
-        get :preview
-        put :publish
-        put :unpublish
+        post :change_name
       end
-
-      resources :widgets do
-        collection do
-          # TODO: review this action
-          get :change_order
-          post :change_order
-          put :change_order
-          delete :change_order
-        end
-
-        member do
-          post :change_name
-        end
-      end
-
-      resources :blocks
     end
+
+    resources :blocks
   end
+
+  match 'page/:page_id/design',
+        :to => 'ubiquo/design#show',
+        :as => :page_design
+  match 'page/:page_id/design/preview',
+        :to => 'ubiquo/design#preview',
+        :as => :preview_page_design
+  match 'page/:page_id/design/publish',
+        :to => 'ubiquo/design#publish',
+        :as => :publish_page_design
+  match 'page/:page_id/design/unpublish',
+        :to => 'ubiquo/design#unpublish',
+        :as => :unpublish_page_design
 end
 
-# Those routes should be mounted at '/'
-UbiquoDesign::Engine.routes.draw do
+Rails.application.routes.draw do
   # Proposal for public routes.
-  match '*url/page/:page' => 'pages#show', :constraints => { :page => /\d*/ }
-  match '*url' => 'pages#show'
+  match '/(*url)/page/:page' => 'pages#show', :constraints => { :page => /\d*/ }
+  match '/(*url)' => 'pages#show'
 end

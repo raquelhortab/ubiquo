@@ -5,6 +5,7 @@ module TestSupport
     def self.included(base)
       base.send :include, Ubiquo::Engine.routes.url_helpers
       base.send :include, Rails.application.routes.mounted_helpers
+      base.send :include, Rails.application.routes.url_helpers
     end
   end
 end

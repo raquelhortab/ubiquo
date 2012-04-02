@@ -2,7 +2,7 @@
 
   <% if @page.blocks.include?(widget.block) %>
     <%= link_to_remote t('ubiquo.design.widget_removal'),
-                       :url => ubiquo.page_design_widget_path(@page, widget),
+                       :url => ubiquo.page_widget_path(@page, widget),
                        :method => :delete, 
                        :confirm => t('ubiquo.design.confirm_widget_removal'),
                        :html => {:class => "delete", 
@@ -19,7 +19,7 @@
       <% javascript_tag do %>
       new Ajax.InPlaceEditor(
       "widget_name_field_<%= widget.id %>",
-      "<%= ubiquo.change_name_page_design_widget_path(@page, widget) %>",
+      "<%= ubiquo.change_name_page_widget_path(@page, widget) %>",
       {
         savingText:"<%= t('ubiquo.design.widget_saving')%>",
         okText:"<%= t('ubiquo.design.widget_save') %>",

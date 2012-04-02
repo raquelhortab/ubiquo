@@ -4,7 +4,7 @@
 </h2>
 <%= error_messages_for 'page' %>
 
-<% form_for([:ubiquo, @page]) do |f| %>
+<%= form_for(@page, :url => ubiquo.page_path(@page)) do |f| %>
 	<%= render :partial => 'form', :locals => {:f => f} %>
 	  <div class="form-item-submit">
 	    <%= f.submit t('ubiquo.save'), :class => "bt-update" %>

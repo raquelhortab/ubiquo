@@ -1,4 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 Dummy::Application.routes.draw do
-  mount UbiquoDesign::Engine => '/' # public routes
-  mount Ubiquo::Engine       => '/ubiquo'
+  mount Ubiquo::Engine => '/ubiquo'
 end

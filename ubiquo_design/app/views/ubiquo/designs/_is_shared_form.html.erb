@@ -8,5 +8,5 @@
   </label>
 </p>
 <%= observe_field "is_shared_block_#{block.id}",
-                  :url => ubiquo.page_design_block_path(page, block),
+                  :url => ubiquo.page_block_path(page, block),
                   :with => "'is_shared='+$F('is_shared_block_#{block.id}')+'&_method=put&style_class=#{style_class}'" %>

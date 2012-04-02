@@ -30,7 +30,7 @@
         <% if page.is_previewable? %>
         <li>
           <%= button_to t('ubiquo.design.preview'),
-                        ubiquo.preview_page_design_path(page),
+            ubiquo.preview_page_design_path(:page_id => page.id),
                         :method => :get,:popup => true, :class => 'preview' %>
         </li>
         <% end %>

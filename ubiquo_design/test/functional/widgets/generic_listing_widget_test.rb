@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class GenericListingWidgetTest < ActionController::TestCase
+  include TestSupport::UrlHelper
   tests PagesController
 
   test "generic_listing widget should get show" do

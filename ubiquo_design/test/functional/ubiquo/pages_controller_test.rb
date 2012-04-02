@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::PagesControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
+  include TestSupport::UrlHelper
 
   def setup
   end

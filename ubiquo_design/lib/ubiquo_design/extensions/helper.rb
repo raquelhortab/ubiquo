@@ -35,13 +35,17 @@ module UbiquoDesign
       def url_for_page(page, url_for_options = {})
         page = Page.find_by_key(page.to_s) unless page.is_a?(Page)
         page_url_for_options = {
-          :controller => '/pages',
+          :controller => 'pages',
           :action => 'show',
           # FIXME split due to rails bug #5135
           :url => "#{page.url_name}/#{url_for_options.delete(:url)}".split('/'),
           :key => nil # to overwrite current key in params
         }
-        url_for(page_url_for_options.merge(url_for_options))
+        _page_url_options = page_url_for_options.merge(url_for_options)
+        _page_url_options.delete(:key)
+        _page_url_options[:only_path] = true
+
+        app_routes.url_for(_page_url_options)
       end
 
       # Create a link to a public page from a page instance
@@ -60,6 +64,12 @@ module UbiquoDesign
         end
         options.join("\n")
       end
+
+      # Direct access to the app routes
+      def app_routes
+        Rails.application.routes
+      end
+      protected :app_routes
     end
   end
 end

@@ -2,6 +2,7 @@ class Ubiquo::DesignsController < UbiquoController
   class UnpreviewablePage < StandardError; end
   include UbiquoDesign::RenderPage
   helper 'ubiquo/widgets'
+  helper 'pages'
   ubiquo_config_call :design_access_control, {:context => :ubiquo_design}
   # FIXME: tiny_mce causes problems with Rails 3.2. It calls the method javascript_expansions
   # uses_tiny_mce(:options => default_tiny_mce_options.merge(:entities => ''))

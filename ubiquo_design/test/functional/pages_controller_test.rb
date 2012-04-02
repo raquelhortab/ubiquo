@@ -3,6 +3,8 @@ require File.dirname(__FILE__) + "/../test_helper.rb"
 class PagesControllerTest < ActionController::TestCase
   # use_ubiquo_fixtures
 
+  include TestSupport::UrlHelper
+
   def test_should_get_show
     get :show, :url => Page.published.first.url_name
     assert_response :success
@@ -37,7 +39,7 @@ class PagesControllerTest < ActionController::TestCase
 
   def test_should_recognize_root
     assert_recognizes(
-      { :controller => "pages", :action => "show", :url => [] },
+      { :controller => "pages", :action => "show", :url => '' },
       ""
     )
   end
