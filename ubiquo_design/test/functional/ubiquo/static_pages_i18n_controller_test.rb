@@ -50,9 +50,9 @@ class Ubiquo::StaticPagesI18nControllerTest < ActionController::TestCase
         :static_section => {
           :title => "English section",
           :body => "this is an english section",
-          :locale => "en_US"
+          :locale => "en"
         },
-        :locale =>"en_US" # we are browsing US locale
+        :locale =>"en" # we are browsing US locale
       )
 
       created_widgets = page.reload.blocks.map{|i| i.widgets}.flatten

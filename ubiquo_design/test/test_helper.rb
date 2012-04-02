@@ -12,6 +12,7 @@ Rails.backtrace_cleaner.remove_silencers!
 TestSupport::Database.check_psql_adapter
 # Run any available migration
 TestSupport::Database.migrate!
+TestSupport::Database.check_psql_adapter
 
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
 
@@ -28,6 +29,3 @@ class TestWidgetWithValidations < Widget
   self.validates_numericality_of :number
 end
 
-if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
-  ActiveRecord::Base.connection.client_min_messages = "ERROR"
-end

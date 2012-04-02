@@ -6,7 +6,7 @@ module TestSupport
 
   # = Support for database manipulation
   #
-  # This class creates the needed models and executes the pending migrations
+  # This class executes the pending migrations
   class Database
     class << self
 

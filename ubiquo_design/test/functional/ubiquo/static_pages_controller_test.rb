@@ -1,12 +1,24 @@
+# -*- encoding: utf-8 -*-
 
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
+module ApplicationHelper
+  # mock ubiquo_media helpers
+  def media_selector(*)
+    true
+  end
+end
+
 class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
-  # use_ubiquo_fixtures
   include TestSupport::UrlHelper
 
   def setup
     Ubiquo::Settings.context(:ubiquo_design).set(:block_type_for_static_section_widget, :main)
+    @controller.stubs(:current_locale).returns('en')
+  end
+
+  def teardown
+    @controller.view_context.unstub(:media_selector)
   end
 
   def test_should_get_index_with_only_static_pages
@@ -32,7 +44,7 @@ class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
     get :new
     assert_response :success
   end
-  
+
   def test_should_get_new_with_possible_parent_pages
     get :new
     assert_response :success
