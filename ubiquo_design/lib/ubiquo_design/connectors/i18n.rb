@@ -78,7 +78,7 @@ module UbiquoDesign
             block.widgets.each do |widget|
               next_content_id = mapped_content_ids[widget.content_id]
 
-              new_widget = widget.clone
+              new_widget = widget.dup
               new_widget.block = new_block
               new_widget.content_id = next_content_id
               new_widget.save!(:validate => false)

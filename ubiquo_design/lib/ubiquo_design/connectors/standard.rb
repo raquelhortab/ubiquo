@@ -17,7 +17,7 @@ module UbiquoDesign
 
           def uhook_publish_block_widgets(block, new_block)
             block.widgets.each do |widget|
-              new_widget = widget.clone
+              new_widget = widget.dup
               new_widget.block = new_block
               new_widget.save!(:validate => false)
               yield widget, new_widget
@@ -31,7 +31,7 @@ module UbiquoDesign
             widget.class.reflections.each do |key, reflection|
               if widget.class.is_a_clonable_has_many?(reflection)
                 widget.send(key).each do |relation|
-                  new_widget.send(key) << relation.clone
+                  new_widget.send(key) << relation.dup
                 end
               elsif widget.class.is_a_clonable_has_one?(reflection)
                 new_widget.send("build_#{key}", widget.send(key).attributes)
