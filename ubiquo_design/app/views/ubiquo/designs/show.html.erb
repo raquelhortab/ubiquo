@@ -40,10 +40,10 @@
 </div>
 <% end %>
 
-<% javascript_tag do %>
+<%= javascript_tag do %>
   document.observe("dom:loaded", function() {
   <% @page.available_widgets_per_block.each_pair do |block, widgets| -%>
-    BlockStructure.add(<%= block.to_json %>, <%= widgets.to_json %>);
+    BlockStructure.add(<%= raw block.to_json %>, <%= raw widgets.to_json %>);
   <% end -%>
   });
 <% end %>

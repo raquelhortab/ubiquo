@@ -9,11 +9,11 @@ module UbiquoDesign
 
       def template_mock(page)
         def @controller.render_template_file(*args)
-          template_file = File.join(ActiveSupport::TestCase.fixture_path, "templates", "test", "public.html.erb")
+          template_file = File.join(ActiveSupport::TestCase.fixture_path, "templates", "test", "public")
           render :file => template_file
         end
         def @controller.render_ubiquo_design_template(page)
-          render_to_string :file => File.join(ActiveSupport::TestCase.fixture_path, "templates", "test", "ubiquo.html.erb"), :locals => {:page => page}
+          render_to_string :file => File.join(ActiveSupport::TestCase.fixture_path, "templates", "test", "ubiquo"), :locals => {:page => page}
         end
       end
 

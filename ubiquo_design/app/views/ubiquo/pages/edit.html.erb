@@ -5,13 +5,13 @@
 <%= error_messages_for 'page' %>
 
 <%= form_for(@page, :url => ubiquo.page_path(@page)) do |f| %>
-	<%= render :partial => 'form', :locals => {:f => f} %>
-	  <div class="form-item-submit">
-	    <%= f.submit t('ubiquo.save'), :class => "bt-update" %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+    <div class="form-item-submit">
+      <%= f.submit t('ubiquo.save'), :class => "bt-update" %>
             <%= button_to_function t('ubiquo.back_to_list'),
                "document.location.href='#{ubiquo.pages_path}'",
                :class => "bt-back" %>
-	  </div>
+    </div>
 <% end %>
 
 <% content_for :sidebar do %>

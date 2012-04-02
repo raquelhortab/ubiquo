@@ -2,7 +2,7 @@
 <h2><%= render :partial => "submenu" %></h2>
 <%= error_messages_for 'static_page' %>
 
-<% form_for @static_page,
+<%= form_for @static_page,
             :url => ubiquo.static_page_path(@static_page),
             :html => { :method => :put } do |form| %>
   <%= render :partial => 'form', :locals => { :form => form } %>

@@ -1,5 +1,5 @@
 <%= widget_header widget %>
-<% widget_form(page, widget) do |f| %>
+<%= widget_form(page, widget) do |f| %>
   <p>
     <%= f.label :title, t('ubiquo.widgets.static_section.title') %>
     <%= f.text_field :title %>

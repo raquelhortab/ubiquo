@@ -128,7 +128,8 @@ module UbiquoDesign
         reset_variables_added_to_assigns
         output #return the output rendered by the behaviour
       else
-        render_to_string :file => File.join("widgets", widget_name.to_s, "show.html.erb")
+        file_path = File.join("widgets", widget_name.to_s, "show")
+        render_to_string :file => file_path, :layout => false
       end
     end
 

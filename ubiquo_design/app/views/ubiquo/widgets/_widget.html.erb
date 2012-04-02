@@ -3,10 +3,10 @@
   <% if @page.blocks.include?(widget.block) %>
     <%= link_to_remote t('ubiquo.design.widget_removal'),
                        :url => ubiquo.page_widget_path(@page, widget),
-                       :method => :delete, 
+                       :method => :delete,
                        :confirm => t('ubiquo.design.confirm_widget_removal'),
-                       :html => {:class => "delete", 
-                       :alt => t('ubiquo.design.widget_removal'), 
+                       :html => {:class => "delete",
+                       :alt => t('ubiquo.design.widget_removal'),
                        :title => t('ubiquo.design.widget_removal')} %>
     <a href="#" class="move" onclick="return false;" alt="<%= t('ubiquo.design.widget_move') %>" title="<%= t('ubiquo.design.widget_move') %>"><%= t('ubiquo.design.widget_move') %></a>
     <% if widget.is_configurable? %>
@@ -16,22 +16,22 @@
   <div class="wrap">
     <h4 id="widget_name_field_<%= widget.id %>"><%= widget.name %></h4>
     <% if @page.blocks.include?(widget.block) %>
-      <% javascript_tag do %>
-      new Ajax.InPlaceEditor(
-      "widget_name_field_<%= widget.id %>",
-      "<%= ubiquo.change_name_page_widget_path(@page, widget) %>",
-      {
-        savingText:"<%= t('ubiquo.design.widget_saving')%>",
-        okText:"<%= t('ubiquo.design.widget_save') %>",
-        cancelText: "<%= t('ubiquo.design.widget_cancel') %>",
-        clickToEditText: "<%= t('ubiquo.design.widget_click_to_edit') %>",
-        loadingText:"<%= t('ubiquo.design.widget_click_to_edit') %>",
-        callback: function(form, value) {
-        return 'authenticity_token=' + encodeURIComponent('<%= Rails.env.test? ? "" : form_authenticity_token %>') + '&' + Form.serialize(form);
-      }
-      }
-      );
+      <%= javascript_tag do %>
+        new Ajax.InPlaceEditor(
+          "widget_name_field_<%= widget.id %>",
+          "<%= ubiquo.change_name_page_widget_path(@page, widget) %>",
+          {
+            savingText:"<%= t('ubiquo.design.widget_saving')%>",
+            okText:"<%= t('ubiquo.design.widget_save') %>",
+            cancelText: "<%= t('ubiquo.design.widget_cancel') %>",
+            clickToEditText: "<%= t('ubiquo.design.widget_click_to_edit') %>",
+            loadingText:"<%= t('ubiquo.design.widget_click_to_edit') %>",
+            callback: function(form, value) {
+              return 'authenticity_token=' + encodeURIComponent('<%= raw(Rails.env.test? ? "" : form_authenticity_token) %>') + '&' + Form.serialize(form);
+            }
+          }
+        );
       <% end %>
     <% end %>
-  </div>			
+  </div>
 </li>

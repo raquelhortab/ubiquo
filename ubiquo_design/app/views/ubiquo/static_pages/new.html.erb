@@ -2,7 +2,7 @@
 <h2><%= render :partial => "submenu" %></h2>
 <%= error_messages_for 'static_page' %>
 
-<% form_for @static_page, :url => ubiquo.static_pages_path do |form| %>
+<%= form_for @static_page, :url => ubiquo.static_pages_path do |form| %>
   <%= render :partial => 'form', :locals => {:form => form} %>
   <div class="form-item-submit">
     <input type="button" id="save_publish" value="<%= t('ubiquo.design.static_pages.create_and_publish')%>" class="bt-save_and_publish"/>

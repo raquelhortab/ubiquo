@@ -47,7 +47,7 @@ class Ubiquo::DesignsController < UbiquoController
   private
 
   def render_ubiquo_design_template(page)
-    template_file = Rails.root.join("app/views/page_templates/ubiquo/#{page.page_template}.html.erb")
+    template_file = Rails.root.join("app/views/page_templates/ubiquo/#{page.page_template}")
     if File.exists?(template_file)
       template_contents = render_to_string(:file => template_file,
                                            :locals => { :page => page })

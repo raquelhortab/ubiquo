@@ -35,7 +35,7 @@ module UbiquoDesign
     end
 
     def render_template_file(key, layout = 'main')
-      template_file = File.join(template_directory, "#{key}.html.erb")
+      template_file = File.join(template_directory, "#{key}")
       self.view_paths.unshift(File.dirname(template_file))
       render_output = render(:file => File.basename(template_file), :layout => layout)
       self.view_paths.paths.shift

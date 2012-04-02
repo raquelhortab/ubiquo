@@ -23,7 +23,7 @@
     <fieldset>
       <legend><%= t('ubiquo.design.page_template') %></legend>
       <ul class="page_templates">
-        <% @page_templates.each do |template_key| %>
+        <%= @page_templates.each do |template_key| %>
           <li>
             <%= f.radio_button(:page_template, template_key) %>
             <%= f.label "page_template_#{template_key}", t("ubiquo.page_templates.#{template_key}") %>
