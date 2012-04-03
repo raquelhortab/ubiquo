@@ -83,7 +83,7 @@ class Ubiquo::WidgetsControllerTest < ActionController::TestCase
   end
 
   def test_should_change_name
-    get :change_name, :page_id => pages(:one_design).id, :id => widgets(:one).id, :value => "New name"
+    xhr :post, :change_name, :page_id => pages(:one_design).id, :id => widgets(:one).id, :value => "New name"
     assert_not_nil widget = assigns(:widget)
     assert_response :success
     assert_equal widget.name, "New name"

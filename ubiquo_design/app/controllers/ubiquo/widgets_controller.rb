@@ -7,7 +7,9 @@ class Ubiquo::WidgetsController < UbiquoController
     @widget = uhook_find_widget
 
     template_path = "/widgets/%s/ubiquo/edit" % @widget.key
-    render :file => template_path, :locals => {:page => @page, :widget => @widget}
+    render :file   => template_path,
+           :layout => false,
+           :locals => {:page => @page, :widget => @widget}
   end
 
   def create
@@ -110,7 +112,9 @@ class Ubiquo::WidgetsController < UbiquoController
           end
         end
 
-        render :inline => "<%= javascript_tag(raw(#{js_response.to_json})) %>", :locals => {:js_response => js_response }
+        render :inline => "<%= javascript_tag(raw(#{js_response.to_json})) %>",
+               :layout => false,
+               :locals => { :js_response => js_response }
       end
     end
   end
