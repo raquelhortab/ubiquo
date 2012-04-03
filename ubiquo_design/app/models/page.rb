@@ -246,19 +246,17 @@ class Page < ActiveRecord::Base
   # Returns false if there are some problem saving page, creating
   # block or relating widget.
   def add_widget(block_key, widget)
-    begin
-      transaction do
-        self.save! if self.new_record?
-        block = self.blocks.select { |b| b.block_type == block_key.to_s }.first
-        block ||= Block.create!(:page_id => self.id, :block_type => block_key.to_s)
-        block.widgets << widget
-        uhook_add_widget(widget) do
-          widget.save!
-        end
+    transaction do
+      self.save! if self.new_record?
+      block = self.blocks.select { |b| b.block_type == block_key.to_s }.first
+      block ||= Block.create!(:page_id => self.id, :block_type => block_key.to_s)
+      block.widgets << widget
+      uhook_add_widget(widget) do
+        widget.save!
       end
-    rescue Exception => e
-      return false
     end
+  rescue Exception => e
+    return false
   end
 
   private

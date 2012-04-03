@@ -29,3 +29,17 @@ class TestWidgetWithValidations < Widget
   self.validates_numericality_of :number
 end
 
+
+# FIXME: Redefinition of classes due to ubiquo_media dependencies.
+module ApplicationHelper
+  # mock ubiquo_media helpers
+  def media_selector(*)
+    true
+  end
+end
+
+Object.send(:remove_const, :StaticSection)
+class StaticSection < Widget
+  self.allowed_options = [:title, :summary, :body]
+  validates_presence_of :title
+end

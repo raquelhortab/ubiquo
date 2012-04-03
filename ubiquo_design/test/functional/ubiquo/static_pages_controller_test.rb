@@ -2,13 +2,6 @@
 
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
-module ApplicationHelper
-  # mock ubiquo_media helpers
-  def media_selector(*)
-    true
-  end
-end
-
 class Ubiquo::StaticPagesControllerTest < ActionController::TestCase
   include TestSupport::UrlHelper
 
