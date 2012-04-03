@@ -42,6 +42,12 @@ end
 
 Rails.application.routes.draw do
   # Proposal for public routes.
-  match '/(*url)/page/:page' => 'pages#show', :constraints => { :page => /\d*/ }
-  match '/(*url)' => 'pages#show'
+  match '/', :to => 'pages#show', :url => ''
+  match '/page/:page',
+        :to          => 'pages#show',
+        :url         => '',
+        :constraints => { :page => /\d*/ }
+  match '/*url/page/:page', :to => 'pages#show', :constraints => { :page => /\d*/ }
+  match '/*url/page/:page', :to => 'pages#show', :constraints => { :page => /\d*/ }
+  match '/*url', :to => 'pages#show'
 end

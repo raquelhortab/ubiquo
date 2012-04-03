@@ -46,28 +46,28 @@ class PagesControllerTest < ActionController::TestCase
 
   def test_should_recognize_single_page
     assert_recognizes(
-      { :controller => "pages", :action => "show", :url => ['url'] },
+      { :controller => "pages", :action => "show", :url => 'url' },
       "url"
     )
   end
 
   def test_should_recognize_page_with_path
     assert_recognizes(
-      { :controller => "pages", :action => "show", :url => ['long', 'url'] },
+      { :controller => "pages", :action => "show", :url => 'long/url' },
       "long/url"
     )
   end
 
   def test_should_recognize_single_page_with_page_number
     assert_recognizes(
-      { :controller => "pages", :action => "show", :url => ['url'], :page => "12" },
+      { :controller => "pages", :action => "show", :url => 'url', :page => "12" },
       "url/page/12"
     )
   end
 
   def test_should_recognize_page_with_page_number
     assert_recognizes(
-      { :controller => "pages", :action => "show", :url => ['long', 'url'], :page => "12" },
+      { :controller => "pages", :action => "show", :url => 'long/url', :page => "12" },
       "long/url/page/12"
     )
   end
