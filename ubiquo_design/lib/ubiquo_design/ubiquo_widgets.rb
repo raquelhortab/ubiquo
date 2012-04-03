@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 #= How to create a widget and use it on ubiquo_design
 #
 #== Widgets
@@ -91,26 +93,26 @@ module UbiquoDesign
     end
 
     # Run a widget behaviour, given a +widget+ instance
-    def run_behaviour widget
+    def run_behaviour(widget)
       ::Widget.behaviours[widget.key][:proc].bind(self).call(widget)
     end
 
     def widget_performed?
-      performed?
+      widget_rendered? or widget_redirected?
     end
 
     def widget_redirected?
-      @performed_redirect
+      @_widget_status.to_s.match(/^3\d\d/)
     end
 
     def widget_rendered?
-      @performed_render
+      @_widget_response_body
     end
 
     # Renders the widget as a string
     #
     # The +widget+ is the instance to be rendered
-    def render_widget widget
+    def render_widget(widget)
       widget_name = widget.key
       unless available_widgets.include?(widget_name)
         require_dependency "widgets/#{widget_name}_widget"
@@ -118,20 +120,26 @@ module UbiquoDesign
       end
 
       output = run_behaviour(widget)
+      @_widget_status, @_widget_response_body = status, response_body
+
       if widget_redirected?
         # Not render any other widget
         false
       elsif widget_rendered?
-        # Erase render results: @performed_render and @performed_redirect
-        # This is used in ActionView::Base::render_to_string
-        erase_render_results
-        reset_variables_added_to_assigns
+        erase_response_body
         output #return the output rendered by the behaviour
       else
         file_path = File.join("widgets", widget_name.to_s, "show")
         render_to_string :file => file_path, :layout => false
       end
     end
+
+    def erase_response_body
+      # @performed_render and @performed_redirect are no longer available
+      # in Rails 3
+      self.instance_variable_set(:@_response_body, nil)
+    end
+    protected :erase_response_body
 
   end
 end
