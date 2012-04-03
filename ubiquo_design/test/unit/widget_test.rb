@@ -120,15 +120,19 @@ class WidgetTest < ActiveSupport::TestCase
   end
 
   def test_should_exclude_a_relation_when_required
-    TestWidget.expects(:write_inheritable_attribute).with(:clonation_exceptions, [:asset_relations, :my_relation])
+    TestWidget.expects(:"clonation_exceptions_attr=").
+      with([:asset_relations, :my_relation])
+
     TestWidget.clonation_exception(:my_relation)
   end
 
   def test_should_check_if_a_relation_can_be_clonable
-    TestWidget.expects(:read_inheritable_attribute).with(:clonation_exceptions).returns([:asset_relations, :my_relation]).twice
+    TestWidget.expects(:clonation_exceptions_attr).
+      twice.
+      returns([:asset_relations, :my_relation])
+
     assert !TestWidget.send(:is_relation_clonable?, :my_relation)
     assert Widget.send(:is_relation_clonable?, :my_relation)
-
     assert TestWidget.send(:is_relation_clonable?, :another)
   end
 
