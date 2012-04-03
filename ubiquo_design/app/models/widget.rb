@@ -6,12 +6,8 @@ class Widget < ActiveRecord::Base
 
   @@behaviours = {}
 
-  # @inheritable_attributes = inheritable_attributes.merge(
-    # :previewable => true,
-    # :clonation_exceptions => [:asset_relations]
-  # )
-  # link: https://github.com/rails/rails/commit/e5ab4b0d07ade8d89d633ca744c0eafbc53ee921
-  # NOTE: use of the suffix _attr for compatibility reasons
+  # NOTE: the @inheritable_attributes variable is no longer available in Rails 3
+  # NOTE: use of the suffix _attr to use the created accessors
   class_attribute :previewable_attr, :clonation_exceptions_attr
   self.previewable_attr = true
   self.clonation_exceptions_attr = [:asset_relations]
@@ -131,20 +127,20 @@ class Widget < ActiveRecord::Base
   end
 
   def self.is_previewable?
-    previewable_attr
+    self.previewable_attr
   end
 
   def self.previewable(value)
-    previewable_attr = (value == true)
+    self.previewable_attr = (value == true)
   end
 
   def self.clonation_exception(value)
     exceptions = clonation_exceptions + [value.to_sym]
-    clonation_exceptions_attr = exceptions.uniq
+    self.clonation_exceptions_attr = exceptions.uniq
   end
 
   def self.clonation_exceptions
-    Array(clonation_exceptions_attr)
+    Array(self.clonation_exceptions_attr)
   end
 
   def self.is_a_clonable_has_one?(reflection)

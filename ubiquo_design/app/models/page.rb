@@ -183,7 +183,7 @@ class Page < ActiveRecord::Base
       UbiquoDesign::Structure.get(:page_template => page_template)[:options] || {}
     )
   end
-  
+
   # Returns the layout to use for this page. If layout is not
   # specified in UbiquoDesign::Structure, returns a default value.
   def layout
@@ -279,7 +279,7 @@ class Page < ActiveRecord::Base
       else
         block_keys << block_type.keys.first
       end
-    end    
+    end
     block_keys.each do |key|
       self.blocks << Block.create(:block_type => key.to_s)
     end

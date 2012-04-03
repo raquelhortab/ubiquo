@@ -335,13 +335,13 @@ class PageTest < ActiveSupport::TestCase
   end
 
   def test_shouldnt_be_previewable_with_no_previewable_widgets
-    Free.send(:previewable, false)
     page = create_page
-    Free.create(
-      :name => "Test widget",
-      :block_id => page.blocks.first.id,
-      :content => "content for test widget")
+    Free.previewable(false)
+    Free.create(:name     => "Test widget",
+                :block_id => page.blocks.first.id,
+                :content  => "content for test widget")
     page.save
+
     assert !page.is_previewable?
   end
 
@@ -349,11 +349,12 @@ class PageTest < ActiveSupport::TestCase
 
   # creates a (draft) page
   def create_page(options = {})
-    Page.create({:name => "Custom page",
-      :url_name => "custom_page",
+    Page.create({
+      :name          => "Custom page",
+      :url_name      => "custom_page",
       :page_template => "static",
-      :published_id => nil,
-      :is_modified => true
+      :published_id  => nil,
+      :is_modified   => true
     }.merge(options))
   end
 
