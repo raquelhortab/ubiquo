@@ -286,10 +286,23 @@ class PageTest < ActiveSupport::TestCase
     assert_equal_set [:one, :two, :example, :global], page.available_widgets - prior_widgets
   end
 
-  def test_should_get_available_widgets_sorted
+  def test_should_get_available_widgets_sorted_by_its_translated_names
+    locale_backup, I18n.locale = I18n.locale, :en
     create_example_structure
     page = create_page(:page_template => 'example')
-    assert_equal [:free, :generic_highlighted, :generic_detail, :generic_listing, :static_section, :example, :global, :one, :two], page.available_widgets
+    expected = [:free,
+                :generic_detail,
+                :generic_highlighted,
+                :generic_listing,
+                :static_section,
+                :example, # missing translation
+                :global,  # missing translation
+                :one,     # missing transaction
+                :two]     # missing transaction
+
+    assert_equal expected, page.available_widgets
+  ensure
+    I18n.locale = locale_backup
   end
 
   def test_should_get_available_widgets_per_block
