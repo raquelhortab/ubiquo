@@ -87,6 +87,7 @@ class PagesControllerTest < ActionController::TestCase
     pages(:one).update_attribute :meta_description, 'description'
     pages(:one).update_attribute :meta_keywords, %{key_on'e,key_tw"o}
     get :show, :key => pages(:one).key
+
     assert_select "meta[name=description][content=description]"
     assert_select "meta[name=keywords][content=key_on'e,key_tw&quot;o]"
   end
