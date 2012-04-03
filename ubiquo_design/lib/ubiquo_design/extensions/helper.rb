@@ -36,13 +36,11 @@ module UbiquoDesign
         page = Page.find_by_key(page.to_s) unless page.is_a?(Page)
         page_url_for_options = {
           :controller => 'pages',
-          :action => 'show',
-          # FIXME split due to rails bug #5135
-          :url => "#{page.url_name}/#{url_for_options.delete(:url)}".split('/'),
-          :key => nil # to overwrite current key in params
+          :action     => 'show',
+          :url        => "#{page.url_name}/#{url_for_options.delete(:url)}",
+          :key        => nil # to overwrite current key in params
         }
         _page_url_options = page_url_for_options.merge(url_for_options)
-        _page_url_options.delete(:key)
         _page_url_options[:only_path] = true
 
         app_routes.url_for(_page_url_options)
@@ -66,6 +64,7 @@ module UbiquoDesign
       end
 
       # Direct access to the app routes
+      # Needed for the custom routes added by the ubiquo_design engine
       def app_routes
         Rails.application.routes
       end
