@@ -47,19 +47,27 @@ class Ubiquo::DesignsController < UbiquoController
   private
 
   def render_ubiquo_design_template(page)
-    template_file = Rails.root.join("app/views/page_templates/ubiquo/#{page.page_template}")
+    ext = '.html.erb'
+    template_file = Rails.root.join("app/views/page_templates/ubiquo/#{page.page_template}#{ext}")
     if File.exists?(template_file)
-      template_contents = render_to_string(:file => template_file,
+      template_contents = render_to_string(:file   => template_file.gsub(/#{ext}$/, ''),
+                                           :layout => false,
                                            :locals => { :page => page })
     else
-      template_contents = render_to_string(:inline => <<-EOS, :locals => { :page => page })
-        <% page.template_structure.map do |block_key, num_cols, subblocks| %>
-          <%= send("block_for_design", page, block_key.to_s, num_cols, subblocks) %>
+      inline = <<-EOS
+        <% page.template_structure.each do |block_key, num_cols, subblocks| %>
+          <%= raw send("block_for_design", page, block_key.to_s, num_cols, subblocks) %>
         <% end %>
       EOS
+
+      template_contents = render_to_string(:inline => inline,
+                                           :layout => false,
+                                           :locals => { :page => page })
     end
 
     render_to_string :partial => 'template',
-                     :locals => {:template_contents => template_contents, :page => page}
+                     :layout  => false,
+                     :locals  => { :template_contents => template_contents,
+                                   :page              => page }
   end
 end

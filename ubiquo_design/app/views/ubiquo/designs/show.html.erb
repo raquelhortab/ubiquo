@@ -6,7 +6,7 @@
 <h1><%= render :partial => 'title' %></h1>
 <h2><%= render :partial => 'submenu' %></h2>
 <%= render :partial => "shared/ubiquo/feedback" %>
-<div id="template"><%= @template_content %></div>
+<div id="template"><%= raw @template_content %></div>
 
 <% content_for :sidebar do %>
 <div id="slide_wrapper">

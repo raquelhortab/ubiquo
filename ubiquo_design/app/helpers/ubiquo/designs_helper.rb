@@ -13,10 +13,12 @@ module Ubiquo::DesignsHelper
     options.reverse_merge!(:class => "column", :style => "width: #{col_width}%")
     if subblocks.present?
       content_tag(:div, :class => options.delete(:class), :style => options.delete(:style) + ";margin:0") do
-        subblocks.map do |subblock, sb_cols|
+        output = subblocks.map do |subblock, sb_cols|
           sb_width = (100.to_f * (sb_cols.to_f / num_cols.to_f)) - default_margin
           block_for_design(page, subblock, sb_cols, [], { :style => "width: #{sb_width}%" })
-        end
+        end.join('')
+
+        raw output
       end
     else
       block = page.blocks.first(:conditions => { :block_type => type.to_s })
@@ -32,12 +34,15 @@ module Ubiquo::DesignsHelper
 
   def make_blocks_sortables(page)
     keys = page.blocks.map(&:block_type).uniq
-    page.blocks.collect do |block|
+
+    blocks = page.blocks.collect do |block|
       if block == block.real_block
         sortable_block_type_holder block.block_type,
                                    ubiquo.change_order_page_widgets_path(page), keys
       end
-    end
+    end.join('')
+
+    raw blocks
   end
 
   def block_type_holder(page, block_type, block, options = {})

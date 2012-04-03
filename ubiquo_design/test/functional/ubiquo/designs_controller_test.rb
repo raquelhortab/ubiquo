@@ -8,6 +8,7 @@ class Ubiquo::DesignsControllerTest < ActionController::TestCase
     page = pages(:one_design)
     template_mock(page)
     get :show, :page_id => page.id
+
     assert_response :success
     assert_not_nil page = assigns(:page)
     assert page.blocks.size > 0
@@ -94,19 +95,21 @@ class Ubiquo::DesignsControllerTest < ActionController::TestCase
   def test_should_get_design_with_blocks_and_subblocks
     UbiquoDesign::Structure.define do
       page_template :with_subblocks do
-      block :independent, :cols => 2
-      block :group, :cols => 2 do
-        subblock :s1, :cols => 1
-        subblock :s2, :cols => 1
+        block :independent, :cols => 2
+        block :group, :cols => 2 do
+          subblock :s1, :cols => 1
+          subblock :s2, :cols => 1
         end
       end
     end
     page = Page.create(
-      :name => "Test page",
-      :url_name => "test",
-      :page_template => "with_subblocks")
+      :name          => "Test page",
+      :url_name      => "test",
+      :page_template => "with_subblocks"
+    )
 
     get :show, :page_id => page.id
+
     assert_response :success
     assert_select "div.column", 2
     assert_select "div.column div.column", 2 #subblocks
