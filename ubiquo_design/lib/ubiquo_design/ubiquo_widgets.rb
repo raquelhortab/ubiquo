@@ -115,7 +115,7 @@ module UbiquoDesign
     def render_widget(widget)
       widget_name = widget.key
       unless available_widgets.include?(widget_name)
-        require_dependency "widgets/#{widget_name}_widget"
+        require_dependency "app/widgets/#{widget_name}_widget"
         raise WidgetNotFound.new("Widget #{widget_name} not found") unless available_widgets.include?(widget_name)
       end
 

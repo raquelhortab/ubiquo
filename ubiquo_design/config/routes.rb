@@ -26,16 +26,16 @@ Ubiquo::Engine.routes.draw do
     resources :blocks
   end
 
-  match 'page/:page_id/design',
+  match 'pages/:page_id/design',
         :to => 'designs#show',
         :as => :page_design
-  match 'page/:page_id/design/preview',
+  match 'pages/:page_id/design/preview',
         :to => 'designs#preview',
         :as => :preview_page_design
-  match 'page/:page_id/design/publish',
+  match 'pages/:page_id/design/publish',
         :to => 'designs#publish',
         :as => :publish_page_design
-  match 'page/:page_id/design/unpublish',
+  match 'pages/:page_id/design/unpublish',
         :to => 'designs#unpublish',
         :as => :unpublish_page_design
 end

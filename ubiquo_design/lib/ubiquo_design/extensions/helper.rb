@@ -49,7 +49,8 @@ module UbiquoDesign
       # Create a link to a public page from a page instance
       def link_to_page(caption, page, url_for_options = {}, link_to_options = {})
         url = url_for_page(page, url_for_options)
-        link_to(caption, url, link_to_options)
+
+        link_to(caption, url.gsub(/\/$/, ''), link_to_options)
       end
 
       def parent_pages_for_select(pages, selected_page)

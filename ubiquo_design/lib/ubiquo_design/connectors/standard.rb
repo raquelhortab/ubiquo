@@ -155,7 +155,10 @@ module UbiquoDesign
             default_widget_params = {
               :name => t('ubiquo.design.static_pages.widget_title'),
             }
-            ::StaticSection.new(params[:static_section].reverse_merge!(default_widget_params))
+            static_section = params[:static_section] ? params[:static_section].dup : {}
+            static_section.reverse_merge!(default_widget_params)
+
+            ::StaticSection.new(static_section)
           end
         end
       end

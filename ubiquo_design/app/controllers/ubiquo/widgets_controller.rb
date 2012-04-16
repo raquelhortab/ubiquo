@@ -65,6 +65,7 @@ class Ubiquo::WidgetsController < UbiquoController
     end
   end
 
+  # FIXME: the js reponse is not working. The page is not updated correctly.
   def update
     @widget = uhook_update_widget
     if @widget.valid?

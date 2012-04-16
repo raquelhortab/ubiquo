@@ -36,7 +36,7 @@
 </fieldset>
 <fieldset>
   <legend><%= t("ubiquo.design.static_pages.widget_info") %></legend>
-  <% fields_for @widget do |widget_form| %>
+  <%= fields_for @widget do |widget_form| %>
     <div class="form-item">
       <%= widget_form.label :title, t("ubiquo.widgets.static_section.title") %>
       <%= widget_form.text_field :title %>
