@@ -12,3 +12,4 @@ test/dummy/public/javascripts/tiny_mce/
 test/dummy/tmp
 test/dummy/config/tiny_mce.yml
 bugs.txt
+.sass-cache

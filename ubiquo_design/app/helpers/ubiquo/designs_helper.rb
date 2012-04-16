@@ -61,10 +61,10 @@ module Ubiquo::DesignsHelper
     if block == block.real_block
       result += drop_receiving_element(
         options[:id],
-        :url => ubiquo.page_widgets_path(@page),
+        :url    => ubiquo.page_widgets_path(@page),
         :method => :post,
         :accept => 'widget',
-        :with => "'widget='+element.id.gsub(/^widget_/, '')+'&block=#{block.id}'"
+        :with   => "'widget='+element.id.gsub(/^widget_/, '')+'&block=#{block.id}'"
       )
       drop_functions = "function activate_droppable_" + options[:id] + "() {"
       drop_functions += drop_receiving_element_js(
@@ -78,7 +78,7 @@ module Ubiquo::DesignsHelper
       drop_functions += "function deactivate_droppable_" + options[:id] + "() {
                           Droppables.remove('"+options[:id]+"');
                           }"
-      result += javascript_tag(drop_functions)
+      result += javascript_tag(raw(drop_functions))
     end
     result
   end

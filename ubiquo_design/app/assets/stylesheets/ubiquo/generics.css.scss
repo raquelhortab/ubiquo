@@ -82,7 +82,7 @@ a:visited {
   border-top: 1px solid #ebebeb;
 }
 #sidebar .generic-list li {
-  background: url("../images/dotted-lines.gif") repeat-x scroll left bottom transparent;
+  background: image-url("dotted-lines.gif") repeat-x scroll left bottom transparent;
   padding: 7px 5px;
 }
 #sidebar .generic-list li a {
@@ -328,7 +328,7 @@ a:visited {
   display: block;
   outline: none;
   text-indent: -3000px;
-  background: url(../images/highlighted-list-background.png) no-repeat scroll top center;
+  background: image-url("highlighted-list-background.png") no-repeat scroll top center;
   cursor: pointer;
 }
 .carousel-container .slide-list .current {
@@ -354,11 +354,11 @@ a:visited {
   left: -31px;
 }
 .highlighted-paginator .prev a {
-  background: url("../images/paginator-prev.png") no-repeat scroll 0 0;
+  background: image-url("paginator-prev.png") no-repeat scroll 0 0;
 }
 .highlighted-paginator .next {
   right: -31px;
 }
 .highlighted-paginator .next a {
-  background: url("../images/paginator-next.png") no-repeat scroll 0 0;
+  background: image-url("paginator-next.png") no-repeat scroll 0 0;
 }
