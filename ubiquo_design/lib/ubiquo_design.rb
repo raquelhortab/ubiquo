@@ -6,6 +6,8 @@ module UbiquoDesign
   class Engine < Rails::Engine
     include Ubiquo::Engine::Base
 
+    paths['app/models'] << "app/models/widgets/"
+
     initializer :load_extensions do
       require 'ubiquo_design/extensions'
       require 'ubiquo_design/ubiquo_widgets'
