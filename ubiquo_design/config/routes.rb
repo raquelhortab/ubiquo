@@ -27,16 +27,16 @@ Ubiquo::Engine.routes.draw do
   end
 
   match 'page/:page_id/design',
-        :to => 'ubiquo/design#show',
+        :to => 'designs#show',
         :as => :page_design
   match 'page/:page_id/design/preview',
-        :to => 'ubiquo/design#preview',
+        :to => 'designs#preview',
         :as => :preview_page_design
   match 'page/:page_id/design/publish',
-        :to => 'ubiquo/design#publish',
+        :to => 'designs#publish',
         :as => :publish_page_design
   match 'page/:page_id/design/unpublish',
-        :to => 'ubiquo/design#unpublish',
+        :to => 'designs#unpublish',
         :as => :unpublish_page_design
 end
 
