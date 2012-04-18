@@ -1,0 +1,42 @@
+<div class='menu-widget-box'>
+<% javascript_tag do %>
+  new Accordion('menu-accordion', <%= (Menu.all.index(widget.menu) || 0 ) + 1%>);
+  addMenuClickHandler();
+<% end %>
+<%= widget_header widget %>
+  <p><%= t('ubiquo.widgets.menu_widget.edit.info') %></p>
+  <% widget_form(page, widget) do |f| %>
+
+    <div class="form-item display-inline">
+      <%= f.label :display_descriptions %>:
+      <%= f.check_box(:display_descriptions) %>
+    </div>
+    <div class="form-item">
+      <%= f.label :menu_id %>
+      <%= f.select :menu_id, options_for_select(Menu.find_all((current_locale rescue nil), []).map{|m| [m.name, m.id]}, widget.menu_id.to_i), {}, :disabled => true %>
+    </div>
+    <div onclick="$('widget_menu_id').disabled = false">
+      <%= widget_submit %>
+    </div>
+  <% end %>
+  <div class="menus-container">
+    <p class="related-action">
+      <%= link_to t('ubiquo.menu.index.title'), ubiquo.menus_path %>
+    </p>
+    <div id="menu-accordion" class="accordion">
+      <% Menu.all.each do |menu| %>
+      <div class="accordion-toggle" id="<%= menu.id %>">
+        <%= menu.name %>
+        <span class="edit-menu">
+          <%= link_to t('ubiquo.edit'), ubiquo.edit_menu_path(menu) %>
+        </span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-scroll">
+          <%= print_menu_structure(menu.key) %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  </div>

@@ -1,0 +1,7 @@
+es:
+  ubiquo:
+    helpmsg:
+      menus:
+        menu_items:
+          index: "Aquí puede ver y modificar el mapa web de la aplicación. Puede crear nuevas secciones y subsecciones, y reordenarlas con el icono que se encuentra a la izquierda del nombre de la sección"
+          form: "Aquí puedes crear o modificar una entrada del mapa web. Dichas entradas pueden ser clicables (en tal caso debería especificarse una URL)."

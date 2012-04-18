@@ -1,0 +1,18 @@
+<%= error_messages_for 'menu' %>
+<div class="form_box">
+  <%= uhook_extra_hidden_fields(form) %>
+  <%= form.text_field :name  %>
+  <% if @can_manage %>
+    <%= form.text_field :key  %>
+  <% end %>
+</div>
+<% unless @forbid_item_creation %>
+  <div class="form_box">
+    <%= menu_items_box(form) %>
+  </div>
+<% else %>
+  <div class="forbid_item_creation_message">
+    <p><%= t('ubiquo.menu.forbid_item_creation_message') %></p>
+  </div>
+<% end %>
+

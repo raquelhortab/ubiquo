@@ -1,0 +1,9 @@
+<% inner = '' %>
+<% capture do %>
+  <% ubiquo_form_for(object, :url => ubiquo.send("#{object.class.name.tableize}_path")) do |f| %>
+    <% f.fields_for(:menu_items, nested_object, :child_index => object.menu_items.size) do |inner_form| %>
+      <% inner = render "#{association}_fields", :f => inner_form %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= raw inner %>

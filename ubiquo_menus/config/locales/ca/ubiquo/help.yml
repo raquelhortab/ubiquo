@@ -1,0 +1,7 @@
+ca:
+  ubiquo:
+    helpmsg:
+      menus:
+        menu_items:
+          index: "Aquí pots veure i modificar els elements del menú. Pots crear noves seccions, subseccions i reordenar-les amb la icona que es troba a la dreta del nom de la secció."
+          form: "Aquí pots crear o modificar una entrada al menu. Aquestes entrades poden ser clickables (en tal cas s'hauria d'especificar una URL)."

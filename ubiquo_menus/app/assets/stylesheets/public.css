@@ -1,0 +1,61 @@
+#sidebar .generic_list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #ebebeb;
+}
+#sidebar .generic_list li {
+  background: url("../../images/dotted-lines.gif") repeat-x scroll left bottom transparent;
+  padding: 7px 5px;
+}
+#sidebar .generic_list li a {
+  display: block;
+  color: #5d95ca;
+  font-weight: bold;
+}
+#sidebar .generic_list li a:hover {
+  color: black;
+}
+#sidebar .generic_list li a span {
+  display: block;
+  color: #9f9f9f;
+  font-size: 0.75em;
+  font-weight: normal;
+  line-height: 1.3em;
+}
+#sidebar .generic_list img {
+  float: left;
+  border: none;
+  margin-top: 0.5em;
+  margin-right: 0.8em;
+}
+
+#navigation ul {
+  font-size: 1.1em;
+  font-family: "Trebuchet MS", Arial, Sans-Serif;
+  font-weight: bold;
+  margin: 2em 0 3em;
+  padding: 0 0 0 0;
+}
+
+#navigation h5{
+display:none;
+}
+#navigation ul li {
+  display: inline-block;
+  margin-right: 1px;
+  text-transform: uppercase;
+}
+#navigation ul li a {
+  color: #7c7c7c;
+  display: block;
+  padding: 3px 8px;
+}
+#navigation ul li a:hover {
+  color: #373737;
+  text-decoration: none;
+}
+#navigation ul li.current a {
+  color: #2d2d2d;
+  border-bottom: 4px solid #62c1ec;
+}

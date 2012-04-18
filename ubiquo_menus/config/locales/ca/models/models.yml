@@ -1,0 +1,24 @@
+ca:
+  activerecord:
+    models:
+      menu: "Menú"
+      menu_item: "Element de menú"
+      menu_widget: "Menú"
+    attributes:
+      menu:
+        name: "Nom"
+        key: "Clau"
+        menu_items: "Elements"
+      menu_item:
+        caption: "Títol"
+        description: "Descripció"
+        is_linkable: "Es linkable?"
+        is_active: "Està actiu?"
+        menu: Menú
+        menu_generator: "Generador de menú"
+        page: "Pàgina"
+        parent: "Fill de"
+        url: "Url"
+      menu_widget:
+        display_descriptions: "Mostrar descripcions"
+        menu: "Menú"

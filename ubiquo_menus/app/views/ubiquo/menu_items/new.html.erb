@@ -1,0 +1,14 @@
+<div class="new_menu_item_box">
+  <h1><%= render :partial => 'title' %></h1>
+  <%= render(:partial => "shared/ubiquo/feedback") %>
+
+  <%= ubiquo_form_for(@menu_item, :url => ubiquo.menu_menu_items_path(@menu)) do |form| %>
+    <%= render :partial => 'form', :locals => {:form => form} %>
+    <%= form.submit_group do %>
+      <%= form.create_button %>
+    <% end %>
+  <% end %>
+
+  <%= content_for :sidebar do %>
+  <% end %>
+</div>

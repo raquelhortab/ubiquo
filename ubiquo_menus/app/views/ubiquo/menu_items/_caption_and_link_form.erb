@@ -1,0 +1,13 @@
+
+<%= form.text_field :caption %>
+<div class="form-item">
+  <%= link_type_selector(form).html_safe %>
+  <div class="link_options">
+    <div class="menu_item_page_link" >
+      <%= page_selector(form).html_safe %>
+    </div>
+    <div class="menu_item_url_link">
+      <%= url_field(form).html_safe %>
+    </div>
+  </div>
+</div>

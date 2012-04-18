@@ -1,0 +1,10 @@
+<fieldset>
+  <legend><%= Menu.human_attribute_name(:menu_items) %></legend>
+  <p><%= link_to_add_nested_association t("ubiquo.menu.add_menu_item"), :menu_items %></p>
+  <% form.fields_for :menu_items do |f| %>
+    <% next unless f.object.new_record? %>
+    <%= render 'menu_items_fields', :f => f %>
+  <% end %>
+  <div>
+  </div>
+</fieldset>

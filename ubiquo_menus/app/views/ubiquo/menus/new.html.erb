@@ -1,0 +1,23 @@
+<h1><%= render :partial => 'title' %></h1>
+<h2>
+  <%= render :partial => "submenu" %>
+</h2>
+<%= render(:partial => "shared/ubiquo/feedback") %>
+
+<%= show_preview(Menu) do |menu| %>
+  <%= render :partial => 'menu', :object => menu %>
+<% end %>
+
+<%= ubiquo_form_for( @menu, :url => ubiquo.menus_path) do |form| %>
+  <%= render :partial => 'form', :locals => {:form => form} %>
+  <div class="form-item-submit">
+    <%= form.submit t('ubiquo.create'), :class => 'bt-submit' %>
+    <%= create_and_continue_button(form) %>
+    <%= button_to_function t('ubiquo.back_to_list'), "document.location.href='#{ubiquo.menus_path}'", :class => 'bt-back' %>
+  </div>
+<% end %>
+
+<%= content_for :sidebar do %>
+  <%= uhook_new_menu_sidebar @menu %>
+  <%= help_block_sidebar(t("ubiquo.menu.new.help_message")) %>
+<% end %>

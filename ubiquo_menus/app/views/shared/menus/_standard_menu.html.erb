@@ -1,0 +1,11 @@
+<div id="<%= @options[:menu_id] || menu.name %>" class="<%= @options[:menu_class] || menu.name %>">
+  <h5><%= @options[:menu_name] || menu.name %></h5>
+  <div class="content">
+    <ul>
+      <% @hash_model.each do |root| %>
+        <%= menu_item(root.merge({:display_descriptions => @options[:display_descriptions]})) %>
+      <% end %>
+    </ul>
+  </div>
+</div>
+

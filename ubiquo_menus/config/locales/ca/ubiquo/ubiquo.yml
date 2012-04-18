@@ -1,0 +1,83 @@
+ca:
+  ubiquo:
+    save_and_continue: "Guardar i continuar"
+    menu:
+      forbid_item_creation_message: "Un vegada creat el menú es podran afegir items al formulari d'edició"
+      add_menu_item: "Afegir element"
+      create_error: "Error al crear el menú"
+      created: "Menú creat amb éxit"
+      destroy_error: "Error al eliminar el menú"
+      destroyed: "Menú eliminat amb éxit"
+      edit:
+        help_message: "<p>Aquí pots editar el menú.</p><p>Si elimines un element, s'eliminarà de tots els idiomes on estigui.</p>"
+        menu_item:
+          caption: "Element"
+          is_active: "Actiu?"
+          actions: "Accions"
+      edit_error: "Error al editar el menú"
+      edited: "Menú editat amb èxit"
+      empty_list_message: "Des d'aquest apartat pots veure un llistat de tots els recursos existents. Podràs crear-ne de nous, editar-los o borrar-los."
+      empty_list_title: "Llistat de menús"
+      index:
+        confirm_removal: "Estàs segur de voler eliminar aquest menú?"
+        help_message: "<p>Aquí pots veure el llistat de menús.</p><p>Si elimines un menú, s'esborrarà per a tots els idiomes.</p>"
+        new: "Nou Menú"
+        title: "Llistat de menús"
+      menu_items_index: "Veure elements"
+      new:
+        help_message: "Aquí pots crear un nou menú"
+      title: Menús
+    menu_item:
+      confirm_removal: "Estàs segur de voler eliminar aquest element de menú?"
+      created: "Element de menú creat amb èxit"
+      create_error: "Error al crear l'element de menú"
+      empty_list_title: "Mapa Web"
+      empty_list_message: "Aquí pots veure i modificar el mapa web de l'aplicació. Pots crear noves seccions i subseccions, i reordenar-les."
+      index:
+        confirm_removal: "Estàs segur de voler eliminar aquest element?"
+        help_message: "Aquí pots veure el llistat de elements del menú \"%{name}\""
+        new: "Nou Element"
+        title: "Elements de \"%{name}\""
+      link: "Enllaç"
+      linkable_info: "<p>Escull una pàgina o introdueix un enllaç. Aquest pot ser dels següents tipus:</p>
+      <ul><li><strong>Complet:</strong> 'http://www.google.es'</li>
+      <li><strong>Relatiu respecte a l'aplicació:</strong> '/portada/actualitat'. Aquest portará a l'adreça 'http://www.nomdeldomini/portada/actualitat'</li>
+      </ul>"
+      link_type:
+        page: "Pàgina"
+        unlinked: "No enllaçat"
+        url: "URL"
+      new_section: "Nova secció"
+      new_subsection: "Nova subsecció"
+      removed: "Element de menú eliminat amb éxit"
+      remove_error: "Error al eliminar l'element de menú"
+      subsections: "Subseccions"
+      title: "Elements del menú \"%{name}\""
+      updated: "Element de menú editat amb éxit"
+      update_error: "Error a l'editar l'element de menú"
+    menus:
+      actions: "Acciones"
+      empty_items: "No hi han elements de menú que mostrar"
+      confirm_menu_item_removal: "Estàs segur de voler eliminar aquest element (i tots els seus nodes fills)?"
+      confirm_menu_removal: "Estàs segur de voler eliminar aquest menú?"
+      new_section: "Nova secció"
+      new_subsection: "Nova subsecció"
+      menu_item:
+        created: "Element de menú creat con éxit"
+        create_error: "Error al crear l'element de menú"
+        removed: "Element de menú eliminat amb éxit"
+        remove_error: "Error al eliminar l'element de menú"
+        updated: "Element de menú editado amb éxit"
+        update_error: "Error al editar l'element de menú"
+      menu_tab: "Menús"
+      menu_tab_title: "Anar a Menús"
+      subsections: "Subseccions"
+      title: "Títol"
+    widgets:
+      menu_widget:
+        edit:
+          admin: "Admin menús"
+          info: "Selecciona del llistat el menú que vols activar. Al fer click, veuràs a nivell informatiu els elements que el contenen."
+          no_available: "No existen menús disponibles"
+          preview: "Vista previa de l'estructura"
+        name: Menú

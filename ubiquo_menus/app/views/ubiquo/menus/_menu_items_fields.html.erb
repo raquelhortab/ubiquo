@@ -1,0 +1,6 @@
+<div class="nested menu_items">
+  <%= f.hidden_field :nested, :value => 1 %>
+  <%= f.hidden_field :_destroy %>
+  <%= raw caption_and_link_fields(f) %>
+  <%= link_to_remove_nested_association t('ubiquo.remove') %>
+</div>

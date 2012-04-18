@@ -1,0 +1,24 @@
+en:
+  activerecord:
+    models:
+      menu: "Menu"
+      menu_item: "Menu item"
+      menu_widget: "Menu"
+    attributes:
+      menu:
+        name: "Name"
+        key: "Key"
+        menu_items: "Items"
+      menu_item:
+        caption: "Title"
+        description: "Description"
+        is_linkable: "Is linkable?"
+        is_active: "Is active"
+        menu: "Menu"
+        menu_generator: "Menu generator"
+        page: "Page"
+        parent: "Child of"
+        url: "Url"
+      menu_widget:
+        display_descriptions: "Show descriptions"
+        menu: "Menu"

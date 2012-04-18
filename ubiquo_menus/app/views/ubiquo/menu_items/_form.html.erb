@@ -1,0 +1,22 @@
+<%= error_messages_for 'menu_item' %>
+
+<div class="form_box menu_item">
+  <%= form.hidden_field :parent_id %>
+  <%= form.hidden_field :menu_id %>
+  <%= form.hidden_field :position %>
+  <%= uhook_extra_hidden_fields(form) %>
+  <%= caption_and_link_fields(form) %>
+  <%= form.relation_selector(:parent, 
+                              :collection_url => "menu_menu_items_url",
+                              :url_params => {:menu_id => form.object.menu.id},
+                              :name_field => :caption,
+                              :autocomplete_style => :list
+                            ) %>
+
+  <%= form.text_area :description, :rows => 4 %>
+  <%= form.check_box :is_active %>
+</div>
+
+<% content_for :sidebar do %>
+  <%= help_block_sidebar(t("ubiquo.helpmsg.menus.menu_items.form")) %>
+<% end %>

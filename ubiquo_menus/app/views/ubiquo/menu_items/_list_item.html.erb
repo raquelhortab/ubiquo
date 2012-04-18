@@ -1,0 +1,16 @@
+<div class="content">
+  <div class="handle-menuitem">
+    <%= ubiquo_image_tag('updownarrows.gif') unless menu_item.uhook_skip_for_position_calculation? %>
+  </div>
+  <div class="caption">
+    <%= menu_item_caption(menu_item) %>
+  </div>
+  <div class="actions">
+    <div class="is_active">
+      <% link_to(ubiquo.toggle_active_menu_menu_item_path(menu_item.menu, menu_item), :method => :put) do %>
+        <%= ubiquo_boolean_image(menu_item.is_active) %>
+      <% end %>
+    </div>
+    <%= uhook_menu_item_links(menu_item).join.html_safe %>
+  </div>
+</div>

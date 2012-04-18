@@ -1,0 +1,45 @@
+From f1ff78005d20abd63c328f8b39eb90a92131c6d1 Mon Sep 17 00:00:00 2001
+From: David Lozano <dlozano@gnuine.com>
+Date: Mon, 5 Mar 2012 15:30:19 +0100
+Subject: [PATCH] patch, error in public helper
+
+---
+ lib/ubiquo_menus/connectors/i18n.rb |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/ubiquo_menus/connectors/i18n.rb b/lib/ubiquo_menus/connectors/i18n.rb
+index 71a9103..7e9fa66 100644
+--- a/lib/ubiquo_menus/connectors/i18n.rb
++++ b/lib/ubiquo_menus/connectors/i18n.rb
+@@ -52,8 +52,8 @@ module UbiquoMenus
+             #or the corresponding translation
+             unless parent_id
+               menu_items.select{|item|
+-                items = ::MenuItem.get_items_by_i18n(item.content_id)
+-                (items.values.flatten.map(&:parent_id).compact.blank? rescue false)
++                items = ::MenuItem.all(:conditions => {:content_id => item.content_id})
++                (items.flatten.map(&:parent_id).compact.blank? rescue false)
+               }.sort{|a, b| a.position.to_i <=> b.position.to_i
+               }.each do |item|
+                 array << {:item => item, :children => []}
+@@ -61,7 +61,7 @@ module UbiquoMenus
+               end
+             else
+               parent = menu_items.select{|item| item.id == parent_id}.first
+-              parents_ids = ::MenuItem.get_items_by_i18n(parent.content_id).values.map(&:id)
++              parents_ids = ::MenuItem.all(:conditions => {:content_id => item.content_id}).map(&:id)
+               menu_items.select{|item| parents_ids.include?(item.parent_id) && item.locale == Locale.current}.
+                 sort_by{|item| item.position.to_i}.each do |item|
+                 array << {:item => item, :children => []}
+@@ -308,7 +308,7 @@ module UbiquoMenus
+           def uhook_new_menu_sidebar menu
+             show_translations(menu, :hide_preview_link => true)
+           end
+-          
++
+           #links for each menu_item of the menu
+           def uhook_menu_item_links(menu_item)
+             links = []
+-- 
+1.7.1
+

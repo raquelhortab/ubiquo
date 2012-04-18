@@ -1,0 +1,17 @@
+<% parent_id ||= nil %>
+<% sortable_id = css_list_parent_id(parent_id) %>
+<% sortable_list_id = "#{sortable_id}_list" %>
+<ul id="<%= sortable_list_id %>">
+  <%= build_items_header if items.detect(&:is_root?) %>
+  <% items.map do |item| %>
+    <%= build_item(item, parent_id.to_i) if item.id %>
+  <% end.join %>
+</ul>
+<%= sortable_element(sortable_list_id, {
+      :tag => "li",
+      :only => "item",
+      #:tree => true,
+      :url => ubiquo.update_positions_menu_menu_item_url(:column => sortable_list_id, :menu_id => menu_id, :id => parent_id.to_i),
+      :method => :put,
+    }) %>
+

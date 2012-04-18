@@ -1,0 +1,84 @@
+es:
+  ubiquo:
+    save_and_continue: "Guardar y continuar"
+    menu:
+      forbid_item_creation_message: "Una vez creado el menu se podrán añadir items en el formulario de edición"
+      add_menu_item: "Añadir elemento"
+      create_error: "Error al crear la entidad menu"
+      created: "Entidad Menu creada con éxito"
+      destroy_error: "Error al eliminar la entidad menu"
+      destroyed: "Entidad Menu eliminada con éxito"
+      edit:
+        help_message: "Aquí puedes editar la entidad menu"
+        menu_item:
+          caption: "Element"
+          is_active: "¿Activo?"
+          actions: "Acciones"
+      edit_error: "Error al editar la entidad menu"
+      edited: "Entidad Menu editada con éxito"
+      empty_list_message: "Desde este apartado puedes ver una lista de todos los recursos existentes. Podras crear nuevos, editar o borrarlos."
+      empty_list_title: "Listado de menus"
+      index:
+        confirm_removal: "Estás seguro de querer eliminar esta entidad menu?"
+        help_message: "Aquí puedes ver el listado de menus"
+        new: "Nuevo Menu"
+        title: "Listado de menus"
+      link_: Enlace
+      menu_items_index: "Ver elementos"
+      new:
+        help_message: "Aquí puedes crear una nueva entidad menu"
+      title: Menus
+    menu_item:
+      confirm_removal: "Estás seguro de querer eliminar este elemento de menu?"
+      created: "Elemento de menú creado con éxito"
+      create_error: "Error al crear el elemento de menú"
+      empty_list_title: "Elementos de menu"
+      empty_list_message: "Aquí puedes ver y modificar los items del menú. Puedes crear nuevas secciones y subsecciones, y reordenarlas."
+      index:
+        confirm_removal: "Estás seguro de querer eliminar este element?"
+        help_message: "Aquí puedes ver el listado de elementos del menú \"%{name}\""
+        new: "Nuevo Elemento"
+        title: "Elementos de \"%{name}\""
+      link: Enlace
+      linkable_info: "Escoge una página o introduce un enlace. Este puede ser de los siguientes tipos:
+      <ul><li><strong>Completo:</strong> 'http://www.google.es'</li>
+      <li><strong>Relativo respecto a la aplicación:</strong> '/portada/actualidad'. Este enlazará con 'http://www.nombredeldominio/portada/actualidad'</li>
+      </ul>"
+      link_type:
+        page: "Página"
+        unlinked: "No tiene"
+        url: "URL"
+      new_section: "Nueva sección"
+      new_subsection: "Nueva subsección"
+      removed: "Elemento de menú eliminado con éxito"
+      remove_error: "Error al eliminar el elemento de menú"
+      subsections: "Subsecciones"
+      title: "Elementos del menú \"%{name}\""
+      updated: "Elemento de menú editado con éxito"
+      update_error: "Error al editar el elemento de menú"
+    menus:
+      actions: "Acciones"
+      empty_items: "No hay elementos de menú que mostrar"
+      confirm_menu_item_removal: "Estás seguro de querer eliminar esta entrada el mapa web (y sus nodos hijos)?"
+      confirm_menu_removal: "Estás seguro de querer eliminar esta entidad menu?"
+      new_section: "Nueva sección"
+      new_subsection: "Nueva subsección"
+      menu_item:
+        created: "Elemento de menú creado con éxito"
+        create_error: "Error al crear el elemento de menú"
+        removed: "Elemento de menú eliminado con éxito"
+        remove_error: "Error al eliminar el elemento de menú"
+        updated: "Elemento de menú editado con éxito"
+        update_error: "Error al editar el elemento de menú"
+      menu_tab: "Menús"
+      menu_tab_title: "Ir a Menús"
+      subsections: "Subsecciones"
+      title: "Título"
+    widgets:
+      menu_widget:
+        edit:
+          admin: "Admin menus"
+          info: "Selecciona del listado el menú que quieres activar. Al hacer click, veras a nivel informativo los elementos que lo contienen."
+          no_available: "No existen menús disponibles"
+          preview: "Vista previa de la estructura"
+        name: Menú

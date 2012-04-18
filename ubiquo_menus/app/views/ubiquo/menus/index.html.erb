@@ -1,0 +1,19 @@
+<h1>
+  <%= render :partial => 'title' %>
+</h1>
+
+<h2>
+  <%= render :partial => 'submenu' %>
+</h2>
+
+<%= render :partial => "shared/ubiquo/feedback" %>
+
+<%= show_filter_info %>
+
+<%= menu_list(@menus, @menus_pages, :can_manage => @can_manage) %>
+
+<% content_for :sidebar do %>
+  <%= show_filters %>
+
+  <%= help_block_sidebar(t("ubiquo.menu.index.help_message")) %>
+<% end %>
