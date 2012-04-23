@@ -21,7 +21,7 @@ module Ubiquo
             _url_for_options = @options[:url_for_options]
             _url_for_options = '' if _url_for_options.nil?
             @context.form_tag(_url_for_options, :method => :get, :id => "frm_calendar") do
-              hidden_fields(keepable_params) + \
+              (hidden_fields(keepable_params) + \
               @context.content_tag(:div, :class => 'form-item') do
                 @context.content_tag(:label, :for => "filter_" + date_start_field.to_s) { I18n.t('ubiquo.base.from') } + \
                 @context.calendar_date_select_tag(date_start_field, @context.params[date_start_field],
@@ -32,7 +32,7 @@ module Ubiquo
                 @context.calendar_date_select_tag(date_end_field, @context.params[date_end_field],
                                                   calendar_options.merge(:id => "filter_" + date_end_field.to_s))
               end + \
-              @context.content_tag(:div, :class => 'form-item-submit') { @context.submit_tag(I18n.t('ubiquo.search'), :class => 'bt-filter-submit') }
+              @context.content_tag(:div, :class => 'form-item-submit') { @context.submit_tag(I18n.t('ubiquo.search'), :class => 'bt-filter-submit') }).html_safe
             end
           end
         end
