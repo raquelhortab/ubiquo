@@ -166,4 +166,10 @@ module Ubiquo::DesignsHelper
 
   end
 
+  def ensure_js(js)
+    js_callback = js.gsub(/;$/, '')
+
+    raw "try { #{js_callback}; } catch(e) { console.log(e.message); };"
+  end
+
 end

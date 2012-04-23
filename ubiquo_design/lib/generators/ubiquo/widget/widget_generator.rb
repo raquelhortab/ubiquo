@@ -33,7 +33,7 @@ module Ubiquo
         template_path    = 'locale.yml.tt'
         destination_path = "config/locales/#{locale}/widgets/#{file_path}.yml"
 
-        template template_path, destination_path  do |content|
+        template template_path, destination_path do |content|
           locale + content
         end
       end

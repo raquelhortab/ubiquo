@@ -79,7 +79,7 @@ class Ubiquo::WidgetsController < UbiquoController
                 :locals => { :page => @page.reload })
               page.call "update_error_on_widgets", @page.wrong_widgets_ids
             end
-           end
+          end
         }
       end
     else
@@ -88,9 +88,10 @@ class Ubiquo::WidgetsController < UbiquoController
         format.js {
           render :update do |page|
             self.uhook_extra_rjs_on_update(page, false) do |page|
-              page.replace_html('error_messages', :partial => 'ubiquo/designs/error_messages',
-                :locals => {:widget => @widget})
-              page << "reviveEditor();"
+              page.replace_html('error_messages',
+                                :partial => 'ubiquo/designs/error_messages',
+                                :locals  => { :widget => @widget })
+              page << ensure_js("reviveEditor();")
             end
           end
         }
