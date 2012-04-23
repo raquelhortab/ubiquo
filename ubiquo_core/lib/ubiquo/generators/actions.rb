@@ -21,8 +21,12 @@ module Ubiquo
       end
 
       def namespaced_route_resources(namespace, *resources)
+        scoped_route_resources(namespace, 'namespace', *resources)
+      end
+
+      def scoped_route_resources(_scope, kind = 'scope', *resources)
         resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-        sentinel      = "namespace :#{namespace} do"
+        sentinel      = "#{kind} :#{_scope} do"
         flag          = /([\t| ]*)(#{Regexp.escape(sentinel)})/mi
         routing_code  = "resources #{resource_list}"
 
@@ -33,6 +37,10 @@ module Ubiquo
             "\n\\1  #{routing_code}"
           end
         end
+      end
+
+      def ubiquo_route_resources(*resources)
+        scoped_route_resources('ubiquo', 'scope', *resources)
       end
 
       def nested_route_resources(parent, *resources)

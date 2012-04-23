@@ -132,23 +132,26 @@ class Ubiquo::ControllerGeneratorTest < ::Rails::Generators::TestCase
     run_generator %w(Post title:string body:text published_at:date)
 
     assert_file 'config/routes.rb' do |routes|
-      assert_match /namespace :ubiquo do$/, routes
+      assert_match /scope :ubiquo do$/, routes
       assert_match /resources :posts$/, routes
     end
   end
 
-  test "should generate namespaced routes" do
+  test "should generate scoped routes" do
     add_routes_file <<-file
     Dummy::Application.routes.draw do
-      namespace :ubiquo do
-        resource :other
+      Ubiquo::Engine.routes.draw do
+        scope :ubiquo do
+          resource :other
+        end
       end
+
     end
     file
     run_generator %w(Post title:string body:text published_at:date --nested-from other)
 
     assert_file 'config/routes.rb' do |routes|
-      assert_match /namespace :ubiquo do$/, routes
+      assert_match /scope :ubiquo do$/, routes
       assert_match /resource :other do$/, routes
       assert_match /resources :posts$/, routes
     end

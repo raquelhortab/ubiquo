@@ -28,7 +28,10 @@ class ::Rails::Generators::TestCase
   def add_routes_file(file = nil)
     file ||= <<-routes
     Dummy::Application.routes.draw do
-      namespace :ubiquo do
+      Ubiquo::Engine.routes.draw do
+        scope :ubiquo do
+          # resources :articles
+        end
       end
     end
     routes

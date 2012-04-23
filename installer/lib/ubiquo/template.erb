@@ -235,10 +235,14 @@ case choosen_adapter
 end
 file 'config/routes.rb', <<-CODE
 #{appname.camelize}::Application.routes.draw do
-  mount Ubiquo::Engine => '/ubiquo'
-
-  namespace :ubiquo do
+  Ubiquo::Engine.routes.draw do
+    scope :ubiquo do
+      # all the resources under ubiquo should be declared here:
+      # resources :articles
+    end
   end
+
+  mount Ubiquo::Engine => '/ubiquo'
 
 # Translate::Routes.translation_ui(map) unless Rails.env.production?
 end

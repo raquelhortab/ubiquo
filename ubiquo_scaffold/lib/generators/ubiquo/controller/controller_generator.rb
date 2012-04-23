@@ -38,7 +38,7 @@ module Ubiquo
       if options[:nested_from]
         nested_route_resources options[:nested_from], plural_name
       else
-        namespaced_route_resources 'ubiquo', plural_name
+        ubiquo_route_resources plural_name
       end
     end
 
