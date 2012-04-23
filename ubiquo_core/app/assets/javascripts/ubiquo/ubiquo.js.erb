@@ -147,24 +147,39 @@ function send_as_form(div_id, url, method) {
   f.remove();
 }
 
-function killeditor(reference) {
-  reference = reference || 'visual_editor';
-  var first = true;
-  $$("."+reference+", #"+reference).each(function(v) {
-    if(first) {
-      tinyMCE.triggerSave(true,true);
-      first = false;
-    }
-    tinyMCE.execCommand('mceRemoveControl', true, $(v).id);
+function killeditor(ref) {
+  tinyMCESafe(arguments, function(reference) {
+    reference = reference || 'visual_editor';
+    var first = true;
+    $$("."+reference+", #"+reference).each(function(v) {
+      if(first) {
+        tinyMCE.triggerSave(true,true);
+        first = false;
+      }
+      tinyMCE.execCommand('mceRemoveControl', true, $(v).id);
+    });
   });
-}
+};
 
-function reviveEditor(reference) {
-  reference = reference || 'visual_editor';
-  $$("."+reference+", #"+reference).each(function(v) {
-    tinyMCE.execCommand('mceAddControl', true, $(v).id);
+function reviveEditor(ref) {
+  tinyMCESafe(arguments, function(reference) {
+    reference = reference || 'visual_editor';
+    $$("."+reference+", #"+reference).each(function(v) {
+      tinyMCE.execCommand('mceAddControl', true, $(v).id);
+    });
   });
-}
+};
+
+function tinyMCESafe(args, callback) {
+  if (typeof tinyMCE === "undefined") {
+    <% if Rails.env.development? %>
+    console.log('tinyMCE is undefined');
+    <% end %>
+    return true;
+  } else {
+    callback.apply(this, args);
+  };
+};
 
 function blind_toggle(desired_elem, brother) {
   if($(desired_elem).visible()) {

@@ -91,7 +91,7 @@ class Ubiquo::WidgetsController < UbiquoController
               page.replace_html('error_messages',
                                 :partial => 'ubiquo/designs/error_messages',
                                 :locals  => { :widget => @widget })
-              page << ensure_js("reviveEditor();")
+              page << "reviveEditor();"
             end
           end
         }

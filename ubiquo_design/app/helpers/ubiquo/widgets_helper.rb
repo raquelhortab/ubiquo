@@ -6,7 +6,7 @@ module Ubiquo::WidgetsHelper
       :url => ubiquo.page_widget_path(:page_id => page.id,
                                       :id      => widget.id,
                                       :format  => :js),
-      :before => ensure_js('killeditor()'),
+      :before => 'killeditor()',
       :html   => { :method => :put,
                    :name   => "widget_edit_form",
                    :id     => "widget_form", },
