@@ -19,7 +19,7 @@
 				width: 19px;
 				height: 19px;
 				text-indent: -5000px;
-				background: url(../../images/ubiquo/close.jpg) no-repeat 0 0;
+				background: url(<%= asset_path("ubiquo/close.jpg") %>) no-repeat 0 0;
 			}
 			.lightwindow_contents input {
 				display: block;
@@ -57,7 +57,7 @@
 					width: 17px;
 					height: 17px;
 					text-indent: -5000px;
-					background: url(../../images/ubiquo/updownarrows.gif) no-repeat;
+					background: url(<%= asset_path("ubiquo/updownarrows.gif") %>) no-repeat;
 					cursor: move;
 				}
 				.lightwindow_contents fieldset li a.view {
@@ -88,7 +88,7 @@
 				}
 	.lightwindow_stage .inferior {
 		height: 4em;
-		background: url(../../images/ubiquo/bg_lightwindow.png) no-repeat left bottom;
+		background: url(<%= asset_path("ubiquo/bg_lightwindow.png") %>) no-repeat left bottom;
 	}
 
 /* Wide version used by crop/resize */

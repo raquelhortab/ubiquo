@@ -39,7 +39,7 @@ table, th, td { border: none;}
 			padding-right: .7em;
 			font-family: Tahoma, Verdana, serif;
 			font-size: 1em;
-			background: url(../../images/ubiquo/controls_divider.gif) no-repeat right .2em;
+			background: url(<%= asset_path("ubiquo/controls_divider.gif") %>) no-repeat right .2em;
 		}
 			#controls li:last-child {
 				margin-right: 0;
@@ -57,7 +57,7 @@ table, th, td { border: none;}
 			}
 			#controls li.ubiquo_user a {
 				padding-left: 14px;
-				background: url(../../images/ubiquo/user.gif) no-repeat 0 50%;
+				background: url(<%= asset_path("ubiquo/user.gif") %>) no-repeat 0 50%;
 			}
 			#controls li.active a, #controls li.active span {
 				color: #000;
@@ -194,7 +194,7 @@ table, th, td { border: none;}
 				display: inline;
 				margin-right: .5em;
 				padding-right: 1.1em;
-				background: url(../../images/ubiquo/separa-item-submenu.png) no-repeat right center;
+				background: url(<%= asset_path("ubiquo/separa-item-submenu.png") %>) no-repeat right center;
 			}
 			.submenu li:last-child {
 				margin-right: 0;
@@ -303,7 +303,7 @@ table, th, td { border: none;}
 				-webkit-border-radius: 6px;
 				border-radius: 6px;
 				border: 1px solid #666;
-				background: url(../../images/ubiquo/bg-button.png) no-repeat left bottom;
+				background: url(<%= asset_path("ubiquo/bg-button.png") %>) no-repeat left bottom;
 				cursor: pointer;
 				/*-moz-box-shadow: 1px 1px 1px #FFF;*/
 			}
@@ -405,7 +405,7 @@ table, th, td { border: none;}
 	}
 		#footer .logo_ubiquo a {
 			display: block;
-			background: url(../../images/ubiquo/logo_ubiquo.png) no-repeat left top;
+			background: url(<%= asset_path("ubiquo/logo_ubiquo.png") %>) no-repeat left top;
 			width: 133px;
 			height: 34px;
 			margin: 0;
@@ -435,7 +435,7 @@ table, th, td { border: none;}
 }
 #feedback_error, #errorExplanation {
 	border-color: #B7393D;
-	background: #EFD2D4 url(../../images/ubiquo/ico-advice-bad.png) no-repeat .5em .4em;
+	background: #EFD2D4 url(<%= asset_path("ubiquo/ico-advice-bad.png") %>) no-repeat .5em .4em;
 }
 #feedback_error {
 	color: #B7393D;
@@ -443,7 +443,7 @@ table, th, td { border: none;}
 #feedback_notice {
 	color: #4CB53B;
 	border-color: #4CB53B;
-	background: #D4EFD0 url(../../images/ubiquo/ico-advice-good.png) no-repeat .5em .4em;
+	background: #D4EFD0 url(<%= asset_path("ubiquo/ico-advice-good.png") %>) no-repeat .5em .4em;
 }
 #feedback_warning {
 	color: #e7be00;
@@ -479,7 +479,7 @@ table, th, td { border: none;}
 	}
 
 	.search_info {
-		background: url(../../images/ubiquo/ico-search.png) no-repeat .5em .4em;
+		background: url(<%= asset_path("ubiquo/ico-search.png") %>) no-repeat .5em .4em;
 	}
 		.search_info a {
 			padding: .2em .5em;
@@ -508,7 +508,7 @@ a.new, #content .form_buttons input, #content .form-item-submit input { /* list 
 	-webkit-border-radius: 9px;
 	border-radius: 9px;
 	cursor: pointer;
-	background: #cacaca url(../../images/ubiquo/bg-button.png) no-repeat left top;
+	background: #cacaca url(<%= asset_path("ubiquo/bg-button.png") %>) no-repeat left top;
 }
 a.new {
 	width: auto;
@@ -523,10 +523,10 @@ a.new:active {
 	-moz-box-shadow: none;*/
 }
 a.new, #content .form-item-submit input.bt-create {
-	background-image: url(../../images/ubiquo/bg-button-add.png);
+	background-image: url(<%= asset_path("ubiquo/bg-button-add.png") %>);
 }
 #content .form-item-submit input.bt-update, #content .form-item-submit input.bt-submit {
-	background-image: url(../../images/ubiquo/bg-button-save.png);
+	background-image: url(<%= asset_path("ubiquo/bg-button-save.png") %>);
 }
 
 /*--- handle ---*/
@@ -537,7 +537,7 @@ a.new, #content .form-item-submit input.bt-create {
  	width: 17px;
  	height: 17px;
  	text-indent: -5000px;
- 	background: url(../../images/ubiquo/updownarrows.gif) no-repeat 0 0;
+ 	background: url(<%= asset_path("ubiquo/updownarrows.gif") %>) no-repeat 0 0;
  	cursor: move;
 }
 
@@ -571,12 +571,12 @@ a.new, #content .form-item-submit input.bt-create {
 	#content .pagination .bot_pag_previous {
 		right: 115px;
 		padding-left: 20px;
-		background: #e9e9e9 url(../../images/ubiquo/ico-left.png) no-repeat 10% center;
+		background: #e9e9e9 url(<%= asset_path("ubiquo/ico-left.png") %>) no-repeat 10% center;
 	}
 	#content .pagination .bot_pag_next {
 		right: 0;
 		padding-right: 20px;
-		background: #e9e9e9 url(../../images/ubiquo/ico-right.png) no-repeat 90% center;
+		background: #e9e9e9 url(<%= asset_path("ubiquo/ico-right.png") %>) no-repeat 90% center;
 	}
 
 /*-------------- Seccions --------------*/
@@ -619,10 +619,10 @@ a.new, #content .form-item-submit input.bt-create {
 		padding-right: 25px;
 	}
 	#content th a.order_asc {
-		background: url(../../images/ubiquo/ico-up.png) no-repeat right center;
+		background: url(<%= asset_path("ubiquo/ico-up.png") %>) no-repeat right center;
 	}
 	#content th a.order_desc {
-		background: url(../../images/ubiquo/ico-down.png) no-repeat right center;
+		background: url(<%= asset_path("ubiquo/ico-down.png") %>) no-repeat right center;
 	}
 #content td {
 	font-size: 1.4em;
@@ -655,12 +655,12 @@ a.new, #content .form-item-submit input.bt-create {
 	#content td .state_true {
 		width: 23px;
 		height: 19px;
-		background: url(../../images/ubiquo/ico-ok.png) no-repeat center center;
+		background: url(<%= asset_path("ubiquo/ico-ok.png") %>) no-repeat center center;
 	}
 	#content td .state_false {
 		width: 19px;
 		height: 18px;
-		background: url(../../images/ubiquo/ico-no.png) no-repeat center center;
+		background: url(<%= asset_path("ubiquo/ico-no.png") %>) no-repeat center center;
 	}
 	#content td.actions {
 	  height: 1.3em;
@@ -691,7 +691,7 @@ a.new, #content .form-item-submit input.bt-create {
       #content table.edit_on_row_click td.delete a.btn-delete {
   	    float: right;
   	    display: block;
-  	    background: url(../../images/ubiquo/ico-delete-off.gif) no-repeat center center;
+  	    background: url(<%= asset_path("ubiquo/ico-delete-off.gif") %>) no-repeat center center;
   	    -moz-border-radius: 0;
     	    -webkit-border-radius: 0;
     	    border-radius: 0;
@@ -707,7 +707,7 @@ a.new, #content .form-item-submit input.bt-create {
 	  }
 	  #content table.edit_on_row_click td a.btn-delete:hover,
       #content table.edit_on_row_click tr.hover td a.btn-delete {
-	    background: #F0BB47 url(../../images/ubiquo/ico-delete.gif) no-repeat center center;
+	    background: #F0BB47 url(<%= asset_path("ubiquo/ico-delete.gif") %>) no-repeat center center;
           }
 	    #content a.btn-delete span {
 	      display: none;
@@ -1015,7 +1015,7 @@ form label {
                         text-indent: -500em;
                         width: 18px;
                         height: 18px;
-                        background: url("/images/ubiquo/btn-help.png") no-repeat center center;
+                        background: url(<%= asset_path("ubiquo/btn-help.png") %>) no-repeat center center;
 		  }
 		  .form-help .content {
                         display: none;
@@ -1045,7 +1045,7 @@ form label {
                         text-indent: -500em;
                         width: 10px;
                         height: 13px;
-                        background: url(/images/ubiquo/bg-form-help-arrow.png) no-repeat center center;
+                        background: url(<%= asset_path("ubiquo/bg-form-help-arrow.png") %>) no-repeat center center;
                   }
 		  #content .form-help .content p {
                         clear: none;
@@ -1186,7 +1186,7 @@ form label {
 			font-size: 1em;
 			font-weight: bold;
 			padding-left: 1.3em;
-			background: url(../../images/ubiquo/icona_wiki.gif) no-repeat left top;
+			background: url(<%= asset_path("ubiquo/icona_wiki.gif") %>) no-repeat left top;
 		}
 			#sidebar .version-box .version .name .data {
 				padding-left: .3em;
@@ -1315,7 +1315,7 @@ body#blank #footer {
 
 .preview ul.attachment li {
 	list-style-type: none;
-	background: url("../../images/ubiquo/attachment.gif") left center no-repeat;
+	background: url(<%= asset_path("ubiquo/attachment.gif") %>) left center no-repeat;
 	padding-left: 17px;
 }
 
@@ -1369,7 +1369,7 @@ form#new_ubiquo_setting .setting-actions .actions li {
 }
 form#new_ubiquo_setting .setting-actions .actions li a{
     vertical-align: top;
-    background: url("../../../images/ubiquo/bg-button.png") no-repeat scroll left bottom transparent;
+    background: url(<%= asset_path("ubiquo/bg-button.png") %>) no-repeat scroll left bottom transparent;
     border: 1px solid #666666;
     border-radius: 6px 6px 6px 6px;
     color: #000000;
@@ -1423,7 +1423,7 @@ form#new_ubiquo_setting .generated, form#new_ubiquo_setting .translatable{
     border-bottom-color: #FBFEF3;
 }
 .tabbed ul.tabs-menu li.with-errors {
-    background-image: url(../../images/ubiquo/ico-advice-bad.png);
+    background-image: url(<%= asset_path("ubiquo/ico-advice-bad.png") %>);
     background-repeat: no-repeat;
     background-position: .5em .4em;
     padding-left: 2.5em;

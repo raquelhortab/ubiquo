@@ -63,17 +63,17 @@
             }
               .group-related-assets .selected-assets .items-list li.item .actions li a, .asset-upload-form-item .bt-upload, .select-assets .search-results .items-list li.item .actions li a {
                 padding: .3em .3em;
-        				font-size: 1.2em;
-        				color: #000;
-        				text-transform: lowercase;
-        				text-decoration: none;
-        				background: #e9e9e9;
-        				-moz-border-radius: 6px;
-        				-webkit-border-radius: 6px;
-        				border-radius: 6px;
-        				border: 1px solid #666;
-        				background: url(../../../images/ubiquo/bg-button.png) no-repeat left bottom;
-        				cursor: pointer;
+                font-size: 1.2em;
+                color: #000;
+                text-transform: lowercase;
+                text-decoration: none;
+                background: #e9e9e9;
+                -moz-border-radius: 6px;
+                -webkit-border-radius: 6px;
+                border-radius: 6px;
+                border: 1px solid #666;
+                background: url(<%= asset_path("ubiquo/bg-button.png") %>) no-repeat left bottom;
+                cursor: pointer;
               }
 
     .group-related-assets .select-assets {}
@@ -87,10 +87,10 @@
       .search-block {
         margin: 0 0 1em;
         padding: 1em 1em 1em 4em;
-        background: #f3f6eb url(../../../images/ubiquo/media/ico-search-block.png) no-repeat 1.5em center;
+        background: #f3f6eb url(<%= asset_path("ubiquo/media/ico-search-block.png") %>) no-repeat 1.5em center;
         -moz-border-radius: 6px;
-				-webkit-border-radius: 6px;
-				border-radius: 6px;
+        -webkit-border-radius: 6px;
+        border-radius: 6px;
       }
         #content .search-block .form-item {
           float: left;
@@ -162,5 +162,5 @@
 .search-block:after,
 .select-assets .search-results .items-list:after
 {
-	content: "."; display: block; height: 0; clear: both; visibility: hidden;
+  content: "."; display: block; height: 0; clear: both; visibility: hidden;
 }

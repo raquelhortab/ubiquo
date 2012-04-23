@@ -47,7 +47,7 @@
     padding: 0;
     overflow: hidden; }
     #crop-resize-container #resize-actions ul li:first-child {
-      background: url("../../../images/ubiquo/media/resize-actions-separator.png") no-repeat scroll right center;
+      background: url(<%= asset_path("ubiquo/media/resize-actions-separator.png") %>) no-repeat scroll right center;
       padding: 0 1.2em 0 0; }
     #crop-resize-container #resize-actions ul li {
       float: left;
@@ -66,7 +66,7 @@
         color: white;
         text-decoration: none; }
   #crop-resize-container .resize-box-info p {
-    background: url("../../../images/ubiquo/media/resize-box-info.png") no-repeat scroll left center;
+    background: url(<%= asset_path("ubiquo/media/resize-box-info.png") %>) no-repeat scroll left center;
     padding: 1em 0 1em 2.2em;
     font-size: 1.01em; }
   #crop-resize-container .resize-box {
@@ -92,9 +92,9 @@
         color: black;
         padding: 0 0 0 2em; }
         #crop-resize-container .resize-box .resize-box-title a.resize-box-fold {
-          background: url("../../../images/ubiquo/media/resize-unfold.png") no-repeat scroll 0 0; }
+          background: url(<%= asset_path("ubiquo/media/resize-unfold.png") %>) no-repeat scroll 0 0; }
         #crop-resize-container .resize-box .resize-box-title a.resize-box-unfold {
-          background: url("../../../images/ubiquo/media/resize-fold.png") no-repeat scroll 0 0; }
+          background: url(<%= asset_path("ubiquo/media/resize-fold.png") %>) no-repeat scroll 0 0; }
     #crop-resize-container .resize-box .resize-box-inactive {
       color: #8c8c8c; }
   #crop-resize-container .resize-box-content {
@@ -153,7 +153,7 @@
     #crop-resize-container .resize-box-content-right .resize-box-widget {
       overflow: hidden; }
     #crop-resize-container .resize-box-content-right .info .resize-box-widget-title {
-      background: url("../../../images/ubiquo/media/resize-box-widget-info.png") no-repeat scroll left top; }
+      background: url(<%= asset_path("ubiquo/media/resize-box-widget-info.png") %>) no-repeat scroll left top; }
     #crop-resize-container .resize-box-content-right .info dl {
       overflow: hidden;
       font-size: 0.75em; }
@@ -167,7 +167,7 @@
     #crop-resize-container .resize-box-content-right .alert {
       border-color: #d93e3e; }
       #crop-resize-container .resize-box-content-right .alert .resize-box-widget-title {
-        background: url("../../../images/ubiquo/media/resize-box-widget-alert.png") no-repeat scroll left top;
+        background: url(<%= asset_path("ubiquo/media/resize-box-widget-alert.png") %>) no-repeat scroll left top;
         color: #d93e3e; }
       #crop-resize-container .resize-box-content-right .alert .resize-box-related-actions {
         margin: 0;
@@ -192,7 +192,7 @@
     }
 
     #crop-resize-container .resize-box-content-right .preview {
-      background: url("../../../images/ubiquo/media/resize-list-arrow.png") no-repeat scroll center center;
+      background: url(<%= asset_path("ubiquo/media/resize-list-arrow.png") %>) no-repeat scroll center center;
       text-align: center; }
       #crop-resize-container .resize-box-content-right .preview .resize-box-widget-title {
         text-indent: -3000px;
@@ -226,7 +226,7 @@
     #crop-resize-container .resize-box-save ul li {
       margin: 0; }
       #crop-resize-container .resize-box-save ul li input.resize-save-button {
-        background: url("../../../images/ubiquo/media/resize-save-action.png") no-repeat scroll 0 0;
+        background: url(<%= asset_path("ubiquo/media/resize-save-action.png") %>) no-repeat scroll -1 0;
         padding: 4px 40px 4px 50px;
         border: 1px solid #acadad;
         font-size: 1.08em; 
@@ -240,12 +240,12 @@
         border: 1px solid #acadad;
         display: inline-block; }
         #crop-resize-container .resize-box-save ul li a span {
-          background: url("../../../images/ubiquo/media/resize-button-background.png") repeat-x scroll left center;
+          background: url(<%= asset_path("ubiquo/media/resize-button-background.png") %>) repeat-x scroll left center;
           padding: 0.3em 2.9em 0.4em 0; }
     #crop-resize-container .resize-box-save ul li.resize-save-as {
       margin: 1em 0 4.2em 0; }
       #crop-resize-container .resize-box-save ul li.resize-save-as a {
-        background: url("../../../images/ubiquo/media/resize-save-as-action.png") no-repeat scroll -14px 0; }
+        background: url(<%= asset_path("ubiquo/media/resize-save-as-action.png") %>) no-repeat scroll -15px 0; }
       #crop-resize-container .resize-box-save ul li.resize-save-as .resize-box-save-as-content {
         display: none; }
     #crop-resize-container .resize-box-save ul li.resize-open-fold {
@@ -343,5 +343,5 @@
 	-webkit-border-radius: 9px;
 	border-radius: 9px;
 	cursor: pointer;
-	background: #d1d3d3 url(../../../images/ubiquo/bg-button.png) no-repeat left top;
+	background: #d1d3d3 url(<%= asset_path("ubiquo/bg-button.png") %>) no-repeat left top;
 }

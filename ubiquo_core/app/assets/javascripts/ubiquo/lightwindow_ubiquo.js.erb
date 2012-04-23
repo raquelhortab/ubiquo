@@ -34,7 +34,7 @@ tinyMceLightWindow = Class.create( lightwindow,{
 });
 
 window["lightwindowInit"] = function() {
-	myLightWindow = new tinyMceLightWindow({
+  myLightWindow = new tinyMceLightWindow({
         effects: false,
         dimensions : {
            image : {height : 250, width : 600},
@@ -44,7 +44,7 @@ window["lightwindowInit"] = function() {
            external : {height : 250, width : 600},
            titleHeight: 25
         },
-        skin : 	{
+        skin :   {
             main : '<div class="lightwindow_container" >'+
                                                         '<div class="lightwindow_title_bar" >'+
                                                                 '<div class="lightwindow_title_bar_inner" >'+
@@ -95,24 +95,24 @@ window["lightwindowInit"] = function() {
                                                         '</div>'+
                                                 '</div>',
             loading : '<div class="lightwindow_loading" >'+
-								'<span class="image"><img src="/images/ubiquo/lightwindow/ajax-loading.gif" alt="loading" /></span>'+
-								'<span class="message">Loading or </span><span class="action"><a href="javascript: myLightWindow.deactivate();">Cancel</a></span>'+
-								'<iframe name="lightwindow_loading_shim" class="lightwindow_loading_shim" src="javascript:false;" frameBorder="0" scrolling="no"></iframe>'+
-							'</div>',
-            iframe : 	'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'+
+              '<span class="image"><img src="<%= asset_path('ubiquo/lightwindow/ajax-loading.gif') %>" alt="loading" /></span>'+
+                '<span class="message">Loading or </span><span class="action"><a href="javascript: myLightWindow.deactivate();">Cancel</a></span>'+
+                '<iframe name="lightwindow_loading_shim" class="lightwindow_loading_shim" src="javascript:false;" frameBorder="0" scrolling="no"></iframe>'+
+              '</div>',
+            iframe :   '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'+
                         '<html xmlns="http://www.w3.org/1999/xhtml">'+
                             '<body>'+
                                 '{body_replace}'+
                             '</body>'+
                         '</html>',
             gallery : {
-                top :		'<div class="lightwindow_galleries_list">'+
+                top :    '<div class="lightwindow_galleries_list">'+
                                 '<h1>{gallery_title_replace}</h1>'+
                                 '<ul>',
-                middle : 			'<li>'+
+                middle :       '<li>'+
                                         '{gallery_link_replace}'+
                                     '</li>',
-                bottom : 		'</ul>'+
+                bottom :     '</ul>'+
                             '</div>'
             }
         },
