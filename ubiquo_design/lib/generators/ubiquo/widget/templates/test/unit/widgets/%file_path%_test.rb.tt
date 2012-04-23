@@ -1,0 +1,22 @@
+require File.dirname(__FILE__) + '/../../test_helper'
+
+class <%= class_name %>Test < ActiveSupport::TestCase
+
+  test "should create <%= file_name %>" do
+    assert_difference '<%= class_name %>.count' do
+      <%= file_name %> = create_<%= file_name %>
+      assert !<%= file_name %>.new_record?, <%= file_name %>.errors.full_messages.to_sentence
+    end
+  end
+
+  private
+
+  def create_<%= file_name %>(options = {})
+    default_options = {
+      :name  => "Test <%= file_name %>",
+      :block => blocks(:one),
+      # Insert other options for widget here
+    }
+    <%= class_name %>.create(default_options.merge(options))
+  end
+end

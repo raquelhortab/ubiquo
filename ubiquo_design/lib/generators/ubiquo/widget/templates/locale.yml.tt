@@ -1,4 +1,4 @@
-es:
+:
   ubiquo:
     widgets:
       <%= singular_name %>:

@@ -1,0 +1,11 @@
+Description:
+  Create a scaffold to implement a ubiquo_widget.
+
+Example:
+    rails generate ubiquo:widget Example key:string description:text is_active:boolean
+
+    This will create:
+      controller code: app/widgets/NAME_widget.rb
+      public partials: app/views/widgets/NAME/_show.html.erb
+      ubiquo partials: app/views/widgets/NAME/ubiquo/_form.html.erb
+      widget class:    app/models/widgets/NAME.rb

@@ -1,23 +1,22 @@
 require File.dirname(__FILE__) + '/../../../test_helper'
-<% model_name = name.classify -%>
 
-class <%= model_name %>WidgetUbiquoTest < ActionController::TestCase
+class <%= class_name %>WidgetUbiquoTest < ActionController::TestCase
   tests Ubiquo::WidgetsController
 
   test "edit new form" do
-    widget, page = create_widget(:<%= name %>)
+    widget, page = create_widget(:<%= file_name %>)
     get :show, :page_id => page.id, :id => widget.id
     assert_response :success
   end
 
   test "edit form" do
-    widget, page = create_widget(:<%= name %>)
+    widget, page = create_widget(:<%= file_name %>)
     get :show, :page_id => page.id, :id => widget.id
     assert_response :success
   end
 
   test "form submit" do
-    widget, page = create_widget(:<%= name %>)
+    widget, page = create_widget(:<%= file_name %>)
     xhr :post, :update, :page_id => page.id,
                         :id => widget.id,
                         :widget => widget_attributes
@@ -26,7 +25,7 @@ class <%= model_name %>WidgetUbiquoTest < ActionController::TestCase
 
   # Uncomment if it is a configurable widget, otherwise it should never return errors
   #test "form submit with errors" do
-  #  widget, page = create_widget(:<%= name %>)
+  #  widget, page = create_widget(:<%= file_name %>)
   #  xhr :post, :update, :page_id => page.id,
   #                      :id => widget.id,
   #                      :widget => {}
