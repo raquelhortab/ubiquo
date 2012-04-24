@@ -80,7 +80,7 @@ module UbiquoMenus
         groups.join("/").blank? ? "/" : groups.join("/")
       end
 
-      def menu_item_selected?(item, url = request.request_uri)
+      def menu_item_selected?(item, url = request.path)
         begin
           item.is_active && item.is_linkable &&
           (item.link.is_a?(Page) ? page_selected?(item.link, url) : item.url == "/" || item.url == "" ? url == "/" || url == "" : url.include?(item.url))
