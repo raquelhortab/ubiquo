@@ -1,0 +1,8 @@
+<div class="menus-container">
+  <p class="related-action">
+    <%= link_to t('ubiquo.menu.index.title'), ubiquo.menus_path %>
+  </p>
+  <div id="menu-accordion" class="accordion">
+    <%= render :partial => '/widgets/menu_widget/ubiquo/menu', :collection => Menu.all, :as => :menu %>
+  </div>
+</div>

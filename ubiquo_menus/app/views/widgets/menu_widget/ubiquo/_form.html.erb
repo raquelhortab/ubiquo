@@ -1,0 +1,18 @@
+<% all_menus = Menu.find_all((current_locale rescue nil), []) %>
+<% collection_for_menu_select = all_menus.map{|m| [m.name, m.id] } %>
+
+<%= javascript_tag do %>
+  new Accordion('menu-accordion', <%= (Menu.all.index(widget.menu) || 0 ) + 1%>);
+  addMenuClickHandler();
+<% end %>
+<div class="form-item display-inline">
+  <%= f.label :display_descriptions %>:
+  <%= f.check_box(:display_descriptions) %>
+</div>
+<div class="form-item">
+  <%= f.label :menu_id %>
+  <%= f.select :menu_id, options_for_select(collection_for_menu_select, widget.menu_id.to_i), {}, :disabled => true %>
+</div>
+<div onclick="$('widget_menu_id').disabled = false">
+  <%= widget_submit %>
+</div>
