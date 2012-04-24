@@ -134,30 +134,31 @@ module UbiquoMenus
         hash_model
       end
 
-      def print_menu_structure key
-        menu = uhook_find_by_key(key)
+      def print_menu_structure menu_or_key
+        menu = menu_or_key
+        menu = uhook_find_by_key(menu_or_key) if menu_or_key.is_a?(String)
         if menu.present?
           @hash_model = []
           @hash_model += process_menu_items_structure(menu.menu_items.roots)
           content_tag(:ul) do
             @hash_model.map do |root|
-              menu_item_structure(root)
-            end
-          end
+              menu_item_structure(root).html_safe
+            end.join.html_safe
+          end.html_safe
         end
       end
 
       def menu_item_structure item
         menu_element = content_tag(:li, :style => "margin-left:10px") do
-          item[:caption] +
+          item[:caption].html_safe +
           if item[:children].present?
             content_tag(:ul, menu_element) do
-              item[:children].map { |children| menu_item_structure(children) }.join
-            end
+              item[:children].map { |children| menu_item_structure(children).html_safe }.join.html_safe
+            end.html_safe
           else
             ""
           end
-        end
+        end.html_safe
       end
 
       def menu_items_array_for(menu)
