@@ -3,7 +3,7 @@
   <div class="content">
     <ul>
       <% @hash_model.each do |root| %>
-        <%= menu_item(root.merge({:display_descriptions => @options[:display_descriptions]})) %>
+        <%= menu_item(root.merge({:display_descriptions => @options[:display_descriptions]})).html_safe %>
       <% end %>
     </ul>
   </div>

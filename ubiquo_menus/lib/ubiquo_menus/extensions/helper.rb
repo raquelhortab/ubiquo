@@ -111,13 +111,13 @@ module UbiquoMenus
               content_tag(:span, item[:display_descriptions] ? item[:item][:description]: "")
           if item[:children].present? && print_children
             m += content_tag(:ul,
-                               item[:children].map { |children| menu_item(children) }.join,
+                               item[:children].map { |children| menu_item(children).html_safe }.join.html_safe,
                               :id => item[:id],
-                              :class => "menu_item-#{item[:klass]}")
+                              :class => "menu_item-#{item[:klass]}").html_safe
           else
-            m
+            m.html_safe
           end
-        end
+        end.html_safe
       end
 
       def process_menu_items_structure menu_items, options = {}
