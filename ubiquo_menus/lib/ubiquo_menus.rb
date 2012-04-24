@@ -6,6 +6,8 @@ module UbiquoMenus
   class Engine < Rails::Engine
     include Ubiquo::Engine::Base
 
+    paths['app/models'] << "app/models/widgets/"
+
     initializer :load_extensions do
       require 'ubiquo_menus/connectors'
       require 'ubiquo_menus/extensions'
