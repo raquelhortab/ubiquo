@@ -7,7 +7,7 @@
   </div>
   <div class="actions">
     <div class="is_active">
-      <% link_to(ubiquo.toggle_active_menu_menu_item_path(menu_item.menu, menu_item), :method => :put) do %>
+      <%= link_to(ubiquo.toggle_active_menu_menu_item_path(menu_item.menu, menu_item), :method => :put) do %>
         <%= ubiquo_boolean_image(menu_item.is_active) %>
       <% end %>
     </div>
