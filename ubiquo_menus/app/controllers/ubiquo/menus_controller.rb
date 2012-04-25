@@ -128,7 +128,7 @@ class Ubiquo::MenusController < UbiquoController
   end
 
   def can_manage?
-    global = Ubiquo::Config.context(:ubiquo_menus).get(:administrable_menus)
+    global = Ubiquo::Settings.context(:ubiquo_menus).get(:administrable_menus)
     @can_manage = global && permit?('menus_keys_management')
   end
 end

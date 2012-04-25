@@ -1,7 +1,7 @@
 module UbiquoMenus
   module Connectors
     def self.load!
-      "UbiquoMenus::Connectors::#{Ubiquo::Config.context(:ubiquo_menus).get(:connector).to_s.camelize}".constantize.load!
+      "UbiquoMenus::Connectors::#{Ubiquo::Settings.context(:ubiquo_menus).get(:connector).to_s.camelize}".constantize.load!
     end
   end
 end
