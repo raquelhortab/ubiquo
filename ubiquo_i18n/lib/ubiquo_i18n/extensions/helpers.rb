@@ -15,10 +15,8 @@ module UbiquoI18n
         redirect_params.delete(:page) unless options[:keep_page]
         if active_locales.size > 1
           form_tag(url_for(redirect_params), :method => :get) +
-            html_unescape(select_tag("locale",
-                                     options_for_locale_selector(redirect_params),
-                                     :id => "data-locale-selector")) +
-            "</form>"
+            select_tag("locale", options_for_locale_selector(redirect_params), :id => "data-locale-selector") +
+            "</form>".html_safe
         end
       end
 

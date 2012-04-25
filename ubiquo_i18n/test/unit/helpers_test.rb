@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + "/../test_helper.rb"
 class UbiquoI18n::Extensions::HelpersTest < ActionView::TestCase
 
   def setup
+    Locale.delete_all
     %w(es en ca).map do |locale|
       options = {
         :iso_code     => locale,
@@ -13,10 +14,6 @@ class UbiquoI18n::Extensions::HelpersTest < ActionView::TestCase
 
       create_locale(options)
     end
-  end
-
-  def teardown
-    Locale.delete_all
   end
 
   def test_locale_selector_displays_select
@@ -56,10 +53,11 @@ class UbiquoI18n::Extensions::HelpersTest < ActionView::TestCase
       :partial =>  "shared/ubiquo/model_translations",
       :locals => { :model => model, :options => {} }
     )
-    assert show_translations(model)
+
+    show_translations(model)
   end
 
-  def test_show_translations_should_be_rendered_for_objects_that_have_a_persistent_translation
+  def test_show_translations_should_not_be_rendered_for_new_objects
     model = TestModel.new(:locale => 'test')
     self.expects(:render).never.with(
       :partial =>  "shared/ubiquo/model_translations",
@@ -105,5 +103,7 @@ class UbiquoI18n::Extensions::HelpersTest < ActionView::TestCase
       'ca'
     end
   end
+
+  create_test_model_backend
 
 end

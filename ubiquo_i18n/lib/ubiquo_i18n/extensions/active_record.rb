@@ -82,9 +82,9 @@ module UbiquoI18n
 
           # usage:
           # find all content in any locale: Model.locale(:all)
-          # find spanish content: Model.locale('es')
-          # find spanish or english content. If spanish and english exists, gets the spanish version. Model.locale('es', 'en')
-          # find all content in spanish or any other locale if spanish dosn't exist: Model.locale('es', :all)
+          # find Spanish content: Model.locale('es')
+          # find Spanish or English content. If Spanish and English exists, gets the Spanish version. Model.locale('es', 'en')
+          # find all content in Spanish or any other locale if Spanish dosn't exist: Model.locale('es', :all)
           # find all content in any locale: Model.locale(:all)
           #
           scope :locale, lambda{|*locales|
@@ -161,13 +161,13 @@ module UbiquoI18n
           define_method('translate') do |*attrs|
             locale = attrs.first
             options = attrs.extract_options!
-            options[:copy_all] = options[:copy_all].nil? ? true : options[:copy_all]
+            copy_all = options[:copy_all].nil? ? true : options[:copy_all]
 
             new_translation = self.class.new
             new_translation.locale = locale
 
             # copy of attributes
-            clonable_attributes = options[:copy_all] ? :attributes_except_unique_for_translation : :untranslatable_attributes
+            clonable_attributes = copy_all ? :attributes_except_unique_for_translation : :untranslatable_attributes
             self.send(clonable_attributes).each_pair do |attr, value|
               new_translation.send("#{attr}=", value)
             end
