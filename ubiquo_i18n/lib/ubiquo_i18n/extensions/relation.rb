@@ -66,7 +66,8 @@ module UbiquoI18n
             # locale preference order
             tbl = self.table_name
             locales_string = locales.size > 0 ? (["#{tbl}.locale != ?"]*(locales.size)).join(", ") : nil
-            locale_order = ["#{tbl}.content_id", locales_string].compact.join(", ")
+            locale_array = ["#{tbl}.content_id", locales_string].compact.join(", ")
+            locale_order = "#{@klass.send(:sanitize_sql, ["#{locale_array}", *locales.map(&:to_s)])}"
 
             join_dependency = construct_join_dependency_for_association_find
             relation = construct_relation_for_association_find(join_dependency)
@@ -89,8 +90,8 @@ module UbiquoI18n
 
             from_and_joins = "FROM #{tbl} " + joins_sql.to_s
 
-            adapters_with_custom_sql = %w{PostgreSQL MySQL}
-            current_adapter = connection.adapter_name
+            adapters_with_custom_sql = %w{postgresql mysql mysql2}
+            current_adapter = connection.adapter_name.downcase
             if adapters_with_custom_sql.include?(current_adapter)
 
               # Certain adapters support custom features that allow the locale
@@ -108,9 +109,9 @@ module UbiquoI18n
                 content_id_query = from_and_joins
                 content_id_query << " WHERE #{conditions_sql} " if conditions_sql.present?
                 id_extra_cond = sql_locale_conditions.present? ? " #{sql_locale_conditions} AND " : ''
-                new_options = options.merge(:conditions => nil, :joins => nil)
-                scope(:find)[:conditions] = nil
-                scope(:find)[:joins] = nil
+
+                # these are already factored in the new conditions
+                self.where_values = self.joins_values = []
                 "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
                     "SELECT #{tbl}.content_id #{content_id_query})"
               else
@@ -121,9 +122,8 @@ module UbiquoI18n
                   id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
                   id_extra_cond += ' AND' if id_extra_cond.present?
 
-                  new_options = options.merge(:conditions => own_conditions, :joins => nil)
-                  scope(:find)[:conditions] = nil
-                  scope(:find)[:joins] = nil
+                  # these are already factored in the new conditions
+                  self.where_values = self.joins_values = []
                   "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
                        "SELECT #{tbl}.content_id #{content_id_query})"
                 else
@@ -134,32 +134,28 @@ module UbiquoI18n
               end
 
               locale_filter = case current_adapter
-              when "PostgreSQL"
+              when "postgresql"
                 # use a subquery with DISTINCT ON, more efficient, but currently
                 # only supported by Postgres
 
-                ["#{tbl}.id IN (" +
+                "#{tbl}.id IN (" +
                     "SELECT DISTINCT ON (#{tbl}.content_id) #{tbl}.id " + subfilter +
-                    "ORDER BY #{locale_order})", *locales.map(&:to_s)
-                ]
+                    "ORDER BY #{locale_order})"
 
-              when "MySQL"
+              when "mysql", "mysql2"
                 # it's a "within-group aggregates" problem. We need to order before grouping.
                 # This subquery is O(N * log N), while a correlated subquery would be O(N^2)
 
-                ["#{tbl}.id IN (" +
+                "#{tbl}.id IN (" +
                     "SELECT id FROM ( SELECT #{tbl}.id, #{tbl}.content_id " + subfilter +
                     "ORDER BY #{locale_order}) AS lpref " +
-                    "GROUP BY content_id)", *locales.map(&:to_s)
-                ]
+                    "GROUP BY content_id)"
+
               end
 
               # finally, merge the created subquery into the current conditions
-              if new_options
-                new_options[:conditions] = merge_conditions(new_options[:conditions], locale_filter)
-              else
-                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_filter))
-              end
+              self.where_values += [locale_filter]
+              reset
 
             else
               # For the other adapters, the strategy is to do two subqueries.
@@ -183,7 +179,6 @@ module UbiquoI18n
                     content_id_query = from_and_joins
                     content_id_query << " WHERE #{mixed_conditions} " unless mixed_conditions.blank?
                     joins_sql = nil # already applied
-#                      new_options = options.merge(:conditions => own_conditions, :joins => nil)
                     id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
                     id_extra_cond += ' AND' if id_extra_cond.present?
                     "#{id_extra_cond} #{tbl}.content_id IN ("+
@@ -201,7 +196,7 @@ module UbiquoI18n
               candidate_ids = unscoped.all(
                 :select => "#{tbl}.id, #{tbl}.content_id ",
                 :conditions => conditions_for_id_query,
-                :order => "#{@klass.send(:sanitize_sql_for_conditions, ["#{locale_order}", *locales.map(&:to_s)])}",
+                :order => locale_order,
                 :joins => joins_sql
               )
 

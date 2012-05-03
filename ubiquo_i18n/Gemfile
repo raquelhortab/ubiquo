@@ -9,3 +9,4 @@ gem 'linecache19', :git => 'git://github.com/mark-moseley/linecache'
 gem "ubiquo_core", :path => ".."
 gem "routing-filter"
 gem "pg"
+gem "mysql2"
