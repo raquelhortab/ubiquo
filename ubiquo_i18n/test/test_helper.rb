@@ -32,7 +32,7 @@ def create_translatable_related_model(options = {})
   TranslatableRelatedTestModel.create(options)
 end
 
-%w{TestModel RelatedTestModel UnsharedRelatedTestModel TranslatableRelatedTestModel ChainTestModelA ChainTestModelB ChainTestModelC OneOneTestModel CallbackTestModel}.each do |c|
+%w{TestModel RelatedTestModel UnsharedRelatedTestModel TranslatableRelatedTestModel ChainTestModelA ChainTestModelB ChainTestModelC OneOneTestModel}.each do |c|
   Object.const_set(c, Class.new(ActiveRecord::Base)) unless Object.const_defined? c
 end
 
@@ -101,15 +101,11 @@ def create_test_model_backend
     t.string :type
   end
 
-  conn.create_table :callback_test_models, options do |t|
-    t.string :my_field
-  end
-
   # Models used to test extensions
   TestModel.class_eval do
     belongs_to :related_test_model
-    scope :my_field_is_1, {:conditions => {:my_field => '1'}}
-    scope :my_field_is_2, {:conditions => {:my_field => '2'}}
+    scope :my_field_is_1, where(:my_field => '1')
+    scope :my_field_is_2, where(:my_field => '2')
 
     translatable :my_field
     filtered_search_scopes
@@ -130,13 +126,15 @@ def create_test_model_backend
     attr_accessor :abort_on_before_create
     attr_accessor :abort_on_before_update
 
-    def before_create
+    def abort_if_before_create_flag
       !self.abort_on_before_create
     end
+    before_create :abort_if_before_create_flag
 
-    def before_update
+    def abort_if_before_update_flag
       !self.abort_on_before_update
     end
+    before_update :abort_if_before_update_flag
   end
 
   RelatedTestModel.class_eval do
@@ -204,34 +202,6 @@ def create_test_model_backend
   Object.const_set('GrandsonClass', Class.new(FirstSubclass)) unless Object.const_defined? 'GrandsonClass'
   @already_built = true
 end
-
-  class CallbackTestModel < ActiveRecord::Base
-    translatable
-    @@after_find_counter = 0
-    @@after_initialize_counter = 0
-
-    def self.reset_counter
-      @@after_find_counter = 0
-      @@after_initialize_counter = 0
-    end
-
-    def after_find
-      @@after_find_counter = @@after_find_counter + 1
-    end
-
-    def after_initialize
-      @@after_initialize_counter = @@after_initialize_counter + 1
-    end
-
-    def self.after_find_counter
-      @@after_find_counter
-    end
-
-    def self.after_initialize_counter
-      @@after_initialize_counter
-    end
-
-  end
 
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
   ActiveRecord::Base.connection.client_min_messages = "ERROR"

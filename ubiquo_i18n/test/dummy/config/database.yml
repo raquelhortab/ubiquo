@@ -1,5 +1,8 @@
 test:
-  adapter: sqlite3
-  database: db/test.sqlite3
   pool: 5
-  timeout: 5000
+  adapter: postgresql
+  encoding: unicode
+  database: u09_test
+#adapter: sqlite3
+#  database: db/test.sqlite3
+#  timeout: 5000

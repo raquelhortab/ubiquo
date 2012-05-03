@@ -7,10 +7,12 @@ module UbiquoI18n
         base.extend(ClassMethods)
         base.send :include, InstanceMethods
         base.send :alias_method_chain, :clone, :i18n_fields_ignore
-        base.send :alias_method_chain, :attributes=, :i18n_fields_assignement_advancement
+        base.send :alias_method_chain, :assign_attributes, :i18n_fields
       end
 
       module ClassMethods
+
+        delegate :locale, :to => :scoped
 
         # Class method for ActiveRecord that states which attributes are translatable and therefore when updated will be only updated for the current locale.
         #
@@ -80,35 +82,19 @@ module UbiquoI18n
               (!options[:skip_any] && self.locale == 'any')
           end
 
-          # usage:
-          # find all content in any locale: Model.locale(:all)
-          # find Spanish content: Model.locale('es')
-          # find Spanish or English content. If Spanish and English exists, gets the Spanish version. Model.locale('es', 'en')
-          # find all content in Spanish or any other locale if Spanish dosn't exist: Model.locale('es', :all)
-          # find all content in any locale: Model.locale(:all)
-          #
-          scope :locale, lambda{|*locales|
-            if locales.delete(:ALL)
-              locales << :all
-              ActiveSupport::Deprecation.warn('Use :all instead of :ALL in locale()', caller(5))
-            end
-
-            {:locale_list => locales}
-          }
-
           # Using localized is like using locale(current_locale, :all),
           # but automatically using the possibly defined locale fallback list
           # if the Locale.use_fallbacks flag is enabled
           scope :localized, lambda{
             locales = Locale.use_fallbacks ? Locale.fallbacks(Locale.current) : [Locale.current]
-            {:locale_list => locales}
+            locale(*locales)
           }
 
           # usage:
           # find all items of one content: Model.content(1).first
           # find all items of some contents: Model.content(1,2,3)
           scope :content, lambda{|*content_ids|
-            {:conditions => {:content_id => content_ids}}
+            where(:content_id => content_ids)
           }
 
           # usage:
@@ -125,19 +111,12 @@ module UbiquoI18n
             unless scoped_conditions.blank?
               translation_condition += ' AND ' + scoped_conditions.join(' AND ')
             end
-            {:conditions => [translation_condition, content.content_id, content.locale]}
+            where([translation_condition, content.content_id, content.locale])
           }
-
-          # Apply these named scopes to any possible already loaded subclass
-#          descendants.each do |klass|
-#            klass.scopes.merge! scopes.slice(:locale, :translations, :content)
-#          end
 
           # Instance method to find translations
           define_method('translations') do
-            self.class.send :with_exclusive_scope do
-              self.class.translations(self)
-            end
+            self.class.unscoped.translations(self)
           end
 
           # Returns an array containing self and its translations
@@ -158,9 +137,9 @@ module UbiquoI18n
           end
 
           # Creates (saving) a new translation of self, with the common values filled in
-          define_method('translate') do |*attrs|
-            locale = attrs.first
-            options = attrs.extract_options!
+          define_method('translate') do |*params|
+            locale = params.first
+            options = params.extract_options!
             copy_all = options[:copy_all].nil? ? true : options[:copy_all]
 
             new_translation = self.class.new
@@ -578,13 +557,13 @@ module UbiquoI18n
         end
 
         # Applies the locale filter if needed, then performs the normal find method
-        def find_with_locale_filter(*args)
+        def to_a_with_locale_filter(*args)
           if self.is_translatable?
             options = args.extract_options!
             new_options = apply_locale_filter(options)
-            find_without_locale_filter(args.first, new_options)
+            to_a_without_locale_filter(args.first, new_options)
           else
-            find_without_locale_filter(*args)
+            to_a_without_locale_filter(*args)
           end
         end
 
@@ -647,8 +626,8 @@ module UbiquoI18n
           # Aliases the find and count methods to apply the locale filter
           klass.class_eval do
             class << self
-              alias_method_chain :find, :locale_filter
-              alias_method_chain :count, :locale_filter
+#              alias_method_chain :to_a, :locale_filter
+#              alias_method_chain :count, :locale_filter
 #              alias_method_chain :with_scope, :locale_filter
               ::ActiveRecord::SpawnMethods::VALID_FIND_OPTIONS << :locale_list << :unmerged_conditions
             end
@@ -710,230 +689,215 @@ module UbiquoI18n
         # This means that if you use .locale(..), you'll end up here,
         # when the results are actually delivered (not in call time)
         # Returns a hash with the resulting +options+ with the applied filter
-        def apply_locale_filter(options)
-          locales = really_translatable_class.instance_variable_get(:@current_locale_list)
-          # set this find as dispatched
-          really_translatable_class.instance_variable_set(:@current_locale_list, [])
-          if locales.present?
-            # build locale restrictions
-            locales = merge_locale_list locales.reverse!
-            locale_options = locales.extract_options!
-            all_locales = locales.delete(:all)
+#        def apply_locale_filter(options)
+#          locales = really_translatable_class.instance_variable_get(:@current_locale_list)
+#          # set this find as dispatched
+#          really_translatable_class.instance_variable_set(:@current_locale_list, [])
+#          if locales.present?
+#            # build locale restrictions
+#            locales = merge_locale_list locales.reverse!
+#            locale_options = locales.extract_options!
+#            all_locales = locales.delete(:all)
+#
+#            # add untranslatable instances if necessary
+#            locales << :any unless all_locales || locales.size == 0
+#
+#            if all_locales
+#              locale_conditions = ""
+#            else
+#              locale_conditions = ["#{self.table_name}.locale in (?)", locales.map(&:to_s)]
+#              # act like a normal condition when we are just filtering a locale
+#              if locales.size == 2 && locales.include?(:any) && locale_options[:strict]
+#                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_conditions))
+#                return new_options
+#              end
+#            end
+#            # locale preference order
+#            tbl = self.table_name
+#            locales_string = locales.size > 0 ? (["#{tbl}.locale != ?"]*(locales.size)).join(", ") : nil
+#            locale_order = ["#{tbl}.content_id", locales_string].compact.join(", ")
+#
+#            current_includes = merge_includes(scope(:find, :include), options[:include])
+#            dependency_class = ::ActiveRecord::Associations::ClassMethods::JoinDependency
+#            join_dependency = dependency_class.new(self, current_includes, options[:joins])
+#            joins_sql = join_dependency.join_associations.collect{|join| join.association_join }.join
+#            # at this point, joins_sql in fact only includes the joins coming from options[:include]
+#            add_joins!(joins_sql, options[:joins])
+#            add_conditions!(conditions_sql = '', options[:conditions], scope(:find))
+#            conditions_sql.sub!('WHERE', '')
+#
+#            conditions_tables = tables_in_string(conditions_sql)
+#            references_other_tables = conditions_tables.size > 1 || conditions_tables.first != self.table_name
+#            if references_other_tables
+#              mixed_conditions = merge_conditions(*other_table_conditions(options[:conditions]))
+#              own_conditions = merge_conditions(*same_table_conditions(options[:conditions]))
+#            end
+#
+#            # now construct the subquery
+#            if locale_conditions.present?
+#              sql_locale_conditions = merge_conditions(locale_conditions, '')
+#            end
+#
+#            from_and_joins = "FROM #{tbl} " + joins_sql.to_s
+#
+#            adapters_with_custom_sql = %w{PostgreSQL MySQL}
+#            current_adapter = connection.adapter_name
+#            if adapters_with_custom_sql.include?(current_adapter)
+#
+#              # Certain adapters support custom features that allow the locale
+#              # filter to do its job in a single sql. We use them for efficiency
+#              # In these cases, the subquery that will be build must respect
+#              # includes, joins and conditions from the original query
+#              # Note: all this is crying for a refactoring
+#
+#
+#              subfilter = case locale_options[:mode]
+#              when :strict
+#                all_conditions = merge_conditions(conditions_sql, sql_locale_conditions)
+#                from_and_joins + (all_conditions.present? ? "WHERE #{all_conditions}" : '')
+#              when :mixed
+#                content_id_query = from_and_joins
+#                content_id_query << "WHERE #{conditions_sql}" if conditions_sql.present?
+#                id_extra_cond = sql_locale_conditions.present? ? "#{sql_locale_conditions} AND" : ''
+#                new_options = options.merge(:conditions => nil, :joins => nil)
+#                scope(:find)[:conditions] = nil
+#                scope(:find)[:joins] = nil
+#                "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
+#                    "SELECT #{tbl}.content_id #{content_id_query})"
+#              else
+#                # Default. Only search for matches in translations in associations
+#                if references_other_tables
+#                  content_id_query = from_and_joins
+#                  content_id_query << "WHERE #{mixed_conditions}" unless mixed_conditions.blank?
+#                  id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
+#                  id_extra_cond += ' AND' if id_extra_cond.present?
+#
+#                  new_options = options.merge(:conditions => own_conditions, :joins => nil)
+#                  scope(:find)[:conditions] = nil
+#                  scope(:find)[:joins] = nil
+#                  "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
+#                       "SELECT #{tbl}.content_id #{content_id_query})"
+#                else
+#                  # No associations involved. Same as :strict. Needs a refactor!
+#                  all_conditions = merge_conditions(conditions_sql, sql_locale_conditions)
+#                  from_and_joins + (all_conditions.present? ? "WHERE #{all_conditions}" : '')
+#                end
+#              end
+#
+#              locale_filter = case current_adapter
+#              when "PostgreSQL"
+#                # use a subquery with DISTINCT ON, more efficient, but currently
+#                # only supported by Postgres
+#
+#                ["#{tbl}.id IN (" +
+#                    "SELECT DISTINCT ON (#{tbl}.content_id) #{tbl}.id " + subfilter +
+#                    "ORDER BY #{locale_order})", *locales.map(&:to_s)
+#                ]
+#
+#              when "MySQL"
+#                # it's a "within-group aggregates" problem. We need to order before grouping.
+#                # This subquery is O(N * log N), while a correlated subquery would be O(N^2)
+#
+#                ["#{tbl}.id IN (" +
+#                    "SELECT id FROM ( SELECT #{tbl}.id, #{tbl}.content_id " + subfilter +
+#                    "ORDER BY #{locale_order}) AS lpref " +
+#                    "GROUP BY content_id)", *locales.map(&:to_s)
+#                ]
+#              end
+#
+#              # finally, merge the created subquery into the current conditions
+#              if new_options
+#                new_options[:conditions] = merge_conditions(new_options[:conditions], locale_filter)
+#              else
+#                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_filter))
+#              end
+#
+#            else
+#              # For the other adapters, the strategy is to do two subqueries.
+#              # This can be problematic for generic queries since we have to
+#              # suppress the paginator scope to guarantee the correctness (#254)
+#
+#              # find the final IDs
+#              ids = nil
+#
+#              # redefine after_find callback method avoiding its call with next find
+#              self.class_eval do
+#                def after_find_with_neutralize; end
+#                def after_initialize_with_neutralize; end
+#                alias_method_chain :after_find, :neutralize if self.instance_methods.include?(:after_find)
+#                alias_method_chain :after_initialize, :neutralize if self.instance_methods.include?(:after_initialize)
+#              end
+#
+#              begin
+#
+#                # removes paginator scope.
+#                with_exclusive_scope(:find => {:limit => nil, :offset => nil, :joins => nil, :include => nil}) do
+#
+#
+#                  conditions_for_id_query = case locale_options[:mode]
+#                  when :strict
+#                      merge_conditions(conditions_sql, sql_locale_conditions)
+#                  when :mixed
+#                        original_query = from_and_joins
+#                        joins_sql = nil # already applied
+#                        (original_query << "WHERE #{conditions_sql}") if conditions_sql.present?
+#                        extra_cond = sql_locale_conditions.present? ? "#{sql_locale_conditions} AND" : ''
+#                        "#{extra_cond} #{tbl}.content_id IN ("+
+#                            "SELECT #{tbl}.content_id #{original_query})"
+#                  else
+#                    # Default. Only search for matches in translations in associations
+#                    if references_other_tables
+#                      content_id_query = from_and_joins
+#                      content_id_query << "WHERE #{mixed_conditions}" unless mixed_conditions.blank?
+#                      joins_sql = nil # already applied
+#                      new_options = options.merge(:conditions => own_conditions, :joins => nil)
+#                      id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
+#                      id_extra_cond += ' AND' if id_extra_cond.present?
+#                      "#{id_extra_cond} #{tbl}.content_id IN ("+
+#                          "SELECT #{tbl}.content_id #{content_id_query})"
+#                    else
+#                      # No associations involved. Same as :strict
+#                      merge_conditions(conditions_sql, sql_locale_conditions)
+#                    end
+#                  end
+#
+#                  ids = find(:all, {
+#                      :select => "#{tbl}.id, #{tbl}.content_id ",
+#                      :order => sanitize_sql_for_conditions(["#{locale_order}", *locales.map(&:to_s)]),
+#                      :conditions => conditions_for_id_query,
+#                      :include => options[:include],
+#                      :joins => joins_sql
+#                  })
+#                end
+#              ensure
+#                # restore after_find callback method
+#                self.class_eval do
+#                  alias_method :after_find, :after_find_without_neutralize if self.instance_methods.include?(:after_find)
+#                  alias_method :after_initialize, :after_initialize_without_neutralize if self.instance_methods.include?(:after_initialize)
+#                end
+#              end
+#
+#              #get only one ID per content_id
+#              content_ids = {}
+#              ids = ids.select{ |id| content_ids[id.content_id].nil? ? content_ids[id.content_id] = id : false }.map{|id| id.id.to_i}
+#
+#              # these are already factored in the new conditions
+#              if scope(:find)
+#                scope(:find)[:conditions] = nil
+#                scope(:find)[:joins] = nil
+#              end
+#
+#              if new_options
+#                new_options[:conditions] = merge_conditions(new_options[:conditions], {:id => ids})
+#              else
+#                new_options = options.merge(:conditions => {:id => ids})
+#              end
+#            end
+#          end
+#          # return the modified options, or the original ones if there is no change
+#          new_options || options
+#        end
 
-            # add untranslatable instances if necessary
-            locales << :any unless all_locales || locales.size == 0
-
-            if all_locales
-              locale_conditions = ""
-            else
-              locale_conditions = ["#{self.table_name}.locale in (?)", locales.map(&:to_s)]
-              # act like a normal condition when we are just filtering a locale
-              if locales.size == 2 && locales.include?(:any) && locale_options[:strict]
-                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_conditions))
-                return new_options
-              end
-            end
-            # locale preference order
-            tbl = self.table_name
-            locales_string = locales.size > 0 ? (["#{tbl}.locale != ?"]*(locales.size)).join(", ") : nil
-            locale_order = ["#{tbl}.content_id", locales_string].compact.join(", ")
-
-            current_includes = merge_includes(scope(:find, :include), options[:include])
-            dependency_class = ::ActiveRecord::Associations::ClassMethods::JoinDependency
-            join_dependency = dependency_class.new(self, current_includes, options[:joins])
-            joins_sql = join_dependency.join_associations.collect{|join| join.association_join }.join
-            # at this point, joins_sql in fact only includes the joins coming from options[:include]
-            add_joins!(joins_sql, options[:joins])
-            add_conditions!(conditions_sql = '', options[:conditions], scope(:find))
-            conditions_sql.sub!('WHERE', '')
-
-            conditions_tables = tables_in_string(conditions_sql)
-            references_other_tables = conditions_tables.size > 1 || conditions_tables.first != self.table_name
-            if references_other_tables
-              mixed_conditions = merge_conditions(*other_table_conditions(options[:conditions]))
-              own_conditions = merge_conditions(*same_table_conditions(options[:conditions]))
-            end
-
-            # now construct the subquery
-            if locale_conditions.present?
-              sql_locale_conditions = merge_conditions(locale_conditions, '')
-            end
-
-            from_and_joins = "FROM #{tbl} " + joins_sql.to_s
-
-            adapters_with_custom_sql = %w{PostgreSQL MySQL}
-            current_adapter = connection.adapter_name
-            if adapters_with_custom_sql.include?(current_adapter)
-
-              # Certain adapters support custom features that allow the locale
-              # filter to do its job in a single sql. We use them for efficiency
-              # In these cases, the subquery that will be build must respect
-              # includes, joins and conditions from the original query
-              # Note: all this is crying for a refactoring
-
-
-              subfilter = case locale_options[:mode]
-              when :strict
-                all_conditions = merge_conditions(conditions_sql, sql_locale_conditions)
-                from_and_joins + (all_conditions.present? ? "WHERE #{all_conditions}" : '')
-              when :mixed
-                content_id_query = from_and_joins
-                content_id_query << "WHERE #{conditions_sql}" if conditions_sql.present?
-                id_extra_cond = sql_locale_conditions.present? ? "#{sql_locale_conditions} AND" : ''
-                new_options = options.merge(:conditions => nil, :joins => nil)
-                scope(:find)[:conditions] = nil
-                scope(:find)[:joins] = nil
-                "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
-                    "SELECT #{tbl}.content_id #{content_id_query})"
-              else
-                # Default. Only search for matches in translations in associations
-                if references_other_tables
-                  content_id_query = from_and_joins
-                  content_id_query << "WHERE #{mixed_conditions}" unless mixed_conditions.blank?
-                  id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
-                  id_extra_cond += ' AND' if id_extra_cond.present?
-
-                  new_options = options.merge(:conditions => own_conditions, :joins => nil)
-                  scope(:find)[:conditions] = nil
-                  scope(:find)[:joins] = nil
-                  "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
-                       "SELECT #{tbl}.content_id #{content_id_query})"
-                else
-                  # No associations involved. Same as :strict. Needs a refactor!
-                  all_conditions = merge_conditions(conditions_sql, sql_locale_conditions)
-                  from_and_joins + (all_conditions.present? ? "WHERE #{all_conditions}" : '')
-                end
-              end
-
-              locale_filter = case current_adapter
-              when "PostgreSQL"
-                # use a subquery with DISTINCT ON, more efficient, but currently
-                # only supported by Postgres
-
-                ["#{tbl}.id IN (" +
-                    "SELECT DISTINCT ON (#{tbl}.content_id) #{tbl}.id " + subfilter +
-                    "ORDER BY #{locale_order})", *locales.map(&:to_s)
-                ]
-
-              when "MySQL"
-                # it's a "within-group aggregates" problem. We need to order before grouping.
-                # This subquery is O(N * log N), while a correlated subquery would be O(N^2)
-
-                ["#{tbl}.id IN (" +
-                    "SELECT id FROM ( SELECT #{tbl}.id, #{tbl}.content_id " + subfilter +
-                    "ORDER BY #{locale_order}) AS lpref " +
-                    "GROUP BY content_id)", *locales.map(&:to_s)
-                ]
-              end
-
-              # finally, merge the created subquery into the current conditions
-              if new_options
-                new_options[:conditions] = merge_conditions(new_options[:conditions], locale_filter)
-              else
-                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_filter))
-              end
-
-            else
-              # For the other adapters, the strategy is to do two subqueries.
-              # This can be problematic for generic queries since we have to
-              # suppress the paginator scope to guarantee the correctness (#254)
-
-              # find the final IDs
-              ids = nil
-
-              # redefine after_find callback method avoiding its call with next find
-              self.class_eval do
-                def after_find_with_neutralize; end
-                def after_initialize_with_neutralize; end
-                alias_method_chain :after_find, :neutralize if self.instance_methods.include?(:after_find)
-                alias_method_chain :after_initialize, :neutralize if self.instance_methods.include?(:after_initialize)
-              end
-
-              begin
-
-                # removes paginator scope.
-                with_exclusive_scope(:find => {:limit => nil, :offset => nil, :joins => nil, :include => nil}) do
-
-
-                  conditions_for_id_query = case locale_options[:mode]
-                  when :strict
-                      merge_conditions(conditions_sql, sql_locale_conditions)
-                  when :mixed
-                        original_query = from_and_joins
-                        joins_sql = nil # already applied
-                        (original_query << "WHERE #{conditions_sql}") if conditions_sql.present?
-                        extra_cond = sql_locale_conditions.present? ? "#{sql_locale_conditions} AND" : ''
-                        "#{extra_cond} #{tbl}.content_id IN ("+
-                            "SELECT #{tbl}.content_id #{original_query})"
-                  else
-                    # Default. Only search for matches in translations in associations
-                    if references_other_tables
-                      content_id_query = from_and_joins
-                      content_id_query << "WHERE #{mixed_conditions}" unless mixed_conditions.blank?
-                      joins_sql = nil # already applied
-                      new_options = options.merge(:conditions => own_conditions, :joins => nil)
-                      id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
-                      id_extra_cond += ' AND' if id_extra_cond.present?
-                      "#{id_extra_cond} #{tbl}.content_id IN ("+
-                          "SELECT #{tbl}.content_id #{content_id_query})"
-                    else
-                      # No associations involved. Same as :strict
-                      merge_conditions(conditions_sql, sql_locale_conditions)
-                    end
-                  end
-
-                  ids = find(:all, {
-                      :select => "#{tbl}.id, #{tbl}.content_id ",
-                      :order => sanitize_sql_for_conditions(["#{locale_order}", *locales.map(&:to_s)]),
-                      :conditions => conditions_for_id_query,
-                      :include => options[:include],
-                      :joins => joins_sql
-                  })
-                end
-              ensure
-                # restore after_find callback method
-                self.class_eval do
-                  alias_method :after_find, :after_find_without_neutralize if self.instance_methods.include?(:after_find)
-                  alias_method :after_initialize, :after_initialize_without_neutralize if self.instance_methods.include?(:after_initialize)
-                end
-              end
-
-              #get only one ID per content_id
-              content_ids = {}
-              ids = ids.select{ |id| content_ids[id.content_id].nil? ? content_ids[id.content_id] = id : false }.map{|id| id.id.to_i}
-
-              # these are already factored in the new conditions
-              if scope(:find)
-                scope(:find)[:conditions] = nil
-                scope(:find)[:joins] = nil
-              end
-
-              if new_options
-                new_options[:conditions] = merge_conditions(new_options[:conditions], {:id => ids})
-              else
-                new_options = options.merge(:conditions => {:id => ids})
-              end
-            end
-          end
-          # return the modified options, or the original ones if there is no change
-          new_options || options
-        end
-
-        # returns an array with the sql conditions that refer to other trables
-        def other_table_conditions(conditions)
-          normalized_conditions(conditions) - same_table_conditions(conditions)
-        end
-
-        # returns an array with the sql conditions that refer to this model table
-        def same_table_conditions(conditions)
-          normalized_conditions(conditions).select{ |cond| cond =~ /\b#{table_name}.?\./ }
-        end
-
-        # returns an array of all the applicable sql conditions (given +conditions+ and the current scope)
-        def normalized_conditions(conditions)
-          scope_conditions = scoped_methods.map{|scoping| scoping[:find][:unmerged_conditions] rescue nil }.compact
-          (scope_conditions + [conditions].compact).map{|condition| sanitize_sql(condition)}
-        end
 
         def merge_locale_list locales
           merge_locale_list_rec locales.first, locales[1,locales.size]
@@ -996,15 +960,15 @@ module UbiquoI18n
           clone
         end
 
-        def attributes_with_i18n_fields_assignement_advancement=(attributes, guard_protected_attributes = true)
+        def assign_attributes_with_i18n_fields(new_attributes, options = {})
           if self.class.is_translatable?
             fields_to_populate = %w{locale content_id}
-            attributes_to_apply = attributes.select { |key, value| fields_to_populate.include?(key.to_s) }
+            attributes_to_apply = new_attributes.select { |key, value| fields_to_populate.include?(key.to_s) }
             attributes_to_apply.each do |key, value|
               write_attribute key.to_sym, value
             end
           end
-          send("attributes_without_i18n_fields_assignement_advancement=", attributes, guard_protected_attributes)
+          send("assign_attributes_without_i18n_fields", new_attributes, options)
         end
 
         # Whenever we update existing content or create a translation, the expected behaviour is the following

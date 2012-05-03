@@ -35,8 +35,8 @@ module UbiquoI18n
 
       # Performs the actual job of applying the :translatable option
       def apply_translatable_option!(method, definition, table_name, options = {})
-        translatable = options.delete(:translatable)
-        locale       = options.delete(:locale)
+        translatable = options[:translatable]
+        locale       = options[:locale]
 
         yield(lambda do |table|
           if translatable
