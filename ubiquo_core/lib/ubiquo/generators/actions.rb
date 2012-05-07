@@ -5,26 +5,53 @@ module Ubiquo
     module Actions
 
       def ubiquo_tab(name)
-        sentinel = /([\t| ]*)(#{Regexp.escape('end # Last tab')})/mi
+        flag     = 'end # :flag:'
+        sentinel = /([\t| ]*)(#{Regexp.escape(flag)})/mi
         tab_file = 'app/views/navigators/_main_navtabs.html.erb'
 
         log :tabs, "insert #{name} tab"
         in_root do
           inject_into_file tab_file, :before => sentinel do
-            "\\1#{tab_template(name)}\n"
+            tab_template(name)
           end
         end
       end
+
+      def tab_template(name)
+        [
+          "end",
+          "",
+          "navigator.add_tab do |tab|",
+          "  tab.text  = t('ubiquo.#{name.singularize}.title')",
+          "  tab.title = t('application.goto', :place => '#{name}')",
+          "  tab.link  = ubiquo_#{name}_path",
+          "  tab.highlights_on(:controller => 'ubiquo/#{name}')",
+          "  tab.highlighted_class = 'active'",
+        ].map { |l| l.blank? ? "#{l}\n" : "\\1#{l}\n" }.reduce(:+)
+      end
+      protected :tab_template
 
       def ubiquo_migration
         rake 'db:migrate'
       end
 
-      def namespaced_route_resources(namespace, *resources)
-        scoped_route_resources(namespace, 'namespace', *resources)
+      def ubiquo_route_resources(*resources)
+        scoped_route_resources('ubiquo', *resources)
       end
 
-      def scoped_route_resources(_scope, kind = 'scope', *resources)
+      def scoped_route_resources(namespace, *resources)
+        _route_resources(namespace, *resources, :kind => 'scope')
+      end
+
+      def namespaced_route_resources(namespace, *resources)
+        _route_resources(namespace, *resources, :kind => 'namespace')
+      end
+
+      def _route_resources(_scope, *arguments)
+        options   = arguments.extract_options!
+        kind      = options[:kind] || 'scope'
+        resources = arguments.dup
+
         resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
         sentinel      = "#{kind} :#{_scope} do"
         flag          = /([\t| ]*)(#{Regexp.escape(sentinel)})/mi
@@ -38,10 +65,7 @@ module Ubiquo
           end
         end
       end
-
-      def ubiquo_route_resources(*resources)
-        scoped_route_resources('ubiquo', 'scope', *resources)
-      end
+      protected :_route_resources
 
       def nested_route_resources(parent, *resources)
         resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
@@ -59,23 +83,9 @@ module Ubiquo
           end
 
           gsub_file 'config/routes.rb', ext_flag do |resource|
-            spaces = resource.match(ext_flag)[1]
-            resource << " do\n#{spaces}  #{routing_code}\n#{spaces}end"
+            resource << " do\n\\1  #{routing_code}\n\\1end"
           end
         end
-      end
-
-      protected
-
-      def tab_template(name)
-        "end
-
-        navigator.add_tab do |tab|
-          tab.text  = t('ubiquo.#{name.singularize}.title')
-          tab.title = t('application.goto', :place => '#{name}')
-          tab.link  = ubiquo_#{name}_path
-          tab.highlights_on(:controller => 'ubiquo/#{name}')
-          tab.highlighted_class = 'active'"
       end
 
     end

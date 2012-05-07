@@ -243,8 +243,6 @@ file 'config/routes.rb', <<-CODE
   end
 
   mount Ubiquo::Engine => '/ubiquo'
-
-# Translate::Routes.translation_ui(map) unless Rails.env.production?
 end
 CODE
 # default rails environment.rb
@@ -274,7 +272,7 @@ end.join("\n")
 file 'Gemfile', <<-CODE
 source "https://rubygems.org"
 
-gem "rails",     "~> 3.2.0.rc2"
+gem "rails",     "~> 3.2.0"
 
 platforms :mri_19 do
   gem "#{adapter_gem}"
