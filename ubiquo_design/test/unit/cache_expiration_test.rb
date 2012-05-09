@@ -160,7 +160,7 @@ class UbiquoDesign::CacheExpirationTest < ActiveSupport::TestCase
       }
     end
     widget = widgets(:one)
-    page = pages(:one)
+    page = pages(:two)
     page.instance_variable_set(:@cache_policy_context, :test)
     widget.instance_variable_set(:@cache_policy_context, :test)
     @manager.cache(widget, 'content', caching_options(page.id))
