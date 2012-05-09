@@ -120,7 +120,9 @@ module UbiquoDesign
         raise WidgetNotFound.new("Widget #{widget_name} not found") unless available_widgets.include?(widget_name)
       end
 
+      prepend_view_path Rails.root.join("app/views/widgets/#{widget_name.to_s}").to_s
       output = run_behaviour(widget)
+
       @_widget_status, @_widget_response_body = status, response_body
 
       if widget_redirected?
