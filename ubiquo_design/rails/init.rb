@@ -50,3 +50,4 @@ require 'ubiquo_design'
   # :ubiquo_design => %w{blocks widgets pages}
 # )
 
+
