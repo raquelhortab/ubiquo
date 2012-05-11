@@ -34,7 +34,7 @@ class Locale < ActiveRecord::Base
   # using the possibly defined I18n.fallbacks as a base
   def self.fallbacks(locale)
     without_defaults do
-      I18n.fallbacks.send(:compute, locale.to_sym, false) + [:all]
+      I18n.fallbacks.send(:compute, locale.try(:to_sym), false) + [:all]
     end
   end
 
@@ -60,8 +60,7 @@ class Locale < ActiveRecord::Base
   # This is used to avoid casual interference of I18n.default_locale when calculating
   # the fallbacks for Locale
   def self.without_defaults
-    defaults = I18n.fallbacks.defaults
-    I18n.fallbacks.defaults = []
+    defaults, I18n.fallbacks.defaults = I18n.fallbacks.defaults, []
     yield.tap do
       I18n.fallbacks.defaults = defaults
     end

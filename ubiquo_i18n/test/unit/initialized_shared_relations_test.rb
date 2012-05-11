@@ -10,6 +10,7 @@ class Ubiquo::InitializedSharedRelationsTest < ActiveSupport::TestCase
 
   def teardown
     # cleanup of the association we are testing
+    TestModel.uninitialize_translations_for :translatable_related_test_models
     TestModel.share_translations_for :translatable_related_test_models
   end
 

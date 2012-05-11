@@ -31,12 +31,20 @@ module UbiquoI18n
       # find all content in Spanish or any other locale if Spanish dosn't exist: Model.locale('es', :all)
       # find all content in any locale: Model.locale(:all)
       #
-      def locale(*locales)
-        return self if locales.blank?
+      def locale(*opts)
+        return self if opts.blank?
 
         relation = clone
-        relation.locale_values = locales
+        relation.locale_values = opts
         relation
+      end
+
+      # Using localized is like using locale(current_locale, :all),
+      # but automatically using the possibly defined locale fallback list
+      # if the Locale.use_fallbacks flag is enabled
+      def localized(options = {})
+        locales = Locale.use_fallbacks ? Locale.fallbacks(Locale.current) : Locale.current
+        locale(*[locales, options].flatten)
       end
 
         # This method is the one that actually applies the locale filter
@@ -72,7 +80,6 @@ module UbiquoI18n
             join_dependency = construct_join_dependency_for_association_find
             relation = construct_relation_for_association_find(join_dependency)
             joins_sql = relation.arel.join_sql
-#            require 'ruby-debug'; debugger if defined? AAA
             conditions_sql = arel.where_sql || ''
             conditions_sql.sub!('WHERE', '')
 
@@ -189,16 +196,15 @@ module UbiquoI18n
                   end
                 end
 
-
               # these are already factored in the new conditions
               self.where_values = self.joins_values = []
 
               candidate_ids = unscoped.all(
                 :select => "#{tbl}.id, #{tbl}.content_id ",
-                :conditions => conditions_for_id_query,
+                    :conditions => conditions_for_id_query,
                 :order => locale_order,
-                :joins => joins_sql
-              )
+                    :joins => joins_sql
+                  )
 
               # get only one ID per content_id
               content_ids = {}

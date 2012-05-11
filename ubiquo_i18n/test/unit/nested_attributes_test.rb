@@ -40,32 +40,38 @@ class Ubiquo::NestedAttributesTest < ActiveSupport::TestCase
   test 'should not affect non-translation-shared relations' do
     instance = RelatedTestModel.create
     assert_nothing_raised do
-      instance.test_models_attributes = [{ "field1" => 1}]
+      instance.test_models_attributes = [{ "my_field" => 1}]
     end
     assert_difference 'TestModel.count', 1 do
       instance.save
     end
   end
 
+  test 'nested_attributes_situation_with_multiple_nil_content_id' do
+    en = TestModel.create
+    en.test_models_attributes = [{}, {}]
+    assert_equal 2, en.test_models.size
+  end
+
   test 'should accept nested_attributes for a combination of translatable and not translatable classes' do
-    test_model = RelatedTestModel.create(:field1 => 'initial')
+    test_model = RelatedTestModel.create(:my_field => 'initial')
     translatable_object = TranslatableRelatedTestModel.create(:shared_related_test_model => test_model)
     assert_no_difference 'TranslatableRelatedTestModel.count' do
       assert_no_difference 'RelatedTestModel.count' do
         translatable_object.update_attributes(
           :shared_related_test_model_attributes => {
             :id => test_model.id,
-            :field1 => 'changed'
+            :my_field => 'changed'
           }
         )
       end
     end
-    assert_equal 'changed', translatable_object.shared_related_test_model.field1
+    assert_equal 'changed', translatable_object.shared_related_test_model.my_field
   end
 
   test 'should accept nested_attributes for and shared_translations for' do
     Locale.current = 'ca'
-    test_model = TestModel.create(:field1 => 'initial')
+    test_model = TestModel.create(:my_field => 'initial')
     shared_object = TestModel.create(:test_model => test_model)
 
     assert_equal [shared_object], test_model.reload.test_models

@@ -12,7 +12,7 @@ module UbiquoI18n
 
       module ClassMethods
 
-        delegate :locale, :to => :scoped
+        delegate :locale, :localized, :to => :scoped
 
         # Class method for ActiveRecord that states which attributes are translatable and therefore when updated will be only updated for the current locale.
         #
@@ -81,14 +81,6 @@ module UbiquoI18n
             asked_locales.map(&:to_s).include?(self.locale) ||
               (!options[:skip_any] && self.locale == 'any')
           end
-
-          # Using localized is like using locale(current_locale, :all),
-          # but automatically using the possibly defined locale fallback list
-          # if the Locale.use_fallbacks flag is enabled
-          scope :localized, lambda{
-            locales = Locale.use_fallbacks ? Locale.fallbacks(Locale.current) : [Locale.current]
-            locale(*locales)
-          }
 
           # usage:
           # find all items of one content: Model.content(1).first
@@ -175,12 +167,7 @@ module UbiquoI18n
 
                   if record && record.class.is_translatable?
 
-                    # for each associated record, find its appropiate translation
-                    # (if existing) and create the contents that it should have
-                    all_relationship_contents = [association_values].flatten.reject(&:marked_for_destruction?).map do |related_element|
-                      existing_translation = related_element.translations.locale(locale).first
-                      existing_translation || related_element
-                    end
+                    all_relationship_contents = [association_values].flatten.reject(&:marked_for_destruction?)
 
                   elsif record
 
@@ -229,7 +216,7 @@ module UbiquoI18n
 
           define_method "refresh_reflection_value_if_needed" do |reflection|
             if has_updated_existing_primary_key(reflection)
-              association = self.send("#{reflection.name}_without_shared_translations")
+              association = association(reflection.name).without_shared_translations
               association.reload if association
             end
           end
@@ -280,128 +267,25 @@ module UbiquoI18n
             reflection.mark_as_translation_shared(true, options)
 
             unless is_translation_shared_initialized? association_id
-              define_method "#{association_id}_with_shared_translations" do
+              define_method "sync_deletion_of_#{association_id}_elements_across_translations" do |removed|
+                self.class.translating_relations do
+                  if reflections[association_id].is_translation_shared?
 
-                association = self.send("#{association_id}_without_shared_translations")
+                    # Tell to the record translations that this element has been removed
+                    translations.each do |translation|
+                      to_remove = removed.class.is_translatable? ? removed.with_translations : removed
+                      translation.send(association_id).delete to_remove
+                    end if self.class.is_translatable?
 
-                return association if !applicable_translation_shared(reflection)
-
-                return association if cached_translation_shared_association(association)
-
-                # preferred locale for the associated objects
-                locale = Locale.current || self.locale
-
-                is_collection = association.respond_to? :count
-
-                # the target needs to be loaded, and this works for nils
-                association.inspect
-
-                if is_collection
-                  unless reflection.is_translatable?
-                    alert_translation_shared_not_supported(association_id, reflection.klass)
-                  end
-
-                  # In a has_many :through to an untranslatable model,
-                  # we operate from the intermediate table
-                  association_to_retrieve = unless reflection.has_many_through_translatable?
-                    "#{association_id}_without_shared_translations"
-                  else
-                    reflection.through_reflection.name
-                  end
-
-                  # if this instance is not from a translatable class, it won't have the with_translations method
-                  origin = self.class.is_translatable? ? self.with_translations : self
-
-                  # retrieve an element for each content_id
-                  contents = []
-                  Array(origin).each do |translation|
-                    elements = translation.send(association_to_retrieve)
-                    elements.each do |element|
-                      contents << element unless element.content_id && contents.map(&:content_id).include?(element.content_id)
+                    # The translations of the removed item have to be also removed
+                    # from this record's association
+                    if removed.class.is_translatable?
+                      send(association_id).delete removed.translations
                     end
+
                   end
-
-                  # build the complete proxy_association.target and replace its contents
-                  target = association.proxy_association.target
-                  target.clear
-
-                  if reflection.has_many_through_translatable?
-                    target.concat(contents.map(&reflection.source_reflection.name))
-                  else
-                    target.concat(contents)
-
-                    # now "localize" the contents
-                    translations_to_do = {}
-                    target.each do |element|
-                      if !element.in_locale?(locale) && (translation = element.in_locale(locale))
-                        translations_to_do[element] = translation
-                      end
-                    end
-                    translations_to_do.each_pair do |foreign, translation|
-                      target.delete foreign
-                      target << translation
-                    end
-                  end
-
-                  association.loaded
-                  association.instance_variable_set(:@loaded_in_locale, Locale.current)
-
-                # it's a proxy and sometimes does not return the same as .nil?
-                elsif !is_collection && !association.is_a?(NilClass)
-                  # one-sized association, not a collection
-                  if association.class.is_translatable? && !association.in_locale?(locale)
-                    association = association.in_locale(locale) || association
-                  end
-
-                elsif association.is_a?(NilClass) && self.class.reflect_on_association(association_id).macro == :has_one
-                  # in a has_one, with a nil association we have to look at translations
-                  translations.map do |translation|
-                    element = translation.send("#{association_id}_without_shared_translations")
-                    if element
-                      if element.class.is_translatable? && !element.in_locale?(locale)
-                        element = element.in_locale(locale) || element
-                      end
-                      association = element
-                      break
-                    end
-                  end
-
                 end
-
-                association
               end
-
-              alias_method_chain association_id, :shared_translations
-
-              # Syncs the deletion of association elements across translations
-#              add_association_callbacks(
-#                association_id,
-#                :after_remove => Proc.new { |record, removed|
-#                  record.class.translating_relations do
-#                    if reflections[association_id].is_translation_shared?
-#
-#                      # Tell to the record translations that this element has been removed
-#                      record.translations.each do |translation|
-#                        to_remove = removed.class.is_translatable? ? removed.with_translations : removed
-#                        translation.send(association_id).delete to_remove
-#                      end if is_translatable?
-#
-#                      # The translations of the removed item have to be also removed
-#                      # from this record's association
-#                      if removed.class.is_translatable?
-#                        record.send(association_id).delete removed.translations
-#                      end
-#
-#                    end
-#                  end
-#                }
-#              )
-
-              # Modifies the behaviour of :dependent option to take into account
-              # translation-shared associations
-#              if reflection.macro == :has_many && is_translatable?
-#                reflection.configure_dependency_for_has_many_with_shared_translations
-#              end
 
               # Marker to avoid recursive redefinition
               initialize_translation_shared association_id
@@ -427,7 +311,6 @@ module UbiquoI18n
           associations.flatten.each do |association_id|
             if is_translation_shared_initialized? association_id
               reflections[association_id].mark_as_translation_shared(false, options)
-              alias_method association_id, "#{association_id}_without_shared_translations"
               uninitialize_translation_shared association_id
             end
           end
@@ -556,41 +439,6 @@ module UbiquoI18n
           instance_variable_inherited_set(associations, "initialized_translation_shared_list", "reset_translation_shared")
         end
 
-        # Applies the locale filter if needed, then performs the normal find method
-        def to_a_with_locale_filter(*args)
-          if self.is_translatable?
-            options = args.extract_options!
-            new_options = apply_locale_filter(options)
-            to_a_without_locale_filter(args.first, new_options)
-          else
-            to_a_without_locale_filter(*args)
-          end
-        end
-
-        # Applies the locale filter if needed, then performs the normal count method
-        def count_with_locale_filter(*args)
-          if self.is_translatable?
-            options = args.extract_options!
-            new_options = apply_locale_filter(options)
-            count_without_locale_filter(args.first || :all, new_options)
-          else
-            count_without_locale_filter(*args)
-          end
-        end
-
-        # When a scope is used, we save their find options inside a new,
-        # unique key to avoid the loss of information that happens
-        # when we merge scopes. We use later this information to easily
-        # discriminate which conditions are to be applied in only one
-        # translation or for all translations
-#        def with_scope_with_locale_filter(method_scoping = {}, action = :merge, &block)
-#          if (method_scoping[:find][:conditions] rescue false)
-#            method_scoping[:find][:unmerged_conditions] = method_scoping[:find][:conditions]
-#          end
-#          with_scope_without_locale_filter(method_scoping, action, &block)
-#        end
-
-
         # Attributes that are always 'translated' (not copied between languages)
         (@global_translatable_attributes ||= []) << :locale << :content_id
 
@@ -620,16 +468,6 @@ module UbiquoI18n
           @@translatable_inheritable_instance_variables.each do |inheritable|
             unless eval("@#{inheritable}").nil?
               klass.instance_variable_set("@#{inheritable}", eval("@#{inheritable}").dup)
-            end
-          end
-
-          # Aliases the find and count methods to apply the locale filter
-          klass.class_eval do
-            class << self
-#              alias_method_chain :to_a, :locale_filter
-#              alias_method_chain :count, :locale_filter
-#              alias_method_chain :with_scope, :locale_filter
-              ::ActiveRecord::SpawnMethods::VALID_FIND_OPTIONS << :locale_list << :unmerged_conditions
             end
           end
 
@@ -684,220 +522,6 @@ module UbiquoI18n
         end
 
         private
-
-        # This method is the one that actually applies the locale filter
-        # This means that if you use .locale(..), you'll end up here,
-        # when the results are actually delivered (not in call time)
-        # Returns a hash with the resulting +options+ with the applied filter
-#        def apply_locale_filter(options)
-#          locales = really_translatable_class.instance_variable_get(:@current_locale_list)
-#          # set this find as dispatched
-#          really_translatable_class.instance_variable_set(:@current_locale_list, [])
-#          if locales.present?
-#            # build locale restrictions
-#            locales = merge_locale_list locales.reverse!
-#            locale_options = locales.extract_options!
-#            all_locales = locales.delete(:all)
-#
-#            # add untranslatable instances if necessary
-#            locales << :any unless all_locales || locales.size == 0
-#
-#            if all_locales
-#              locale_conditions = ""
-#            else
-#              locale_conditions = ["#{self.table_name}.locale in (?)", locales.map(&:to_s)]
-#              # act like a normal condition when we are just filtering a locale
-#              if locales.size == 2 && locales.include?(:any) && locale_options[:strict]
-#                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_conditions))
-#                return new_options
-#              end
-#            end
-#            # locale preference order
-#            tbl = self.table_name
-#            locales_string = locales.size > 0 ? (["#{tbl}.locale != ?"]*(locales.size)).join(", ") : nil
-#            locale_order = ["#{tbl}.content_id", locales_string].compact.join(", ")
-#
-#            current_includes = merge_includes(scope(:find, :include), options[:include])
-#            dependency_class = ::ActiveRecord::Associations::ClassMethods::JoinDependency
-#            join_dependency = dependency_class.new(self, current_includes, options[:joins])
-#            joins_sql = join_dependency.join_associations.collect{|join| join.association_join }.join
-#            # at this point, joins_sql in fact only includes the joins coming from options[:include]
-#            add_joins!(joins_sql, options[:joins])
-#            add_conditions!(conditions_sql = '', options[:conditions], scope(:find))
-#            conditions_sql.sub!('WHERE', '')
-#
-#            conditions_tables = tables_in_string(conditions_sql)
-#            references_other_tables = conditions_tables.size > 1 || conditions_tables.first != self.table_name
-#            if references_other_tables
-#              mixed_conditions = merge_conditions(*other_table_conditions(options[:conditions]))
-#              own_conditions = merge_conditions(*same_table_conditions(options[:conditions]))
-#            end
-#
-#            # now construct the subquery
-#            if locale_conditions.present?
-#              sql_locale_conditions = merge_conditions(locale_conditions, '')
-#            end
-#
-#            from_and_joins = "FROM #{tbl} " + joins_sql.to_s
-#
-#            adapters_with_custom_sql = %w{PostgreSQL MySQL}
-#            current_adapter = connection.adapter_name
-#            if adapters_with_custom_sql.include?(current_adapter)
-#
-#              # Certain adapters support custom features that allow the locale
-#              # filter to do its job in a single sql. We use them for efficiency
-#              # In these cases, the subquery that will be build must respect
-#              # includes, joins and conditions from the original query
-#              # Note: all this is crying for a refactoring
-#
-#
-#              subfilter = case locale_options[:mode]
-#              when :strict
-#                all_conditions = merge_conditions(conditions_sql, sql_locale_conditions)
-#                from_and_joins + (all_conditions.present? ? "WHERE #{all_conditions}" : '')
-#              when :mixed
-#                content_id_query = from_and_joins
-#                content_id_query << "WHERE #{conditions_sql}" if conditions_sql.present?
-#                id_extra_cond = sql_locale_conditions.present? ? "#{sql_locale_conditions} AND" : ''
-#                new_options = options.merge(:conditions => nil, :joins => nil)
-#                scope(:find)[:conditions] = nil
-#                scope(:find)[:joins] = nil
-#                "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
-#                    "SELECT #{tbl}.content_id #{content_id_query})"
-#              else
-#                # Default. Only search for matches in translations in associations
-#                if references_other_tables
-#                  content_id_query = from_and_joins
-#                  content_id_query << "WHERE #{mixed_conditions}" unless mixed_conditions.blank?
-#                  id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
-#                  id_extra_cond += ' AND' if id_extra_cond.present?
-#
-#                  new_options = options.merge(:conditions => own_conditions, :joins => nil)
-#                  scope(:find)[:conditions] = nil
-#                  scope(:find)[:joins] = nil
-#                  "FROM #{tbl} WHERE #{id_extra_cond} #{tbl}.content_id IN ("+
-#                       "SELECT #{tbl}.content_id #{content_id_query})"
-#                else
-#                  # No associations involved. Same as :strict. Needs a refactor!
-#                  all_conditions = merge_conditions(conditions_sql, sql_locale_conditions)
-#                  from_and_joins + (all_conditions.present? ? "WHERE #{all_conditions}" : '')
-#                end
-#              end
-#
-#              locale_filter = case current_adapter
-#              when "PostgreSQL"
-#                # use a subquery with DISTINCT ON, more efficient, but currently
-#                # only supported by Postgres
-#
-#                ["#{tbl}.id IN (" +
-#                    "SELECT DISTINCT ON (#{tbl}.content_id) #{tbl}.id " + subfilter +
-#                    "ORDER BY #{locale_order})", *locales.map(&:to_s)
-#                ]
-#
-#              when "MySQL"
-#                # it's a "within-group aggregates" problem. We need to order before grouping.
-#                # This subquery is O(N * log N), while a correlated subquery would be O(N^2)
-#
-#                ["#{tbl}.id IN (" +
-#                    "SELECT id FROM ( SELECT #{tbl}.id, #{tbl}.content_id " + subfilter +
-#                    "ORDER BY #{locale_order}) AS lpref " +
-#                    "GROUP BY content_id)", *locales.map(&:to_s)
-#                ]
-#              end
-#
-#              # finally, merge the created subquery into the current conditions
-#              if new_options
-#                new_options[:conditions] = merge_conditions(new_options[:conditions], locale_filter)
-#              else
-#                new_options = options.merge(:conditions => merge_conditions(options[:conditions], locale_filter))
-#              end
-#
-#            else
-#              # For the other adapters, the strategy is to do two subqueries.
-#              # This can be problematic for generic queries since we have to
-#              # suppress the paginator scope to guarantee the correctness (#254)
-#
-#              # find the final IDs
-#              ids = nil
-#
-#              # redefine after_find callback method avoiding its call with next find
-#              self.class_eval do
-#                def after_find_with_neutralize; end
-#                def after_initialize_with_neutralize; end
-#                alias_method_chain :after_find, :neutralize if self.instance_methods.include?(:after_find)
-#                alias_method_chain :after_initialize, :neutralize if self.instance_methods.include?(:after_initialize)
-#              end
-#
-#              begin
-#
-#                # removes paginator scope.
-#                with_exclusive_scope(:find => {:limit => nil, :offset => nil, :joins => nil, :include => nil}) do
-#
-#
-#                  conditions_for_id_query = case locale_options[:mode]
-#                  when :strict
-#                      merge_conditions(conditions_sql, sql_locale_conditions)
-#                  when :mixed
-#                        original_query = from_and_joins
-#                        joins_sql = nil # already applied
-#                        (original_query << "WHERE #{conditions_sql}") if conditions_sql.present?
-#                        extra_cond = sql_locale_conditions.present? ? "#{sql_locale_conditions} AND" : ''
-#                        "#{extra_cond} #{tbl}.content_id IN ("+
-#                            "SELECT #{tbl}.content_id #{original_query})"
-#                  else
-#                    # Default. Only search for matches in translations in associations
-#                    if references_other_tables
-#                      content_id_query = from_and_joins
-#                      content_id_query << "WHERE #{mixed_conditions}" unless mixed_conditions.blank?
-#                      joins_sql = nil # already applied
-#                      new_options = options.merge(:conditions => own_conditions, :joins => nil)
-#                      id_extra_cond = merge_conditions(own_conditions, sql_locale_conditions)
-#                      id_extra_cond += ' AND' if id_extra_cond.present?
-#                      "#{id_extra_cond} #{tbl}.content_id IN ("+
-#                          "SELECT #{tbl}.content_id #{content_id_query})"
-#                    else
-#                      # No associations involved. Same as :strict
-#                      merge_conditions(conditions_sql, sql_locale_conditions)
-#                    end
-#                  end
-#
-#                  ids = find(:all, {
-#                      :select => "#{tbl}.id, #{tbl}.content_id ",
-#                      :order => sanitize_sql_for_conditions(["#{locale_order}", *locales.map(&:to_s)]),
-#                      :conditions => conditions_for_id_query,
-#                      :include => options[:include],
-#                      :joins => joins_sql
-#                  })
-#                end
-#              ensure
-#                # restore after_find callback method
-#                self.class_eval do
-#                  alias_method :after_find, :after_find_without_neutralize if self.instance_methods.include?(:after_find)
-#                  alias_method :after_initialize, :after_initialize_without_neutralize if self.instance_methods.include?(:after_initialize)
-#                end
-#              end
-#
-#              #get only one ID per content_id
-#              content_ids = {}
-#              ids = ids.select{ |id| content_ids[id.content_id].nil? ? content_ids[id.content_id] = id : false }.map{|id| id.id.to_i}
-#
-#              # these are already factored in the new conditions
-#              if scope(:find)
-#                scope(:find)[:conditions] = nil
-#                scope(:find)[:joins] = nil
-#              end
-#
-#              if new_options
-#                new_options[:conditions] = merge_conditions(new_options[:conditions], {:id => ids})
-#              else
-#                new_options = options.merge(:conditions => {:id => ids})
-#              end
-#            end
-#          end
-#          # return the modified options, or the original ones if there is no change
-#          new_options || options
-#        end
-
 
         def merge_locale_list locales
           merge_locale_list_rec locales.first, locales[1,locales.size]
@@ -975,20 +599,15 @@ module UbiquoI18n
         # - The translatable fields will be updated just for the current instance
         # - Fields not defined as translatable will need to be updated for every instance that shares the same content_id
         def create_with_translatable
-          replace_belongs_to_ids_with_self_locale
-          saved = create_without_translatable
-          if saved
-            update_foreign_keys_with_new_translation_id
-            update_translations
+          create_without_translatable.tap do |saved|
+            update_translations if saved
           end
-          saved
         end
 
         def update_with_translatable
-          replace_belongs_to_ids_with_self_locale
-          saved = update_without_translatable
-          update_translations if saved
-          saved
+          update_without_translatable.tap do |saved|
+            update_translations if saved
+          end
         end
 
         def update_translations
@@ -1005,88 +624,10 @@ module UbiquoI18n
           end
         end
 
-        # When an instance is going to be saved, replace its belongs_to ids
-        # with the ones of instances in the same locale than the instances.
-        # This avoids queries in the future and the DB is kept in a more intuitive state
-        def replace_belongs_to_ids_with_self_locale
-          return unless self.class.is_translatable?
-          self.class.translating_relations do
-            self.class.translation_shared_reflections.each do |name, reflection|
-              if reflection.macro == :belongs_to
-                refresh_reflection_value_if_needed(reflection)
-                current = send("#{reflection.name}_without_shared_translations")
-                if current && current.class.is_translatable? && !current.in_locale?(self.locale)
-                  if current_in_my_locale = current.in_locale(self.locale)
-                    send("#{name}=", current_in_my_locale)
-                  end
-                end
-              end
-            end
-          end
-        end
-
-        # When an instance is first saved, update the translation_shared relations
-        # that should now point to it
-        def update_foreign_keys_with_new_translation_id
-          return unless self.class.is_translatable?
-          self.class.translating_relations do
-            self.class.translation_shared_reflections.each do |name, reflection|
-              next if reflection.options[:through]
-              unless reflection.macro == :belongs_to
-                # if this association was not loaded, we reset it after the work, else it's confusing to the user
-                original_association = self.send("#{name}_without_shared_translations")
-                reset = original_association && !original_association.loaded?
-                without_current_locale(self.locale) do
-                  [self.send(name)].flatten.compact.each do |record|
-                    if record.class.is_translatable? && record.in_locale?(self.locale) && record.send(reflection.association_foreign_key) != self.class.primary_key
-                      record.without_updating_translations do
-                        record.update_attribute reflection.association_foreign_key, send(self.class.primary_key)
-                      end
-                    end
-                  end
-                  if reset && original_association.respond_to?(:reset)
-                    original_association.reset
-                  elsif
-                    # has_ones have no interface to do a lazy reset other than this.
-                    association_instance_set(name, nil)
-                  end
-                end
-              end
-            end
-          end
-        end
-
         def alert_translation_shared_not_supported(association_id, klass)
           raise "You are trying to share translations in :#{association_id} of #{self.class}. " +
             "This behaviour can't be supported by ubiquo_i18n. Either use a has_many :through " +
             "with an intermediate translatable model, or mark the #{klass} model as translatable"
-        end
-
-        # If we don't have a current locale and we aren't in a translatable instance,
-        # there is nothing we can do to share.
-        # Also, if the reflection is not marked as shared we should do nothing.
-        def applicable_translation_shared reflection
-          (Locale.current || self.class.is_translatable?) && reflection.is_translation_shared?(self)
-        end
-
-        # Returns whether +association+ has been already loaded
-        def cached_translation_shared_association(association)
-          association_loaded?(association) && !locale_changed_from_load_time?(association)
-        end
-
-        # Returns whether the current locale has changed from the (possible) moment
-        # that +association+ was loaded.
-        def locale_changed_from_load_time?(association)
-          # AssociationProxy has most of the basic methods removed, including
-          # instance_variable_get, so the following line will in fact load the target.
-          association.instance_variable_get(:@loaded_in_locale) != Locale.current
-        end
-
-        # Provides an unified interface to know if +association+ has been loaded.
-        # Rails has different mechanisms for single and collection associations,
-        # this method will work for all them.
-        def association_loaded?(association)
-          association.respond_to?(:loaded?) && association.loaded?
         end
 
         def untranslatable_attributes_names

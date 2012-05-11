@@ -26,7 +26,7 @@ module UbiquoI18n
 
         def can_be_initialized?(record, ignore_association_loading = false)
           if is_translation_shared_on_initialize? && record && record.new_record?
-            ignore_association_loading || !record.is_association_initialized?(self.name)
+            ignore_association_loading || !record.association(name).loaded?
           end
         end
 
@@ -45,26 +45,6 @@ module UbiquoI18n
           end
         end
 
-        # Mimetizes +configure_dependency_for_has_many+ but performs the necessary
-        # changes given that +reflection+ is translation-shared.
-        # Here there is only the treatment for :dependent => :destroy. Given the
-        # different nature of :nullify and :delete_all, they are in the
-        # Associations module (since they are fixed association methods)
-        def configure_dependency_for_has_many_with_shared_translations
-          if options[:dependent] == :destroy
-            method_name = "has_many_dependent_destroy_for_#{name}".to_sym
-            reflection = self
-            active_record.send(:define_method, "#{method_name}_with_shared_translations") do
-              reflection.propagate_dependent_option_with_shared_translations(self) do
-                # TODO: Check why this reload is needed
-                send(reflection.name).reload
-                send("#{method_name}_without_shared_translations")
-              end
-            end
-            active_record.send(:alias_method_chain, method_name, :shared_translations)
-          end
-        end
-
         # Returns true if the reflection can run its course with the usual
         # :dependent behaviour
         def should_propagate_dependent_option? record
@@ -73,7 +53,7 @@ module UbiquoI18n
           # has no translations, or that its translations use a different set of records
           all_records = record.translations.map do |translation|
             translation.without_current_locale(translation.locale) do
-              translation.send(name)
+              translation.send(name).to_a
             end
           end.flatten
           (all_records & record.send(name)).empty?
@@ -85,10 +65,11 @@ module UbiquoI18n
         # another translation.
         def propagate_dependent_option_with_shared_translations record
           if should_propagate_dependent_option? record
-            yield
-          else
-            update_foreign_keys_to_point_another_translation record
+            klass.translating_relations do
+              yield
+            end
           end
+          update_foreign_keys_to_point_another_translation record if record.translations.exists?
         end
 
         # Any associated record pointing to +record+ will be updated to another
@@ -96,7 +77,7 @@ module UbiquoI18n
         def update_foreign_keys_to_point_another_translation record
           record.without_current_locale do
             associated = record.send(name)
-            associated.update_all({primary_key_name => record.translations.first.id})
+            associated.update_all({foreign_key => record.translations.first.id})
           end
         end
       end

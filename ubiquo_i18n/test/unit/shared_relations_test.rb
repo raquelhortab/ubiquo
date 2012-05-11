@@ -6,6 +6,7 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def setup
     Locale.current = Locale.default
+    Locale.use_fallbacks = true
   end
 
   #### Tests of the expected behaviour of :shared_translations in the different association types
@@ -13,7 +14,9 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
   def test_copy_shared_relations_simple_has_many_case
     TestModel.share_translations_for :unshared_related_test_models
     assert_raise RuntimeError do
-      create_model
+      m = create_model
+      m.unshared_related_test_models << UnsharedRelatedTestModel.create
+      m.translate('jp').save
     end
     TestModel.unshare_translations_for :unshared_related_test_models
   end
@@ -59,8 +62,8 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def test_should_not_copy_relations_as_default_simple_has_many_creation_case
     m1 = create_model(:locale => 'ca')
-    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:field1 => '1')
-    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:field1 => '2')
+    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:my_field => '1')
+    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:my_field => '2')
     m2 = m1.translate('en')
 
     assert_equal 0, m2.unshared_related_test_models.size
@@ -69,10 +72,10 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def test_should_not_copy_relations_as_default_simple_has_many_update_case_as_default
     m1 = create_model(:locale => 'ca')
-    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:field1 => '1')
-    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:field1 => '2')
+    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:my_field => '1')
+    m1.unshared_related_test_models << UnsharedRelatedTestModel.create(:my_field => '2')
     m2 = m1.translate('en')
-    m1.unshared_related_test_models = [UnsharedRelatedTestModel.create(:field1 => '3')]
+    m1.unshared_related_test_models = [UnsharedRelatedTestModel.create(:my_field => '3')]
 
     assert_equal 0, m2.unshared_related_test_models.size
     assert_equal 3, UnsharedRelatedTestModel.count
@@ -157,10 +160,6 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     en_one_one.save
     assert_equal 4, OneOneTestModel.count
 
-    en.without_current_locale do
-      assert_equal 'en', en.reload.independent
-      assert_equal 'suben', en.one_one.independent
-    end
     Locale.current = 'ca'
     assert_equal 'en', en.reload.independent
     assert_equal 'subca', en.one_one.independent
@@ -176,8 +175,8 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     ca.one_one_test_model = assigned = OneOneTestModel.create(:locale => 'en')
     assert_equal assigned, en.reload.one_one_test_model
     en.save
-    assert_equal en.id, assigned.reload.one_one_test_model_id
-    assert_equal en.id, en.one_one_test_model.one_one_test_model_id # should have been refreshed
+    assert_equal en, assigned.reload.one_one
+    assert_equal en, en.one_one_test_model.one_one
   end
 
   def test_should_copy_shared_relations_translatable_has_one_update_from_the_other_side
@@ -188,7 +187,6 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     assert_equal assigned, en.reload.one_one_test_model
     en.save
     assert_equal assigned, en.one_one_test_model
-    assert_equal en.id, en.one_one_test_model.one_one_test_model_id
     assert_equal assigned, ca.one_one_test_model
   end
 
@@ -282,11 +280,6 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     translated.test_model = updated_relation
     translated.save
 
-    original.without_current_locale do
-      assert_not_equal original_relation, original.reload.test_model
-      assert_equal ca_updated_relation, original.reload.test_model
-    end
-
     Locale.current = 'ca'
     assert_not_equal original_relation, original.reload.test_model
     assert_equal ca_updated_relation, original.reload.test_model
@@ -312,9 +305,9 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     assert_equal [child_ca], ca_parent.reload.test_models
 
     en_parent.save
-    assert_equal en_parent.id, child_en.reload.test_model_id
+    assert_equal ca_parent, child_en.reload.test_model
     ca_parent.save
-    assert_equal ca_parent.id, child_ca.reload.test_model_id
+    assert_equal ca_parent, child_ca.reload.test_model
     assert_equal 4, TestModel.count
   end
 
@@ -325,17 +318,17 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     parent_es.save
     child_ca = create_model(:locale => 'ca')
     parent_ca.test_models << child_ca
-    
+
     # Delete current parent, child model should point to the other translation
     parent_ca.destroy
     child_ca.reload
     assert_equal parent_es, child_ca.test_model
-    
+
     # Only parent translation available destroy, child record should be also destroyed
     parent_es.destroy
     assert !child_ca.class.find_by_id(child_ca.id)
   end
-  
+
   def test_dependent_destroy_in_has_many_does_not_delete_things_while_translations_exist
     test_dependent_in_has_many_does_not_delete_things_while_translations_exist(:destroy)
   end
@@ -459,12 +452,12 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     InheritanceTestModel.destroy_all
 
     test_model = RelatedTestModel.create
-    first_inherited = FirstSubclass.create(:field => "Hi", :locale => "en", :related_test_model => test_model)
+    first_inherited = FirstSubclass.create(:my_field => "Hi", :locale => "en", :related_test_model => test_model)
 
     assert_equal 1, test_model.inheritance_test_models.size
 
     second_inherited = first_inherited.translate
-    second_inherited.field = "Hola"
+    second_inherited.my_field = "Hola"
     second_inherited.locale = 'es'
 
     assert_difference 'InheritanceTestModel.count' do
@@ -475,19 +468,19 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
       # this behaviour is almost deprecated (unused), but let's maintain tests
       # to know whether it's really still supported if is necessary in the future
       assert_equal 2, test_model.reload.inheritance_test_models.size
-      assert_equal "Hi", test_model.inheritance_test_models.locale("en").first.field
-      assert_equal "Hola", test_model.inheritance_test_models.locale("es").first.field
-      assert_equal "Hi", test_model.inheritance_test_models.locale("en", 'es').first.field
-      assert_equal "Hola", test_model.inheritance_test_models.locale("es", 'en').first.field
+      assert_equal "Hi", test_model.inheritance_test_models.locale("en").first.my_field
+      assert_equal "Hola", test_model.inheritance_test_models.locale("es").first.my_field
+      assert_equal "Hi", test_model.inheritance_test_models.locale("en", 'es').first.my_field
+      assert_equal "Hola", test_model.inheritance_test_models.locale("es", 'en').first.my_field
     end
 
     # Now test what happens in the normal workflow
     Locale.current = 'es'
     assert_equal 1, test_model.reload.inheritance_test_models.size
-    assert_equal "Hola", test_model.inheritance_test_models.first.field
+    assert_equal "Hola", test_model.inheritance_test_models.first.my_field
     Locale.current = 'en'
     assert_equal 1, test_model.reload.inheritance_test_models.size
-    assert_equal "Hi", test_model.inheritance_test_models.first.field
+    assert_equal "Hi", test_model.inheritance_test_models.first.my_field
   end
 
   def test_translatable_has_many_to_translated_sti_correctly_updates_the_associations
@@ -549,6 +542,7 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def test_translatable_belongs_to_correctly_updates_translations_when_nullified_by_attribute_assignation
     origin, translated_origin = create_test_model_with_relation_and_translation
+    origin.reload # due to https://github.com/rails/rails/issues/5563 (only happens in recently created instances)
 
     assert_equal origin.test_model, translated_origin.test_model
     assert_kind_of TestModel, origin.test_model
@@ -574,6 +568,7 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def test_translatable_belongs_to_correctly_updates_translations_when_nullified_by_attribute_update
     origin, translated_origin = create_test_model_with_relation_and_translation
+    origin.reload # due to https://github.com/rails/rails/issues/5563
     parent = TestModel.find(origin.test_model.id)
 
     origin.update_attribute :test_model_id, nil
@@ -632,6 +627,7 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
   def test_should_support_mark_for_destruction_objects
     ca = TestModel.create(:locale => 'ca')
     ca.test_models << TestModel.create(:locale => 'ca')
+    ca.test_models.inspect
     ca.test_models.first.mark_for_destruction
 
     en = ca.translate('en')
@@ -672,10 +668,6 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     en_relation = ca_relation.translate('en')
     en_relation.save
 
-    assert_equal_set ['ca', 'en'], ca.test_models.map(&:locale).uniq
-    en.without_current_locale do
-      assert_equal ['en'], en.test_models.map(&:locale).uniq
-    end
     assert_equal_set ['ca', 'en'], ca.test_models.map(&:locale).uniq
   end
 
@@ -757,39 +749,12 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     assert_equal 'en', main.test_models.first.locale
   end
 
-  def test_nested_attributes_situation_with_multiple_nil_content_id
-    en = TestModel.create
-    en.test_models_attributes = [{}, {}]
-    assert_equal 2, en.test_models.count
-  end
-
   def test_should_cache_results_for_future_uses
     ca = TestModel.create(:locale => 'ca')
     ca.test_models << TestModel.create(:locale => 'en')
     ca.reload
-    ca.expects(:with_translations).once
-    2.times { ca.test_models }
-  end
-
-  # When we check if an association is already loaded and cached,
-  # ensure that we are not being mistaken by ourselves loading it before doing the check.
-  # The fact that AssociationProxy is so metal can lead to unexpected loading
-  # This test is inspired from a real problem in ubiquo_categories
-  def test_should_not_load_association_before_checking_if_it_is_loaded
-    ca = TestModel.create(:locale => 'ca')
-    ca.test_models << TestModel.create(:locale => 'en')
-    en = ca.translate('en')
-    en.expects(:association_loaded?).with { |association|
-      !association.loaded?
-    }
-    assert en.test_models.present?
-  end
-
-  def test_should_not_tamper_with_nil
-    # Rails sometimes returns it instead of an association, but should not be confused
-    ca = OneOneTestModel.create(:locale => 'ca')
-    nil.expects(:instance_variable_set).never
-    assert_nil ca.one_one_test_model
+    ca.expects(:with_translations).once.returns([])
+    2.times { ca.test_models.to_a }
   end
 
   def test_reload_with_translation_shared_associations
@@ -820,29 +785,21 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def test_translation_shared_associations_should_have_correct_finder_sql
     en = TestModel.create(:locale => 'en')
-    related1 = TestModel.create(:locale => 'en', :field1 => 'related1')
-    related2 = TestModel.create(:locale => 'en', :field1 => 'related2')
+    related1 = TestModel.create(:locale => 'en', :my_field => 'related1')
+    related2 = TestModel.create(:locale => 'en', :my_field => 'related2')
     en.test_models << related1
     en.test_models << related2
     ca = en.translate 'ca'
     assert ca.test_models.first(:conditions => {:locale => 'en'})
     assert_nil ca.test_models.first(:conditions => {:locale => 'ca'})
-    assert_equal related1, ca.test_models.first(:conditions => { :locale => 'en', :field1 => 'related1' })
-    assert_equal related2, ca.test_models.first(:conditions => { :locale => 'en', :field1 => 'related2' })
+    assert_equal related1, ca.test_models.first(:conditions => { :locale => 'en', :my_field => 'related1' })
+    assert_equal related2, ca.test_models.first(:conditions => { :locale => 'en', :my_field => 'related2' })
   end
 
-  def test_translation_shared_associations_should_warn_in_count_with_args
-    en = TestModel.create(:locale => 'en')
-    en.test_models << TestModel.create(:locale => 'en')
-    ca = en.translate 'ca'
-    assert_raise NotImplementedError do
-      ca.test_models.count(:conditions => {:locale => 'en'})
-    end
-  end
-
-  def test_update_a_translatable_mode_with_a_has_many_throught_relation
+  def test_update_a_translatable_mode_with_a_has_many_through_relation
     related_object = ChainTestModelA.new
     model = ChainTestModelA.new(:chain_test_model_as => [related_object])
+    model.chain_test_model_as
     assert model.save
     assert_equal [related_object], model.chain_test_model_as
   end
@@ -896,8 +853,8 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     reflection = TestModel.reflections[:test_models]
     reflection.options[:dependent] = option
     TestModel.instance_variable_set(:@before_destroy_callbacks, nil)
-    TestModel.send :configure_dependency_for_has_many, reflection
-    reflection.configure_dependency_for_has_many_with_shared_translations
+#    TestModel.send :configure_dependency_for_has_many, reflection
+#    reflection.configure_dependency_for_has_many_with_shared_translations
   end
 
   def restore_dependency_type

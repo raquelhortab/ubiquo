@@ -6,6 +6,7 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
 
   def setup
     Locale.current = Locale.default
+    Locale.use_fallbacks = true
   end
 
   def test_simple_filter
@@ -660,14 +661,14 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   end
 
   def test_in_locale_instance_method_with_one_locale
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
     assert_equal es.id, en.in_locale('es').id
   end
 
   def test_in_locale_instance_method_with_two_locales
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
     assert_equal es.id, en.in_locale('es', 'en').id
     assert_equal en.id, en.in_locale('en', 'es').id
     assert_equal en.id, en.in_locale('ca', 'en').id
@@ -675,17 +676,17 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
 
   def test_in_locale_instance_method_with_all_locales
     TestModel.delete_all
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
     assert_equal es.id, en.in_locale('es', :all).id
     assert_equal en.id, en.in_locale('en', :all).id
     assert_equal es.id, en.in_locale('ca', 'es', :all).id
   end
 
   def test_destroy_contents
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
-    ca = create_model(:content_id => 1, :locale => 'ca', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
+    ca = create_model(:content_id => 1, :locale => 'ca')
     assert_equal 3, TestModel.count
     es.destroy
     assert_equal 2, TestModel.count
@@ -694,7 +695,7 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   end
 
   def test_destroy_contents_and_dependants
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:locale => 'es')
     es.inheritance_test_models << InheritanceTestModel.create(:locale => 'es')
     es.inheritance_test_models << InheritanceTestModel.create(:locale => 'es')
     en = es.translate('en')
@@ -703,13 +704,14 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
     ca.save
     assert_equal 3, TestModel.count
     assert_equal 2, InheritanceTestModel.count
+    Object.const_set :AAA, true
     ca.destroy_content
     assert_equal 0, TestModel.count
     assert_equal 0, InheritanceTestModel.count
   end
 
-  def test_destroy_contents_and_dependants_with_itself
-    es = create_model(:locale => 'es', :my_field => 'val', :my_other_field => 'val')
+  def test_destroy_content_with_itself
+    es = create_model(:locale => 'es')
     es.test_models << create_model(:locale => 'es')
     en = es.translate('en')
     en.save
@@ -721,9 +723,9 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   end
 
   def test_compare_locales
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
-    any = create_model(:content_id => 2, :locale => 'any', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
+    any = create_model(:content_id => 2, :locale => 'any')
     assert es.in_locale?('es')
     assert en.in_locale?('es', 'en')
     assert !en.in_locale?('ca', 'es')
@@ -734,9 +736,9 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   end
 
   def test_compare_locales_without_any
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
-    any = create_model(:content_id => 2, :locale => 'any', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
+    any = create_model(:content_id => 2, :locale => 'any')
     assert es.in_locale?('es', :skip_any => true)
     assert en.in_locale?('es', 'en', :skip_any => true)
     assert !en.in_locale?('ca', 'es', :skip_any => true)
@@ -747,9 +749,9 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   end
 
   def test_compare_locales_with_symbols
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
-    any = create_model(:content_id => 2, :locale => 'any', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
+    any = create_model(:content_id => 2, :locale => 'any')
     assert es.in_locale?(:es, :skip_any => true)
     assert en.in_locale?(:es, :en, :skip_any => true)
     assert !en.in_locale?(:ca, :es, :skip_any => true)
@@ -762,8 +764,8 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   def test_compare_locales_with_locale_object
     es_locale = Locale.create(:iso_code => 'es')
     ca_locale = Locale.create(:iso_code => 'ca')
-    es = create_model(:content_id => 1, :locale => 'es', :my_field => 'val', :my_other_field => 'val')
-    en = create_model(:content_id => 1, :locale => 'en', :my_field => 'val', :my_other_field => 'val')
+    es = create_model(:content_id => 1, :locale => 'es')
+    en = create_model(:content_id => 1, :locale => 'en')
     assert es.in_locale?(es_locale)
     assert !en.in_locale?(es_locale)
     assert !es.in_locale?(ca_locale)
@@ -794,16 +796,16 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
   def test_localized_method_is_a_proxy_for_locale_with_current_locale_when_fallbacks_is_disabled
     Locale.use_fallbacks = false
     Locale.current = 'de'
-    assert_equal [:de], TestModel.localized.locale_values.map(&:to_sym)
+    assert_equal ['de', {}], TestModel.localized.locale_values
   end
 
   def test_localized_method_is_a_proxy_for_locale_with_current_locale_and_fallbacks_when_fallbacks_enabled
     Locale.use_fallbacks = true
     Locale.current = 'de'
-    assert_equal [:de, :all], TestModel.localized.locale_values.map(&:to_sym)
+    assert_equal [:de, :all, {}], TestModel.localized.locale_values
     I18n.fallbacks.map(:de => :ca, :ca => :es)
     Locale.current = 'de-DE'
-    assert_equal [:"de-DE", :de, :ca, :es, :all], TestModel.localized.locale_values.map(&:to_sym)
+    assert_equal [:"de-DE", :de, :ca, :es, :all, {}], TestModel.localized.locale_values
   end
 
 end

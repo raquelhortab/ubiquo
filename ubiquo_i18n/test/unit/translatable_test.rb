@@ -34,7 +34,7 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
     end
 
     assert ar.is_translatable?
-    assert [:my_field], ar.instance_variable_get('@translatable_attributes')
+    assert ar.instance_variable_get('@translatable_attributes').include?(:my_field)
   end
 
   def test_should_accumulate_translatable_attributes_list_from_parent
