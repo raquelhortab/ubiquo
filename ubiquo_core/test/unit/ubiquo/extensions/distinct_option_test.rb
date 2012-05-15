@@ -24,7 +24,7 @@ class Ubiquo::Extensions::DistinctOptionTest < ActiveSupport::TestCase
     TestOnlyModel.destroy_all
     TestOnlyModel.create!(:name => "test1")
     TestOnlyModel.create!(:name => "test2")
-    scope1 = {
+    scope3 = {
       :distinct => true,
       :conditions => ["name like ?", "te%"]
     }
@@ -32,7 +32,10 @@ class Ubiquo::Extensions::DistinctOptionTest < ActiveSupport::TestCase
       :distinct => true,
       :conditions => ["name like ?", "%test%"]
     }
-    results = TestOnlyModel.scoped(scope1).scoped(scope2).all
+    scope1 = {
+      :select => 'DISTINCT(test_only_models.id)'
+    }
+    results = TestOnlyModel.scoped(scope1).scoped(scope2).scoped(scope3).all
     assert_equal 2, results.size
   end
 
