@@ -102,11 +102,15 @@ module Ubiquo
         return humanized_field, selector_type, relation_type
       end
 
+      def default_collection_url_proc(class_name)
+        Proc.new { |url_params = {}| send(:ubiquo).send("#{class_name.tableize.pluralize}_url", url_params) }
+      end
+
       def url_craft_settings class_name, selector_type, options = {}
         related_objects = []
         if options[:collection_url].blank?
-          options[:related_url] = send("new_ubiquo_#{class_name.tableize.singularize}_url")
-          options[:collection_url] = "ubiquo_#{class_name.tableize.pluralize}_url"
+          options[:related_url] = "new_#{class_name.tableize.singularize}_url"
+          options[:collection_url] = default_collection_url_proc(class_name)
           if selector_type != :autocomplete
             related_objects = if class_name.constantize.respond_to?(:locale)
               # TODO this should be in a connector
@@ -183,8 +187,11 @@ module Ubiquo
         url_params = {:format => :js}
         url_params.merge!(options[:url_params]) if options[:url_params].present?
 
+        url = options[:collection_url]
+        url = url.call(url_params) if url.respond_to?(:call)
+
         autocomplete_options = {
-          :url => send(options[:collection_url], url_params),
+          :url => url,
           :current_values => open_struct_from_model(
             object.send(key),
             options[:related_object_id_field] || 'id',
@@ -249,7 +256,7 @@ module Ubiquo
         elsif options[:related_control].blank?
           content_tag(:div, :class => 'relation_new') do
             link_to I18n.t('ubiquo.new_relation'),
-                    options[:related_url],
+                    send(:ubiquo).send(options[:related_url]),
                     { :class => 'bt-add-category', :rel => 'external' }
           end
         else

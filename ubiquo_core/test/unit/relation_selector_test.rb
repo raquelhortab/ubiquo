@@ -200,7 +200,7 @@ class RelationSelectorTest < ActionView::TestCase
       :url_params => opts,
       :type => :autocomplete)
 
-    assert_equal (r.index(ubiquo_test_only_model_twos_url({:format => 'js'}.merge(opts)))).present?, true
+    assert_equal (r.index(ubiquo.test_only_model_twos_url({:format => 'js'}.merge(opts)))).present?, true
 
   end
 
@@ -266,25 +266,29 @@ class RelationSelectorTest < ActionView::TestCase
     end
   end
 
-  private
+  protected
 
-  def new_ubiquo_test_only_model_url options = {}
+  def ubiquo
+    self
+  end
+
+  def new_test_only_model_url options = {}
     return url_former('a/fake/url', options)
   end
 
-  def ubiquo_test_only_models_url options = {}
+  def test_only_models_url options = {}
     return url_former('another/fake/url', options)
   end
 
-  def new_ubiquo_test_only_model_two_url options = {}
+  def new_test_only_model_two_url options = {}
     return url_former('another/one/fake/url', options)
   end
 
-  def new_ubiquo_test_only_model_three_url options = {}
+  def new_test_only_model_three_url options = {}
     return url_former('another/two/fake/url', options)
   end
 
-  def ubiquo_test_only_model_twos_url options = {}
+  def test_only_model_twos_url options = {}
     return url_former('yet/another/one/fake/url', options)
   end
 
