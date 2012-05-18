@@ -24,7 +24,7 @@ module UbiquoMenus
         end
 
         def link_to_default_menu
-          if Ubiquo::Settings[:ubiquo_menus].option_exists?(:default_menu)
+          if ::Ubiquo::Settings[:ubiquo_menus].option_exists?(:default_menu)
             default_menu = Ubiquo::Settings[:ubiquo_menus][:default_menu]
             default_menu = case default_menu
             when Integer
