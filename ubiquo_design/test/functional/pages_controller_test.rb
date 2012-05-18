@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PagesControllerTest < ActionController::TestCase
+  use_ubiquo_fixtures
 
   def test_should_get_show
     get :show, :url => Page.published.first.url_name
@@ -106,6 +107,32 @@ class PagesControllerTest < ActionController::TestCase
 
     @controller.expects(:params).returns({:widget => nil})
     assert !@controller.send(:widget_request?)
+  end
+
+  test "should respond with cache headers when the page has client_expiration greater than 0" do
+    page = create_page(:url_name => 'no-cache', :client_expiration => 15)
+    page.publish
+
+    get :show, :url => ["no-cache"], :locale => 'ca'
+    assert_response :success
+    assert_equal page.published, assigns(:page)
+    assert_equal "max-age=15, public", @response.headers['Cache-Control']
+  end
+
+  test "should respond with no cache headers when the page has client_expiration time equals to 0" do
+    page = create_page(:url_name => 'no-cache', :client_expiration => 0)
+    page.publish
+    now = Time.now
+    Time.stubs(:now).returns(now)
+
+    get :show, :url => ["no-cache"], :locale => 'ca'
+    assert_response :success
+    assert_equal page.published, assigns(:page)
+    assert_equal "no-cache, no-store, max-age=0, must-revalidate, public",
+                 @response.headers['Cache-Control']
+    assert_equal "no-cache", @response.headers["Pragma"]
+    assert_equal now.to_i.to_s, @response.headers["Etag"]
+    assert_equal "Fri, 01 Jan 1990 00:00:00 GMT", @response.headers["Expires"]
   end
 
 end
