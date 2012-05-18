@@ -370,14 +370,14 @@ class PageTest < ActiveSupport::TestCase
 
   def test_should_expire_page_on_destroy
     page = create_page
-    ActionController::Base.expects(:perform_caching).returns(true)
+    caching_on
     UbiquoDesign.cache_manager.expects(:expire_page).with(page).returns(true)
     page.destroy
   end
 
   def test_should_expire_page_on_save
     page = create_page
-    ActionController::Base.expects(:perform_caching).returns(true)
+    caching_on
     UbiquoDesign.cache_manager.expects(:expire_page).with(page).returns(true)
     page.save
   end
@@ -410,7 +410,36 @@ class PageTest < ActiveSupport::TestCase
     end
   end
 
-  private
+  def test_should_expire_page
+    caching_on
+    page = create_page
+    UbiquoDesign.cache_manager.expects(:expire_page).with(page).returns(true)
+    page.expire
+  end
+
+  def test_should_expire_selected_pages
+    caching_on
+    pages = [create_page, create_page(:url_name => 'other')]
+    UbiquoDesign.cache_manager.expects(:expire_page).with(pages.first).returns(true)
+    UbiquoDesign.cache_manager.expects(:expire_page).with(pages.last).returns(true)
+    Page.expire(pages.map(&:id))
+
+    UbiquoDesign.cache_manager.expects(:expire_page).with(pages.first).returns(true)
+    UbiquoDesign.cache_manager.expects(:expire_page).with(pages.last).returns(true)
+    Page.expire(pages)
+  end
+
+  # FIXME as integration?
+  def test_should_expire_all_pages
+    UbiquoDesign.cache_manager.expects(:ban).once
+    Page.expire_all
+  end
+
+  def test_should_expire_url
+    url = 'http://www.mywebsite.com'
+    UbiquoDesign.cache_manager.expects(:expire_url).with(url).returns(true)
+    Page.expire_url url
+  end
 
   # creates a (draft) page
   def create_page(options = {})
@@ -421,7 +450,35 @@ class PageTest < ActiveSupport::TestCase
       :published_id  => nil,
       :is_modified   => true
     }.merge(options))
+
+  def test_should_be_expirable_by_a_superadmin
+    original = Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?]
+    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = lambda { false }
+    user = UbiquoUser.new
+    user.is_superadmin = true
+    assert user.is_superadmin?
+    page = create_page
+    assert page.can_be_expired_by?(user)
+    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = original
   end
+
+  def test_should_be_expirable_by_a_user_using_setting
+    original = Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?]
+    user = UbiquoUser.new(:is_superadmin => false, :is_admin => true)
+    page = create_page
+    called = false
+    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = lambda do |_page, _user|
+      assert_equal page, _page
+      assert_equal user, _user
+      called = true
+      false
+    end
+    assert !page.can_be_expired_by?(user)
+    assert called
+    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = original
+  end
+
+  private
 
   def create_example_structure
     unless @structure_created
@@ -439,6 +496,10 @@ class PageTest < ActiveSupport::TestCase
       end
       @structure_created = true
     end
+  end
+
+  def caching_on
+    ActionController::Base.expects(:perform_caching).at_least_once.returns(true)
   end
 
 end

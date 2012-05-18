@@ -146,9 +146,31 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def self.expire_all
+    # TODO generalize
+    Rails.logger.debug "Expiring all Varnish cache"
+    UbiquoDesign.cache_manager.send(:ban, ['',"."])
+  end
+
+  def self.expire elements = []
+    ids = elements.map {|id| id.is_a?(Page) ? id.id : id}
+    pages = Page.find(:all, :conditions => {:id => ids})
+    pages.map { |page| (page.expire; page) rescue nil }.compact
+  end
+
+  def self.expire_url(url)
+    UbiquoDesign.cache_manager.expire_url(url)
+  end
+
   def expire
     ActionController::Base.perform_caching ?
       UbiquoDesign.cache_manager.expire_page(self) : true
+  end
+
+  # Returns true if the UbiquoUser +user+ can expire this page
+  def can_be_expired_by?(user)
+    user.is_superadmin? ||
+      Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?].call(self, user)
   end
 
   # Returns true if the page has been published.
