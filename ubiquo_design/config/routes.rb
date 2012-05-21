@@ -16,10 +16,13 @@ Ubiquo::Engine.routes.draw do
         post :change_order
         put :change_order
         delete :change_order
+        get :expirations
+        put :expire_pages
       end
 
       member do
         post :change_name
+        put :expire
       end
     end
 
