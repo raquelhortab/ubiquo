@@ -1,5 +1,5 @@
 class Category < ActiveRecord::Base
-
+  attr_accessible :name, :description, :parent_id
   belongs_to :category_set
   has_many :category_relations
   belongs_to :parent, :class_name => 'Category'
