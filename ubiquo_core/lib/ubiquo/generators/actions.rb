@@ -24,7 +24,7 @@ module Ubiquo
           "navigator.add_tab do |tab|",
           "  tab.text  = t('ubiquo.#{name.singularize}.title')",
           "  tab.title = t('application.goto', :place => '#{name}')",
-          "  tab.link  = ubiquo_#{name}_path",
+          "  tab.link  = ubiquo.#{name}_path",
           "  tab.highlights_on(:controller => 'ubiquo/#{name}')",
           "  tab.highlighted_class = 'active'",
         ].map { |l| l.blank? ? "#{l}\n" : "\\1#{l}\n" }.reduce(:+)
