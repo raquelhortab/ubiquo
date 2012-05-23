@@ -56,17 +56,19 @@ module UbiquoI18n
         # Create or remove indexes for these new fields. Skip it in tests for speed
         return if Rails.env.test?
         if translatable
-          create_i18n_indexes
+          create_i18n_indexes(table_name)
         elsif translatable == false # != nil
-          remove_i18n_indexes
+          remove_i18n_indexes(table_name)
         end
       end
 
-      @i18n_indexes = [:locale, :content_id]
+      def i18n_indexes
+        [:locale, :content_id]
+      end
 
       # creates indexes for the i18n fields, unless they already exist
-      def create_i18n_indexes
-        @i18n_indexes.each do |index|
+      def create_i18n_indexes(table_name)
+        i18n_indexes.each do |index|
           unless indexes(table_name).map(&:columns).flatten.include? index.to_s
             add_index table_name, index
           end
@@ -74,8 +76,8 @@ module UbiquoI18n
       end
 
       # removes indexes for the i18n fields, if they exist
-      def remove_i18n_indexes
-        @i18n_indexes.each do |index|
+      def remove_i18n_indexes(table_name)
+        i18n_indexes.each do |index|
           if indexes(table_name).map(&:columns).flatten.include? index.to_s
             remove_index table_name, index
           end
