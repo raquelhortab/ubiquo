@@ -18,8 +18,6 @@ class Page < ActiveRecord::Base
   before_save :compose_url_name_with_parent_url
   before_create :assign_template_blocks
   before_save :update_modified, :if => :is_the_draft?
-  before_save :expire, :if => :is_the_draft?
-  before_destroy :expire, :if => :is_the_draft?
   after_destroy :is_modified_on_destroy_published
 
   validates :name, :page_template, :presence => true
@@ -173,6 +171,8 @@ class Page < ActiveRecord::Base
           :is_modified => false,
           :published_id => published_page.id
         )
+
+        expire
       end
       return true
     rescue StandardError => e
