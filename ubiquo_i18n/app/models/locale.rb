@@ -27,7 +27,7 @@ class Locale < ActiveRecord::Base
   end
 
   def humanized_name
-    native_name.capitalize
+    native_name.to_s.capitalize
   end
 
   # Returns the mapping of locale fallbacks (used as a Hash),

@@ -28,7 +28,7 @@ class Ubiquo::LocalesController < UbiquoController
     else
       flash[:error] = t("ubiquo.i18n.select_default_locale_error")
     end
-    redirect_to ubiquo_locales_path
+    redirect_to ubiquo.locales_path
   end
 
 end
