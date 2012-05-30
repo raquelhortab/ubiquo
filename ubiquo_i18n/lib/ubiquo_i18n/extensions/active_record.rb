@@ -488,9 +488,12 @@ module UbiquoI18n
         end
 
         def clear_validation identifier
-#          self.validate.delete_if do |v|
-#            v.identifier == identifier
-#          end if self.validate.respond_to?(:delete_if)
+          self._validators[:locale].reject! do |validator|
+            validator.options[:identifier] == identifier
+          end
+          self._validate_callbacks.reject! do |validator|
+            validator.options[:identifier] == identifier
+          end
         end
 
         def uniqueness_per_entity_validation_identifier

@@ -46,8 +46,8 @@ class Ubiquo::LocaleTest < ActiveSupport::TestCase
 
   def test_humanized_name_capitalizes_native_name
     locale = create_locale
-    locale.expects(:native_name).returns(mock(:capitalize => 'result'))
-    assert_equal 'result', locale.humanized_name
+    locale.expects(:native_name).returns('result')
+    assert_equal 'Result', locale.humanized_name
   end
 
   def test_should_cache_find_by_iso_code
