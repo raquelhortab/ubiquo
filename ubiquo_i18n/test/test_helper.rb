@@ -13,6 +13,8 @@ Rails.backtrace_cleaner.remove_silencers!
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
 
+RoutingFilter.active = false if defined?(RoutingFilter)
+
 def create_locale(options = {})
   default_options = {
     :iso_code => 'iso'

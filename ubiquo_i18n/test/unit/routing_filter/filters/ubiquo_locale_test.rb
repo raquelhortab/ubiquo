@@ -28,6 +28,7 @@ class UbiquoLocaleTest < Test::Unit::TestCase
   attr_reader :routes, :ubiquo_params, :public_params
 
   def setup
+    RoutingFilter.active = true
     Locale.delete_all
     %w(en es ca).each do |locale|
       create_locale :iso_code   => locale,
@@ -50,6 +51,10 @@ class UbiquoLocaleTest < Test::Unit::TestCase
     end
   end
 
+  def teardown
+    RoutingFilter.active = false
+  end
+
   def test_should_recognize_localized_routes_inside_ubiquo_area
     Locale.active.map(&:to_s).each do |locale|
       expected = ubiquo_params.merge(:locale => locale)
@@ -66,11 +71,11 @@ class UbiquoLocaleTest < Test::Unit::TestCase
     Locale.active.map(&:to_s).each do |locale|
       expected = "/ubiquo/#{locale}"
       result   = routes.generate(ubiquo_params.merge(:locale => locale))
-      assert_equal expected, result
+      assert_equal expected, result.first
 
       expected = "/ubiquo/#{locale}/other"
       result   = routes.generate(ubiquo_params.merge(:locale => locale, :action => 'other'))
-      assert_equal expected, result
+      assert_equal expected, result.first
     end
   end
 
@@ -90,12 +95,12 @@ class UbiquoLocaleTest < Test::Unit::TestCase
     Locale.active.map(&:to_s).each do |locale|
       expected = "/dashboard/#{locale}"
       result   = routes.generate(public_params.merge(:locale => locale))
-      assert_equal expected, result
+      assert_equal expected, result.first
     end
 
     expected = "/other"
     result   = routes.generate(public_params.merge(:action => 'other'))
-    assert_equal expected, result
+    assert_equal expected, result.first
   end
 
   protected
