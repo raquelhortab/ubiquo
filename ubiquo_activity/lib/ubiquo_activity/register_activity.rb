@@ -2,10 +2,10 @@ module UbiquoActivity
   module RegisterActivity
     def self.included klass
       klass.extend ClassMethods
-    end
-    
+   end
+
     module ClassMethods
-      # After filter that calls store_activity method for each action 
+      # After filter that calls store_activity method for each action
       # specified in params
       def register_activity *actions
         after_filter do |c|

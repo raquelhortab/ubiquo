@@ -1,9 +1,9 @@
 module UbiquoActivity
   module StoreActivity
     def self.included klass
-      klass.send :include, InstanceMethods
+      klass.send :include, InstanceMethods 
     end
-    
+
     module InstanceMethods
       # Creates a ActivityInfo record with:
       #   - status, info, action, controller, related_object and ubiquo_user
@@ -11,9 +11,9 @@ module UbiquoActivity
       # Expected params:
       #   - status, object = nil, info = {}
       def store_activity *args
-        info = args.extract_options!
+        info = activity_info_options args.extract_options!
         status, object = args
-        activity_options = { 
+        activity_options = {
           :status => status.to_s,
           :info => info.to_yaml,
         }
@@ -23,18 +23,23 @@ module UbiquoActivity
             :related_object_type => object.class.to_s,
           })
         end
-        
+
         begin
           ActivityInfo.create!(activity_options.merge(request_activity_options))
         rescue ActiveRecord::RecordInvalid => error
-          logger.info "[ubiquo_activity] Fail trying register activity info: #{error}"
+          Rails.logger.info "[ubiquo_activity] Fail trying register activity info: #{error}"
         end
       end
-      
+
       private
-      
+
+      def activity_info_options options
+        options ||= {}
+        options
+      end
+
       def request_activity_options
-        { 
+        {
           :controller => params[:controller],
           :action => params[:action],
           :ubiquo_user_id => current_ubiquo_user.id,
