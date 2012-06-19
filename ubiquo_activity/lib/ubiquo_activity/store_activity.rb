@@ -27,7 +27,7 @@ module UbiquoActivity
         begin
           ActivityInfo.create!(activity_options.merge(request_activity_options))
         rescue ActiveRecord::RecordInvalid => error
-          logger.info "[ubiquo_activity] Fail trying register activity info: #{error}"
+          Rails.logger.info "[ubiquo_activity] Fail trying register activity info: #{error}"
         end
       end
 
