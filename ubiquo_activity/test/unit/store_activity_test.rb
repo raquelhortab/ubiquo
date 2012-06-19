@@ -19,7 +19,7 @@ class StoreActivityTest < ActiveSupport::TestCase
       store_activity :successful, object
     end
     assert_equal 1, ActivityInfo.count
-    assert_equal ubiquo_users(:eduard).id, ActivityInfo.first.related_object_id
+    assert_equal object.id, ActivityInfo.first.related_object_id
     assert_equal "UbiquoUser", ActivityInfo.first.related_object_type
     assert_equal "successful", ActivityInfo.first.status
   end
@@ -71,5 +71,5 @@ class StoreActivityTest < ActiveSupport::TestCase
     assert_equal_set [:message], info.keys
     assert_equal "Test message", info[:message]
   end
-  
+
 end

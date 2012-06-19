@@ -5,37 +5,11 @@ class Ubiquo::ActivityInfosControllerTest < ActionController::TestCase
   include TestSupport::UrlHelper
 
   def test_should_get_index
+    login_with_permission(:activity_info_management)
     activity_info = create_activity_info
     get :index
     assert_response :success
     assert_not_nil assigns(:activity_infos)
-  end
-
-  def test_should_get_index_with_permission
-    login_with_permission(:activity_info_management)
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:activity_infos)
-  end
-
-  def test_should_not_get_index_without_permission
-    login_with_permission
-    get :index
-    assert_response :forbidden
-  end
-
-  def test_should_get_index_with_permission
-    login_with_permission(:activity_info_management)
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:activity_infos)
-  end
-
-  def test_should_not_get_index_without_permission
-    login_with_permission
-
-    get :index
-    assert_response :forbidden
   end
 
   private
