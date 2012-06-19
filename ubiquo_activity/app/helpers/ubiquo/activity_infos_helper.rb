@@ -12,7 +12,7 @@ module Ubiquo::ActivityInfosHelper
         :id_field   => :ubiquo_user_id,
         :caption    => ActivityInfo.human_attribute_name(:user)
       }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
-
+    
       f.link(:controller, @controllers, {
         :id_field => :key,
         :caption  => t('ubiquo.activity_info.controller')
@@ -45,7 +45,7 @@ module Ubiquo::ActivityInfosHelper
           {
             :id => activity_info.id,
             :columns => [
-              activity_info.ubiquo_user.name,
+              activity_info.ubiquo_user.try(:name),
               t("ubiquo.#{activity_info.controller.gsub('ubiquo/', '').singularize}.title"),
               t("ubiquo.activity_info.actions.#{activity_info.action}"),
               t("ubiquo.activity_info.statuses.#{activity_info.status}"),
@@ -73,15 +73,14 @@ module Ubiquo::ActivityInfosHelper
 
   def activity_info_actions(activity_info, options = {})
     actions = []
-    actions << link_to(t("ubiquo.remove"), [:ubiquo, activity_info],
+    actions << link_to(t("ubiquo.remove"), ubiquo.activity_info_url(activity_info),
                        :confirm => t("ubiquo.activity_info.confirm_removal"),
                        :method => :delete)
-    if activity_info.status != "error" && activity_info.related_object
-      actions << link_to(t("ubiquo.activity_info.show_it"),
-                         :action => 'show',
-                         :controller => activity_info.controller,
-                         :id => activity_info.related_object_id)
-    end
-    actions
+    actions << show_action(activity_info)
+    actions.flatten
+  end
+
+  def show_action(activity_info)
+    link_to(t("ubiquo.activity_info.show_it"), url_for(activity_info)) if activity_info.related_object
   end
 end
