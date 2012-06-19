@@ -1,2 +1,20 @@
-<div class="view_box">
-</div>
+<dl>
+  <dt><%= activity_info.class.human_attribute_name(:created_at) %></dt>
+  <dd><%= l(activity_info.created_at) %></dd>
+
+  <dt><%= activity_info.class.human_attribute_name(:action) %></dt>
+  <dd><%= t "ubiquo.activity_info.actions.#{activity_info.action}" %></dd>
+
+  <dt><%= activity_info.class.human_attribute_name(:status) %></dt>
+  <dd><%=  t "ubiquo.activity_info.actions.#{activity_info.status}" %></dd>
+
+  <% if activity_info.related_object %>
+    <dt><%= activity_info.class.human_attribute_name(:related_object) %></dt>
+    <dd><%= activity_info.class.name.humanize %>
+        <%= render('related_object',
+                    :related_object      => activity_info.related_object,
+                    :controller          => activity_info.controller,
+                    :related_object_name => activity_info.related_object_name) %>
+    </dd>
+  <% end %>
+</dl>

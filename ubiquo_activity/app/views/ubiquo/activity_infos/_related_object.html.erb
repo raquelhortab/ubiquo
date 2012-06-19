@@ -1,0 +1,9 @@
+<div class="related_object">
+  <div class="header">
+    <%= t("ubiquo.#{related_object_name}.title") %>
+  </div>
+  <div class="content">
+    <%= render("/#{controller}/#{related_object_name}",
+                  {related_object_name => related_object})  %>
+  </div>
+</div>
