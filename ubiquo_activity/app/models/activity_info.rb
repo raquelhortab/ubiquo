@@ -14,6 +14,7 @@ class ActivityInfo < ActiveRecord::Base
   scope :date_start,  lambda { |value| where("created_at >= ?", value)}
   scope :date_end,    lambda { |value| where("created_at <= ?", value)}
   scope :user,        lambda { |value| where(:ubiquo_user_id => value)}
+  scope :users_info,  select("ubiquo_user_id, surname || ', ' || name as full_name").joins(:ubiquo_user).group(:ubiquo_user_id)
 
   filtered_search_scopes :enable => [:controller, :action, :status, :date_start, :date_end, :user]
 
