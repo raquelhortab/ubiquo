@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 require 'ubiquo'
+require 'ubiquo_authentication'
 
 module UbiquoActivity
   class Engine < Rails::Engine
