@@ -1,7 +1,7 @@
 module UbiquoActivity
   module StoreActivity
     def self.included klass
-      klass.send :include, InstanceMethods 
+      klass.send :include, InstanceMethods
     end
 
     module InstanceMethods
@@ -35,7 +35,14 @@ module UbiquoActivity
 
       def activity_info_options options
         options ||= {}
+        if activity_info_log_request_params?
+          options.merge!(:request_params => request.filtered_parameters)
+        end
         options
+      end
+
+      def activity_info_log_request_params?
+        defined?(request) && Ubiquo::Settings[:ubiquo_activity][:register_request_params]
       end
 
       def request_activity_options

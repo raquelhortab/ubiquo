@@ -42,6 +42,28 @@ class Ubiquo::StoreActivityControllerTest < ActionController::TestCase
     assert_equal ubiquo_users(:eduard).id, ActivityInfo.first.ubiquo_user_id
   end
 
+  def test_should_register_request_parameters
+    self.stubs(:activity_info_log_request_params?).returns(true)
+    assert_difference 'ActivityInfo.count' do
+      login_as(:eduard)
+      # 1 => "1" in rails 3
+      post :create, :my_param => 1
+    end
+    activity_info = ActivityInfo.last
+    assert_equal "1", activity_info.request_params[:my_param]
+  end
+
+  def test_should_register_request_parameters_filtered
+    self.stubs(:activity_info_log_request_params?).returns(true)
+    assert_difference 'ActivityInfo.count' do
+      login_as(:eduard)
+      post :create, :my_param => 1, :password => 'secret'
+    end
+    activity_info = ActivityInfo.last
+    assert_equal "1", activity_info.request_params[:my_param]
+    assert_equal "[FILTERED]", activity_info.request_params[:password]
+  end
+
   protected
 
 end

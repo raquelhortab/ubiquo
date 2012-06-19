@@ -55,6 +55,12 @@ class ActivityInfoTest < ActiveSupport::TestCase
     end
   end
 
+  test "should return the request_params" do
+    params = {:hi => :bye}
+    activity_info = create_activity_info(:info => {:request_params => params})
+    assert_equal params, activity_info.request_params
+  end
+
   test "should filter by date" do
     ActivityInfo.delete_all
     activity1 = create_activity_info :created_at => 4.days.ago

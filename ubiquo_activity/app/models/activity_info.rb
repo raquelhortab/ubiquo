@@ -1,12 +1,12 @@
 class ActivityInfo < ActiveRecord::Base
 
+  belongs_to :related_object, :polymorphic => true
+  belongs_to :ubiquo_user
+
   validates :controller, :presence => true
   validates :action, :presence => true
   validates :status, :presence => true
   validates :ubiquo_user_id, :presence => true
-
-  belongs_to :related_object, :polymorphic => true
-  belongs_to :ubiquo_user
 
   scope :controller,  lambda { |value| where(:controller => value)}
   scope :action,      lambda { |value| where(:action => value)}
@@ -28,7 +28,16 @@ class ActivityInfo < ActiveRecord::Base
     related_object.class.name.underscore.to_sym if related_object
   end
 
+  def request_params
+    @request_params ||= parsed_info[:request_params]
+  end
+
   protected
+
+  def parsed_info
+    return info if info.kind_of?(Hash)
+    YAML.load(info).with_indifferent_access
+  end
 
   def recover_object
     nil

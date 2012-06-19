@@ -17,4 +17,6 @@ Ubiquo::Plugin.register(:ubiquo_activity, :plugin => UbiquoActivity) do |config|
   config.add :activities_default_sort_order, 'desc'
   # partial name for the activity_info index list
   config.add :info_list_partial, 'standard'
+
+  config.add :register_request_params, true
 end
