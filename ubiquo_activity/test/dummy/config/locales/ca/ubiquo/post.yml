@@ -1,0 +1,21 @@
+ca:
+  ubiquo:
+    post:
+      title: "Posts"
+      created: "Entitat Post creada amb èxit"
+      create_error: "Error al crear l'entitat post"
+      edited: "Entitat Post editada amb èxit"
+      edit_error: "Error a l'editar l'entitat post"
+      destroyed: "Entitat Post eliminada amb èxit"
+      destroy_error: "Error al eliminar l'entitat post"
+      index:
+        title: "Llistat de posts"
+        help_message: "Aquí pots veure el llistat de posts"
+        new: "Nou Post"
+        confirm_removal: "Estàs segur de voler eliminar aquesta entitat post?"
+      new:
+        help_message: "Aquí pots crear la nova entitat post"
+      edit:
+        help_message: "Aquí pots editar la nova entitat post"
+      empty_list_title: "Llistat de posts"
+      empty_list_message: "Des d’aquest apartat pots veure una llista de tots els recursos existents. Podràs crear-los, editar-los o esborrar-los."

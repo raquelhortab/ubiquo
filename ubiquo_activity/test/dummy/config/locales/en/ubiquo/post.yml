@@ -1,0 +1,21 @@
+en:
+  ubiquo:
+    post:
+      title: "Posts"
+      created: "Post created succesfully"
+      create_error: "Error creating post"
+      edited: "Post updated succesfully"
+      edit_error: "Error updating post"
+      destroyed: "Post removed succesfully"
+      destroy_error: "Error removing post"
+      index:
+        title: "Posts list"
+        help_message: "Here you can see the posts list."
+        new: "New Post"
+        confirm_removal: "Are you sure you want to remove this post?"
+      new:
+        help_message: "Here you can create a new post"
+      edit:
+        help_message: "Here you can edit a new post"
+      empty_list_title: "Posts list"
+      empty_list_message: "Here you can see all the records and create, edit or delete them."

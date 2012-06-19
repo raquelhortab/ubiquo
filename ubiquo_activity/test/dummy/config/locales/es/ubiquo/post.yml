@@ -1,0 +1,21 @@
+es:
+  ubiquo:
+    post:
+      title: "Posts"
+      created: "Entidad Post creada con éxito"
+      create_error: "Error al crear la entidad post"
+      edited: "Entidad Post editada con éxito"
+      edit_error: "Error al editar la entidad post"
+      destroyed: "Entidad Post eliminada con éxito"
+      destroy_error: "Error al eliminar la entidad post"
+      index:
+        title: "Listado de posts"
+        help_message: "Aquí puedes ver el listado de posts"
+        new: "Nuevo Post"
+        confirm_removal: "Estás seguro de querer eliminar esta entidad post?"
+      new:
+        help_message: "Aquí puedes crear una nueva entidad post"
+      edit:
+        help_message: "Aquí puedes editar la entidad post"
+      empty_list_title: "Listado de posts"
+      empty_list_message: "Desde este apartado puedes ver una lista de todos los recursos existentes. Podrás crear nuevos, editar o borrarlos."

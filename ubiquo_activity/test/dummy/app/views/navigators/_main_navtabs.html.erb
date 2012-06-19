@@ -1,0 +1,34 @@
+<%
+  navigator_left = create_tab_navigator(:id => "contents_tabnav", :tab_options => {}) do |navigator|
+    navigator.add_tab do |tab|
+      tab.text  = t("application.home")
+      tab.title = t("application.goto", :place => "inicio")
+      tab.link  = ubiquo.home_path
+      tab.highlights_on({:controller => "ubiquo/home"})
+      tab.highlighted_class = "active"
+    end
+
+    navigator.add_tab do |tab|
+      tab.text  = t('ubiquo.post.title')
+      tab.title = t('application.goto', :place => 'posts')
+      tab.link  = ubiquo.posts_path
+      tab.highlights_on(:controller => 'ubiquo/posts')
+      tab.highlighted_class = 'active'
+    end # :flag: Last tab
+    # NOTE: do not delete the comment above with the :flag: tag!
+
+    static_pages_tab(navigator) if respond_to?(:static_pages_tab)
+  end
+%>
+<%= render_tab_navigator(navigator_left) %>
+
+<%
+     navigator_right = create_tab_navigator(:id => "general_tabnav") do |navigator|
+       category_sets_tab(navigator) if respond_to?(:category_sets_tab)
+       media_tab(navigator) if respond_to?(:media_tab)
+       design_tab(navigator) if respond_to?(:design_tab)
+       sitemap_tab(navigator) if respond_to?(:sitemap_tab)
+       ubiquo_settings_tab(navigator) if respond_to?(:ubiquo_settings_tab)
+     end
+%>
+<%= render_tab_navigator(navigator_right) %>
