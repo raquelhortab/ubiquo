@@ -61,6 +61,43 @@ class ActivityInfoTest < ActiveSupport::TestCase
     assert_equal params, activity_info.request_params
   end
 
+  test "should recover the related_object using Version model" do
+    related_object = Versionable.create!
+    activity_info = create_activity_info(:related_object => related_object)
+
+    assert related_object.destroy
+    activity_info.reload
+    assert_equal related_object.attributes, activity_info.related_object.attributes
+  end
+
+  test "should fail to recover the related_object" do
+    related_object = Versionable.create!
+    activity_info = create_activity_info(:related_object => related_object)
+
+    assert related_object.destroy
+    activity_info.reload
+    Version.last.destroy
+
+    assert_nil activity_info.related_object
+    assert_equal related_object.id, activity_info.related_object_id
+    assert_equal related_object.class.name, activity_info.related_object_type
+  end
+
+  test "should recover the related_object at the moment when the activity was created" do
+    related_object = Versionable.create!(:title => 'foo_1')
+    original_attributes = related_object.attributes
+    activity_info = create_activity_info(:related_object => related_object)
+
+    assert_difference('Version.count') do
+      related_object.update_attributes :title => 'foo_2'
+    end
+
+    assert related_object.destroy
+    activity_info.reload
+    assert_equal original_attributes, activity_info.related_object.attributes
+    assert_equal 'foo_1', activity_info.related_object.title
+  end
+
   test "should filter by date" do
     ActivityInfo.delete_all
     activity1 = create_activity_info :created_at => 4.days.ago

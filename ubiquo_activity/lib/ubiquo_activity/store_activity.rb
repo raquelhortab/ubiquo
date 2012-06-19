@@ -5,6 +5,10 @@ module UbiquoActivity
     end
 
     module InstanceMethods
+      def current_user
+        current_ubiquo_user
+      end
+
       # Creates a ActivityInfo record with:
       #   - status, info, action, controller, related_object and ubiquo_user
       #

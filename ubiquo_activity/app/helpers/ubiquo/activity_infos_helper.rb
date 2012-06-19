@@ -12,7 +12,7 @@ module Ubiquo::ActivityInfosHelper
         :id_field   => :ubiquo_user_id,
         :caption    => ActivityInfo.human_attribute_name(:user)
       }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
-    
+
       f.link(:controller, @controllers, {
         :id_field => :key,
         :caption  => t('ubiquo.activity_info.controller')

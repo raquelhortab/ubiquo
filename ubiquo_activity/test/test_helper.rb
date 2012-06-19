@@ -27,11 +27,11 @@ class ActiveSupport::TestCase
 
 end
 
-
 # FIXME, I copied authentication migration to dummy
 ActiveRecord::Migrator.migrate File.expand_path("./test/dummy/db/migrate")
 
 class Versionable < ActiveRecord::Base
+  has_paper_trail
   def publish
     self.is_published = true
   end
@@ -42,3 +42,4 @@ Versionable.connection.create_table :versionables do |t|
   t.boolean :is_published, :default => false
   t.timestamps
 end unless Versionable.table_exists?
+

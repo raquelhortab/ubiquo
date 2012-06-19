@@ -3,6 +3,8 @@
 require 'ubiquo'
 require 'ubiquo_authentication'
 
+require 'paper_trail'
+
 module UbiquoActivity
   class Engine < Rails::Engine
     include Ubiquo::Engine::Base
