@@ -443,4 +443,32 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     render :text => form_for(User.new, options, &proc)
   end
 
+  # Testing purpose class to simulate an ActiveRecord model
+  class User < ActiveRecord::Base
+    conn = ActiveRecord::Base.connection
+
+    conn.create_table :users do |t|
+    end unless conn.tables.include?('users')
+
+    def lastname
+      "Bar"
+    end
+
+    def born_at
+      Time.parse("2011-01-01 12:00")
+    end
+
+    def is_admin
+      true
+    end
+
+    def self.human_attribute_name( attr )
+      {
+        :lastname => "Bar",
+        :is_admin => "Is admin",
+        :born_at => "Born at"
+       }[ attr.to_sym ] || attr.to_s
+    end
+  end
+
 end
