@@ -4,7 +4,6 @@ ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require File.expand_path("../test_support/database.rb",  __FILE__)
-require File.expand_path("../test_support/url_helper.rb",  __FILE__)
 require "rails/test_help"
 
 Rails.backtrace_cleaner.remove_silencers!
@@ -15,6 +14,7 @@ TestSupport::Database.migrate!
 TestSupport::Database.check_psql_adapter
 
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
+ActionController::TestCase.route_testing_engine = :ubiquo_design
 
 class ActiveSupport::TestCase
   fixtures :all

@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::WidgetsControllerTest < ActionController::TestCase
-  # use_ubiquo_fixtures
-  include TestSupport::UrlHelper
 
   def test_should_add_widget_through_html
     assert_difference('Widget.count') do

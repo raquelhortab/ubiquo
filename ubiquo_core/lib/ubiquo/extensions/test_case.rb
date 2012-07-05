@@ -5,6 +5,7 @@ module Ubiquo
       def self.included(klass)
         klass.extend(ClassMethods)
         klass.send(:include, ConnectorsTesting)
+        klass.send(:include, EngineUrlHelper)
       end
 
       # Like assert_equal but test that expected and actual sets are equal
@@ -84,6 +85,27 @@ module Ubiquo
 
         def stubbed_controller
           @stubbed_controller
+        end
+      end
+
+      module EngineUrlHelper
+
+        def self.included(base)
+          base.class_eval do
+            include Ubiquo::Engine.routes.url_helpers
+            include Rails.application.routes.mounted_helpers
+            include Rails.application.routes.url_helpers
+            cattr_accessor :route_testing_engine
+
+            def process_with_use_route(action, parameters = nil, session = nil, flash = nil, method = "GET")
+              parameters ||= {}
+              process_without_use_route(action, parameters.merge!(:use_route => route_testing_engine), session, flash, method)
+            end
+
+            if instance_methods.include?(:process) && !instance_methods.include?(:process_without_use_route)
+              alias_method_chain :process, :use_route
+            end
+          end
         end
       end
 
