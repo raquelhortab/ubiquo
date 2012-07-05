@@ -2,7 +2,7 @@
   navigator_left = create_tab_navigator(:id => "contents_tabnav", :tab_options => {}) do |navigator|
     navigator.add_tab do |tab|
       tab.text  = t("application.home")
-      tab.title = t("application.goto", :place => "inicio")
+      tab.title = t("application.goto", :place => t("application.home"))
       tab.link  = ubiquo.home_path
       tab.highlights_on({:controller => "ubiquo/home"})
       tab.highlighted_class = "active"
