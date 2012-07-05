@@ -49,7 +49,6 @@ class UbiquoUser < ActiveRecord::Base
         :surname => 'Admin',
         :is_active => true,
         :is_admin => true,
-        :is_superadmin => true,
         :locale => I18n.locale.to_s
       }
       user = UbiquoUser.create(admin_user)
