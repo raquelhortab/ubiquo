@@ -231,6 +231,17 @@ case choosen_adapter
   when "sqlite" then file 'config/database.yml', sqlite3
   else file 'config/database.yml', postgresql
 end
+
+# add the paths for i18n yml files
+inject_into_file "config/application.rb", :after => "config.encoding = \"utf-8\"\n" do
+    <<-CODE
+
+    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+    config.i18n.load_path.unshift(Dir.glob(File.join("config", "locales", "**","*.{rb,yml}"))).flatten!
+    config.i18n.default_locale = :en
+CODE
+end
+
 file 'config/routes.rb', <<-CODE
 #{appname.camelize}::Application.routes.draw do
   Ubiquo::Engine.routes.draw do
@@ -243,7 +254,7 @@ file 'config/routes.rb', <<-CODE
   mount Ubiquo::Engine => '/ubiquo'
 end
 CODE
-# default rails environment.rb
+
 ubiquo_branch = <%= @opts[:template] == :edge ? 'nil' : "'0.8-stable'" %>
 #add_plugins(selected_plugins + external_plugins, :branch => ubiquo_branch, :devel => <%= @opts[:devel] ? true : false %>)
 <% if @opts[:clone_gems] %>
