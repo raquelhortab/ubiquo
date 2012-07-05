@@ -9,6 +9,8 @@ class Page < ActiveRecord::Base
     end
   end
 
+  attr_accessible :name, :url_name, :key, :page_template, :is_modified, :is_static, :published_id, :parent_id, :meta_title, :meta_keywords, :meta_description
+
   before_save :compose_url_name_with_parent_url
   before_create :assign_template_blocks
   before_save :update_modified, :if => :is_the_draft?
@@ -94,6 +96,7 @@ class Page < ActiveRecord::Base
     blocks.as_hash
   end
 
+  # This method will raise an exception if it's not possible to publish the page
   def publish
     transaction do
       self.clear_published_page
@@ -122,9 +125,6 @@ class Page < ActiveRecord::Base
         :published_id => published_page.id
       )
     end
-    return true
-  rescue Exception => e
-    return false
   end
 
   # Destroy the published page copy if exists.

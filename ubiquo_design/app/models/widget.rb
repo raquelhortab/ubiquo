@@ -16,6 +16,8 @@ class Widget < ActiveRecord::Base
 
   attr_accessor :update_page_denied
 
+  attr_accessible :name, :options, :block_id, :position, :type, :version
+
   validates_presence_of :name, :block
 
   belongs_to :block
@@ -56,16 +58,13 @@ class Widget < ActiveRecord::Base
     self.allowed_options_storage = opts
     opts.each do |option|
       define_method(option) do
-        unserialized_opts = self.options.unserialize
-        unserialized_opts[option]
+        self.options[option]
       end
       define_method("#{option}=") do |value|
-        unserialized_opts = self.options.unserialize
-        unserialized_opts[option] = value
-        self.options = unserialized_opts
+        self.options[option] = value
       end
       define_method("#{option}_before_type_cast") do
-        send(option)
+        self.options[option]
       end
     end
   end

@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PageTest < ActiveSupport::TestCase
-  # use_ubiquo_fixtures
 
   # Page.publish is a transaction
   self.use_transactional_fixtures = false
@@ -165,7 +164,9 @@ class PageTest < ActiveSupport::TestCase
     assert_no_difference "Page.count" do # no new page
       assert_no_difference "Block.count" do # no cloned blocks
         assert_no_difference "Widget.count" do # no cloned widgets
-          assert !page.publish
+          assert_raise ActiveRecord::RecordInvalid do
+            assert !page.publish
+          end
         end
       end
     end

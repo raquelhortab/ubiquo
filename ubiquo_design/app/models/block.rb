@@ -8,6 +8,8 @@ class Block < ActiveRecord::Base
   after_save :update_page
   after_destroy :update_page
 
+  attr_accessible :block_type, :page_id, :shared_id, :is_shared,
+
   DEFAULT_BLOCK_OPTIONS = {
     :cols => 4
   }
