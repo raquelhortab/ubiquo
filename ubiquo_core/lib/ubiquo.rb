@@ -2,6 +2,7 @@
 
 require 'rails'
 require 'prototype-rails'
+require 'paperclip'
 
 module Ubiquo
 
@@ -50,7 +51,7 @@ module Ubiquo
       end
     end
 
-    initializer :load_ubiquo_core_extensions do
+    initializer :load_ubiquo_core_extensions, :after => 'paperclip.insert_into_active_record' do
       require 'ubiquo/version'
       require 'ubiquo/plugin'
       require 'ubiquo/extensions'
