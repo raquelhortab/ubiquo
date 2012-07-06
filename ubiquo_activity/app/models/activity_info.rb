@@ -18,6 +18,8 @@ class ActivityInfo < ActiveRecord::Base
 
   filtered_search_scopes :enable => [:controller, :action, :status, :date_start, :date_end, :user]
 
+  attr_accessible :ubiquo_user_id, :controller, :action, :status, :info, :related_object_id, :related_object_type, :related_object, :ubiquo_user
+
   def related_object
     if related_object_type && related_object_id
       super || recover_object

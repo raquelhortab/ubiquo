@@ -19,6 +19,7 @@ TestSupport::Database.migrate!
 TestSupport::Database.create_test_model
 
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
+ActionController::TestCase.route_testing_engine = :ubiquo_activity
 
 class ActiveSupport::TestCase
   fixtures :all
@@ -35,6 +36,7 @@ class Versionable < ActiveRecord::Base
   def publish
     self.is_published = true
   end
+  attr_accessible :title
 end
 
 Versionable.connection.create_table :versionables do |t|

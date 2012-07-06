@@ -14,10 +14,10 @@ class CreateUbiquoUsers < ActiveRecord::Migration
       t.string :photo_file_name
       t.integer :photo_file_size
       t.string :photo_content_type
-      t.boolean :is_superadmin, :default => true
+      t.boolean :is_superadmin
       t.string :locale
       t.string :last_locale
-      
+
       t.timestamps
     end
     add_index :ubiquo_users, :login, :unique=>true
