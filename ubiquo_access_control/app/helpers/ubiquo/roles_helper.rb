@@ -22,7 +22,7 @@ module Ubiquo::RolesHelper
     [
       link_to(t('ubiquo.edit'), ubiquo.edit_role_path(role), :class => 'btn-edit'),
       link_to(t('ubiquo.remove'), ubiquo.role_path(role),
-        :confirm => t('ubiquo.auth.confirm_role_removal'),
+        :data => {:confirm => t('ubiquo.auth.confirm_role_removal')},
         :method => :delete, :class => 'btn-delete')
     ]
   end

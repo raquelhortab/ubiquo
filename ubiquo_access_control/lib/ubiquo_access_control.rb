@@ -1,4 +1,5 @@
-require 'ubiquo'
+require 'ubiquo_core'
+require 'ubiquo_authentication'
 
 module UbiquoAccessControl
   class Engine < Rails::Engine

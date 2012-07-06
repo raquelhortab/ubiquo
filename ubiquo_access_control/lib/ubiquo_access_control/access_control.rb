@@ -150,7 +150,7 @@ module UbiquoAccessControl
       def initialize(subject, actions={})
         @actions = actions.inject({}) do |auth, current|
           [current.first].flatten.each { |action|
-            auth[action] = UbiquoAccessControl::AccessControl::Parser.parse(current.last)
+            auth[action.to_sym] = UbiquoAccessControl::AccessControl::Parser.parse(current.last)
           }
           auth
         end
@@ -179,8 +179,7 @@ module UbiquoAccessControl
       #
       def process(auth, context)
         return false if context[:ubiquo_user].nil? || context[:ubiquo_user] == :false
-        return true if context[:ubiquo_user].is_superadmin?
-        return true if context[:ubiquo_user].has_permission?(nil) # only admins should get true
+        return true if context[:ubiquo_user].is_superadmin? || context[:ubiquo_user].is_admin?
         [auth].flatten.each do |a|
           permit = context[:ubiquo_user].has_permission?(a[:permission])
           return true if permit==true

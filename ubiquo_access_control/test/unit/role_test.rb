@@ -12,7 +12,7 @@ class RoleTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference 'Role.count' do
       role = create_role(:name => nil)
-      assert role.errors.on(:name)
+      assert role.errors[:name]
     end
   end
 
@@ -21,7 +21,7 @@ class RoleTest < ActiveSupport::TestCase
     assert_difference 'Role.count' do
       assert_difference 'UbiquoUserRole.count' do
         role = create_role
-        UbiquoUser.find(:first).add_role(role)
+        UbiquoUser.find(:first).roles << role
       end
     end
     assert_difference 'Role.count', -1 do
@@ -30,13 +30,13 @@ class RoleTest < ActiveSupport::TestCase
       end
     end
   end
-  
+
   def test_destroy_permission_dependencies
     role=nil
     assert_difference 'Role.count' do
       assert_difference 'RolePermission.count' do
         role = create_role
-        role.add_permission(:permission_1)
+        role.permissions << permissions(:permission_1)
       end
     end
     assert_difference 'Role.count', -1 do
@@ -44,48 +44,8 @@ class RoleTest < ActiveSupport::TestCase
         role.destroy
       end
     end
-  end  
-
-  def test_should_add_permission
-    role = create_role
-    assert !role.has_permission?(:permission_1)
-    assert_difference "RolePermission.count" do
-      assert role.add_permission(:permission_1)
-    end
-    assert role.has_permission?(:permission_1)
   end
 
-  def test_shouldnt_add_permission_twice
-    role = create_role
-    role.add_permission(:permission_1)
-    
-    assert role.has_permission?(:permission_1)
-    assert_no_difference "RolePermission.count" do
-      assert !role.add_permission(:permission_1)
-    end
-    assert role.has_permission?(:permission_1)
-  end
-
-  def test_should_destroy_permission
-    role = create_role
-    role.add_permission(:permission_1)
-
-    assert role.has_permission?(:permission_1)
-    assert_difference "RolePermission.count", -1 do
-      assert role.remove_permission(:permission_1)
-    end
-    assert !role.has_permission?(:permission_1)
-  end
-
-  def test_shouldnt_destroy_permission_if_dont_have_it
-    role = create_role
-    assert !role.has_permission?(:permission_1)
-    assert_no_difference "RolePermission.count", -1 do
-      assert !role.remove_permission(:permission_1)
-    end
-    assert !role.has_permission?(:permission_1)
-  end
-  
   protected
 
   def create_role(options = {})

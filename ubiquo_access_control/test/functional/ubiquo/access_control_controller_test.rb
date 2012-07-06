@@ -6,7 +6,7 @@ class AccessControlControllerTest < ActionController::TestCase
     @request.session[:ubiquo] ||= {}
     @request.session[:ubiquo][:ubiquo_user_id] = nil
     get :admin
-    assert_redirected_to ubiquo_login_path
+    assert_redirected_to ubiquo.login_path
   end
 
   def test_should_permit_admin
@@ -23,8 +23,8 @@ class AccessControlControllerTest < ActionController::TestCase
   end
 
   def test_should_permit_simple_action
-    roles(:role_1).add_permission :permission_1
-    ubiquo_users(:josep).add_role :role_1
+    roles(:role_1).permissions << permissions(:permission_1)
+    ubiquo_users(:josep).roles << roles(:role_1)
     login_as :josep
 
     get :simple
@@ -49,10 +49,9 @@ class AccessControlControllerTest < ActionController::TestCase
     get :restrict, :perm => :simple
     assert_response 403
   end
-  
-  
-  def test_should_permit_super_admin
-    ubiquo_users(:admin).update_attribute(:is_superadmin, true)
+
+
+  def test_should_permit_admin
     login_as :admin
 
     get :admin
@@ -64,30 +63,17 @@ class AccessControlControllerTest < ActionController::TestCase
     get :restrict, :perm => :admin
     assert_response :success
   end
-  
-  def test_should_permit_super_admin
-    login_as :admin
 
-    get :admin
-    assert_response :success
-
-    get :permit, :perm => :admin
-    assert_response :success
-
-    get :restrict, :perm => :admin
-    assert_response :success
-  end
-  
 end
 
 # This controller is just for test purposes it can be safely be deleted.
 class AccessControlController < UbiquoController
 
-  @@permissions = {
+  @@permissions = HashWithIndifferentAccess.new(
     :admin  => nil,
     :simple => "permission_1",
     :super_admin => {:admin => false}
-  }
+  )
   access_control @@permissions
 
 

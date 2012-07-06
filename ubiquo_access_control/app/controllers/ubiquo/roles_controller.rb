@@ -3,7 +3,7 @@ class Ubiquo::RolesController < UbiquoController
   ubiquo_config_call :role_access_control, {:context => :ubiquo_access_control}
 
   before_filter :load_permissions
-  
+
   # GET /roles
   # GET /roles.xml
   def index
@@ -11,7 +11,7 @@ class Ubiquo::RolesController < UbiquoController
     params[:sort_order] = params[:sort_order] || Ubiquo::Config.context(:ubiquo_access_control).get(:roles_default_sort_order)
     per_page = Ubiquo::Config.context(:ubiquo_access_control).get(:roles_elements_per_page)
     @roles_pages, @roles = Role.paginated_filtered_search(params.merge(:per_page => per_page))
-    
+
     respond_to do |format|
       format.html {} # index.html.erb
       format.xml  {
@@ -42,7 +42,9 @@ class Ubiquo::RolesController < UbiquoController
     respond_to do |format|
       if @role.save
         [params[:permissions]].flatten.each do |permission|
-          @role.add_permission(permission.to_s)
+          if perm = Permission.gfind(permission)
+            @role.permissions << perm
+          end
         end
         flash[:notice] = t('ubiquo.auth.role_created')
         format.html { redirect_to(ubiquo.roles_path) }
@@ -60,7 +62,9 @@ class Ubiquo::RolesController < UbiquoController
     @role = Role.find(params[:id])
     @role.role_permissions.delete_all
     [params[:permissions]].flatten.each do |permission|
-      @role.add_permission(permission.to_s)
+      if perm = Permission.gfind(permission)
+        @role.permissions << perm
+      end
     end
     respond_to do |format|
       if @role.update_attributes(params[:role])
@@ -90,9 +94,9 @@ class Ubiquo::RolesController < UbiquoController
       format.xml  { head :ok }
     end
   end
-  
+
   private
-  
+
   def load_permissions
     @permissions = Permission.all
   end

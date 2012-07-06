@@ -1,11 +1,13 @@
 class Permission < ActiveRecord::Base
   has_many :role_permissions
   has_many :roles, :through => :role_permissions
-  
+
   validates_uniqueness_of :key, :case_sensitive => false
-  validates_format_of     :key, :with => /\A[a-z\_]*\Z/ 
+  validates_format_of     :key, :with => /\A[a-z\_]*\Z/
   validates_presence_of   :name, :key
-  
+
+  attr_accessible :name, :key
+
   # Magic finder. it's like an find_by_id_or_key
   def self.gfind(something, options={})
     case something

@@ -12,7 +12,7 @@ class PermissionTest < ActiveSupport::TestCase
   def test_should_require_name
     assert_no_difference 'Permission.count' do
       permission = create_permission :name=>nil
-      assert permission.errors.on(:name)
+      assert permission.errors[:name]
     end
   end
 
@@ -20,7 +20,7 @@ class PermissionTest < ActiveSupport::TestCase
   def test_should_require_key
     assert_no_difference 'Permission.count' do
       permission = create_permission :key=>nil
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
     end
   end
 
@@ -28,22 +28,22 @@ class PermissionTest < ActiveSupport::TestCase
     assert_difference 'Permission.count', 1 do
       permission = create_permission :key=> 'my_key'
       permission = create_permission :key=> permission.key
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
       permission = create_permission :key=> permission.key.upcase
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
     end
   end
 
   def test_should_require_valid_key
     assert_no_difference 'Permission.count' do
       permission = create_permission :key=>"NotAValidKey"
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
       permission = create_permission :key=>"not-a-valid-key"
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
       permission = create_permission :key=>"not a valid key"
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
       permission = create_permission :key=>"not.a.valid.key"
-      assert permission.errors.on(:key)
+      assert permission.errors[:key]
     end
   end
 
