@@ -18,5 +18,8 @@ module Dummy
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     config.assets.enabled = true
+
+    # Default in Rails 3.2.3, so it should be supported
+    config.active_record.whitelist_attributes = true
   end
 end

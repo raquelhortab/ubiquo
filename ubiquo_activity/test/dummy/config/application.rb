@@ -18,5 +18,8 @@ module Dummy
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**' ,'*.{rb,yml}').to_s]
+
+    # Default in Rails 3.2.3, so it should be supported
+    config.active_record.whitelist_attributes = true
   end
 end
