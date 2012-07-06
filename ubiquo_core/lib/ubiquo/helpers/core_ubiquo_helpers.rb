@@ -14,7 +14,8 @@ module Ubiquo
       # Removes the non existent assets in the asset environment.
       # ref: actionpack-3.x/lib/sprockets/helpers/rails_helper.rb
       def filter_assets(assets, format)
-        assets.select{ |a| asset_environment["#{a.to_s}.#{format}"] }
+        all_assets = defined?(asset_environment) ? asset_environment : {}
+        assets.select{ |a| all_assets["#{a.to_s}.#{format}"] }
       end
 
       # Adds the default stylesheet tags needed for ubiquo
