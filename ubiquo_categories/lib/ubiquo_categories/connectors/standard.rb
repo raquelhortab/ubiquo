@@ -82,7 +82,7 @@ module UbiquoCategories
           def uhook_category_index_actions category_set, category
             [
               link_to(t('ubiquo.edit'), [ubiquo, :edit, category_set, category], :class => 'btn-edit'),
-              link_to(t('ubiquo.remove'), [ubiquo, category_set, category], :confirm => t("ubiquo.category.index.confirm_removal"), :method => :delete, :class => 'btn-delete')
+              link_to(t('ubiquo.remove'), [ubiquo, category_set, category], :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete, :class => 'btn-delete')
             ]
           end
 

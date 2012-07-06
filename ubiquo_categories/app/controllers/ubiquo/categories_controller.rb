@@ -9,7 +9,7 @@ class Ubiquo::CategoriesController < UbiquoController
   def index
     order_by = params[:order_by] || 'categories.name'
     sort_order = params[:sort_order] || 'ASC'
-    
+
     filters = {
       "filter_category_set" => params[:category_set_id],
       "per_page" => Ubiquo::Config.context(:ubiquo_categories).get(:categories_per_page),
@@ -67,7 +67,7 @@ class Ubiquo::CategoriesController < UbiquoController
     respond_to do |format|
       if @category.save
         flash[:notice] = t("ubiquo.category.created")
-        format.html { redirect_to(ubiquo.category_set_categories_url) }
+        format.html { redirect_to(ubiquo.category_set_categories_url(params[:category_set_id])) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
       else
         flash[:error] = t("ubiquo.category.create_error")
@@ -83,7 +83,7 @@ class Ubiquo::CategoriesController < UbiquoController
     respond_to do |format|
       if @category.update_attributes(params[:category])
         flash[:notice] = t("ubiquo.category.edited")
-        format.html { redirect_to(ubiquo.category_set_categories_url) }
+        format.html { redirect_to(ubiquo.category_set_categories_url(params[:category_set_id])) }
         format.xml  { head :ok }
       else
         flash[:error] = t("ubiquo.category.edit_error")
@@ -102,7 +102,7 @@ class Ubiquo::CategoriesController < UbiquoController
       flash[:error] = t("ubiquo.category.destroy_error")
     end
     respond_to do |format|
-      format.html { redirect_to(ubiquo.category_set_categories_url) }
+      format.html { redirect_to(ubiquo.category_set_categories_url(params[:category_set_id])) }
       format.xml  { head :ok }
     end
   end

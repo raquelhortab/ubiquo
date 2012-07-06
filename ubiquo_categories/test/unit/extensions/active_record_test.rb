@@ -72,6 +72,7 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
       scope :city, lambda{|value|
         category_conditions_for(:cities, value).merge(:order => 'my_field asc')
       }
+      attr_accessible :my_field
     end
 
     c = Category.create(:name => 'city1', :category_set_id => CategorySet.find_by_key('cities').id)
@@ -158,10 +159,10 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     m.create(:my_field => 'one',   :section => 'admin',  :colors => 'red')
     m.create(:my_field => 'two',   :section => 'design', :colors => 'blue')
     m.create(:my_field => 'three', :section => 'shop',   :colors => 'green')
-    assert_equal [1,2,3,4], m.find(:all, :include => :sections, :order => 'categories.name asc').map(&:id)
-    assert_equal [4,3,2,1], m.find(:all, :include => :sections, :order => 'categories.name desc').map(&:id)
-    assert_equal [1,3,4,2], m.find(:all, :include => :colors,   :order => 'categories.name asc').map(&:id)
-    assert_equal [2,4,3,1], m.find(:all, :include => :colors,   :order => 'categories.name desc').map(&:id)
+    assert_equal [1,2,3,4], m.includes(:sections).order('categories.name asc').all.map(&:id)
+    assert_equal [4,3,2,1], m.includes(:sections).order('categories.name desc').all.map(&:id)
+    assert_equal [1,3,4,2], m.includes(:colors).order('categories.name asc').all.map(&:id)
+    assert_equal [2,4,3,1], m.includes(:colors).order('categories.name desc').all.map(&:id)
   end
 
   def test_should_raise_if_set_does_not_exist

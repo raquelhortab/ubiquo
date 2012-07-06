@@ -33,11 +33,12 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
   end
 
   def test_should_create_category
+    set_id = category_sets(:one).id
     assert_difference('Category.count') do
-      post :create, :category => category_attributes, :category_set_id => category_sets(:one).id
+      post :create, :category => category_attributes, :category_set_id => set_id
     end
 
-    assert_redirected_to ubiquo.category_set_categories_path
+    assert_redirected_to ubiquo.category_set_categories_path(set_id)
   end
 
   def test_should_create_category_from_current_category_set
@@ -53,24 +54,27 @@ class Ubiquo::CategoriesControllerTest < ActionController::TestCase
   end
 
   def test_edit_should_redirect_to_correct_locale
-    get :edit, :id => categories(:one).id, :category_set_id => category_sets(:one).id, :locale => 'jp'
+    set_id = category_sets(:one).id
+    get :edit, :id => categories(:one).id, :category_set_id => set_id, :locale => 'jp'
     if Ubiquo::Config.context(:ubiquo_categories).get(:connector).to_sym == :i18n
-      assert_redirected_to ubiquo.category_set_categories_path
+      assert_redirected_to ubiquo.category_set_categories_path(set_id)
     else
       assert_response :success
     end
   end
 
   def test_should_update_category
-    put :update, :id => categories(:one).id, :category => category_attributes, :category_set_id => category_sets(:one).id
-    assert_redirected_to ubiquo.category_set_categories_path
+    set_id = category_sets(:one).id
+    put :update, :id => categories(:one).id, :category => category_attributes, :category_set_id => set_id
+    assert_redirected_to ubiquo.category_set_categories_path(set_id)
   end
 
   def test_should_destroy_category
+    set_id = category_sets(:one).id
     assert_difference('Category.count', -1) do
-      delete :destroy, :id => categories(:one).id, :category_set_id => category_sets(:one).id
+      delete :destroy, :id => categories(:one).id, :category_set_id => set_id
     end
-    assert_redirected_to ubiquo.category_set_categories_path
+    assert_redirected_to ubiquo.category_set_categories_path(set_id)
   end
 
   private

@@ -69,11 +69,12 @@ class CategoryTest < ActiveSupport::TestCase
     category = create_category
     related = CategoryTestModel.create
     category_relation = CategoryRelation.create(
-        :category_id => category.id,
-        :related_object_id => related.id,
-        :related_object_type => related.class.to_s,
-        :position => 1,
-        :attr_name => "attrs")
+      :category_id => category.id,
+      :related_object_id => related.id,
+      :related_object_type => related.class.to_s,
+      :position => 1,
+      :attr_name => "attrs"
+    )
     assert_equal [category_relation], category.category_relations
   end
 
