@@ -8,22 +8,13 @@ module Ubiquo
 
       # Performs the usual drop_table action, but remove also the created sequences
       # that are related with this table
-      def drop_table_with_sequences(table_name)
-        drop_table_without_sequences(table_name)
+      def drop_table_with_sequences(table_name, options = {})
+        drop_table_without_sequences(table_name, options)
         ActiveRecord::Base.connection.list_sequences(table_name.to_s + "_$").each do |sequence|
-          unless sequence =~ /id_seq/ || @using_force
+          unless sequence =~ /id_seq/ || options[:force]
             ActiveRecord::Base.connection.drop_sequence sequence
           end
         end
-      end
-
-      # Performs the usual create_table action, but records in an instance variable
-      # if we are using the :force option, since we need it in the above method,
-      # but the drop_table signature no longer includes
-      def create_table(table_name, options={})
-        @using_force = options[:force]
-        super
-        @using_force = nil
       end
 
       # Undoes the field and sequence created by the add_sequence_field method
