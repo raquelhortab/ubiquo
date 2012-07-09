@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class GenericListingWidgetTest < ActionController::TestCase
-  include TestSupport::UrlHelper
   tests PagesController
 
   test "generic_listing widget should get show" do
@@ -36,9 +35,9 @@ class GenericListingWidgetTest < ActionController::TestCase
       :model => 'GenericListing',
       :title => 'title',
       :show_images => true,
-    }  
+    }
   end
-  
+
   def create_widget(type, options = {})
     insert_widget_in_page(type, widget_attributes.merge(options))
   end

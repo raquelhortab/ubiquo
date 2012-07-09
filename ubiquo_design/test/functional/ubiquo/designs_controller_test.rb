@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::DesignsControllerTest < ActionController::TestCase
-  # use_ubiquo_fixtures
-  include TestSupport::UrlHelper
 
   def test_should_get_design
     page = pages(:one_design)

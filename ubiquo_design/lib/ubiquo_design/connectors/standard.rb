@@ -137,7 +137,7 @@ module UbiquoDesign
           def uhook_static_page_actions(page)
             [
               link_to(t('ubiquo.edit'), ubiquo.edit_static_page_path(page)),
-              (link_to(t('ubiquo.remove'), ubiquo.static_page_path(page), :confirm => t('ubiquo.design.confirm_page_removal'), :method => :delete) unless page.key?)
+              (link_to(t('ubiquo.remove'), ubiquo.static_page_path(page), :data => {:confirm => t('ubiquo.design.confirm_page_removal')}, :method => :delete) unless page.key?)
             ].compact
           end
 
@@ -175,7 +175,7 @@ module UbiquoDesign
             [
               link_to(t('ubiquo.edit'), ubiquo.edit_page_path(page), :class => 'btn-edit'),
               link_to(t('ubiquo.design.design'), ubiquo.page_design_path(page)),
-              (link_to(t('ubiquo.remove'), ubiquo.page_path(page), :confirm => t('ubiquo.design.confirm_page_removal'), :method => :delete, :class => 'btn-delete') unless page.key?)
+              (link_to(t('ubiquo.remove'), ubiquo.page_path(page), :data => {:confirm => t('ubiquo.design.confirm_page_removal')}, :method => :delete, :class => 'btn-delete') unless page.key?)
             ].compact
           end
 

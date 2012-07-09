@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in ubiquo_media.gemspec
+# Specify your gem's dependencies in ubiquo_design.gemspec
 gemspec
 
 group :development, :test do

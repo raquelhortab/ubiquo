@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../../../test_helper'
 
 class GenericDetailWidgetUbiquoTest < ActionController::TestCase
-  include TestSupport::UrlHelper
   tests Ubiquo::WidgetsController
 
   test "edit new form" do
