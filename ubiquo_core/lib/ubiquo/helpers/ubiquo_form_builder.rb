@@ -123,15 +123,19 @@ module Ubiquo
           else
             pre += label
           end
+
           post += group(:type => :help) do
             help
           end if help
+
           post += group(:type => :translatable) do
             ( translatable === true ? @template.t("ubiquo.translatable_field") : translatable )
           end if translatable
+
           post += group(:type => :description) do
             description
           end if description
+
           result = if group_options
             group(group_options) do
               pre + super_result + post
@@ -139,6 +143,7 @@ module Ubiquo
           else
             pre + super_result + post
           end
+
           result
         end
       end
@@ -195,30 +200,34 @@ module Ubiquo
 
         type = options.delete(:type) || self.builder_options[:default_group_type]
         options = options.reverse_merge( groups_configuration[type] || {})
+        if options[:partial]
+          result = @template.render :partial => options[:partial],
+            :locals => options.merge(:content => @template.capture(&block).to_s)
+        else
+          options[:class] = [
+              options[:class],
+              options.delete(:append_class)
+          ].delete_if(&:blank?).compact.join(" ")
 
-        options[:class] = [
-            options[:class],
-            options.delete(:append_class)
-        ].delete_if(&:blank?).compact.join(" ")
-
-        block_group = BlockGroup.new(self, options.merge(:type => type))
-        self.group_chain << block_group
-        tag = options.delete(:content_tag) # Delete it before sending to content_tag
-        callbacks = options.delete(:callbacks) || {}
-        result = @template.content_tag(tag, options) do
-          out = "".html_safe
-          if callbacks[:before].respond_to?(:call)
-            out += callbacks[:before].call(binding, options)
+          block_group = BlockGroup.new(self, options.merge(:type => type))
+          self.group_chain << block_group
+          tag = options.delete(:content_tag) # Delete it before sending to content_tag
+          callbacks = options.delete(:callbacks) || {}
+          result = @template.content_tag(tag, options) do
+            out = "".html_safe
+            if callbacks[:before].respond_to?(:call)
+              out += callbacks[:before].call(binding, options)
+            end
+            out += options.delete(:before)
+            out += @template.capture(block_group, &block)
+            out += options.delete(:after)
+            if callbacks[:after].respond_to?(:call)
+              out += callbacks[:after].call(binding, options)
+            end
+            out
           end
-          out += options.delete(:before)
-          out += @template.capture(block_group, &block)
-          out += options.delete(:after)
-          if callbacks[:after].respond_to?(:call)
-            out += callbacks[:after].call(binding, options)
-          end
-          out
+          self.group_chain.pop
         end
-        self.group_chain.pop
         # Any method here that accepts a block must check before concat
         result
       end

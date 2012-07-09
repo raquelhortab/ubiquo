@@ -23,10 +23,10 @@ class Ubiquo::Generators::ActionsTests < ::Rails::Generators::TestCase
       assert_match /navigator\.add_tab do |tab|/, tabs
       assert_match /tab\.text  = t\('ubiquo\.stub\.title'\)/, tabs
       assert_match /tab\.title = t\('application\.goto', :place => 'stubs'\)/, tabs
-      assert_match /tab\.link  = ubiquo_stubs_path/, tabs
+      assert_match /tab\.link  = ubiquo.stubs_path/, tabs
       assert_match /tab\.highlights_on\(:controller => 'ubiquo\/stubs'\)/, tabs
       assert_match /tab\.highlighted_class = 'active'/, tabs
-      assert_match /end # Last tab$/, tabs
+      assert_match /end # :flag: Last tab$/, tabs
     end
   end
 
@@ -154,7 +154,7 @@ class Ubiquo::Generators::ActionsTests < ::Rails::Generators::TestCase
           tab.link = ubiquo_home_path
           tab.highlights_on({:controller => "ubiquo/home"})
           tab.highlighted_class = "active"
-        end # Last tab
+        end # :flag: Last tab
     %>
     <%= render_tab_navigator(navigator_right) %>
     eof

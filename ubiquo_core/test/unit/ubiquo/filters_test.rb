@@ -36,7 +36,7 @@ class FilterHelpersTest < Ubiquo::Filters::UbiquoFilterTestCase
     end
     @filters = @filter_set.filters
     doc = HTML::Document.new(show_filters).root
-    assert_select doc, "div#links_filter_content", 0    
+    assert_select doc, "div#links_filter_content", 0
   end
-    
+
 end

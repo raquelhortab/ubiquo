@@ -19,6 +19,10 @@ class Ubiquo::Helpers::CoreHelpersTest < ActionView::TestCase
     assert_match />secció</, ubiquo_table_headerfy(:"headerfy_section.title")
   end
 
+  def url_for(*)
+    'stub'
+  end
+
 end
 
 class HeaderfySection

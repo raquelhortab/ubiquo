@@ -139,6 +139,9 @@ class FilteredSearchTest < ActiveSupport::TestCase
 
       model = table.classify
       Object.const_set(model, Class.new(ActiveRecord::Base)) unless Object.const_defined? model
+      Object.const_get(model).class_eval do
+        attr_accessible :title, :description, :published_at, :private
+      end
     end
   end
 

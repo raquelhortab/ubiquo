@@ -439,7 +439,7 @@ class Ubiquo::SettingsTest < ActiveSupport::TestCase
       :invented_option => 2
     assert !Ubiquo::Settings.options(:a).include?(:is_editable)
     assert Ubiquo::Settings.options(:a).include?(:invented_option)
-    assert({ :invented_option => 2 }, Ubiquo::Settings.options(:a))
+    assert_equal({ :invented_option => 2 }, Ubiquo::Settings.options(:a))
     assert_equal 2, Ubiquo::Settings.options(:a)[:invented_option]
     assert Ubiquo::Settings.settings[default_context][:a][:options].include?(:is_editable)
 

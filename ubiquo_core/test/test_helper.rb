@@ -16,6 +16,8 @@ Rails.backtrace_cleaner.remove_silencers!
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
 
+ActionController::TestCase.route_testing_engine = :ubiquo_core
+
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
@@ -30,10 +32,6 @@ end
 
 def disable_settings_override
   Ubiquo::Settings[:ubiquo][:settings_overridable] = false
-end
-
-class ActiveSupport::TestCase
-  include Rails.application.routes.mounted_helpers
 end
 
 class ::Rails::Generators::TestCase

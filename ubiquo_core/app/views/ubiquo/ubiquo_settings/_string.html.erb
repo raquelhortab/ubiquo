@@ -12,8 +12,8 @@
                         :class => error_class(ubiquo_setting) } %>
   <% end %>
 <% else %>
-  <%= select_tag ubiquo_setting.key, 
+  <%= select_tag ubiquo_setting.key,
                  options_for_select(ubiquo_setting.allowed_values, ubiquo_setting.value),
-                :group => false,    
+                :group => false,
                 :class => error_class(ubiquo_setting) %>
 <% end  %>

@@ -91,10 +91,10 @@ class UbiquoFormBuilderTest < ActionView::TestCase
       f.submit_group(:class => "alter-submit") do
         # Custom params
         f.create_button("c-custom", :class => "bt-create2") +
-        f.create_button( nil, :i18n_label_key => "ubiquo.create-custom") +
-        f.back_button("back-custom", { :js_function => "alert('foo');", :class => "bt-back2" }) +
-        f.update_button("u-custom", :class => "bt-update2") +
-        f.update_button(nil, :i18n_label_key => "ubiquo.save-custom")
+          f.create_button( nil, :i18n_label_key => "ubiquo.create-custom") +
+          f.back_button("back-custom", { :js_function => "alert('foo');", :class => "bt-back2" }) +
+          f.update_button("u-custom", :class => "bt-update2") +
+          f.update_button(nil, :i18n_label_key => "ubiquo.save-custom")
       end
     end
 
@@ -114,10 +114,10 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     the_form do |form|
       form.custom_block do
         '<div class="custom-form-item">'.html_safe +
-        form.label(:lastname, "imalabel") +
-        form.text_field(:lastname) +
-        "</div>".html_safe
-     end
+          form.label(:lastname, "imalabel") +
+          form.text_field(:lastname) +
+          "</div>".html_safe
+      end
     end
 
     assert_select "form > div.form-item", 0
@@ -145,13 +145,13 @@ class UbiquoFormBuilderTest < ActionView::TestCase
       form.group(:class => "a0") do
         form.text_field :lastname, :translatable => true
       end +
-      form.group(:class => "a1") do
-       form.text_field :lastname, :class=> "alter", :translatable => "foo"
+        form.group(:class => "a1") do
+        form.text_field :lastname, :class=> "alter", :translatable => "foo"
       end +
-      form.group(:class => "a2") do
+        form.group(:class => "a2") do
         form.text_field :lastname, :class=> "alter2", :description => "foo2", :help => "Info text"
       end +
-      form.group(:class => "a3") do
+        form.group(:class => "a3") do
         form.text_field :lastname, :class=> "alter3", :translatable => "foo3", :description => "bar"
       end
     end
@@ -195,7 +195,7 @@ class UbiquoFormBuilderTest < ActionView::TestCase
       form.group(:class => "a0") do
         form.check_box :is_admin
       end +
-      form.group(:class => "a1") do
+        form.group(:class => "a1") do
         form.check_box :is_admin, :translatable => true
       end
     end
@@ -227,7 +227,7 @@ class UbiquoFormBuilderTest < ActionView::TestCase
         group.add(t("personal_data")) do
           form.text_field :lastname
         end +
-        group.add(t("rights"), :class => "custom-tab-class") do
+          group.add(t("rights"), :class => "custom-tab-class") do
           form.check_box :is_admin
         end
       end
@@ -242,19 +242,19 @@ class UbiquoFormBuilderTest < ActionView::TestCase
 
   test "tabbed blocks easy syntax" do
     the_form do |form|
-       form.group(:type => :tabbed, :class=> "a-group-of-tabs") do
-         form.tab(("personal_data"),:class => "parenttab") do
-           form.text_field :lastname
-           form.group(:type => :tabbed, :class=> "childtab") do
-             form.tab(("inner tab"),:class =>"childtab") do
-               form.text_field :is_admin
-             end
-           end
-         end +
-         form.tab(("rights"), :class => "custom-tab-class") do
-           form.check_box :is_admin
-         end
-       end
+      form.group(:type => :tabbed, :class=> "a-group-of-tabs") do
+        form.tab(("personal_data"),:class => "parenttab") do
+          form.text_field :lastname
+          form.group(:type => :tabbed, :class=> "childtab") do
+            form.tab(("inner tab"),:class =>"childtab") do
+              form.text_field :is_admin
+            end
+          end
+        end +
+          form.tab(("rights"), :class => "custom-tab-class") do
+          form.check_box :is_admin
+        end
+      end
     end
 
     assert_select ".form-tab-container.a-group-of-tabs .form-tab" do |tabs|
@@ -270,11 +270,11 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     Ubiquo::Settings.context(:ubiquo_form_builder).set(:unfold_tabs,true)
     begin
       the_form do |form|
-         form.group(:type => :tabbed, :class=> "a-group-of-tabs") do
-           form.tab(("personal_data")) do
-             form.text_field :lastname
+        form.group(:type => :tabbed, :class=> "a-group-of-tabs") do
+          form.tab(("personal_data")) do
+            form.text_field :lastname
           end
-         end
+        end
       end
 
       assert_select ".form-tab-container.a-group-of-tabs .form-tab", 0
@@ -288,9 +288,9 @@ class UbiquoFormBuilderTest < ActionView::TestCase
   test "we cannot call tab without a tabbed parent group defined" do
     assert_raise(RuntimeError) {
       the_form do |form|
-         form.tab(t("personal_data")) do
-           form.text_field :lastname
-         end
+        form.tab(t("personal_data")) do
+          form.text_field :lastname
+        end
       end
     }
   end
@@ -298,7 +298,7 @@ class UbiquoFormBuilderTest < ActionView::TestCase
   test "can append content inside the field, after and before the content" do
     the_form do |form|
       form.text_field(:lastname, :group => { :after => '<div class="after">A</div>'.html_safe}) +
-      form.text_field(:lastname, :class=> "alter", :group => { :before => '<div class="before">A</div>'.html_safe })
+        form.text_field(:lastname, :class=> "alter", :group => { :before => '<div class="before">A</div>'.html_safe })
     end
 
     assert_select "form .form-item"  do |form_items|
@@ -317,8 +317,8 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     the_form do |form|
       # Weird use but useful sometimes
       form.check_box(:lastname) +
-      form.check_box(:lastname, { :class => "simple" }) +
-      form.check_box(:lastname, { :class => "complex" }, "GARCIA", "OFF")
+        form.check_box(:lastname, { :class => "simple" }) +
+        form.check_box(:lastname, { :class => "complex" }, "GARCIA", "OFF")
     end
     assert_select "form input[type=hidden][value=0]",2
     assert_select "form input[type=checkbox][class=checkbox][value=1]"
@@ -356,16 +356,16 @@ class UbiquoFormBuilderTest < ActionView::TestCase
         :time_zone_select => {:class => "time_zone_select"}
       )
       Ubiquo::Helpers::UbiquoFormBuilder.default_tag_options = options
+      choices = [["Bar","Bar"],["Foo","Foo"]]
       the_form do |form|
-        form.check_box( :lastname, :class => "checkboxed")
+        form.check_box( :lastname, :class => "checkboxed") +
         # Forcing :order because of an unknown bug on I18n covnerting arrays to hashes
-        form.datetime_select(:born_at,{:order =>[:day,:month,:year]})
-        form.datetime_select(:born_at,{:order =>[:day,:month,:year]}, {:class => "datetime_forced"})
-        form.date_select(:born_at, {:order =>[:day,:month,:year],:include_blank => true})
-        form.time_select(:born_at)
-        choices = [["Bar","Bar"],["Foo","Foo"]]
-        form.collection_select(:lastname, choices,:first, :last )
-        form.select(:lastname, choices )
+        form.datetime_select(:born_at,{:order =>[:day,:month,:year]}) +
+        form.datetime_select(:born_at,{:order =>[:day,:month,:year]}, {:class => "datetime_forced"}) +
+        form.date_select(:born_at, {:order =>[:day,:month,:year],:include_blank => true}) +
+        form.time_select(:born_at) +
+        form.collection_select(:lastname, choices,:first, :last ) +
+        form.select(:lastname, choices ) +
         form.time_zone_select(:lastname)
       end
 
@@ -383,19 +383,19 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     end
   end
 
-##  test "support calendar_date_select" do
-##    self.expects(:calendar_date_select).returns('<input name="calendar"/>')
-##    the_form do |form|
-##      form.calendar_date_select(:born_at)
-##    end
-##    assert_select "form .form-item.datetime label"
-##    assert_select "form .form-item.datetime input"
-##  end
+  ##  test "support calendar_date_select" do
+  ##    self.expects(:calendar_date_select).returns('<input name="calendar"/>')
+  ##    the_form do |form|
+  ##      form.calendar_date_select(:born_at)
+  ##    end
+  ##    assert_select "form .form-item.datetime label"
+  ##    assert_select "form .form-item.datetime input"
+  ##  end
 
   test "do not forward options as attributes" do
     the_form do |form|
       form.text_field(:lastname, :group => { :class => "aclass", :attx => "attxvalue" }) +
-      form.text_field(:lastname, :label => "MYLABEL", :label_as_legend => true,
+        form.text_field(:lastname, :label => "MYLABEL", :label_as_legend => true,
         :group => { :type => :fieldset, :class => "custom_class"})
     end
     assert_select "form *[group]", 0
@@ -420,9 +420,9 @@ class UbiquoFormBuilderTest < ActionView::TestCase
       the_form do |form|
         form.text_field :lastname,
           :group => {
-            :class => "aclass",
-            :before => "<span>Before!</span>"
-          }
+          :class => "aclass",
+          :before => "<span>Before!</span>".html_safe
+        }
       end
       assert_select "form fieldset[class=aclass]"
       assert_select "form legend", "Lastname"
@@ -443,32 +443,32 @@ class UbiquoFormBuilderTest < ActionView::TestCase
     render :text => form_for(User.new, options, &proc)
   end
 
-  # Testing purpose class to simulate an ActiveRecord model
-  class User < ActiveRecord::Base
-    conn = ActiveRecord::Base.connection
+end
 
-    conn.create_table :users do |t|
-    end unless conn.tables.include?('users')
+# Testing purpose class to simulate an ActiveRecord model
+class User < ActiveRecord::Base
+  conn = ActiveRecord::Base.connection
 
-    def lastname
-      "Bar"
-    end
+  conn.create_table :users do |t|
+  end unless conn.tables.include?('users')
 
-    def born_at
-      Time.parse("2011-01-01 12:00")
-    end
-
-    def is_admin
-      true
-    end
-
-    def self.human_attribute_name( attr )
-      {
-        :lastname => "Bar",
-        :is_admin => "Is admin",
-        :born_at => "Born at"
-       }[ attr.to_sym ] || attr.to_s
-    end
+  def lastname
+    "Bar"
   end
 
+  def born_at
+    Time.parse("2011-01-01 12:00")
+  end
+
+  def is_admin
+    true
+  end
+
+  def self.human_attribute_name( attr )
+    {
+      :lastname => "Lastname",
+      :is_admin => "Is admin",
+      :born_at => "Born at"
+    }[ attr.to_sym ] || attr.to_s
+  end
 end

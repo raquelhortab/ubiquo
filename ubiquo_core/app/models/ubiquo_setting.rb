@@ -24,6 +24,8 @@ class UbiquoSetting < ActiveRecord::Base
   scope :context, lambda { |value| where(:context => value) }
   scope :key,     lambda { |value| where(:key => value) }
 
+  attr_accessible :locale, :content_id, :key, :context, :type, :value, :allowed_values, :options, :is_inherited
+
   # Check if the value is included in the alloweds
   def value_acceptable?
     self.allowed_values.blank? || self.allowed_values.include?(self.value)

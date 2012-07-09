@@ -21,6 +21,10 @@ module Ubiquo
         "http://example.com/tests"
       end
 
+      def config
+        ActionController::Base.config
+      end
+
     end
 
     # A helper model to be able to execute filters.
@@ -51,8 +55,7 @@ module Ubiquo
       include ::Ubiquo::Helpers::CoreUbiquoHelpers
 
       def initialize(*args)
-        # FIXME adapt for Rails 3
-        #::ActionController::Routing::Routes.draw { |map| map.resources :tests }
+#        Ubiquo::Engine.routes.draw { resources :tests }
         @model = FilterTestModel.create
         @model.delete_all
         load_test_data
@@ -78,6 +81,10 @@ module Ubiquo
            :status => false
          }
         ].each { |attrs| @model.create(attrs) }
+      end
+
+      def url_for(options)
+        "http://example.com/tests"
       end
 
     end

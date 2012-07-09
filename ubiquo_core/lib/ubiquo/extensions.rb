@@ -24,6 +24,7 @@ if Rails.env.test?
   require 'action_controller/test_case'
   ActiveSupport::TestCase.send(:include, Ubiquo::Extensions::TestCase)
   ActionController::TestCase.send(:include, Ubiquo::Extensions::TestCase)
+  ActionController::TestCase.send(:include, Ubiquo::Extensions::TestCase::EngineUrlHelper)
 end
 
 ActiveRecord::Base.send(:include, Ubiquo::Extensions::ConfigCaller)

@@ -10,14 +10,6 @@ module Ubiquo
         end
       end
 
-
-      # Removes the non existent assets in the asset environment.
-      # ref: actionpack-3.x/lib/sprockets/helpers/rails_helper.rb
-      def filter_assets(assets, format)
-        all_assets = defined?(asset_environment) ? asset_environment : {}
-        assets.select{ |a| all_assets["#{a.to_s}.#{format}"] }
-      end
-
       # Adds the default stylesheet tags needed for ubiquo
       # options:
       #   color: by default is red, but you can replace it calling another color
@@ -30,12 +22,13 @@ module Ubiquo
         default_sources = []
         should_include_ie = false
         if sources.include?(:defaults)
-          default_sources += Ubiquo::Plugin.registered_plugins + ["ubiquo/colors/#{color}", "ubiquo/ubiquo_application"]
-          default_sources += ["ubiquo/ipad"] if defined?(request) && request.user_agent.match(/Apple.*Mobile/)
+          default_sources += Ubiquo::Plugin.registered_plugins.map(&:to_s) + ["ubiquo/colors/#{color}", "ubiquo/ubiquo_application"]
+          # on tests, there might be no request or no user_agent method
+          default_sources += ["ubiquo/ipad"] if request.user_agent.match(/Apple.*Mobile/) rescue false
           should_include_ie = true
           sources.delete(:defaults)
         end
-        ubiquo_sources = filter_assets(sources.map{ |s| "ubiquo/#{s}"} + default_sources, "css")
+        ubiquo_sources = sources.map{ |s| "ubiquo/#{s}"} + default_sources
         output = stylesheet_link_tag(*ubiquo_sources, options)
 
         if should_include_ie

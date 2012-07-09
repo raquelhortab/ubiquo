@@ -44,6 +44,7 @@ def set_relations options = {}
     has_many :test_only_model_twos, :through => :middle_tables
     belongs_to :related, :foreign_key => :arbitrary_name_id, :class_name => TestOnlyModel.name
     belongs_to :test_only_model_two
+    attr_accessible :name, :arbitrary_name
   end
 
   TestOnlyModelTwo.class_eval do
@@ -52,6 +53,7 @@ def set_relations options = {}
     belongs_to :related, :foreign_key => :arbitrary_name_id, :class_name => TestOnlyModel.name
     belongs_to :test_only_model
     has_and_belongs_to_many :test_only_model_threes
+    attr_accessible :title, :arbitrary_name
   end
 
   TestOnlyModelThree.class_eval do

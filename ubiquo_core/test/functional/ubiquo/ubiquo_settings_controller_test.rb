@@ -239,8 +239,9 @@ class Ubiquo::UbiquoSettingsControllerTest < ActionController::TestCase
     )
     assert_equal 'yes please', Ubiquo::Settings[:controller_test][:test_index]
     get :index
+    # why \n? see https://github.com/rails/rails/issues/393
     assert_select '#context_controller_test textarea[name="test_index"]',
-      { :count => 1, :html => "yes please" }
+      { :count => 1, :html => "\nyes please" }
   end
 
   def test_should_handle_passwords
