@@ -70,7 +70,7 @@ module UbiquoJobs
       #   options: properties for the new job
       #
       def self.add(type, options = {})
-        job = type.new(options)
+        job = type.new(options, :without_protection => true)
         job.save
         job
       end
@@ -91,7 +91,7 @@ module UbiquoJobs
       #   options: a hash with the changed properties
       #
       def self.update(job_id, options)
-        job_class.find(job_id).update_attributes(options)
+        job_class.find(job_id).update_attributes(options, :without_protection => true)
       end
 
       # Marks the job with the given identifier to be repeated

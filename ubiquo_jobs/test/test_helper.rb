@@ -13,4 +13,5 @@ Rails.backtrace_cleaner.remove_silencers!
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
 
+ActionController::TestCase.route_testing_engine = :ubiquo_jobs
 ENV['foo'] = "0"

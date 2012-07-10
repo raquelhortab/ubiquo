@@ -53,40 +53,40 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
 
   def test_should_filter_by_name
     create_job(:name => "I don't appear")
-    assert_equal [], ActiveJob.filtered_search({:text => "notsocommon"})
+    assert_equal [], ActiveJob.filtered_search({:filter_text => "notsocommon"})
     job = create_job(:name => "this is a notsocommon word")
-    assert_equal_set [job], ActiveJob.filtered_search({:text => "notsocommon"})
+    assert_equal_set [job], ActiveJob.filtered_search({:filter_text => "notsocommon"})
   end
 
-  def test_should_filter_by_date_start
+  def test_should_filter_by_filter_date_start
     job = create_job()
     job.update_attribute(:created_at, 1.year.from_now)
-    assert_equal [], ActiveJob.filtered_search({:date_start => 2.years.from_now})
+    assert_equal [], ActiveJob.filtered_search({:filter_date_start => 2.years.from_now})
     job.update_attribute(:created_at, 3.years.from_now)
-    assert_equal_set [job], ActiveJob.filtered_search({:date_start => 2.years.from_now})
+    assert_equal_set [job], ActiveJob.filtered_search({:filter_date_start => 2.years.from_now})
   end
 
-  def test_should_filter_by_date_end
+  def test_should_filter_by_filter_date_end
     job = create_job()
     job.update_attribute(:created_at, 1.years.ago)
-    assert_equal [], ActiveJob.filtered_search({:date_end => 2.years.ago})
+    assert_equal [], ActiveJob.filtered_search({:filter_date_end => 2.years.ago})
     job.update_attribute(:created_at, 3.years.ago)
-    assert_equal_set [job], ActiveJob.filtered_search({:date_end => 2.years.ago})
+    assert_equal_set [job], ActiveJob.filtered_search({:filter_date_end => 2.years.ago})
   end
 
   def test_should_filter_by_state
     ActiveJob.delete_all
     job = create_job(:state => 1)
-    assert_equal [], ActiveJob.filtered_search({:state => 0})
-    assert_equal_set [job], ActiveJob.filtered_search({:state => 1})
+    assert_equal [], ActiveJob.filtered_search({:filter_state => 0})
+    assert_equal_set [job], ActiveJob.filtered_search({:filter_state => 1})
   end
 
   def test_should_filter_by_state_not
     ActiveJob.delete_all
     job_1 = create_job(:state => 1)
     job_2 = create_job(:state => 2)
-    assert_equal [job_1, job_2], ActiveJob.filtered_search({:state_not => 0})
-    assert_equal [job_2], ActiveJob.filtered_search({:state_not => 1})
+    assert_equal [job_1, job_2], ActiveJob.filtered_search({:filter_state_not => 0})
+    assert_equal [job_2], ActiveJob.filtered_search({:filter_state_not => 1})
   end
 
   def test_should_wait_for_single_dependency

@@ -42,6 +42,10 @@ module UbiquoJobs
         where("state != ?", value)
       }
 
+      attr_accessible :runner, :command, :tries, :priority, :planified_at,
+        :started_at, :ended_at, :result_code, :result_output, :result_error,
+        :notify_to, :state, :name, :type, :options
+
       # Save updated attributes.
       # Optimistic locking is handled automatically by Active Record
       def set_property(property, value)
