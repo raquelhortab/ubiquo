@@ -393,6 +393,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
   def create_asset(options = {})
     file_ext = options.delete(:file_extension) || "png"
     file_contents = options.delete(:file_contents) || sample_image.read
+    created_at = options.delete(:created_at)
     default_options = {
       :name          => "Created asset",
       :description   => "Description",
@@ -402,6 +403,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
     }
 
     asset = AssetPublic.create(default_options.merge(options))
+    asset.update_attribute :created_at, created_at if created_at
     # Save asset to destroy on teardown
     @created_assets << asset
     asset

@@ -1,6 +1,8 @@
 class AssetType < ActiveRecord::Base
   has_many :assets
 
+  attr_accessible :name, :key
+
   # Generic find (ID, key or record)
   def self.gfind(something, options={})
     case something

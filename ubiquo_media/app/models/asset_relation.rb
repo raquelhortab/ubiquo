@@ -6,6 +6,9 @@ class AssetRelation < ActiveRecord::Base
 
   before_create :set_attribute_values
 
+  attr_accessible :asset, :related_object, :position, :asset_id,
+    :related_object_id, :related_object_type, :field_name, :name
+
   # Return the name (used for foot-text of images, for example) for a given asset and field
   def self.name_for_asset(field, asset, related_object)
     asset = Asset.gfind(asset)

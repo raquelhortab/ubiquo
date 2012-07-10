@@ -5,6 +5,5 @@ class AssetPrivate < Asset
                   :processors => Ubiquo::Settings.context(:ubiquo_media).get(:media_processors_list)
   validates_attachment_presence :resource
 
-  before_post_process :clean_tmp_files
   after_resource_post_process :generate_geometries
 end

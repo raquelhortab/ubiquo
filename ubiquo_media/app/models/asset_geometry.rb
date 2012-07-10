@@ -9,6 +9,8 @@ class AssetGeometry < ActiveRecord::Base
                             :greater_than => 0
   validates_uniqueness_of :style, :scope => :asset_id, :case_sensitive => false
 
+  attr_accessible :asset_id, :style, :width, :height, :asset
+
   def self.from_file(file, style = :original)
     if file
       geometry = Paperclip::Geometry.from_file(file)

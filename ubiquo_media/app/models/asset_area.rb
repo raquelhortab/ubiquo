@@ -10,6 +10,8 @@ class AssetArea < ActiveRecord::Base
     :only_integer => false, :greater_than => -1
   validates_numericality_of :width,:height, :greater_than => 0
 
+  attr_accessible :asset_id, :style, :top, :left, :width, :height, :asset
+
    # Gives a string expressing the resize in a format ready for Paperclip::Gemometry#
   def resize_to
     "#{width}x#{height}!"

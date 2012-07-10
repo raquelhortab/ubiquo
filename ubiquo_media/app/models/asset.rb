@@ -22,6 +22,10 @@ class Asset < ActiveRecord::Base
   after_save :update_backup
   after_save :save_geometries
 
+  attr_accessible :name, :description, :asset_type_id, :resource_file_name,
+    :resource_file_size, :resource_content_type, :type, :is_protected,
+    :keep_backup, :resource, :asset_type
+
   scope :type, lambda { |t|
     where("asset_type_id IN (?)", t.to_s.split(',').map(&:to_i))
   }
@@ -180,10 +184,12 @@ class Asset < ActiveRecord::Base
 
   def resource_file(style = :original)
     if self.resource
-      return self.resource.to_file(style) if self.resource.options[:storage] == :filesystem
-
-      @tmp_files ||= {}
-      @tmp_files[style] ||= self.resource.to_file(style)
+      queued = (self.resource.queued_for_write[style].send(:destination) rescue false)
+      if !queued
+        resource = style == :original ? self.resource : self.resource.styles[style]
+        stored = Paperclip.io_adapters.for(resource)
+      end
+      queued || stored
     end
   end
 
@@ -249,10 +255,6 @@ class Asset < ActiveRecord::Base
 
   def calculate_geometry(style = :original)
     AssetGeometry.from_file(self.resource_file(style), style)
-  end
-
-  def clean_tmp_files
-    @tmp_files = nil
   end
 
 end

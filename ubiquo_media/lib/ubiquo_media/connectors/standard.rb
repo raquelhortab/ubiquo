@@ -81,7 +81,7 @@ module UbiquoMedia
                       :class => 'btn-edit'),
               link_to(t('ubiquo.remove'),
                       ubiquo.asset_path(asset),
-                      :confirm => t('ubiquo.media.confirm_asset_removal'),
+                      :data => {:confirm => t('ubiquo.media.confirm_asset_removal')},
                       :method => :delete,
                       :class => 'btn-delete'),
             ]

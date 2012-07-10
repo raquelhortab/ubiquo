@@ -11,7 +11,6 @@ class AssetMock < Asset
 
   validates_attachment_presence :resource
 
-  before_post_process :clean_tmp_files
   after_resource_post_process :generate_geometries
 end
 
@@ -34,7 +33,7 @@ class AssetTest < ActiveSupport::TestCase
   def test_should_require_resource
     assert_no_difference "Asset.count" do
       asset = create_asset(:resource => nil)
-      assert asset.errors.include?(:resource_file_name)
+      assert asset.errors.include?(:resource)
     end
   end
 
@@ -167,13 +166,6 @@ class AssetTest < ActiveSupport::TestCase
     assert_equal 1, asset.asset_geometries.count
   end
 
-  def test_should_get_resource_file
-    asset = create_asset(:resource => sample_image)
-
-    assert File.identical?(asset.resource.to_file, asset.resource_file)
-    assert File.identical?(asset.resource.to_file(:thumb), asset.resource_file(:thumb))
-  end
-
   def test_should_change_styles_with_asset_areas
     Asset.destroy_all
     AssetArea.destroy_all
@@ -215,12 +207,15 @@ class AssetTest < ActiveSupport::TestCase
   private
 
   def create_asset(options = {})
+    created_at = options.delete(:created_at)
     default_options = {
       :name        => "Created asset",
       :description => "Description",
       :resource    => _test_file,
     }
-    a = AssetPublic.create(default_options.merge(options))
+    AssetPublic.create(default_options.merge(options)).tap do |asset|
+      asset.update_attribute :created_at, created_at if created_at
+    end
   end
 
   def create_mock_asset(options = {})

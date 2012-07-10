@@ -18,6 +18,8 @@ TestSupport::Database.create_test_model
 
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
 
+ActionController::TestCase.route_testing_engine = :ubiquo_media
+
 class ActiveSupport::TestCase
   fixtures :all
 
@@ -55,5 +57,8 @@ class AssetType # Using this model because is very simple and has no validations
   media_attachment :sized,      :size =>  2
   media_attachment :all_types,  :types => :ALL
   media_attachment :some_types, :types => %w{audio video}
+  attr_accessible :simple_attributes, :multiple_attributes, :sized_attributes,
+    :all_types_attributes, :some_types_attributes, :my_attachment_attributes,
+    :simple_ids, :sized, :multiple, :multiple_asset_relations_attributes, :some_type_ids
 end
 

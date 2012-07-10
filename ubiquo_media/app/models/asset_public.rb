@@ -9,6 +9,5 @@ class AssetPublic < Asset
 
   validates_attachment_presence :resource
 
-  before_post_process :clean_tmp_files
   after_resource_post_process :generate_geometries
 end
