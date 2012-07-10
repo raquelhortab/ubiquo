@@ -16,6 +16,7 @@ class FilteredSearchTest < ActiveSupport::TestCase
       end
     end
     assert_equal [@m.find_by_description('stop')], @m.filtered_search({ 'filter_desc' => 'stop'})
+    assert_equal [@m.find_by_description('stop')], @m.filtered_search({ :filter_desc => 'stop'})
   end
 
   test "Should not be able to use scopes without enabling them" do
