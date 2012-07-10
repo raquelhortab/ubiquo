@@ -11,18 +11,6 @@ class Ubiquo::SomeController < ActionController::Base
   def other; end
 end
 
-if ActionPack::VERSION::MAJOR == 2
-  ActionController::Routing::RouteSet::Mapper.class_eval do
-    # rails 3 routes creation, for fallback
-    def match(pattern, options)
-      pattern.gsub!('(.:format)', '.:format')
-      controller, action = options.delete(:to).split('#')
-      options.merge!(:controller => controller, :action => action)
-      connect(pattern, options)
-    end
-  end
-end
-
 # test based on the local_filter test from the gem routing-filter
 class UbiquoLocaleTest < Test::Unit::TestCase
   attr_reader :routes, :ubiquo_params, :public_params
@@ -35,9 +23,6 @@ class UbiquoLocaleTest < Test::Unit::TestCase
                     :is_active  => true,
                     :is_default => true
     end
-
-    # in this tests, allways clean the url params
-    Ubiquo::Settings.context(:ubiquo_i18n).set(:clean_url_params, lambda { true })
 
     @ubiquo_params = { :controller => 'ubiquo/some', :action => 'index' }
     @public_params = { :controller => 'some', :action => 'index' }
@@ -106,12 +91,7 @@ class UbiquoLocaleTest < Test::Unit::TestCase
   protected
 
   def draw_routes(&block)
-    normalized_block = rails_2? ? lambda { |set| set.instance_eval(&block) } : block
-    klass = rails_2? ? ActionController::Routing::RouteSet : ActionDispatch::Routing::RouteSet
-    klass.new.tap { |set| set.draw(&normalized_block) }
+    ActionDispatch::Routing::RouteSet.new.tap { |set| set.draw(&block) }
   end
 
-  def rails_2?
-    ActionPack::VERSION::MAJOR == 2
-  end
 end

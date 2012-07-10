@@ -13,6 +13,8 @@ Rails.backtrace_cleaner.remove_silencers!
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
 
+ActionController::TestCase.route_testing_engine = :ubiquo_i18n
+
 RoutingFilter.active = false if defined?(RoutingFilter)
 
 def create_locale(options = {})
@@ -137,6 +139,9 @@ def create_test_model_backend
       !self.abort_on_before_update
     end
     before_update :abort_if_before_update_flag
+    attr_accessible :my_field, :my_other_field, :test_model_id, :related_test_model_id,
+      :abort_on_before_create, :abort_on_before_update, :content_id, :locale, :test_model,
+      :test_models_attributes, :related_test_model
   end
 
   RelatedTestModel.class_eval do
@@ -146,10 +151,12 @@ def create_test_model_backend
     has_many :inheritance_test_models, :translation_shared => true
     has_many :test_models, :translation_shared => false
     accepts_nested_attributes_for :test_models
+    attr_accessible :test_model_id, :tracked_test_model_id, :my_field, :test_model, :id
   end
 
   UnsharedRelatedTestModel.class_eval do
     belongs_to :test_model
+    attr_accessible :test_model_id, :my_field
   end
 
   TranslatableRelatedTestModel.class_eval do
@@ -160,6 +167,8 @@ def create_test_model_backend
     has_many :related_test_models
     belongs_to :shared_related_test_model, :translation_shared => true, :class_name => 'RelatedTestModel'
     accepts_nested_attributes_for :shared_related_test_model
+    attr_accessible :test_model_id, :related_test_model_id, :shared_related_test_model_id,
+      :my_field, :common, :shared_related_test_model_attributes, :shared_related_test_model
   end
 
   ChainTestModelA.class_eval do
@@ -167,6 +176,7 @@ def create_test_model_backend
     belongs_to :chain_test_model_b, :translation_shared => true
     has_many :chain_test_model_cs, :translation_shared => true
     has_many :chain_test_model_as, :translation_shared => true, :through => :chain_test_model_cs, :source => :chain_test_model_a
+    attr_accessible :chain_test_model_as
   end
   ChainTestModelB.class_eval do
     translatable :my_field
@@ -184,6 +194,7 @@ def create_test_model_backend
     belongs_to :one_one, :translation_shared => true, :foreign_key => 'one_one_test_model_id', :class_name => 'OneOneTestModel'
     has_one :one_one_test_model, :translation_shared => true
     accepts_nested_attributes_for :one_one_test_model
+    attr_accessible :independent, :locale, :common
   end
 
   InheritanceTestModel.class_eval do
@@ -191,6 +202,7 @@ def create_test_model_backend
     belongs_to :test_model
     belongs_to :related_test_model, :translation_shared => true
     belongs_to :translatable_related_test_model, :translation_shared => true
+    attr_accessible :my_field, :locale, :related_test_model, :translatable_related_test_model, :mixed, :content_id
   end
 
   %w{FirstSubclass SecondSubclass}.each do |c|

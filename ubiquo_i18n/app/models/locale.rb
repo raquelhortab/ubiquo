@@ -18,6 +18,8 @@ class Locale < ActiveRecord::Base
   # Cache locale instances by iso_code
   cattr_accessor :cached_locales
 
+  attr_accessible :iso_code, :english_name, :native_name, :is_active, :is_default
+
   def self.default
     defaults.first.try(:iso_code)
   end

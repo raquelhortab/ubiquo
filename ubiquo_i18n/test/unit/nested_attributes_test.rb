@@ -77,8 +77,7 @@ class Ubiquo::NestedAttributesTest < ActiveSupport::TestCase
     assert_equal [shared_object], test_model.reload.test_models
 
     # now we will delete the relation from the attributes
-    # and caused it is shared, test_model and translation will
-    # also lose it
+    # and because it is shared, test_model and translation will also lose it.
     # we don't have a way to actually delete it, as it should be done
     # in the attribute assignement method, but can check that we
     # have all the i18n information that would in that case be required

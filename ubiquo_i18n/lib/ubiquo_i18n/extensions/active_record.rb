@@ -620,7 +620,7 @@ module UbiquoI18n
             # Update the translations
             self.translations.each do |translation|
               translation.without_updating_translations do
-                translation.update_attributes untranslatable_attributes
+                translation.update_attributes untranslatable_attributes, :without_protection => true
                 translation.copy_translatable_shared_relations_from self
               end
             end
