@@ -94,13 +94,13 @@ namespace :ubiquo do
           tables = Dir.glob(fixture_path('*')).map{ |file| File.basename(file, '.*') } if tables.blank?
 
           # Create fixtures and print result summary
-          fixtures = Fixtures.create_fixtures(fixture_path, tables || [])
+          fixtures = ActiveRecord::Fixtures.create_fixtures(fixture_path, tables || [])
 
           # Print results
           # if there is only one kind of fixtures created, create_fixtures returns an array with a missing dimension
           fixtures = [fixtures] unless fixtures[0]
           results = fixtures.map do |group|
-            "#{group.size} #{group.flatten.last.model_class.to_s.tableize}" if group.flatten.last
+            "#{group.size} #{group.model_class.to_s.tableize}" if group.size > 0
           end
           if fixtures
             p 'Created fixtures: ' + results.compact.join(', ')
