@@ -21,17 +21,26 @@ module Ubiquo
 
           isolate_namespace Ubiquo
 
-          # Define ubiquo_xxx:install task
+          # Define ubiquo:install task
+          # Since this is inherited for every ubiquo engine, every one of them will get called
           rake_tasks do
-            namespace railtie_name do
+            namespace 'ubiquo' do
               require 'ubiquo/tasks/files.rb'
 
-              desc "Install files from #{railtie_name} to application"
+              # to avoid repeated descriptions, do it only if it's ubiquo_core
+              write_description = plugin.to_s == 'Ubiquo::Engine'
+              desc "Install ubiquo files to the application" if write_description
               task :install do
-                ENV["FROM"] = railtie_name
-                overwrite = ['yes','true'].include?(ENV.delete("OVERWRITE"))
-                Ubiquo::Tasks::Files.copy_dir(Dir.glob(config.root.join('install')), "/", :force => overwrite)
+                Ubiquo::Tasks::Files.copy_dir(Dir.glob(config.root.join('install')), "/")
               end
+
+              namespace :install do
+                desc "Install ubiquo files to the application, overwriting the existing ones" if write_description
+                task :overwrite do
+                  Ubiquo::Tasks::Files.copy_dir(Dir.glob(config.root.join('install')), "/", :force => true)
+                end
+              end
+
             end
           end
 
