@@ -23,7 +23,7 @@ class MenuWidgetWidgetTest < ActionController::TestCase
   def widget_attributes
     {
       :menu_id => create_menu.id
-    }  
+    }
   end
 
   def create_menu(options = {})
@@ -32,7 +32,7 @@ class MenuWidgetWidgetTest < ActionController::TestCase
     }
     Menu.create(default_options.merge(options))
   end
-  
+
   def create_widget(type, options = {})
     insert_widget_in_page(type, widget_attributes.merge(options))
   end

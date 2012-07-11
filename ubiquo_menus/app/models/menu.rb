@@ -15,6 +15,8 @@ class Menu < ActiveRecord::Base
   filtered_search_scopes :enable => [:text],
                           :text => [ :name, :key ]
 
+  attr_accessible :name, :key, :menu_items_attributes, :force_key
+
   def root_menu_items
     self.menu_items.select(&:is_root?)
   end

@@ -41,6 +41,9 @@ class MenuItem < ActiveRecord::Base
 
   filtered_search_scopes :enable => [:text], :text => [:caption]
 
+  attr_accessible :parent_id, :caption, :url, :description, :is_linkable,
+    :is_active, :position, :menu_id, :page_id, :key, :menu, :parent, :page, :nested
+
   # Returns true if is a root node
   def is_root?
     self.parent.nil?

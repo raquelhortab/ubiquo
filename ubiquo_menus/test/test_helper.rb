@@ -16,6 +16,8 @@ TestSupport::Database.check_psql_adapter
 
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures",  __FILE__)
 
+ActionController::TestCase.route_testing_engine = :ubiquo_menus
+
 UbiquoDesign::Structure.define{}
 
 
