@@ -2,10 +2,10 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title><%= Ubiquo::Config.get(:app_title) %></title>
+    <title><%= Ubiquo::Settings.get(:app_title) %></title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="" />
-    <meta name="description" content="<%= Ubiquo::Config.get(:app_description) %>" />
+    <meta name="description" content="<%= Ubiquo::Settings.get(:app_description) %>" />
     <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <%= ubiquo_stylesheet_link_tag :ubiquo, :login %>
   </head>

@@ -22,7 +22,7 @@ Ubiquo::Plugin.register(:ubiquo_authentication) do |config|
   config.add :ubiquo_users_default_sort_order, 'DESC'
   config.add :photo_storage, lambda {
     begin
-      Ubiquo::Config.context(:ubiquo_media).get(:media_storage)
+      Ubiquo::Settings.context(:ubiquo_media).get(:media_storage)
     rescue
       :filesystem
     end

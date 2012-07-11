@@ -6,9 +6,9 @@ class Ubiquo::UbiquoUsersController < UbiquoController
   # GET /ubiquo_users
   # GET /ubiquo_users.xml
   def index
-    order_by = params[:order_by] || Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_default_order_field)
-    sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_default_sort_order)
-    per_page = Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_elements_per_page)
+    order_by = params[:order_by] || Ubiquo::Settings.context(:ubiquo_authentication).get(:ubiquo_users_default_order_field)
+    sort_order = params[:sort_order] || Ubiquo::Settings.context(:ubiquo_authentication).get(:ubiquo_users_default_sort_order)
+    per_page = Ubiquo::Settings.context(:ubiquo_authentication).get(:ubiquo_users_elements_per_page)
     filters = {
       "filter_admin" => (params[:filter_admin].blank? ? nil : (params[:filter_admin].to_s=="1").to_s),
       "filter_text" => params[:filter_text],

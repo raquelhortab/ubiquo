@@ -122,7 +122,7 @@ module UbiquoMenus
           def destroy_menu_item_link(menu_item)
             link_to(t("ubiquo.remove"),
                 ubiquo.menu_menu_item_path(menu_item.menu, menu_item, :destroy_content => true),
-                :confirm => t("ubiquo.menus.confirm_menu_item_removal"),
+                :data => {:confirm => t("ubiquo.menus.confirm_menu_item_removal")},
                 :method => :delete,
                 :class => "btn-delete")
           end
@@ -219,7 +219,7 @@ module UbiquoMenus
             link_to(
               t('ubiquo.remove'),
               ubiquo.menu_path(menu, :destroy_content => true),
-              :confirm => t('ubiquo.menus.confirm_menu_removal'),
+              :data => {:confirm => t('ubiquo.menus.confirm_menu_removal')},
               :method  => :delete,
               :class => "btn-delete"
             )

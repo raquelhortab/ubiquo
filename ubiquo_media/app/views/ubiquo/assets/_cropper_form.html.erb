@@ -1,4 +1,4 @@
-<%
+:<%
   show_current = true unless show_current === false
   hidden= false unless hidden
   preview = true unless preview == false
@@ -198,7 +198,7 @@
       <ul>
         <li>
           <%= f.submit t('ubiquo.media.save'), :name => "apply", :class => "resize-save-button",
-        :confirm => ( shared_asset_msg ? (shared_asset_msg +" " + t("ubiquo.media.confirm_continue")) : nil )  %>
+        :data => {:confirm => ( shared_asset_msg ? (shared_asset_msg +" " + t("ubiquo.media.confirm_continue")) : nil )}  %>
         </li>
         <% if allow_save_as %>
         <li class="resize-save-as"> <!-- #ocultar per convertir la caixa en inactiva -->

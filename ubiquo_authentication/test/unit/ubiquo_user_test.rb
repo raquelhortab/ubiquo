@@ -166,9 +166,9 @@ class UbiquoUserTest < ActiveSupport::TestCase
   end
 
   def test_should_remember_me_default_two_weeks
-    before = Ubiquo::Config.context(:ubiquo_authentication).get(:remember_time).from_now.utc
+    before = Ubiquo::Settings.context(:ubiquo_authentication).get(:remember_time).from_now.utc
     ubiquo_users(:josep).remember_me
-    after = Ubiquo::Config.context(:ubiquo_authentication).get(:remember_time).from_now.utc
+    after = Ubiquo::Settings.context(:ubiquo_authentication).get(:remember_time).from_now.utc
     assert_not_nil ubiquo_users(:josep).remember_token
     assert_not_nil ubiquo_users(:josep).remember_token_expires_at
     assert ubiquo_users(:josep).remember_token_expires_at.between?(before, after)

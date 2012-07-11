@@ -11,14 +11,14 @@ class Ubiquo::CategorySetsControllerTest < ActionController::TestCase
   end
 
   def test_should_not_see_actions_if_not_manageable
-    Ubiquo::Config.context(:ubiquo_categories).set(:administrable_category_sets, false)
+    Ubiquo::Settings.context(:ubiquo_categories).set(:administrable_category_sets, false)
     get :index
     assert_response :success
     assert !assigns(:can_manage)
   end
 
   def test_should_not_see_actions_if_set_isnt_editable
-    Ubiquo::Config.context(:ubiquo_categories).set(:administrable_category_sets, true)
+    Ubiquo::Settings.context(:ubiquo_categories).set(:administrable_category_sets, true)
     set_attrs = category_set_attributes.merge(:is_editable => false)
     category_set = CategorySet.create(set_attrs)
     get :index

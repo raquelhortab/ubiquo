@@ -5,33 +5,33 @@ module Ubiquo::ActivityInfosHelper
       f.date(
         :caption => t('ubiquo.activity_info.date'),
         :field => [:filter_date_start, :filter_date_end]
-      ) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_date_filter_enabled)
+      ) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_date_filter_enabled)
 
       f.links_or_select(:user, @users, {
         :name_field => :full_name,
         :id_field   => :ubiquo_user_id,
         :caption    => ActivityInfo.human_attribute_name(:user)
-      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_user_filter_enabled)
+      }) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_user_filter_enabled)
 
       f.link(:controller, @controllers, {
         :id_field => :key,
         :caption  => t('ubiquo.activity_info.controller')
-      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_controller_filter_enabled)
+      }) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_controller_filter_enabled)
 
       f.link(:action, @actions, {
         :id_field => :key,
         :caption  => t('ubiquo.activity_info.action')
-      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_action_filter_enabled)
+      }) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_action_filter_enabled)
 
       f.link(:status, @statuses, {
         :id_field => :key,
         :caption  => t('ubiquo.activity_info.status')
-      }) if Ubiquo::Config.context(:ubiquo_activity).get(:activities_status_filter_enabled)
+      }) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_status_filter_enabled)
     end
   end
 
   def activity_info_list(collection, pages, options = {})
-    list_partial = Ubiquo::Config.context(:ubiquo_activity).get(:info_list_partial)
+    list_partial = Ubiquo::Settings.context(:ubiquo_activity).get(:info_list_partial)
     concat render(:partial => "shared/ubiquo/lists/#{list_partial}", :locals => {
         :name => 'activity_info',
         :headers => [
@@ -74,7 +74,7 @@ module Ubiquo::ActivityInfosHelper
   def activity_info_actions(activity_info, options = {})
     actions = []
     actions << link_to(t("ubiquo.remove"), ubiquo.activity_info_url(activity_info),
-                       :confirm => t("ubiquo.activity_info.confirm_removal"),
+                       :data => {:confirm => t("ubiquo.activity_info.confirm_removal")},
                        :method => :delete)
     actions << show_action(activity_info)
     actions.flatten

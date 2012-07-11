@@ -188,7 +188,7 @@ module UbiquoDesign
             end
             [
               edit_link,
-              (link_to(t('ubiquo.remove'), ubiquo.static_page_path(page), :confirm => t('ubiquo.design.confirm_page_removal'), :method => :delete) unless page.key?)
+              (link_to(t('ubiquo.remove'), ubiquo.static_page_path(page), :data => {:confirm => t('ubiquo.design.confirm_page_removal')}, :method => :delete) unless page.key?)
             ].compact
           end
         end

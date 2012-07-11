@@ -1,5 +1,5 @@
 <%= I18n.t("ubiquo.auth.confirm_creation_message",
-      :app_title => Ubiquo::Config.get(:app_title),
+      :app_title => Ubiquo::Settings.get(:app_title),
       :url => ubiquo.home_url(:host => @host),
       :locale => @locale
       ) %>

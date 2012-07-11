@@ -2,12 +2,12 @@ module Ubiquo::UbiquoUsersHelper
 
   def ubiquo_user_filters
     filters_for 'UbiquoUser' do |f|
-      f.text if Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_string_filter_enabled)
+      f.text if Ubiquo::Settings.context(:ubiquo_authentication).get(:ubiquo_users_string_filter_enabled)
       f.boolean(:admin, {
         :caption       => t('ubiquo.auth.user_type'),
         :caption_true  => t('ubiquo.auth.user_admin'),
         :caption_false => t('ubiquo.auth.user_non_admin'),
-      }) if Ubiquo::Config.context(:ubiquo_authentication).get(:ubiquo_users_admin_filter_enabled)
+      }) if Ubiquo::Settings.context(:ubiquo_authentication).get(:ubiquo_users_admin_filter_enabled)
     end
   end
 
@@ -35,7 +35,7 @@ module Ubiquo::UbiquoUsersHelper
     [
       link_to(t("ubiquo.edit"), ubiquo.edit_ubiquo_user_path(ubiquo_user), :class => "btn-edit"),
       link_to(t("ubiquo.remove"), ubiquo.ubiquo_user_path(ubiquo_user),
-        :confirm => t("ubiquo.auth.confirm_user_removal"),
+        :data => {:confirm => t("ubiquo.auth.confirm_user_removal")},
         :method => :delete, :class => "btn-delete")
     ]
   end

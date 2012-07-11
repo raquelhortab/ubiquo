@@ -412,7 +412,7 @@ module Ubiquo
 
               actions << link_to(restore_text,
                                   restore_url,
-                                  :confirm => confirm_text,
+                                  :data => {:confirm => confirm_text},
                                   :method  => :delete,
                                   :class   => 'btn-restore')
             end

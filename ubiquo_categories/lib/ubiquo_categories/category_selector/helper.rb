@@ -19,7 +19,7 @@ module UbiquoCategories
         categories = uhook_categories_for_set(options[:set], object)
         selector_type = options[:type].try(:to_sym)
         categorize_size = categorize_options[:size]
-        max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)
+        max = Ubiquo::Settings.context(:ubiquo_categories).get(:max_categories_simple_selector)
         selector_type ||= case categories.size
           when 0..max
             (categorize_size == :many || categorize_size > 1) ? :checkbox : :select

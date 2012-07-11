@@ -121,7 +121,7 @@ module Ubiquo::DesignsHelper
           link_to_remote(t('ubiquo.design.stop_share_block'),
             :url => ubiquo.page_block_path(page, block),
             :method => :put,
-            :confirm => t('ubiquo.design.stop_share_block_confirm'),
+            :data => {:confirm => t('ubiquo.design.stop_share_block_confirm')},
             :with => "'is_shared=false'")
         end
       elsif block.shared_id
@@ -144,7 +144,7 @@ module Ubiquo::DesignsHelper
             link_to_remote(t('ubiquo.add'),
             :url => ubiquo.page_block_path(page, block),
             :method => :put,
-            :confirm => t('ubiquo.design.replace_block_confirm'),
+            :data => {:confirm => t('ubiquo.design.replace_block_confirm')},
             :with => "'shared_id='+$F('shared_blocks_#{block.id}')") +
             link_to_function(t('ubiquo.cancel'), "toggleShareActions('share_options_#{block.id}')")
           end

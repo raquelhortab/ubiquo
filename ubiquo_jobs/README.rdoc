@@ -11,12 +11,12 @@ To be able to run a worker, you need the following:
 * A system utility to monitor the worker (such as monit).
 
 This plugin uses a transparent backend to store job information. To configure the backend,
-set :job_manager_class in Ubiquo::Config to the class that will manage jobs.
+set :job_manager_class in Ubiquo::Settings to the class that will manage jobs.
 See rails/init.rb for the default configuration (which is using the app DB as the backend)
 
 === Notifications
 If you want to use notifications, set the :job_notifier_class that you will be using 
-to Ubiquo::Config
+to Ubiquo::Settings
 
 == Usage example
 

@@ -4,7 +4,7 @@
     <%= link_to_remote t('ubiquo.design.widget_removal'),
                        :url => ubiquo.page_widget_path(@page, widget),
                        :method => :delete,
-                       :confirm => t('ubiquo.design.confirm_widget_removal'),
+                       :data => {:confirm => t('ubiquo.design.confirm_widget_removal')},
                        :html => {:class => "delete",
                        :alt => t('ubiquo.design.widget_removal'),
                        :title => t('ubiquo.design.widget_removal')} %>

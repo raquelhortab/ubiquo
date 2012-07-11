@@ -230,7 +230,7 @@ module UbiquoMenus
             link_to(
               t("ubiquo.remove_translation"),
               ubiquo_menu_menu_item_path(menu_item.menu, menu_item),
-              :confirm => t("ubiquo.menus.confirm_menu_item_removal"),
+              :data => {:confirm => t("ubiquo.menus.confirm_menu_item_removal")},
               :method => :delete)
           end
 
@@ -354,7 +354,7 @@ module UbiquoMenus
             link_to(
               t('ubiquo.remove_translation'),
               [:ubiquo, menu],
-              :confirm => t('ubiquo.menus.confirm_menu_removal'),
+              :data => {:confirm => t('ubiquo.menus.confirm_menu_removal')},
               :method  => :delete
             )
           end

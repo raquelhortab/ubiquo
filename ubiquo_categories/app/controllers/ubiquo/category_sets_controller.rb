@@ -10,14 +10,14 @@ class Ubiquo::CategorySetsController < UbiquoController
     sort_order = params[:sort_order] || 'desc'
     
     filters = {
-      "per_page" => Ubiquo::Config.context(:ubiquo_categories).get(:category_sets_per_page),
+      "per_page" => Ubiquo::Settings.context(:ubiquo_categories).get(:category_sets_per_page),
       "order_by" => order_by,
       "sort_order" => sort_order
     }
 
     @category_sets_pages, @category_sets = CategorySet.paginated_filtered_search(params.merge(filters))
 
-    @can_manage = Ubiquo::Config.context(:ubiquo_categories).get(:administrable_category_sets)
+    @can_manage = Ubiquo::Settings.context(:ubiquo_categories).get(:administrable_category_sets)
     
     respond_to do |format|
       format.html # index.html.erb  

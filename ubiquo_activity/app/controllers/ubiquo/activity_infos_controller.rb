@@ -5,10 +5,10 @@ class Ubiquo::ActivityInfosController < UbiquoController
   # GET /activity_infos
   # GET /activity_infos.xml
   def index
-    order_by = params[:order_by] || Ubiquo::Config.context(:ubiquo_activity).get(:activities_default_order_field)
-    sort_order = params[:sort_order] || Ubiquo::Config.context(:ubiquo_activity).get(:activities_default_sort_order)
+    order_by = params[:order_by] || Ubiquo::Settings.context(:ubiquo_activity).get(:activities_default_order_field)
+    sort_order = params[:sort_order] || Ubiquo::Settings.context(:ubiquo_activity).get(:activities_default_sort_order)
 
-    per_page = Ubiquo::Config.context(:ubiquo_activity).get(:activities_elements_per_page)
+    per_page = Ubiquo::Settings.context(:ubiquo_activity).get(:activities_elements_per_page)
     @activity_infos_pages, @activity_infos = ActivityInfo.paginated_filtered_search(params.merge(:per_page => per_page))
     
     respond_to do |format|

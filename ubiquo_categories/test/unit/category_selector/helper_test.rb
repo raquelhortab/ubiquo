@@ -71,7 +71,7 @@ class UbiquoCategories::CategorySelector::HelperTest < ActionView::TestCase
   def test_category_selector_should_be_autocomplete_when_many_categories
     categorize :tags
     current_categories_amount = @set.categories.size
-    max = Ubiquo::Config.context(:ubiquo_categories).get(:max_categories_simple_selector)
+    max = Ubiquo::Settings.context(:ubiquo_categories).get(:max_categories_simple_selector)
 
     (max + 1 - current_categories_amount).times do
       @set.categories << rand.to_s

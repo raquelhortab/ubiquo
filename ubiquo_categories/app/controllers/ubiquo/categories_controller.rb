@@ -12,7 +12,7 @@ class Ubiquo::CategoriesController < UbiquoController
 
     filters = {
       "filter_category_set" => params[:category_set_id],
-      "per_page" => Ubiquo::Config.context(:ubiquo_categories).get(:categories_per_page),
+      "per_page" => Ubiquo::Settings.context(:ubiquo_categories).get(:categories_per_page),
       "order_by" => order_by,
       "sort_order" => sort_order
     }.merge(uhook_index_filters)
