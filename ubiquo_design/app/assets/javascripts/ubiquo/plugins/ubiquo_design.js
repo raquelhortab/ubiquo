@@ -61,14 +61,18 @@ function slide_that_div(){
 
 //------------
 function update_url_example() {
-  var selected_parent = $('page_parent_id').options[$('page_parent_id').selectedIndex].title;
+  var selected_parent = ''
+  var selected_parent_title = ''
+  if (selected_parent = $('page_parent_id').options[$('page_parent_id').selectedIndex]) {
+     selected_parent_title = selected_parent.title;
+  }
   var host = $('url_example').textContent.match(/http\:\/\/.*\.[a-z]{2,3}\//).first();
   var page_value = $('page_url_name').value;
-  if (selected_parent != "") {
-    var replace = "^" + selected_parent + "/";
+  if (selected_parent_title != "") {
+    var replace = "^" + selected_parent_title + "/";
     page_value = page_value.gsub(replace, '');
     $('page_url_name').value = page_value;
-    var value = host + selected_parent + "/" + page_value;
+    var value = host + selected_parent_title + "/" + page_value;
   } else {
     var value = host + page_value;
   }

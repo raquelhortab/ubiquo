@@ -1,9 +1,15 @@
 /**
  *  Tools used in cropresize
  *
- *  All code is scoped to UbiquoMediaCropResize to aviod collisions
+ *  All code is namespaced to Ubiquo.Media.CropResize to aviod collisions
  **/
-UbiquoMediaCropResize = {
+if((typeof Ubiquo) == "undefined"){
+    var Ubiquo = {};
+}
+if((typeof Ubiquo.Media) == "undefined"){
+    Ubiquo.Media = {};
+}
+Ubiquo.Media.CropResize = {
     TabbedContent: {
         /*
             Params:
@@ -64,7 +70,9 @@ UbiquoMediaCropResize = {
 
             //Shows a content by selector
             var activate_content_for = function( tab_or_link ){
-                var ctx = { activated_on: tab_or_link };
+                var ctx = {
+                    activated_on: tab_or_link
+                };
 
                 var selector = tab_or_link.readAttribute( opt.tab_selector_attribute );
 
@@ -90,7 +98,7 @@ UbiquoMediaCropResize = {
                     }
                 }else{
                     hide_all();
-                    
+
                     content.show();
 
                     //Tab swapping: search which tab has the same content selector O(n)
@@ -129,30 +137,3 @@ UbiquoMediaCropResize = {
         }
     }
 };
-
-
-//Initalizations
-document.observe("dom:loaded", function() {
-    UbiquoMediaCropResize.TabbedContent.init( {
-        parent: $$(".crop_resize_form").first(),
-        tab_selector: "#resize-actions li a",
-        content_selector: ".tab-content",
-        tab_activation_statuses: [null,"resize-highlighted-action"]
-    });
-
-    UbiquoMediaCropResize.TabbedContent.init({
-        parent: $$(".crop-resize-toggle-tabbed-styles").first(),
-        tab_selector: ".resize-box-title a",
-        content_selector: ".resize-box-content",
-        tab_activation_statuses: ["resize-box-unfold","resize-box-fold"],
-        other_selectors: [".resize-box-content-list .styles a"],
-        all_content_can_be_hidden: true,
-        tab_activation_callback: function(tab, ctx ){
-            if( ctx["activated_on"].identify() != tab.identify() ){
-                Effect.ScrollTo(tab.up(".resize-box"),{
-                    duration:0.3
-                });
-            }
-        }
-    });
-});
