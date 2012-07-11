@@ -40,7 +40,7 @@ class Widget < ActiveRecord::Base
   end
 
   def update_position
-    self.position = (block.widgets.map(&:position).max || 0)+1 if self.position.nil?
+    self.position = (block.widgets.map(&:position).max || 0)+1 if block && self.position.nil?
   end
 
   # +options+ should be an empty hash by default (waiting for rails #1736)
@@ -160,7 +160,7 @@ class Widget < ActiveRecord::Base
 
   # When a block is saved, the associated page must change its modified attribute
   def update_page
-    if self.update_page_denied.blank?
+    if self.update_page_denied.blank? && block
       widget_page = self.block.reload.page.reload
       widget_page.update_modified(true) unless widget_page.is_modified?
     end

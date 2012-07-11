@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 class GenericDetailTest < ActiveSupport::TestCase
-  
+
   test "should create generic_detail" do
     assert_difference 'GenericDetail.count' do
       generic_detail = create_generic_detail
@@ -21,10 +21,10 @@ class GenericDetailTest < ActiveSupport::TestCase
   end
 
   private
-  
+
   def create_generic_detail(options = {})
     default_options = {
-      :name => "Test generic_detail", 
+      :name => "Test generic_detail",
       :block => blocks(:one),
       :model => GenericDetail.to_s,
     }
