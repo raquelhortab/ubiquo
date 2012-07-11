@@ -15,8 +15,6 @@ ActionController::TestCase.route_testing_engine = :ubiquo_authentication
 
 class ActiveSupport::TestCase
   fixtures :ubiquo_users
-  include Ubiquo::Engine.routes.url_helpers
-  include Rails.application.routes.mounted_helpers
 
   private
 
