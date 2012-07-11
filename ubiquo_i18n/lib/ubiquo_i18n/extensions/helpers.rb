@@ -43,7 +43,7 @@ module UbiquoI18n
 
         active_locales.ordered_alphabetically.each do |locale|
           url = url_for(url_params.merge(:locale => locale.to_s))
-          options << [locale.humanized_name, url]
+          options << [locale.humanized_name.html_safe, url]
           selected = url if locale.to_s == current_locale.to_s
         end
 
