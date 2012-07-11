@@ -6,6 +6,10 @@ class CreateAssetTypes < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    %w{video doc audio other image flash}.each do |key|
+      AssetType.create!({:key => key, :name => key.capitalize})
+    end
   end
 
   def self.down
