@@ -3,9 +3,9 @@
   <% versions.each do |version| %>
     <div class="version<%= version.id == params[:preview_id].to_i ? "_selected" : ""%>">
       <p class="name">
-        <%= version.version_number %>
+        <%= version.index.to_i + 1 %>
         <span class="data">
-          <%= l version.updated_at %>
+          <%= l version.created_at %>
         </span>
       </p>
       <div class="options">

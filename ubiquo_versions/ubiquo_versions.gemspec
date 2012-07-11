@@ -21,5 +21,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "rails", ["~> 3.2.0"]
   s.add_development_dependency "sqlite3", "~> 1.3.5"
   s.add_development_dependency "mocha", "~> 0.10.0"
+  s.add_dependency "paper_trail", "~> 2.6.3"
 
 end
