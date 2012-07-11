@@ -16,8 +16,6 @@ class Widget < ActiveRecord::Base
 
   attr_accessor :update_page_denied
 
-  attr_accessible :name, :options, :block_id, :position, :type, :version
-
   validates_presence_of :name, :block
 
   belongs_to :block
