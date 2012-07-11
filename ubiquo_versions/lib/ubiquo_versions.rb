@@ -1,7 +1,9 @@
+require 'ubiquo_core'
+
 module UbiquoVersions
 
   class Engine < Rails::Engine
-    config.paths["lib"].autoload!
+    include Ubiquo::Engine::Base
 
     initializer :load_extensions do
       require 'ubiquo_versions/extensions.rb'
