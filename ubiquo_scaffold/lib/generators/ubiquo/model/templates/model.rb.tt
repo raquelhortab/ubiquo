@@ -38,4 +38,6 @@ class <%= class_name %> < ActiveRecord::Base
 
   filtered_search_scopes
 
+  attr_accessible <%= attributes.map {|a| ":#{a.name}" }.sort.join(', ') %>
+
 end
