@@ -38,8 +38,8 @@ module Ubiquo
         build_filter_info(info_messages)
       end
 
-      # TODO: Make private in ubiquo 0.9.0. Public for now to
-      # maintain the deprecated interface.
+      private
+
       def build_filter_info(info_messages)
         fields, string = process_filter_info(info_messages)
         return unless fields
@@ -52,8 +52,6 @@ module Ubiquo
         message = [ I18n.t('ubiquo.filters.filtered_by', :field => info), @context.link_to(link_text, new_params, :class => 'bt-remove-filters')]
         @context.content_tag(:p, message.join(" "), :class => 'search_info')
       end
-
-      private
 
       # Return the pretty filter info string
       #
@@ -114,45 +112,6 @@ module Ubiquo
       @filter_set.message
     end
 
-    # TODO: The following public methods should be deprecated in the
-    # 0.9.0 release
-
-    # Render a lateral filter
-    #
-    # filter_name (symbol): currently implemented: :date_filter, :string_filter, :select_filter
-    # url_for_options: route used by the form (string or hash)
-    # options_for_filter: options for a filter (see each *_filter_info helpers for details)
-    def render_filter(filter_name, url_for_options, options = {})
-      deprecation_message
-      options[:url_for_options] = url_for_options
-      filter_name = :boolean if options[:boolean]
-      filter = select_filter(filter_name, options)
-      filter.render
-    end
-
-    # Return the informative string about a filter process
-    #
-    # filter_name (symbol). Currently implemented: :date_filter, :string_filter, :select_filter
-    # params: current 'params' controller object (hash)
-    # options_for_filter: specific options needed to build the filter string (hash)
-    #
-    # Return array [info_string, fields_used_by_this_filter]
-    def filter_info(filter_name, params, options = {})
-      deprecation_message
-      filter = select_filter(filter_name, options)
-      filter.message
-    end
-
-    # Return the pretty filter info string
-    #
-    # info_and_fields: array of [info_string, fields_for_that_filter]
-    def build_filter_info(*info_and_fields)
-      deprecation_message
-      model = self.controller_name.classify
-      fs = FilterSetBuilder.new(model, self)
-      fs.build_filter_info(info_and_fields)
-    end
-
     private
 
     # Initializes filter set definition if it isn't already.
@@ -169,39 +128,6 @@ module Ubiquo
     def initialize_filter_set_if_needed
       helper = "#{controller.controller_name.singularize}_filters"
       send(helper) unless @filter_set
-    end
-
-    # Transitional method to maintain compatibility with the old
-    # filter interface.
-    # TODO: To be removed from the 0.9.0 release
-    def select_filter(name, options)
-      model = self.controller_name.classify.constantize
-      field = options[:field]
-      case name
-      when :single_date
-        (SingleDateFilter.new(model, self)).tap { |f| f.configure(options) }
-      when :date
-        (DateFilter.new(model, self)).tap { |f| f.configure(options) }
-      when :string
-        (TextFilter.new(model, self)).tap { |f| f.configure(options) }
-      when :select
-        (SelectFilter.new(model, self)).tap { |f| f.configure(field, options[:collection], options) }
-      when :links
-        (LinkFilter.new(model, self)).tap { |f| f.configure(field, options[:collection], options) }
-      when :links_or_select
-        (LinksOrSelectFilter.new(model, self)).tap { |f| f.configure(field, options[:collection], options) }
-      when :boolean
-        (BooleanFilter.new(model, self)).tap { |f| f.configure(field, options)}
-      end
-    end
-
-    # Transitional method to maintain compatibility with the old
-    # filter interface.
-    # TODO: To be removed from the 0.9.0 release
-    def deprecation_message
-      caller_method_name = caller.first.scan /`([a-z_]+)'$/
-      msg = "#{caller_method_name} will be removed in 0.9.0. See http://guides.ubiquo.me/edge/ubiquo_core.html for more information."
-      ActiveSupport::Deprecation.warn(msg, caller(2))
     end
 
   end
