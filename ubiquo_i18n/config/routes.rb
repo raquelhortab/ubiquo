@@ -1,5 +1,5 @@
 Ubiquo::Engine.routes.draw do
-  resources :locales
+  resource :locales
   filter :ubiquo_locale
 
   if Rails.env.test?

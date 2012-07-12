@@ -1,7 +1,7 @@
         <h1><%= t('ubiquo.i18n.translations') %></h1>
 <%= render :partial => "shared/ubiquo/feedback" %>
 
-<% form_for(ubiquo.locales_path, :html => {:method => :put}) do |form| %>
+<%= form_for(ubiquo.locales_path, :html => {:method => :put}) do |form| %>
   <%= default_locale = Locale.default;
       render(:partial => "shared/ubiquo/lists/standard", :locals => {
           :name => 'locale',
