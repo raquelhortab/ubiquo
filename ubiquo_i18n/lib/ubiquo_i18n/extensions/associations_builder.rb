@@ -32,9 +32,30 @@ module UbiquoI18n
         def build_with_shared_translations_propagation
           build_without_shared_translations_propagation.tap do |reflection|
             callbacks = model.send("after_remove_for_#{reflection.name}")
-            callbacks << :"sync_deletion_of_#{reflection.name}_elements_across_translations"
+            callback_name = :"sync_deletion_of_#{reflection.name}_elements_across_translations"
+            callbacks << callback_name
+
+            reflection.active_record.send :define_method, callback_name do |removed|
+              self.class.translating_relations do
+                if reflection.is_translation_shared?
+
+                  # Tell to the record translations that this element has been removed
+                  translations.each do |translation|
+                    to_remove = removed.class.is_translatable? ? removed.with_translations : removed
+                    translation.send(reflection.name).delete to_remove
+                  end if self.class.is_translatable?
+
+                  # The translations of the removed item have to be also removed
+                  # from this record's association
+                  if removed.class.is_translatable?
+                    send(reflection.name).delete removed.translations
+                  end
+                end
+              end
+            end
           end
         end
+
       end
 
       # On has_manys we intercept the :dependent policies to see if they really should be applied

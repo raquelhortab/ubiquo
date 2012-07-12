@@ -267,26 +267,6 @@ module UbiquoI18n
             reflection.mark_as_translation_shared(true, options)
 
             unless is_translation_shared_initialized? association_id
-              define_method "sync_deletion_of_#{association_id}_elements_across_translations" do |removed|
-                self.class.translating_relations do
-                  if reflections[association_id].is_translation_shared?
-
-                    # Tell to the record translations that this element has been removed
-                    translations.each do |translation|
-                      to_remove = removed.class.is_translatable? ? removed.with_translations : removed
-                      translation.send(association_id).delete to_remove
-                    end if self.class.is_translatable?
-
-                    # The translations of the removed item have to be also removed
-                    # from this record's association
-                    if removed.class.is_translatable?
-                      send(association_id).delete removed.translations
-                    end
-
-                  end
-                end
-              end
-
               # Marker to avoid recursive redefinition
               initialize_translation_shared association_id
 

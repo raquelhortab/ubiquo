@@ -64,6 +64,9 @@ module UbiquoI18n
         # but as +record+ is deleted, any related foreign key is updated to
         # another translation.
         def propagate_dependent_option_with_shared_translations record
+          # if this model is not translatable, act normally
+          yield && return unless record.class.is_translatable?
+
           if should_propagate_dependent_option? record
             klass.translating_relations do
               yield

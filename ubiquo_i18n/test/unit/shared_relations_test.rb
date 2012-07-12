@@ -375,6 +375,14 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     end
   end
 
+  def test_dependent_in_non_translatable_method_doesnt_get_affected
+    origin = RelatedTestModel.create
+    origin.test_models << TestModel.create
+    assert_difference 'TestModel.count', -1 do
+      origin.destroy
+    end
+  end
+
   #### Tests related to the use of :translation_shared in non-translatable models
 
   def test_should_get_translated_has_many_elements_from_a_non_translated_model

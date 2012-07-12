@@ -149,7 +149,7 @@ def create_test_model_backend
     belongs_to :tracked_test_model, :translation_shared => true, :class_name => 'TestModel'
 
     has_many :inheritance_test_models, :translation_shared => true
-    has_many :test_models, :translation_shared => false
+    has_many :test_models, :translation_shared => false, :dependent => :destroy
     accepts_nested_attributes_for :test_models
     attr_accessible :test_model_id, :tracked_test_model_id, :my_field, :test_model, :id
   end
