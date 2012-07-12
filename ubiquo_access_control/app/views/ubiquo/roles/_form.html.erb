@@ -1,11 +1,14 @@
 <%= form.group :type => :fieldset, :legend => t('ubiquo.auth.role_new') do %>
   <%= form.text_field :name %>
-  <% fields_for 'permission' do |pf| -%>
+  <%= fields_for 'permission' do |pf| -%>
+    <ul class="ubiquo_permissions">
     <% @permissions.each do |permission| -%>
-    <label for="<%= "permission_#{permission.key}"%>"><%= permission.name %></label>
+      <li><label for="<%= "permission_#{permission.key}"%>"><%= permission.name %></label>
     <%= check_box_tag("permissions[]", permission.key,
           @role.permissions.include?(permission),
           { :id=>"permission_#{permission.key}", :class => "checkbox" }) %>
+      </li>
     <% end %>
+    </ul>
   <% end %>
 <% end %>
