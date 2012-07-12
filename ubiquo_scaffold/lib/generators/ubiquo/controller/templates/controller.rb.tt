@@ -1,8 +1,4 @@
 class Ubiquo::<%= controller_class_name %> < UbiquoController
-  <%- if include_tiny_mce? -%>
-
-  uses_tiny_mce(options: default_tiny_mce_options)
-  <%- end -%>
   <%- if register_activity? -%>
 
   register_activity :create, :update, :destroy

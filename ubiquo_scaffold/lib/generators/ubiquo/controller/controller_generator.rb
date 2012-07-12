@@ -64,10 +64,6 @@ module Ubiquo
       "#{namespaced_path}#{controller_file_name}"
     end
 
-    def include_tiny_mce?
-      attributes.map(&:field_type).include? :text_area
-    end
-
     def register_activity?
       # TODO: add ubiquo_activity check
       !options[:skip_activity]

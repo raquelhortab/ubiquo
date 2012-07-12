@@ -15,7 +15,6 @@ class Ubiquo::ControllerGeneratorTest < ::Rails::Generators::TestCase
 
     assert_file 'app/controllers/ubiquo/test/posts_controller.rb' do |controller|
       assert_match /class Ubiquo::Test::PostsController < UbiquoController/, controller
-      assert_match /uses_tiny_mce\(options: default_tiny_mce_options\)/, controller
       assert_instance_method :index, controller
       assert_instance_method :show, controller
       assert_instance_method :new, controller
@@ -31,7 +30,6 @@ class Ubiquo::ControllerGeneratorTest < ::Rails::Generators::TestCase
 
     assert_file 'app/controllers/ubiquo/posts_controller.rb' do |controller|
       assert_match /class Ubiquo::PostsController < UbiquoController/, controller
-      assert_not_match /uses_tiny_mce\(:options => default_tiny_mce_options\)/, controller
     end
   end
 

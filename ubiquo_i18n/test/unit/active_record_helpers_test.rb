@@ -704,7 +704,6 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
     ca.save
     assert_equal 3, TestModel.count
     assert_equal 2, InheritanceTestModel.count
-    Object.const_set :AAA, true
     ca.destroy_content
     assert_equal 0, TestModel.count
     assert_equal 0, InheritanceTestModel.count

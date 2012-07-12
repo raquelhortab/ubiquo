@@ -70,7 +70,6 @@ class UbiquoLocaleTest < Test::Unit::TestCase
   def test_should_recognize_correct_routes_for_controller_containing_ubiquo
     locale = Locale.default
     expected = ubiquo_params.merge(:locale => locale, :action => 'stuff')
-    Object.const_set :AAA, true
     result   = routes.recognize_path("/en/ubiquo_stuff")
     assert_equal expected, result
   end
