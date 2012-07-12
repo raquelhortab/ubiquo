@@ -8,7 +8,7 @@ module UbiquoActivity
         navigator.add_link do |link|
           link.text = I18n.t("ubiquo.activity_info.title")
           link.highlights << {:controller => "ubiquo/activity_infos"}
-          link.url = ubiquo_activity_infos_path
+          link.url = ubiquo.activity_infos_path
         end if ubiquo_config_call(:activity_info_permit, {:context => :ubiquo_activity })
       end
 
