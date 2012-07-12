@@ -430,14 +430,6 @@ module Ubiquo
       @context.to_sym
     end
 
-    #
-    # Deprecated: It was not used in any plugin. the default values were always set by
-    # the 'add' method
-    #
-    def self.new_context_options(name = self.current_context)
-      ActiveSupport::Deprecation.warn("Ubiquo::Settings 'new_context_options' is deprecated!")
-    end
-
     # Apply the options chosen
     def self.reinitialize options = {}
       uhook_reinitialize options
@@ -489,31 +481,5 @@ module Ubiquo
 
     class << self; attr_accessor :loaded end
     @@loaded = false
-  end
-end
-
-Settings = Ubiquo::Settings
-module Ubiquo
-  class Config
-    def self.method_missing(method, *args, &block)
-      if !defined?@@deprecation
-        @@deprecation = true
-        ActiveSupport::Deprecation.warn(%{
-        -----------------------------------------------------------
-        -----------------------------------------------------------
-                Ubiquo::Config is deprecated!
-                Use instead:
-                  * Settings          in your app
-                  * Ubiquo::Settings  in the plugins
-                Ubiquo::Config will be removed in Ubiquo 0.9
-        -----------------------------------------------------------
-        -----------------------------------------------------------
-        }, caller)
-      end
-      Ubiquo::Settings.send(method, *args, &block)
-    end
-    def self.const_missing(sym)
-      Ubiquo::Settings.const_get sym
-    end
   end
 end

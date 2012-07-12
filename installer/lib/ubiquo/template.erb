@@ -96,6 +96,9 @@ Ubiquo::Settings.set do |config|
     config.notifier_email_from = 'railsmail@gnuine.com'
   end
 end
+
+# convenience alias, remove it if you don't use it and it causes conflict
+Settings = Ubiquo::Settings
 CODE
 
 # Initializer for ubiquo crontab
