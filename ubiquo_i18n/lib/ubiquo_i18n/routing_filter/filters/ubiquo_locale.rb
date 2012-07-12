@@ -14,13 +14,9 @@ module RoutingFilter
     end
 
     def around_recognize(path, env)
-      if is_ubiquo?(path)
-        locale = extract_segment!(locales_pattern, path)
-        yield.tap do |params|
-          params[:locale] ||= locale if locale
-        end
-      else
-        yield
+      locale = extract_segment!(locales_pattern, path)
+      yield.tap do |params|
+        params[:locale] ||= locale if locale
       end
     end
 
@@ -29,10 +25,7 @@ module RoutingFilter
       locale = extract_locale_from_params(params)
 
       yield.tap do |result|
-        url = result.is_a?(Array) ? result.first : result
-        if is_ubiquo?(url)
-          localize_ubiquo_route(locale, result)
-        end
+        localize_ubiquo_route(locale, result)
       end
     end
 
@@ -40,12 +33,8 @@ module RoutingFilter
 
     def localize_ubiquo_route(locale, result)
       if prepend_locale?(locale)
-        url        = extract_url!(result)
-        to_extract = %r(^/(ubiquo))
-        to_prepend = "ubiquo/#{locale}"
-
-        extract_segment!(to_extract, url)
-        prepend_segment!(url, to_prepend)
+        url = extract_url!(result)
+        prepend_segment!(url, "#{locale}")
       end
 
       result
@@ -76,7 +65,6 @@ module RoutingFilter
     def locales_pattern
       @locales_pattern ||= begin
         _locales = locales.map { |l| Regexp.escape(l.to_s) }.join('|')
-
         %r(/(#{_locales})(?=/|$))
       end
     end
@@ -103,14 +91,6 @@ module RoutingFilter
 
     def extract_url(path)
       extract_url!(path).dup
-    end
-
-    def is_ubiquo?(path, extrict = true)
-      if extrict
-        extract_url(path).match(/^\/ubiquo/)
-      else
-        extract_url(path).match(/^ubiquo/)
-      end
     end
 
     def clean_url_params?
