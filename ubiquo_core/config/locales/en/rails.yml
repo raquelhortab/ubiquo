@@ -7,3 +7,11 @@ en:
     formats:
       default: "%Y/%m/%d %H:%M"
       verbose: "%a, %d %b %Y %H:%M:%S %z"
+  activerecord:
+    errors:
+      template:
+        header:
+          one:    "1 error prohibited this %{model} from being saved"
+          other:  "%{count} errors prohibited this %{model} from being saved"
+        # The variable :count is also available
+        body: "There were problems with the following fields:"

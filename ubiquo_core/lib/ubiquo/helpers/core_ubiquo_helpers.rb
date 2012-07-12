@@ -186,8 +186,7 @@ module Ubiquo
         form_for(record_or_name_or_array, *args, &proc)
       end
 
-      # Copy of the original error_messages_for from the dynamic_form gem
-      # @link: https://raw.github.com/rails/dynamic_form/master/lib/action_view/helpers/dynamic_form.rb
+      # Copy of the original error_messages_for from the 2.3.8 version
       #
       # TODO: This must be adapted to our needs or deleted on the views and use
       #       something like this:
@@ -202,20 +201,13 @@ module Ubiquo
       def error_messages_for(*params)
         options = params.extract_options!.symbolize_keys
 
-        objects = Array.wrap(options.delete(:object) || params).map do |object|
-          object = instance_variable_get("@#{object}") unless object.respond_to?(:to_model)
-          object = convert_to_model(object)
-
-          if object.class.respond_to?(:model_name)
-            options[:object_name] ||= object.class.model_name.human.downcase
-          end
-
-          object
+        if object = options.delete(:object)
+          objects = Array.wrap(object)
+        else
+          objects = params.collect {|object_name| instance_variable_get("@#{object_name}") }.compact
         end
 
-        objects.compact!
-        count = objects.inject(0) {|sum, object| sum + object.errors.count }
-
+        count  = objects.inject(0) {|sum, object| sum + object.errors.count }
         unless count.zero?
           html = {}
           [:id, :class].each do |key|
@@ -228,20 +220,16 @@ module Ubiquo
           end
           options[:object_name] ||= params.first
 
-          I18n.with_options :locale => options[:locale], :scope => [:errors, :template] do |locale|
+          I18n.with_options :locale => options[:locale], :scope => [:activerecord, :errors, :template] do |locale|
             header_message = if options.include?(:header_message)
               options[:header_message]
             else
-              locale.t :header, :count => count, :model => options[:object_name].to_s.gsub('_', ' ')
+              object_name = options[:object_name].to_s
+              object_name = I18n.t(object_name, :default => object_name.gsub('_', ' '), :scope => [:activerecord, :models], :count => 1)
+              locale.t :header, :count => count, :model => object_name
             end
-
             message = options.include?(:message) ? options[:message] : locale.t(:body)
-
-            error_messages = objects.sum do |object|
-              object.errors.full_messages.map do |msg|
-                content_tag(:li, msg)
-              end
-            end.join.html_safe
+            error_messages = objects.sum {|object| object.errors.full_messages.map {|msg| content_tag(:li, ERB::Util.html_escape(msg)) } }.join.html_safe
 
             contents = ''
             contents << content_tag(options[:header_tag] || :h2, header_message) unless header_message.blank?
