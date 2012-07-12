@@ -19,20 +19,16 @@ module UbiquoMedia
 
     initializer :register_ubiquo_plugin do
       require 'ubiquo_media/init_settings.rb'
-      _loader
     end
 
-    protected
-
-    def _loader
-      UbiquoMedia::Connectors.load!
-
+    initializer :add_ubiquo_form_builder_options do
       key = :ubiquo_form_builder_media_selector_tag_options
-      Ubiquo::Helpers::UbiquoFormBuilder.initialize_method("media_selector", _config(key))
+      value = Ubiquo::Settings.context(:ubiquo_media).get(key)
+      Ubiquo::Helpers::UbiquoFormBuilder.initialize_method("media_selector", value)
     end
 
-    def _config(key)
-      Ubiquo::Settings.context(:ubiquo_media).get(key).dup
+    initializer :load_connector, :after => :load_config_initializers do
+      UbiquoMedia::Connectors.load!
     end
   end
 end
