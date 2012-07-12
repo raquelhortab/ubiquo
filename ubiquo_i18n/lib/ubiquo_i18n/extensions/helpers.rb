@@ -33,7 +33,7 @@ module UbiquoI18n
           tab.text = I18n.t("ubiquo.i18n.translations")
           tab.title = I18n.t("ubiquo.i18n.translations_title")
           tab.highlights_on({:controller => "ubiquo/locales"})
-          tab.link = ubiquo_locales_path
+          tab.link = ubiquo.locales_path
         end if ubiquo_config_call(:assets_permit, {:context => :ubiquo_media})
       end
 

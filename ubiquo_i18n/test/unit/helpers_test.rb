@@ -35,6 +35,11 @@ class UbiquoI18n::Extensions::HelpersTest < ActionView::TestCase
     assert_select html_content.root, ['option[value=?]', /.*page.+/], true
   end
 
+  def test_superadmin_locales_tab
+    expects(:ubiquo_config_call).returns(true) # gives it permission
+    superadmin_locales_tab(Ubiquo::NavigationTabs::NavigatorTabs.new)
+  end
+
   def test_show_translations_for_a_existing_object
     model = create_model(:locale => 'test')
     self.expects(:render).once.with(
