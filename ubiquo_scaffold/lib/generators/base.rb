@@ -73,6 +73,11 @@ module UbiquoScaffold
                    type:     :string,
                    required: false
 
+      class_option :run_migration,
+        desc: "Run pending migrations at the end",
+        type: :boolean,
+        default: true
+
       def self.source_root
         path = File.join(File.dirname(__FILE__), 'ubiquo', generator_name, 'templates')
 

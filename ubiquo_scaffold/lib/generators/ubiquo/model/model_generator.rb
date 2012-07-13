@@ -26,6 +26,13 @@ module Ubiquo
       end
     end
 
+    def run_migration
+      if options[:migration] && options[:run_migration]
+        say_status 'migrations', 'Running pending migrations', :white
+        ubiquo_migration
+      end
+    end
+
     def create_unit_test_file
       template 'unit_test.rb.tt', "test/unit/#{file_path}_test.rb"
 
