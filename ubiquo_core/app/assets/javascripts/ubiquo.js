@@ -3,4 +3,5 @@
 //= require effects
 //= require dragdrop
 //= require controls
+//= require tinymce
 //= require_tree ./ubiquo

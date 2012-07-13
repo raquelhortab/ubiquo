@@ -2,6 +2,7 @@
 
 require 'rails'
 require 'prototype-rails'
+require 'tinymce-rails'
 require 'paperclip'
 
 module Ubiquo
