@@ -4,4 +4,7 @@
 //= require dragdrop
 //= require controls
 //= require tinymce
+//= require jquery
+//= require jquery_ujs
+//= require ubiquo/ubiquo
 //= require_tree ./ubiquo
