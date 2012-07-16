@@ -1,6 +1,5 @@
 <%- if options[:translatable] -%>
-  <%%= form.hidden_field :content_id %>
-
+<%%= f.hidden_field :content_id %>
 <%- end -%>
 <% attributes.each do |attribute| -%>
 <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
@@ -21,12 +20,12 @@
 <%- if options[:media] -%>
 
   <%- options[:media].each do |bt| -%>
-  <%%= form.media_selector :<%= bt %>, :visibility => 'public' %>
+<%%= f.media_selector :<%= bt %>, :visibility => 'public' %>
   <%- end -%>
 <%- end -%>
 <%- if options[:categorized] -%>
 
   <%- options[:categorized].each do |bt| -%>
-  <%%= form.category_selector :<%= bt %> %>
+<%%= f.category_selector :<%= bt %> %>
   <%- end -%>
 <%- end -%>
