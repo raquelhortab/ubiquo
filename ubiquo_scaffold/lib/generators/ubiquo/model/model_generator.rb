@@ -121,7 +121,6 @@ module Ubiquo
 
     def create_table_options
       _options = []
-      _options << key_value('versionable', 'true') if options[:versionable]
       _options << key_value('translatable', 'true') if options[:translatable]
       _options = _options.join(', ')
 
