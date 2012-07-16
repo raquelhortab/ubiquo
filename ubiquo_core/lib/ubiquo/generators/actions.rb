@@ -27,7 +27,7 @@ module Ubiquo
           "  tab.link  = ubiquo.#{name}_path",
           "  tab.highlights_on(:controller => 'ubiquo/#{name}')",
           "  tab.highlighted_class = 'active'",
-        ].map { |l| l.blank? ? "#{l}\n" : "\\1#{l}\n" }.reduce(:+)
+        ].map { |l| l.blank? ? "#{l}\n" : "    #{l}\n" }.reduce(:+)
       end
       protected :tab_template
 
@@ -61,7 +61,7 @@ module Ubiquo
 
         in_root do
           inject_into_file 'config/routes.rb', :after => flag do
-            "\n\\1  #{routing_code}"
+            "\n      #{routing_code}"
           end
         end
       end
