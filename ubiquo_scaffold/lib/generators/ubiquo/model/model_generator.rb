@@ -22,14 +22,16 @@ module Ubiquo
 
     def create_migration_file
       if options[:migration]
-        migration_template 'migration.rb.tt', "db/migrate/create_#{file_name.pluralize}.rb"
-      end
-    end
-
-    def run_migration
-      if options[:migration] && options[:run_migration]
-        say_status 'migrations', 'Running pending migrations', :white
-        ubiquo_migration
+        create_file = ->{ migration_template 'migration.rb.tt', "db/migrate/create_#{file_name.pluralize}.rb"}
+        # I don't know what I'm missing but the following is pretty obvious behaviour
+        # that was working in 2.3 but not in 3.2 (reversability in order)
+        if behavior == :revoke
+          run_migration
+          create_file.call
+        else
+          create_file.call
+          run_migration
+        end
       end
     end
 
@@ -51,6 +53,13 @@ module Ubiquo
     protected
 
     # helper methods
+
+    def run_migration
+      if options[:migration] && options[:run_migration]
+        say_status 'migrations', 'Running pending migrations', :white
+        ubiquo_migration
+      end
+    end
 
     def classes_for_has_many
       options[:has_many] ? options[:has_many].map(&:classify) : Array.new

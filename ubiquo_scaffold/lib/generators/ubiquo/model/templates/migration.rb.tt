@@ -1,5 +1,5 @@
 class Create<%= class_name.pluralize %> < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :<%= table_name %><%= create_table_options %> do |t|
       <%- attributes.each do |attribute| -%>
       t.<%= attribute.type %> :<%= attribute.name %>
@@ -30,9 +30,5 @@ class Create<%= class_name.pluralize %> < ActiveRecord::Migration
       end
       <%- end -%>
     end
-  end
-
-  def self.down
-    drop_table :<%= table_name %>
   end
 end

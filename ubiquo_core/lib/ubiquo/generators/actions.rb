@@ -31,8 +31,15 @@ module Ubiquo
       end
       protected :tab_template
 
-      def ubiquo_migration
-        rake 'db:migrate'
+      def ubiquo_migration *args
+        if behavior == :revoke
+          # Thor's +run+ won't do anthing unless the behavior is :invoke... wat
+          self.behavior = :invoke
+          rake 'db:rollback'
+          self.behavior = :revoke
+        else
+          rake 'db:migrate'
+        end
       end
 
       def ubiquo_route_resources(*resources)
