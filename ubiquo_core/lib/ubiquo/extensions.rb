@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 module Ubiquo::Extensions
-  autoload :Loader, 'ubiquo/extensions/loader'
+  require 'ubiquo/extensions/loader'
 
   # Load the defined extensions for +klass+ into +recipient+
   def self.load_extensions_for klass, recipient = klass
@@ -11,11 +11,14 @@ module Ubiquo::Extensions
   end
 end
 
+# It's good to put this one the first, to avoid potential problems in the other extensions
+Module.send(:include, Ubiquo::Extensions::Module)
+
 Ubiquo::Extensions::Loader.append_include(:UbiquoController, Ubiquo::Extensions::DateParser)
 ActionView::Base.field_error_proc = Ubiquo::Extensions::ActionView.ubiquo_field_error_proc
 ActiveRecord::Base.send(:extend, Ubiquo::Extensions::ActiveRecord)
 
-Object.send(:include, Ubiquo::Extensions::Object)
+Object.send(:include, Ubiquo::Extensions::ObjectMethods)
 Proc.send(:include, Ubiquo::Extensions::Proc)
 Array.send(:include, Ubiquo::Extensions::Array)
 String.send(:include, Ubiquo::Extensions::String)

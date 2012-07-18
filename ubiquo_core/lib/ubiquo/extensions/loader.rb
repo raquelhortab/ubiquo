@@ -15,7 +15,7 @@ module Ubiquo
 
       # Returns a Module that, when included, will provide all the scheduled funcionality for +sym+
       def self.extensions_for(sym)
-        Module.new{
+        ::Module.new{
           block = ::Proc.new{|recipient|
             Loader.methods.each do |method|
               Array(Loader.extensions[sym.to_s][method]).each do |k|
@@ -82,10 +82,10 @@ module Ubiquo
       end
 
       def self.included(klass)
-        if klass === Module
+        if klass === ::Module
           # Modules do not have Class#inherited since it is only defined for classes
-          Class.instance_eval  { include InheritedHook }
-          Module.instance_eval { include ConstSetHook  }
+          ::Class.instance_eval  { include InheritedHook }
+          ::Module.instance_eval { include ConstSetHook  }
         else
           klass.singleton_class.instance_eval { include InheritedHook, ConstSetHook }
         end
@@ -93,6 +93,6 @@ module Ubiquo
     end
 
     # Enable the Loader feature broadly
-    Module.class_eval { include LoaderHook }
+    ::Module.class_eval { include LoaderHook }
   end
 end
