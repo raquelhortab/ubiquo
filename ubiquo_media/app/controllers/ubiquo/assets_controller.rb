@@ -90,7 +90,6 @@ class Ubiquo::AssetsController < UbiquoController
                 })
               @asset = saved_asset
             end
-            return
           end
         }
       else
@@ -113,7 +112,6 @@ class Ubiquo::AssetsController < UbiquoController
                   :accepted_types => params[:accepted_types]
                 })
             end
-            return
           end
         }
       end

@@ -66,7 +66,7 @@ module Ubiquo
           render :text => "<html><body><script type='text/javascript' charset='utf-8'>
             var loc = document.location;
             with(window.parent) { setTimeout(function() { window.eval('#{script}'); if (typeof(loc) !== 'undefined') loc.replace('about:blank'); }, 1) };
-            </script></body></html>".html_safe
+            </script></body></html>".html_safe unless Rails.env.test? # due to AbstractController::DoubleRenderError only in tests
         end
       end
       alias respond_to_parent responds_to_parent
