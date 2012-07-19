@@ -89,6 +89,8 @@ es:
       filesize: "Peso"
       undo_buttons: "Versiones anteriores"
       new_image: "nueva"
+      advanced_mode:
+        close: Cerrar
       paperclip:
         resize_and_crop:
           error_no_style_matched: "Ningún estilo coincide con el formato: %s"

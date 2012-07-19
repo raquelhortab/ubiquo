@@ -88,6 +88,8 @@ ca:
       filesize: "Pes"
       undo_buttons: "Versions anteriors"
       new_image: "nova"
+      advanced_mode:
+        close: Tancar
       paperclip:
         resize_and_crop:
           error_no_style_matched: "Cap estil coincideix amb les opcions: %s"

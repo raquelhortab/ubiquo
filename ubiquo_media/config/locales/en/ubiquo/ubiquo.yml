@@ -89,6 +89,8 @@ en:
       filesize: "Size"
       undo_buttons: "Previous versions"
       new_image: "new"
+      advanced_mode:
+        close: Close
       paperclip:
         resize_and_crop:
           error_no_style_matched: "No style matched the options: %s"
