@@ -128,15 +128,11 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
     assert_migration 'db/migrate/create_posts.rb' do |content|
       assert_match /class CreatePosts < ActiveRecord::Migration/, content
 
-      assert_class_method :up, content do |up|
+      assert_instance_method :change, content do |up|
         assert_match /create_table :posts/, up
         assert_match /t\.string :title/, up
         assert_match /t\.text :body/, up
         assert_match /t\.timestamps/, up
-      end
-
-      assert_class_method :down, content do |down|
-        assert_match /drop_table :posts/, down
       end
     end
   end
@@ -147,7 +143,7 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
     assert_migration 'db/migrate/create_posts.rb' do |content|
       assert_match /class CreatePosts < ActiveRecord::Migration/, content
 
-      assert_class_method :up, content do |up|
+      assert_instance_method :change, content do |up|
         assert_match /create_table :posts/, up
         assert_match /t\.integer :author_id/, up
         assert_match /t\.integer :editor_id/, up
@@ -161,7 +157,7 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
     assert_migration 'db/migrate/create_posts.rb' do |content|
       assert_match /class CreatePosts < ActiveRecord::Migration/, content
 
-      assert_class_method :up, content do |up|
+      assert_instance_method :change, content do |up|
         assert_match /create_table :posts/, up
         %w(Author Comment).each do |klass|
           assert_match /if defined\?\(#{klass}\) && #{klass}.table_exists\?/, up
@@ -179,14 +175,14 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
     assert_no_migration 'db/migrate/create_posts.rb'
   end
 
-  test "should create migration with versionable and translatable options" do
+  test "should create migration with translatable options" do
     run_generator %w(Post title:string --translatable title --versionable)
 
     assert_migration 'db/migrate/create_posts.rb' do |content|
       assert_match /class CreatePosts < ActiveRecord::Migration/, content
 
-      assert_class_method :up, content do |up|
-        assert_match /create_table :posts, versionable: true, translatable: true/, up
+      assert_instance_method :change, content do |up|
+        assert_match /create_table :posts, translatable: true/, up
       end
     end
   end
@@ -197,7 +193,7 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
     assert_migration 'db/migrate/create_posts.rb' do |content|
       assert_match /class CreatePosts < ActiveRecord::Migration/, content
 
-      assert_class_method :up, content do |up|
+      assert_instance_method :change, content do |up|
         assert_match /unless ::CategorySet\.find_by_key\('colors'\)/, up
         assert_match /::CategorySet\.create\(key: 'colors', name: 'Colors'\)/, up
       end
@@ -277,20 +273,6 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
       %w(one two).each do |name|
         assert_match /# #{name}:/, content
         assert_match /column: 'value'/, content
-      end
-    end
-  end
-
-  test "should create fixtures with versionable option" do
-    run_generator %w(Post title:string body:text --versionable)
-
-    assert_file 'test/fixtures/posts.yml' do |content|
-      %w(one two).each_with_index do |name, i|
-        assert_match /#{name}:/, content
-        assert_match /content_id: 1/, content
-        assert_match /version_number: #{i + 1}/, content
-        assert_match /is_current_version: #{(i + 1) == 1 ? 'true' : 'false'}/, content
-        assert_match /parent_version: 'one'/, content
       end
     end
   end

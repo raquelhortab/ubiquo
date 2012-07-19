@@ -6,16 +6,11 @@
     <%- attributes.each do |attribute| -%>
   <%= attribute.name %>: '<%= attribute.default %>'
     <%- end -%>
-<%- if options[:versionable] || options[:translatable] -%>
+<%- if options[:translatable] -%>
   content_id: 1
 <%- end -%>
 <%- if options[:translatable] -%>
   locale: 'en'
-<%- end -%>
-<%- if options[:versionable] -%>
-  version_number: <%= i + 1 %>
-  is_current_version: <%= i.zero?.to_s %>
-  parent_version: 'one'
 <%- end -%>
   <%- end -%>
 <%- else -%>
