@@ -61,13 +61,12 @@ module Ubiquo
 
         resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
         sentinel      = "#{kind} :#{_scope} do"
-        flag          = /([\t| ]*)(#{Regexp.escape(sentinel)})/mi
         routing_code  = "resources #{resource_list}"
 
         log :route, routing_code
 
         in_root do
-          inject_into_file 'config/routes.rb', :after => flag do
+          inject_into_file 'config/routes.rb', :after => sentinel do
             "\n      #{routing_code}"
           end
         end
