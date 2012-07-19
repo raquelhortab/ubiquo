@@ -4,6 +4,7 @@ ca:
       empty_list_title: "Llistat multimèdia"
       empty_list_message: "Des d'aquest apartat podeu gestionar el vostre catàleg d'elements multimèdia."
     media:
+      upload: Pujar fitxer
       file_upload_in_progress: "Pujada de fitxer en progrés"
       file_upload_complete: "Pujada completada. Processant fitxer..."
       media: "Multimèdia"
@@ -76,7 +77,7 @@ ca:
       confirm_asset_restore: "Estàs segur de voler restaurar aquest recurs?"
       preview: "Previsualització"
       preview_not_available: "Previsualització no disponible"
-      affects_all_related_elements: 
+      affects_all_related_elements:
         one: "Aquesta imatge esta relacionada amb un altre element. Aquest canvi li afectarà."
         other: "Aquesta imatge esta relacionada amb altres elements. Aquest canvi afectarà a tots ells."
       confirm_continue: "Vols continuar?"
@@ -96,7 +97,7 @@ ca:
       names:
         flash: 'Flash'
         doc: 'Document'
-        audio: 'Àudio' 
+        audio: 'Àudio'
         other: 'Altres'
-        video: 'Vídeo' 
+        video: 'Vídeo'
         image: 'Imatge'

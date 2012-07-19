@@ -4,6 +4,7 @@ en:
       empty_list_title: "Multimedia list"
       empty_list_message: "In this section you can manage your assets catalog."
     media:
+      upload: Upload
       file_upload_in_progress: "File upload in progress"
       file_upload_complete: "Upload complete. Processing file..."
       media: "Multimedia"
@@ -76,7 +77,7 @@ en:
       confirm_asset_restore: "Are you sure you want to restore this asset?"
       preview: "Preview"
       preview_not_available: "Preview not available"
-      affects_all_related_elements: 
+      affects_all_related_elements:
         one: "This image is related with another element. This change will affect to it."
         other: "This image is related with other elements. This change will affect all of them."
       confirm_continue: "Are you sure?"
@@ -97,7 +98,7 @@ en:
       names:
         flash: 'Flash'
         doc: 'Document'
-        audio: 'Audio' 
+        audio: 'Audio'
         other: 'Other'
-        video: 'Video' 
+        video: 'Video'
         image: 'Image'

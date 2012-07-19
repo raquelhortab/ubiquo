@@ -4,6 +4,7 @@ es:
       empty_list_title: "Listado multimedia"
       empty_list_message: "Desde este apartado podéis gestionar vuestro catálogo de elementos multimedia."
     media:
+      upload: Upload
       file_upload_in_progress: "Subida de fichero en progreso"
       file_upload_complete: "Subida completada. Procesando fichero..."
       media: "Multimedia"
@@ -76,7 +77,7 @@ es:
       confirm_asset_restore: "Estás seguro de querer restaurar este recurso?"
       preview: "Previsualización"
       preview_not_available: "Previsualización no disponible"
-      affects_all_related_elements: 
+      affects_all_related_elements:
         one: "Esta imagen está relacionada con un elemento. Este cambio le afectará."
         other: "Esta imagen está relacionada con otros elementos. Este cambio les afectará."
       confirm_continue: "¿Estás seguro?"
@@ -97,7 +98,7 @@ es:
       names:
         flash: 'Flash'
         doc: 'Documento'
-        audio: 'Audio' 
+        audio: 'Audio'
         other: 'Otros'
-        video: 'Video' 
+        video: 'Video'
         image: 'Imagen'
