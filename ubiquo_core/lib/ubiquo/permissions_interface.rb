@@ -68,4 +68,4 @@ module Ubiquo
   end
 end
 
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, Ubiquo::PermissionsInterface)
+:UbiquoController.include! Ubiquo::PermissionsInterface

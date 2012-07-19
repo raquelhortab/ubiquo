@@ -3,5 +3,5 @@ module UbiquoAuthentication
   end
 end
 
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoAuthentication::Extensions::Helper)
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::Extensions::Controller)
+:UbiquoController.helper! UbiquoAuthentication::Extensions::Helper
+:UbiquoController.include! UbiquoAuthentication::Extensions::Controller

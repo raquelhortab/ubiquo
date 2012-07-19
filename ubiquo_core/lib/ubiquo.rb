@@ -4,6 +4,7 @@ require 'rails'
 require 'prototype-rails'
 require 'jquery-rails'
 require 'tinymce-rails'
+require 'nanoboy'
 require 'paperclip'
 
 module Ubiquo

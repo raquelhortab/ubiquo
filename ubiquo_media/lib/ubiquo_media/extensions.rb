@@ -4,6 +4,6 @@ module UbiquoMedia
   end
 end
 
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoMedia::Extensions::Helper)
+:UbiquoController.helper! UbiquoMedia::Extensions::Helper
 
 

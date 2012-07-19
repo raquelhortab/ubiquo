@@ -1,20 +1,12 @@
 # -*- encoding: utf-8 -*-
 
 module Ubiquo::Extensions
-  require 'ubiquo/extensions/loader'
-
-  # Load the defined extensions for +klass+ into +recipient+
-  def self.load_extensions_for klass, recipient = klass
-    if Loader.has_extensions?(klass.name)
-      recipient.send :include, Loader.extensions_for(klass.name)
-    end
-  end
 end
 
 # It's good to put this one the first, to avoid potential problems in the other extensions
 Module.send(:include, Ubiquo::Extensions::Module)
 
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, Ubiquo::Extensions::DateParser)
+:UbiquoController.include! Ubiquo::Extensions::DateParser
 ActionView::Base.field_error_proc = Ubiquo::Extensions::ActionView.ubiquo_field_error_proc
 ActiveRecord::Base.send(:extend, Ubiquo::Extensions::ActiveRecord)
 
@@ -33,8 +25,8 @@ end
 ActiveRecord::Base.send(:include, Ubiquo::Extensions::ConfigCaller)
 ActiveRecord::Base.send(:extend, Ubiquo::Extensions::ConfigCaller)
 ActiveRecord::SpawnMethods.send(:include, Ubiquo::Extensions::DistinctOption)
-Ubiquo::Extensions::Loader.append_extend(:UbiquoController, Ubiquo::Extensions::ConfigCaller)
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, Ubiquo::Extensions::ConfigCaller)
+:UbiquoController.include! Ubiquo::Extensions::ConfigCaller
+:UbiquoController.extend! Ubiquo::Extensions::ConfigCaller
 ActionView::Base.send(:include, Ubiquo::Extensions::ConfigCaller)
 ActionView::Base.send(:extend, Ubiquo::Extensions::ConfigCaller)
 

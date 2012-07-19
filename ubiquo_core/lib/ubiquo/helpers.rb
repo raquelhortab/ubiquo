@@ -5,8 +5,8 @@ module Ubiquo
   end
 end
 
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, Ubiquo::Helpers::CoreUbiquoHelpers)
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, Ubiquo::Helpers::ShowHelpers)
+:UbiquoController.helper! Ubiquo::Helpers::CoreUbiquoHelpers
+:UbiquoController.helper! Ubiquo::Helpers::ShowHelpers
 ActionController::Base.helper(Ubiquo::Helpers::CorePublicHelpers)
 ActionController::Base.helper(Ubiquo::Helpers::RemoteHelpers)
 

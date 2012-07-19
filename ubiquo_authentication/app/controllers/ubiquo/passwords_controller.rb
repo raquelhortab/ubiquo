@@ -1,6 +1,6 @@
 class Ubiquo::PasswordsController < ApplicationController
 
-  Ubiquo::Extensions.load_extensions_for UbiquoController, self
+  Nanoboy.load_extensions_for UbiquoController, self
 
   #shows the request pasword recovering form.
   def new

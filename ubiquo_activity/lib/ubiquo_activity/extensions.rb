@@ -4,7 +4,7 @@ module UbiquoActivity
   end
 end
 
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoActivity::StoreActivity)
-Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoActivity::RegisterActivity)
+:UbiquoController.include! UbiquoActivity::StoreActivity
+:UbiquoController.include! UbiquoActivity::RegisterActivity
 
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoActivity::Extensions::Helper)
+:UbiquoController.helper! UbiquoActivity::Extensions::Helper

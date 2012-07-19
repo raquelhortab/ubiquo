@@ -10,7 +10,7 @@ module UbiquoAuthentication
       require 'ubiquo_authentication/ubiquo_user_console_creator.rb'
       require 'ubiquo_authentication/version.rb'
 
-      Ubiquo::Extensions::Loader.append_include(:UbiquoController, UbiquoAuthentication::AuthenticatedSystem)
+      :UbiquoController.include! UbiquoAuthentication::AuthenticatedSystem
     end
 
     initializer :register_ubiquo_plugin do

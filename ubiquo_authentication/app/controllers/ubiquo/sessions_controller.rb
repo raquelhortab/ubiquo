@@ -1,7 +1,7 @@
 class Ubiquo::SessionsController < ApplicationController
   layout :false
 
-  Ubiquo::Extensions.load_extensions_for UbiquoController, self
+  Nanoboy.load_extensions_for UbiquoController, self
 
   before_filter :cookies_required
   skip_before_filter :verify_authenticity_token, :only => [:create]

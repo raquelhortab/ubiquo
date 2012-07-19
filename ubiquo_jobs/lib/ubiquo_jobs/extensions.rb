@@ -4,4 +4,4 @@ module UbiquoJobs
   end
 end
 
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoJobs::Extensions::Helper)
+:UbiquoController.helper! UbiquoJobs::Extensions::Helper

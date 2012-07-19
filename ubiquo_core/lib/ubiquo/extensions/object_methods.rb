@@ -6,8 +6,6 @@ module Ubiquo
     # Object didn't define Ubiquo::Extensions::Object, but Ubiquo::Extensions,
     # and therefore this constant was added to the autoloaded_constants array,
     # where it shouldn't be as the extensions should be only added once.
-    # Specially, if you have the Loader there, which is meant to be eternally in
-    # memory, to precisely allow
     # Well, in short, please don't name any module Object, or trouble will come.
     module ObjectMethods
       def to_bool

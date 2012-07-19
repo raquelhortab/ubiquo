@@ -8,4 +8,4 @@ module UbiquoCategories
 end
 
 ActiveRecord::Base.send(:include, UbiquoCategories::Extensions::ActiveRecord)
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, UbiquoCategories::Extensions::Helpers)
+:UbiquoController.helper! UbiquoCategories::Extensions::Helpers

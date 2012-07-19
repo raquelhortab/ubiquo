@@ -11,11 +11,10 @@ module UbiquoCategories
         return if validate_requirements == false
         prepare_mocks if Rails.env.test?
         ::ActiveRecord::Base.send(:include, self::ActiveRecord::Base)
-        loader = Ubiquo::Extensions::Loader
-        loader.append_include(:Category, self::Category)
-        loader.append_include(:CategorySet, self::CategorySet)
-        loader.append_helper(:UbiquoController, self::UbiquoHelpers::Helper)
-        loader.append_include(:"Ubiquo::CategoriesController", self::UbiquoCategoriesController)
+        :Category.include! self::Category
+        :CategorySet.include! self::CategorySet
+        :UbiquoController.helper! self::UbiquoHelpers::Helper
+        :"Ubiquo::CategoriesController".include! self::UbiquoCategoriesController
         ::ActiveRecord::Migration.send(:include, self::Migration)
         UbiquoCategories::Connectors::Base.set_current_connector self
       end

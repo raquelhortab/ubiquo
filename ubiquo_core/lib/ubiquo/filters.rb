@@ -133,4 +133,4 @@ module Ubiquo
   end
 end
 
-Ubiquo::Extensions::Loader.append_helper(:UbiquoController, Ubiquo::Filters)
+:UbiquoController.helper! Ubiquo::Filters
