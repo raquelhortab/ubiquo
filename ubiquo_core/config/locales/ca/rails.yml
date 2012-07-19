@@ -97,7 +97,7 @@ ca:
       messages:
         inclusion: "no està inclòs en la llista"
         exclusion: "està reservat"
-        invalid: "no és valid"
+        invalid: "no és vàlid"
         confirmation: "no coincideix amb la confirmació"
         accepted: "ha de ser acceptat"
         empty: "no pot estar buit"
