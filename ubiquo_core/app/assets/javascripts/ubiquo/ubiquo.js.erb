@@ -21,6 +21,9 @@ document.observe("dom:loaded", function() {
       del_btn = e.down('.btn-delete');
       if(del_btn){
           del_btn.update('<span>'+del_btn.text+'</span>');
+          del_btn.observe('click', function(ev){
+            Event.stop(ev);
+          });
           del_btn.remove();
           e.insert('<td class="delete"></td>');
           e.down('td.delete').insert(del_btn);
@@ -69,7 +72,7 @@ document.observe("dom:loaded", function() {
     e.observe('click', function(ev){
       ev.stop();
       var url = e.readAttribute('href');
-      window.open(url,'New window');
+      window.open(url);
     });
   });
 
@@ -218,7 +221,7 @@ Ubiquo.Forms.createTabs = function(parent_selector,title_selector){
             group.insert({ top: tab_menu });
 
             //hide titles and put them as tab menu items
-            var tabs = group.down('.tabs-container').childElements();
+            var tabs = group.down('.tabs-container').immediateDescendants().select(function(e){return !!e.down(title_selector);})
             tabs.each(function(i,index) {
                 i.addClassName('tab');
 
@@ -253,7 +256,10 @@ Ubiquo.Forms.createTabs = function(parent_selector,title_selector){
                     var container = tab.up(".tabs-container");
                     if( container ){
                         var idx = container.childElements().indexOf( tab );
-                        container.up().down(".tabs-menu").childElements()[idx].addClassName("with-errors");
+                         var element = container.up().down(".tabs-menu").childElements()[idx];
+                         if(element){
+                           element.addClassName("with-errors");
+                         }
                     }
                 }
             });
