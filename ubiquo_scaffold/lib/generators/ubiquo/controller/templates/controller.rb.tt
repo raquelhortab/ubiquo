@@ -63,7 +63,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
   # POST /<%= plural_name %>
   # POST /<%= plural_name %>.json
   def create
-    @<%= singular_name %> = <%= class_name %>.new(params[:<%= singular_name %>])
+    @<%= singular_name %> = <%= class_name %>.new(params[:<%= singular_name %>], :without_protection => true)
 
     respond_to do |format|
       if @<%= singular_name %>.save
@@ -86,10 +86,10 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     ok = if params[:restore_from_version]
            @<%= singular_name %>.restore(params[:restore_from_version])
          else
-           @<%= singular_name %>.update_attributes(params[:<%= singular_name %>])
+           @<%= singular_name %>.update_attributes(params[:<%= singular_name %>], :without_protection => true)
          end
     <%- else -%>
-    ok = @<%= singular_name %>.update_attributes(params[:<%= singular_name %>])
+    ok = @<%= singular_name %>.update_attributes(params[:<%= singular_name %>], :without_protection => true)
     <%- end -%>
 
     respond_to do |format|
