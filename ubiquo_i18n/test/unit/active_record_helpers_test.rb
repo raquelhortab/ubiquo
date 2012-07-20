@@ -807,6 +807,6 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
     assert_equal [:"de-DE", :de, :ca, :es, :all, {}], TestModel.localized.locale_values
   end
 
+  create_test_model_backend
 end
 
-create_test_model_backend

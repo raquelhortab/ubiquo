@@ -870,6 +870,7 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     # and what other tests might be expecting
     prepare_dependency_type(:destroy)
   end
+
+  create_test_model_backend
 end
 
-create_test_model_backend

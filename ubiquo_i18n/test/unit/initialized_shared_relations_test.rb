@@ -60,6 +60,7 @@ class Ubiquo::InitializedSharedRelationsTest < ActiveSupport::TestCase
     assert_equal [related], en.reload.translatable_related_test_models
   end
 
+  create_test_model_backend
+
 end
 
-create_test_model_backend

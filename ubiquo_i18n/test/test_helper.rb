@@ -42,8 +42,10 @@ end
 
 Object.const_set("InheritanceTestModel", Class.new(ActiveRecord::Base)) unless Object.const_defined? "InheritanceTestModel"
 
-def create_test_model_backend
-  return if @already_built
+class ActiveSupport::TestCase
+# Not indented to avoid history pollution
+def self.create_test_model_backend
+  return if defined? @@already_built
 
   conn = ActiveRecord::Base.connection
   options = {:translatable => true, :force => true}
@@ -214,9 +216,10 @@ def create_test_model_backend
   end
 
   Object.const_set('GrandsonClass', Class.new(FirstSubclass)) unless Object.const_defined? 'GrandsonClass'
-  @already_built = true
+  @@already_built = true
 end
 
+end
 if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
   ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end

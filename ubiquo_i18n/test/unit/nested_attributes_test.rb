@@ -180,6 +180,7 @@ class Ubiquo::NestedAttributesTest < ActiveSupport::TestCase
 
     assert_equal 1, tm.translations.count
   end
+
+  create_test_model_backend
 end
 
-create_test_model_backend
