@@ -1,4 +1,4 @@
-:<%
+<%
   show_current = true unless show_current === false
   hidden= false unless hidden
   preview = true unless preview == false
@@ -215,7 +215,7 @@
                   <%= f.submit t('ubiquo.media.save_as_new'),
                      :name => "save_as_new_button_#{style}",
                      :type=>"image",
-                     :src => "/images/ubiquo/media/resize-save-as-button-big.png",
+                     :src => image_path("ubiquo/media/resize-save-as-button-big.png"),
                      :onclick => "$('crop_resize_asset_name').value = $F('asset_name_#{style}');$('crop_resize_save_as_new').value='1';return true;",
                      :title => t('ubiquo.media.save_as_new')
                   %>
