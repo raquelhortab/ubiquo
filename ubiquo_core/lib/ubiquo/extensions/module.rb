@@ -19,6 +19,10 @@ module Ubiquo
             # use alias_method?
             unless (instance_methods + private_methods).include?(without_method.to_sym)
               alias_method_chain_without_recursion_control target, feature
+            else
+              # In these cases, this will normally do nothing. But if you have
+              # reloaded the class, this will leave things as expected
+              alias_method target, "#{aliased_target}_with_#{feature}#{punctuation}"
             end
           end
 
