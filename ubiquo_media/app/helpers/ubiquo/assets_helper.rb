@@ -29,14 +29,11 @@ module Ubiquo::AssetsHelper
 
   # Styles that can be cropped
   def media_styles_croppable_list
-    list = Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list)
     # The main styles are not croppable as they belong to the core
-    Ubiquo::Settings.context(:ubiquo_media).get(:media_core_styles).each do |s|
-      list.delete(s)
+    core_styles = Ubiquo::Settings.context(:ubiquo_media).get(:media_core_styles)
+    Ubiquo::Settings.context(:ubiquo_media).get(:media_styles_list).select do |k, v|
+      !core_styles.include?(k)
     end
-    # Filter the formats that are not strings like "300x200#"
-    list.delete_if{|k,v| !v.respond_to?( :match )}
-    list
   end
 
   # Returns the size scale comparing base_to_crop with original
