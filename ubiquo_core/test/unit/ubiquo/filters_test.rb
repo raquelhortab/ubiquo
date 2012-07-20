@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
-class FilterHelpersTest < Ubiquo::Filters::UbiquoFilterTestCase
+class Ubiquo::FiltersTest < Ubiquo::Filters::UbiquoFilterTestCase
 
   attr_accessor :params
 

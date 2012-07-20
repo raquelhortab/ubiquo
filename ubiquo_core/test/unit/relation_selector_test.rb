@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'ubiquo/relation_selector'
 
 
-class RelationSelectorTest < ActionView::TestCase
+class Ubiquo::RelationSelectorTest < ActionView::TestCase
 
   include Ubiquo::RelationSelector::Helper
 

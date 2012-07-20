@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require File.dirname(__FILE__) + "/../../../test_helper.rb"
 
-class UbiquoFormBuilderTest < ActionView::TestCase
+class Ubiquo::Helpers::UbiquoFormBuilderTest < ActionView::TestCase
 
   attr_accessor :params
 

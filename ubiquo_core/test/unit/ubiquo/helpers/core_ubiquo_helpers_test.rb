@@ -1,6 +1,13 @@
+# -*- coding: utf-8 -*-
 require File.dirname(__FILE__) + "/../../../test_helper.rb"
 
 class Ubiquo::Helpers::CoreUbiquoHelpersTest < ActionView::TestCase
+
+  attr_accessor :params
+
+  def setup
+    self.params = { :controller => 'tests', :action => 'index' }
+  end
 
   test 'ubiquo_image_path prepends ubiquo by default' do
     assert_equal 'ubiquo/image.png', ubiquo_image_path('image.png')
@@ -53,6 +60,14 @@ class Ubiquo::Helpers::CoreUbiquoHelpersTest < ActionView::TestCase
     assert stylesheet_included?( "ubiquo/ipad.css", html )
   end
 
+  test "ubiquo_table_headerfy should return a humanized string when receiving a string" do
+    assert 'books'.humanize, ubiquo_table_headerfy('books')
+  end
+
+  test "ubiquo_table_headerfy should return a proper column header when dealing with a relation" do
+    assert_match />secció</, ubiquo_table_headerfy(:"headerfy_section.title")
+  end
+
   private
   # True when the stylesheet is in the html at least once
   def stylesheet_included? filename, html
@@ -63,4 +78,21 @@ class Ubiquo::Helpers::CoreUbiquoHelpersTest < ActionView::TestCase
       end
     end
   end
+
+  def url_for(*)
+    'stub'
+  end
+
+end
+
+class HeaderfySection
+
+  def self.human_name
+    "Secció"
+  end
+
+  def self.human_attribute_name(column)
+    "títol"
+  end
+
 end

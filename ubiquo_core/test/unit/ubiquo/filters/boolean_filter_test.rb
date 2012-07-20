@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../../../test_helper.rb"
 require 'ubiquo/filters/boolean_filter'
 
-class BooleanFilterTest < Ubiquo::Filters::UbiquoFilterTestCase
+class Ubiquo::Filters::BooleanFilterTest < Ubiquo::Filters::UbiquoFilterTestCase
 
   def setup
     @filter = BooleanFilter.new(@model, @context)
