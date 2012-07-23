@@ -13,11 +13,15 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
 
   def test_copy_shared_relations_simple_has_many_case
     TestModel.share_translations_for :unshared_related_test_models
-    assert_raise RuntimeError do
-      m = create_model
-      m.unshared_related_test_models << UnsharedRelatedTestModel.create
-      m.translate('jp').save
-    end
+
+    ca = create_model(:locale => 'ca')
+    ca.unshared_related_test_models << UnsharedRelatedTestModel.create(:field1 => '1')
+    ca.unshared_related_test_models << UnsharedRelatedTestModel.create(:field1 => '2')
+    en = ca.translate('en')
+
+    assert_equal 2, en.unshared_related_test_models.size
+    assert_equal 2, UnsharedRelatedTestModel.count
+
     TestModel.unshare_translations_for :unshared_related_test_models
   end
 

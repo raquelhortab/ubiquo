@@ -165,22 +165,8 @@ module UbiquoI18n
                   # Use the first record to determine what to do in this association
                   record = [association_values].flatten.first
 
-                  if record && record.class.is_translatable?
-
+                  if record
                     all_relationship_contents = [association_values].flatten.reject(&:marked_for_destruction?)
-
-                  elsif record
-
-                    # If record is not translatable, we can only do something if
-                    # the reflection is a belongs_to, because else we would be
-                    # changing a relation that does not belong to us
-                    if reflection.macro == :belongs_to
-                      # we simply copy the attribute value
-                      all_relationship_contents = [association_values]
-                    else
-                      alert_translation_shared_not_supported(association_id, record.class)
-                    end
-
                   elsif reflection.macro == :belongs_to
                      # no record means that we are removing an association, so the new content is nil
                     all_relationship_contents = [nil]
@@ -605,12 +591,6 @@ module UbiquoI18n
               end
             end
           end
-        end
-
-        def alert_translation_shared_not_supported(association_id, klass)
-          raise "You are trying to share translations in :#{association_id} of #{self.class}. " +
-            "This behaviour can't be supported by ubiquo_i18n. Either use a has_many :through " +
-            "with an intermediate translatable model, or mark the #{klass} model as translatable"
         end
 
         def untranslatable_attributes_names
