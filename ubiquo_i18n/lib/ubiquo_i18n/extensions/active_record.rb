@@ -4,10 +4,35 @@ module UbiquoI18n
 
       def self.append_features(base)
         super
-        base.extend(ClassMethods)
-        base.send :include, InstanceMethods
-        base.send :alias_method_chain, :clone, :i18n_fields_ignore
-        base.send :alias_method_chain, :assign_attributes, :i18n_fields
+        base.class_eval do
+          extend ClassMethods
+          include InstanceMethods
+          alias_method_chain :clone, :i18n_fields_ignore
+          alias_method_chain :assign_attributes, :i18n_fields
+
+          # Flags and fields to store translatable options
+          class_attribute :is_translatable, :translatable_attributes,
+            :is_translating_relations, :initialized_translation_shared_list
+
+          # Attributes that are always 'translated' (not copied between languages)
+          # Can be used by third parties to add fields that should always
+          # be independent between different languages
+          class_attribute :global_translatable_attributes
+          self.global_translatable_attributes = [:locale, :content_id, :lock_version]
+
+          # Define scopes to define what are translations, needed if for some
+          # reason you have instances sharing the same content_id,
+          # but they shouldn't be considered translations.
+          #
+          # It accepts two formats of conditions:
+          # - A String with a sql where condition (e.g. is_active = 1)
+          # - A Proc that will be called with the current element argument and
+          #   that should return a scope/relation
+          #   (e.g. lambda{|el| where({:scope_id => el.scope_id})
+          class_attribute :translatable_scopes
+          self.translatable_scopes = []
+
+        end
       end
 
       module ClassMethods
@@ -24,12 +49,7 @@ module UbiquoI18n
         #   :timestamps => set to false to avoid translatable (i.e. independent per translation) timestamps
 
         def translatable(*attrs)
-
-          # inherit translatable attributes
-          @translatable_attributes = self.translatable_attributes || []
-
-          @really_translatable_class = self
-          @translatable = true
+          self.is_translatable = true
 
           # add the uniqueness validation, clearing it before if it existed
           clear_locale_uniqueness_per_entity_validation
@@ -37,17 +57,17 @@ module UbiquoI18n
 
           # extract and parse options
           options = attrs.extract_options!
-          # add attrs from this class
-          @translatable_attributes += attrs
+
+          # add defined translatable attributes
+          self.translatable_attributes ||= []
+          self.translatable_attributes += attrs
 
           # timestamps are independent per translation unless set
-          @translatable_attributes += [:created_at, :updated_at] unless options[:timestamps] == false
-          # when using optimistic locking, lock_version has to be independent per translation
-          @translatable_attributes += [:lock_version]
+          self.translatable_attributes += [:created_at, :updated_at] unless options[:timestamps] == false
 
           # try to generate the attribute setter
           self.new.send(:locale=, :generate) rescue nil
-          if instance_methods.include?(:locale=) && !instance_methods.include?(:locale_with_duality=)
+          if instance_methods.include?(:locale=)
             # give the proper behaviour to the locale setter
             define_method('locale_with_duality=') do |locale|
               locale = case locale
@@ -94,16 +114,13 @@ module UbiquoI18n
           # will use the defined scopes to discriminate what are translations
           # remember it won't return 'content' itself
           scope :translations, lambda{|content|
-            scoped_conditions = []
-            @translatable_scopes.each do |scope|
-                scoped_conditions << (String === scope ? scope : scope.call(content))
+            scoped_conditions = self.translatable_scopes.inject(scoped) do |current, translatable_scope|
+              options = translatable_scope.respond_to?(:call) ? translatable_scope.call(content) : translatable_scope
+              current.merge(options)
             end
             inequality_operator = content.locale ? '!=' : 'IS NOT'
             translation_condition = "#{self.table_name}.content_id = ? AND #{self.table_name}.locale #{inequality_operator} ?"
-            unless scoped_conditions.blank?
-              translation_condition += ' AND ' + scoped_conditions.join(' AND ')
-            end
-            where([translation_condition, content.content_id, content.locale])
+            scoped_conditions.where([translation_condition, content.content_id, content.locale])
           }
 
           # Instance method to find translations
@@ -215,31 +232,35 @@ module UbiquoI18n
         end
 
         def untranslatable
-          @translatable_attributes = []
-          @really_translatable_class = nil
-          @translatable = nil
+          self.translatable_attributes = []
+          self.is_translatable = nil
           clear_locale_uniqueness_per_entity_validation
         end
 
         def initialize_translations_for(*associations)
           share_translations_for(associations, {:only_new => true})
-          associations.each do |association|
-            ["assign_nested_attributes_for_collection_association"].each do |method|
-              unless self.method_defined?("#{method}_with_initialization")
-                define_method("#{method}_with_initialization") do |*params|
-                  # It's being fully assigned, so should no longer return results as an initialized_shared
-                  current_association = params.first
-                  association_initialized!(current_association)
-                  # If these shared results were already loaded, discard them
-                  if self.is_association_initialized?(current_association)
-                    self.send(current_association).reset
-                  end
-                  # Now perform the assignation as usual
-                  send("#{method}_without_initialization", *params)
-                end
-                alias_method_chain("#{method}", :initialization)
-              end
+
+          # On nested_attributes, if we are assigning the content of this association,
+          # we have to enable a flag that they have been assigned, to avoid that
+          # on save, we check again the translations and overwrite the assigned contents.
+          method = 'assign_nested_attributes_for_collection_association'
+          define_method("#{method}_with_initialization") do |*params|
+
+            # It's being fully assigned, so should no longer return results as an initialized_shared
+            current_association = params.first
+            association_initialized!(current_association)
+
+            # If these shared results were already loaded, discard them
+            if self.is_association_initialized?(current_association)
+              self.send(current_association).reset
             end
+
+            # Now perform the assignation as usual
+            send("#{method}_without_initialization", *params)
+          end
+
+          unless self.method_defined?("#{method}_with_initialization")
+            alias_method_chain("#{method}", :initialization)
           end
         end
 
@@ -252,33 +273,24 @@ module UbiquoI18n
 
             reflection.mark_as_translation_shared(true, options)
 
-            unless is_translation_shared_initialized? association_id
-              # Marker to avoid recursive redefinition
-              initialize_translation_shared association_id
-
-              # For has_many :throughs, the middle must have the same configuration
-              # as the end
-              if reflection.has_many_through_translatable?
-                if reflection.is_translation_shared?
-                  share_translations_for reflection.through_reflection.name
-                elsif reflection.is_translation_shared_on_initialize?
-                  initialize_translations_for reflection.through_reflection.name
-                end
+            # For has_many :throughs, the middle must have the same configuration
+            # as the end
+            if reflection.has_many_through_translatable?
+              if reflection.is_translation_shared?
+                share_translations_for reflection.through_reflection.name
+              elsif reflection.is_translation_shared_on_initialize?
+                initialize_translations_for reflection.through_reflection.name
               end
             end
 
           end
-
         end
 
         # Reverses the action of +share_translations_for+
         def unshare_translations_for(*associations)
           options = associations.extract_options!
           associations.flatten.each do |association_id|
-            if is_translation_shared_initialized? association_id
-              reflections[association_id].mark_as_translation_shared(false, options)
-              uninitialize_translation_shared association_id
-            end
+            reflections[association_id].mark_as_translation_shared(false, options)
           end
         end
 
@@ -289,7 +301,6 @@ module UbiquoI18n
 
         # Given a reflection, will process the :translation_shared option
         def process_translation_shared reflection
-          reset_translation_shared reflection.name
           if reflection.is_translation_shared?
             share_translations_for reflection.name
           end
@@ -300,54 +311,6 @@ module UbiquoI18n
           self.reflections.select do |name, reflection|
             reflection.is_translation_shared?
           end
-        end
-
-        # Returns the value for the var_name instance variable, or if this is nil,
-        # follow the superclass chain to ask the value
-        def instance_variable_inherited_get(var_name, method_name = nil)
-          method_name ||= var_name
-          value = instance_variable_get("@#{var_name}")
-          if value.nil? && !@really_translatable_class && self.superclass.respond_to?(method_name)
-            self.superclass.send(method_name)
-          else
-            value
-          end
-        end
-
-        # Sets the value for the var_name instance variable, or if this is nil,
-        # follow the superclass chain to set the value
-        def instance_variable_inherited_set(value, var_name, method_name = nil)
-          method_name ||= var_name
-          if !@really_translatable_class && self.superclass.respond_to?(method_name)
-            self.superclass.send(method_name, value)
-          else
-            instance_variable_set("@#{var_name}", value)
-          end
-        end
-
-        # Returns true if the class is marked as translatable
-        def is_translatable?
-          instance_variable_inherited_get("translatable", "is_translatable?")
-        end
-
-        # Returns a list of translatable attributes for this class
-        def translatable_attributes
-          instance_variable_inherited_get("translatable_attributes")
-        end
-
-        # Returns the class that really calls the translatable method
-        def really_translatable_class
-          instance_variable_inherited_get("really_translatable_class")
-        end
-
-        # Returns true if this class is currently translating relations
-        def is_translating_relations
-          instance_variable_inherited_get("is_translating_relations")
-        end
-
-        # Sets the value of the is_translating_relations flag
-        def is_translating_relations=(value)
-          instance_variable_inherited_set(value, "is_translating_relations", "is_translating_relations=")
         end
 
         # Wrapper for translating relations preventing cyclical chain updates
@@ -362,94 +325,11 @@ module UbiquoI18n
           end
         end
 
-        # Returns true if the translatable propagation has been set to stop
-        def stop_translatable_propagation
-          instance_variable_inherited_get("stop_translatable_propagation")
-        end
-
-        # Setter for the stop_translatable_propagation_flag
-        def stop_translatable_propagation=(value)
-          instance_variable_inherited_set(value, "stop_translatable_propagation", "stop_translatable_propagation=")
-        end
-
-        # Returns true if the translation-shared association has been initialized
-        def is_translation_shared_initialized? association_id = nil
-          associations = initialized_translation_shared_list
-          associations.is_a?(Array) && associations.include?(association_id)
-        end
-
-        # Returns the list of associations initialized
-        def initialized_translation_shared_list
-          instance_variable_inherited_get("initialized_translation_shared_list")
-        end
-
-        # Marks the association as initialized
-        def initialize_translation_shared association_id
-          new_association = Array(association_id)
-          associations = instance_variable_inherited_get("initialized_translation_shared_list") || []
-          associations +=  new_association
-          instance_variable_inherited_set(associations, "initialized_translation_shared_list", "initialize_translation_shared")
-        end
-
-        # Unmarks the association as non-initialized (reverse of +initialize_translation_shared+)
-        def uninitialize_translation_shared association_id
-          initialized_associations = instance_variable_inherited_get("initialized_translation_shared_list") || []
-          initialized_associations.delete(association_id)
-        end
-
-        # Unmarks an association as translation-shared initialized
-        def reset_translation_shared association_id
-          reset_association = Array(association_id)
-          associations = instance_variable_inherited_get("initialized_translation_shared_list") || []
-          associations -=  reset_association
-          instance_variable_inherited_set(associations, "initialized_translation_shared_list", "reset_translation_shared")
-        end
-
-        # Attributes that are always 'translated' (not copied between languages)
-        (@global_translatable_attributes ||= []) << :locale << :content_id
-
-        # Used by third parties to add fields that should always
-        # be independent between different languages
-        def add_translatable_attributes(*args)
-          @global_translatable_attributes += args
-        end
-
-        # Define scopes to limit the automatic update of common fields to instances
-        # that have the same value for each scope (as a field name)
-        @translatable_scopes ||= []
-
-        # Used by third parties to add scopes for translations updates of common fields
-        # It accepts two formats for condition:
-        # - A String with a sql where condition (e.g. is_active = 1)
-        # - A Proc that will be called with the current element argument and
-        #   that should return a string (e.g. lambda{|el| "table.field = #{el.field + 1}"})
-        def add_translatable_scope(condition)
-          @translatable_scopes << condition
-        end
-
-        @@translatable_inheritable_instance_variables = %w{global_translatable_attributes translatable_scopes}
-
         def self.extended(klass)
-          # Ensure that the needed variables are inherited
-          @@translatable_inheritable_instance_variables.each do |inheritable|
-            unless eval("@#{inheritable}").nil?
-              klass.instance_variable_set("@#{inheritable}", eval("@#{inheritable}").dup)
-            end
-          end
-
           # Accept the :translation_shared option when defining associations
           association_builder = ::ActiveRecord::Associations::Builder::Association
           ([association_builder] + association_builder.descendants).each do |builder|
             builder.valid_options << :translation_shared
-          end
-        end
-
-        def inherited(klass)
-          super
-          @@translatable_inheritable_instance_variables.each do |inheritable|
-            unless eval("@#{inheritable}").nil?
-              klass.instance_variable_set("@#{inheritable}", eval("@#{inheritable}").dup)
-            end
           end
         end
 
@@ -466,46 +346,32 @@ module UbiquoI18n
           :locale_uniqueness_per_entity
         end
 
+        def uniqueness_per_entity_validation_options
+            [
+              :locale,
+              :identifier => uniqueness_per_entity_validation_identifier,
+              :scope => :content_id,
+              :case_sensitive => false,
+              :message => Proc.new { |*attrs|
+                locale = attrs.last[:value] rescue false
+                humanized_locale = Locale.find_by_iso_code(locale.to_s)
+                humanized_locale = humanized_locale.native_name if humanized_locale
+                I18n.t(
+                  'ubiquo.i18n.locale_uniqueness_per_entity',
+                  :model => self.model_name.human,
+                  :object_locale => humanized_locale
+                )
+              }
+            ]
+        end
+
         def clear_locale_uniqueness_per_entity_validation
           clear_validation uniqueness_per_entity_validation_identifier
         end
 
         # Assure no duplicated objects for the same locale
         def add_locale_uniqueness_per_entity_validation
-          validates_uniqueness_of(
-            :locale,
-            :identifier => uniqueness_per_entity_validation_identifier,
-            :scope => :content_id,
-            :case_sensitive => false,
-            :message => Proc.new { |*attrs|
-              locale = attrs.last[:value] rescue false
-              humanized_locale = Locale.find_by_iso_code(locale.to_s)
-              humanized_locale = humanized_locale.native_name if humanized_locale
-              I18n.t(
-                'ubiquo.i18n.locale_uniqueness_per_entity',
-                :model => self.model_name.human,
-                :object_locale => humanized_locale
-              )
-            }
-          )
-        end
-
-        private
-
-        def merge_locale_list locales
-          merge_locale_list_rec locales.first, locales[1,locales.size]
-        end
-
-        def merge_locale_list_rec previous, rest
-          new = rest.first
-          return previous.clone unless new
-          merged = if previous.empty? || previous.include?(:all)
-            new
-          else
-            previous & new
-          end
-          merged = previous if merged.empty? && new.include?(:all)
-          merge_locale_list_rec merged, rest[1,rest.size]
+          validates_uniqueness_of *uniqueness_per_entity_validation_options
         end
 
       end
@@ -595,7 +461,7 @@ module UbiquoI18n
 
         def untranslatable_attributes_names
           translatable_attributes = (self.class.translatable_attributes || []) +
-            (self.class.instance_variable_get('@global_translatable_attributes') || []) +
+            (self.class.global_translatable_attributes) +
             (self.class.reflections.select do |name, ref|
                 ref.macro != :belongs_to ||
                 !ref.is_translation_shared? ||

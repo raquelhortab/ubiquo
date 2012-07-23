@@ -445,7 +445,7 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
 
   def test_translations_finds_using_single_translatable_scope
     TestModel.class_eval do
-      add_translatable_scope lambda{|el| "test_models.my_field = '#{el.my_field}'"}
+      self.translatable_scopes << lambda{|el| where("test_models.my_field = '#{el.my_field}'")}
     end
 
     es_1a = create_model(:content_id => 1, :locale => 'es', :my_field => 'a')
@@ -457,13 +457,13 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
     assert_equal_set [], en_1b.translations
     assert_equal_set [en_2a], es_2a.translations
     # restore
-    TestModel.instance_variable_set('@translatable_scopes', [])
+    TestModel.translatable_scopes.clear
   end
 
   def test_translations_finds_using_multiple_translatable_scopes
     TestModel.class_eval do
-      add_translatable_scope lambda{|el| "test_models.my_field = '#{el.my_field}'"}
-      add_translatable_scope lambda{|el| "test_models.my_other_field = '#{el.my_other_field}'"}
+      self.translatable_scopes << lambda{|el| where("test_models.my_field = '#{el.my_field}'")}
+      self.translatable_scopes << lambda{|el| where("test_models.my_other_field = '#{el.my_other_field}'")}
     end
 
     es_1a = create_model(:content_id => 1, :locale => 'es', :my_field => 'a', :my_other_field => 'a')
@@ -478,7 +478,7 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
     assert_equal_set [], ca_2a.translations
 
     # restore
-    TestModel.instance_variable_set('@translatable_scopes', [])
+    TestModel.translatable_scopes.clear
   end
 
   def test_translations_method_when_locale_is_nil
