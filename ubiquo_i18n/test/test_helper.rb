@@ -102,6 +102,7 @@ def self.create_test_model_backend
     t.integer :translatable_related_test_model_id
     t.integer :related_test_model_id
     t.integer :test_model_id
+    t.integer :parent_id
     t.string :my_field
     t.string :mixed
     t.string :type
@@ -204,6 +205,7 @@ def self.create_test_model_backend
     belongs_to :test_model
     belongs_to :related_test_model, :translation_shared => true
     belongs_to :translatable_related_test_model, :translation_shared => true
+    has_many :children, :translation_shared => true, :foreign_key => "parent_id", :class_name => 'InheritanceTestModel'
     attr_accessible :my_field, :locale, :related_test_model, :translatable_related_test_model, :mixed, :content_id
   end
 
