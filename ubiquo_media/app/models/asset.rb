@@ -152,6 +152,7 @@ class Asset < ActiveRecord::Base
   def dup
     obj                 = super
     obj.duplicated_from = self
+    obj.resource        = self.resource_file
     uhook_duplicated_object(obj)
 
     obj

@@ -188,11 +188,11 @@ class Ubiquo::AssetsController < UbiquoController
     errors = !@asset.is_resizeable? || !params[:crop_resize]
 
     unless params[:crop_resize_save_as_new].blank?
-      original_asset = @asset
+      # "find" method is used instead of @asset directly because with @asset doesn't work
+      original_asset = Asset.find(@asset.id)
       @asset = original_asset.dup
       @asset.name = params[:asset_name] || @asset.name
       @asset.save!
-      @asset
     end
 
     @asset.keep_backup = ( params[:asset][:keep_backup] rescue Ubiquo::Settings.context(:ubiquo_media).get(:assets_default_keep_backup))

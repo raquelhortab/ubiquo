@@ -89,8 +89,8 @@ class AssetArea < ActiveRecord::Base
     #Replace with current original
     self.asset.resource = File.open(resource_original_name)
 
-    # Now we execute the regeneration of the styles again
-    self.asset.resource.reprocess!
+    # Now we save the asset and this will regenerate all the styles
+    self.asset.save!
     self.asset.touch
   end
 

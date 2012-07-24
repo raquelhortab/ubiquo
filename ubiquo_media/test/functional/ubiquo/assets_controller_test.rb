@@ -247,6 +247,9 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
   def test_should_get_advanced_edit
     asset = create_image_asset
 
+    Ubiquo::Settings.context(:ubiquo_media).set(:media_styles_list,
+      {:thumb => "100x100>", :base_to_crop => "320x200>"})
+    
     get :advanced_edit, :id => asset.id
 
     assert_response :success
