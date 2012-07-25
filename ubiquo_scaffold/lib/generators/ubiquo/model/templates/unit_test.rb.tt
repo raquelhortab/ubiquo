@@ -15,7 +15,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   test "should require <%= label_name %>" do
     assert_no_difference '<%= class_name %>.count' do
       <%= file_name %> = create_<%= file_name %>(:<%= label_name %> => "")
-      assert <%= file_name %>.errors.on(:<%= label_name %>)
+      assert <%= file_name %>.errors[:<%= label_name %>]
     end
   end
 
