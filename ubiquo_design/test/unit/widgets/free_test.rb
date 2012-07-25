@@ -12,7 +12,7 @@ class FreeTest < ActiveSupport::TestCase
   test "should require content" do
     assert_no_difference 'Free.count' do
       free = create_free(:content => nil)
-      assert free.errors.on(:content)
+      assert free.errors[:content]
     end
   end
 

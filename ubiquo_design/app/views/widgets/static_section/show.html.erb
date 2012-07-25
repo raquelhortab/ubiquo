@@ -7,8 +7,8 @@
                   :title => @static_section.name_for_asset(:image, @image)) %>
   </div>
   <%- end -%>
-  <p class="summary"><%= @static_section.summary %></p>
-  <p class="body"><%= @static_section.body %></p>
+  <p class="summary"><%= @static_section.summary.to_s.html_safe %></p>
+  <p class="body"><%= @static_section.body.to_s.html_safe %></p>
   <%- if @docs.present? -%>
   <ul class="docs">
     <%- @docs.each do |doc| -%>

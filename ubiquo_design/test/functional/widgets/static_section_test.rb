@@ -20,6 +20,8 @@ class StaticSectionWidgetTest < ActionController::TestCase
     end
   end
 
+# Commented until we decide how to load cross-reference optional gems
+=begin
   if Ubiquo::Plugin.registered[:ubiquo_media]
     test "static_section widget with media attrs should get show" do
       widget, page = create_widget(:static_section, widget_media_attributes)
@@ -46,6 +48,7 @@ class StaticSectionWidgetTest < ActionController::TestCase
   else
     puts 'ubiquo_media not found, omitting StaticSection with media attributes tests'
   end
+=end
 
   private
 

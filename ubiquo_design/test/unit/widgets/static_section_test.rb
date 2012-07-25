@@ -12,7 +12,7 @@ class StaticSectionTest < ActiveSupport::TestCase
   def test_should_require_title
     assert_no_difference 'StaticSection.count' do
       static_section = create_static_section(:title => '')
-      assert static_section.errors.on(:title)
+      assert static_section.errors[:title]
     end
   end
 
