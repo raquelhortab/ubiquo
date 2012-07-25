@@ -14,7 +14,7 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
 
     assert_file 'app/models/post.rb' do |content|
       assert_match /class Post < ActiveRecord::Base/, content
-      assert_match /validates_presence_of :title/, content
+      assert_match /validates :title, :presence => true/, content
       assert_match /filtered_search_scopes/, content
     end
   end
@@ -24,7 +24,7 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
 
     assert_file 'app/models/post.rb' do |content|
       assert_match /class Post < ActiveRecord::Base/, content
-      assert_match /validates_presence_of :name/, content
+      assert_match /validates :name, :presence => true/, content
       assert_match /filtered_search_scopes/, content
     end
   end
@@ -34,7 +34,7 @@ class Ubiquo::ModelGeneratorTest < ::Rails::Generators::TestCase
 
     assert_file 'app/models/post.rb' do |content|
       assert_match /class Post < ActiveRecord::Base/, content
-      assert_not_match /validates_presence_of :some_field/, content
+      assert_not_match /validates :some_field, :presence => true/, content
       assert_match /filtered_search_scopes/, content
     end
   end
