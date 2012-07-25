@@ -33,7 +33,7 @@ class <%= class_name %> < ActiveRecord::Base
 
   <%- if labeled? -%>
 
-  validates_presence_of :<%= label_name %>
+  validates :<%= label_name %>, :presence => true
   <%- end -%>
 
   filtered_search_scopes
