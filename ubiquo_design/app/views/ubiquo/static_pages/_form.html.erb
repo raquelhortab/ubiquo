@@ -19,22 +19,6 @@
   </fieldset>
 </fieldset>
 <fieldset>
-  <legend><%= t('ubiquo.design.metatags') %></legend>
-  <div class="form-item">
-    <%= form.label :meta_title, Page.human_attribute_name("meta_title") %>
-    <%= form.text_field :meta_title %>
-  </div>
-  <div class="form-item">
-    <%= form.label :meta_keywords, Page.human_attribute_name("meta_keywords") %>
-    <%= form.text_field :meta_keywords %>
-  </div>
-  <div class="form-item">
-    <%= form.label :meta_description, Page.human_attribute_name("meta_description") %>
-    <%= form.text_area :meta_description, :rows => 5 %>
-  </div>
-  <%= hidden_field_tag :publish_page, 'false' %>
-</fieldset>
-<fieldset>
   <legend><%= t("ubiquo.design.static_pages.widget_info") %></legend>
   <%= fields_for @widget do |widget_form| %>
     <div class="form-item">
@@ -62,4 +46,20 @@
       </fieldset>
     <% end %>
   <% end %>
+</fieldset>
+<fieldset>
+  <legend><%= t('ubiquo.design.metatags') %></legend>
+  <div class="form-item">
+    <%= form.label :meta_title, Page.human_attribute_name("meta_title") %>
+    <%= form.text_field :meta_title %>
+  </div>
+  <div class="form-item">
+    <%= form.label :meta_keywords, Page.human_attribute_name("meta_keywords") %>
+    <%= form.text_field :meta_keywords %>
+  </div>
+  <div class="form-item">
+    <%= form.label :meta_description, Page.human_attribute_name("meta_description") %>
+    <%= form.text_area :meta_description, :rows => 5 %>
+  </div>
+  <%= hidden_field_tag :publish_page, 'false' %>
 </fieldset>
