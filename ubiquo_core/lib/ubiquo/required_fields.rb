@@ -7,7 +7,7 @@ module Ubiquo
   #   required_fields :name
   # end
   #
-  #If you use 'validates_pressence_of' it will automaticaly detected as required field.
+  #If you use 'validates :field, :presence => true' it will automaticaly detected as required field.
   #
   #Once a field is marked as required, it will show an asterisk(*) in field label inside the form
   #

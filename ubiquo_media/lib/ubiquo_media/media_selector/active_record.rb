@@ -19,7 +19,7 @@
 #
 #_media_attachment_ creates some methods on the object which can be useful on validations:
 #
-#  validates_length_of :images_ids, :minumum => 1, :message => t('should contain at least one image')
+#  validates :images_ids, :length => { :minumum => 1 , :message => t('should contain at least one image') }
 #
 #== Add media selectors to your views
 #

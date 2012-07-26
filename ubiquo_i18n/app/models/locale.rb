@@ -1,6 +1,6 @@
 class Locale < ActiveRecord::Base
-  validates_presence_of :iso_code
-  validates_uniqueness_of :iso_code, :case_sensitive => false
+  validates :iso_code, :presence => true
+  validates :iso_code, :uniqueness => { :case_sensitive => false }
 
   scope :active, {:conditions => {:is_active => true}}
   scope :ordered, {:order => 'iso_code ASC'}

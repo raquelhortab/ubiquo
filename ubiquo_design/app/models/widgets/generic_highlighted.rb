@@ -1,7 +1,7 @@
 class GenericHighlighted < Widget
   self.allowed_options = [:model, :title, :limit]
 
-  validates_presence_of :model
+  validates :model, :presence => true
 
   # Returns the scope of elements to be shown.
   # If the model of the generic highlighting has a +generic_highlighted_elements+ method,

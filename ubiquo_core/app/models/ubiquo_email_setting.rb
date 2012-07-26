@@ -1,7 +1,7 @@
 class UbiquoEmailSetting < UbiquoSetting
 # es podra espeficar n llistat separat per comes, sempre, mai un de sol
   serialize :value, String
-  validates_format_of :value, :with => /^.+@.+\..+$/, :allow_nil => true
+  validates :value, :format => { :with => /^.+@.+\..+$/, :allow_nil => true }
 
   EMAIL_REGEX="^.+@.+\..+$"
 

@@ -12,19 +12,19 @@ class UbiquoUser < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
 
-  validates_presence_of     :login
-  validates_presence_of     :name
-  validates_presence_of     :surname
-  validates_presence_of     :password,                   :if => :password_required?
-  validates_presence_of     :password_confirmation,      :if => :password_required?
-  validates_length_of       :password, :within => 4..40, :if => :password_required?
-  validates_confirmation_of :password,                   :if => :password_required?
-  validates_presence_of     :email
-  validates_uniqueness_of   :email, :case_sensitive => false
-  validates_format_of       :email, :with => /\A([a-z0-9#_.-]+)@([a-z0-9-]+)\.([a-z.]+)\Z/i
-  validates_length_of       :login, :within => 3..40
-  validates_uniqueness_of   :login, :case_sensitive => false
-
+  validates :name, :surname, :presence => true
+  validates :password_confirmation, :presence => { :if => :password_required? }
+  validates :password, :presence     => true, 
+                       :length       => { :within => 4..40 },
+                       :confirmation => true,
+                       :if           => :password_required? 
+  validates :login, :presence   => true,
+                    :length     => { :within => 3..40 },
+                    :uniqueness => { :case_sensitive => false }
+  validates :email, :presence   => true,
+                    :uniqueness => { :case_sensitive => false },
+                    :format     => { :with => /\A([a-z0-9#_.-]+)@([a-z0-9-]+)\.([a-z.]+)\Z/i }
+  
   before_save :encrypt_password
 
   # prevents a ubiquo_user from submitting a crafted form that bypasses activation

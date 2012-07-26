@@ -1,7 +1,7 @@
 class UbiquoIntegerSetting < UbiquoSetting
 
   serialize :value #, Integer
-  validates_numericality_of :value, :only_integer => true, :allow_nil => true
+  validates :value, :numericality => { :only_integer => true, :allow_nil => true }
 
   def self.check_values values
     values.each do |v|

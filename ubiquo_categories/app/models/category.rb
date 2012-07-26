@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   belongs_to :parent, :class_name => 'Category'
   has_many :children, :class_name => 'Category', :foreign_key => 'parent_id'
 
-  validates_presence_of :name, :category_set
+  validates :name, :category_set, :presence => true
 
   scope :category_set, lambda {|value|
     where(:category_set_id => value)

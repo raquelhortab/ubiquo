@@ -16,10 +16,9 @@ class Page < ActiveRecord::Base
   before_save :update_modified, :if => :is_the_draft?
   after_destroy :is_modified_on_destroy_published
 
-  validates_presence_of :name
-  validates_presence_of :url_name, :if => lambda{|page| page.url_name.nil?}
-  validates_format_of :url_name, :with => /\A[a-z0-9\/\_\-]*\Z/
-  validates_presence_of :page_template
+  validates :name, :page_template, :presence => true
+  validates :url_name, :presence => { :if => lambda{ |page| page.url_name.nil? } }
+  validates :url_name, :format => { :with => /\A[a-z0-9\/\_\-]*\Z/ }
 
   # No other page with the same url_name
   validate :uniqueness_url_name

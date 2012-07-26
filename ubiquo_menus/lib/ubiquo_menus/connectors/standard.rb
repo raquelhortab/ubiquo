@@ -229,7 +229,7 @@ module UbiquoMenus
 
       module Menu
         def self.included(klass)
-          klass.send(:validates_uniqueness_of, :key, :allow_blank => true, :case_sensitive => false)
+          klass.send(:validates, :key, :uniqueness => { :allow_blank => true, :case_sensitive => false })
           klass.send(:extend, ClassMethods)
           klass.send(:include, InstanceMethods)
           Standard.register_uhooks klass, InstanceMethods, ClassMethods

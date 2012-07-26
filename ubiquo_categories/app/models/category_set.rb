@@ -38,8 +38,8 @@ class CategorySet < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :name, :key
-  validates_uniqueness_of :key, :case_sensitive => false
+  validates :name, :presence => true
+  validates :key, :presence => true, :uniqueness => { :case_sensitive => false }
 
   filtered_search_scopes :text => [:name]
 

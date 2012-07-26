@@ -14,7 +14,7 @@ class Asset < ActiveRecord::Base
   has_many :asset_areas, :dependent => :destroy
   has_many :asset_geometries, :dependent => :destroy
 
-  validates_presence_of :name, :asset_type_id, :type
+  validates :name, :asset_type_id, :type, :presence => true
   before_validation :set_asset_type, :on => :create
   after_update :uhook_after_update
   attr_accessor :duplicated_from

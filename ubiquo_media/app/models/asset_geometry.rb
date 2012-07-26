@@ -3,11 +3,10 @@
 class AssetGeometry < ActiveRecord::Base
   belongs_to :asset
 
-  validates_presence_of :asset_id, :style, :width, :height
-  validates_numericality_of :width, :height,
-                            :only_integer => false,
-                            :greater_than => 0
-  validates_uniqueness_of :style, :scope => :asset_id, :case_sensitive => false
+  validates :asset_id, :style, :width, :height, :presence => true
+  validates :width, :height, :numericality => { :only_integer => false,
+                                                :greater_than => 0 }
+  validates :style, :uniqueness => { :scope => :asset_id, :case_sensitive => false }
 
   attr_accessible :asset_id, :style, :width, :height, :asset
 

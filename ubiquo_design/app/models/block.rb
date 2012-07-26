@@ -1,5 +1,5 @@
 class Block < ActiveRecord::Base
-  validates_presence_of :block_type, :page
+  validates :block_type, :page, :presence => true
 
   has_many :block_uses, :class_name => 'Block', :foreign_key => 'shared_id'
   belongs_to :shared, :class_name => 'Block', :foreign_key => 'shared_id'

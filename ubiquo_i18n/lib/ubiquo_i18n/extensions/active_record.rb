@@ -349,18 +349,20 @@ module UbiquoI18n
         def uniqueness_per_entity_validation_options
             [
               :locale,
-              :identifier => uniqueness_per_entity_validation_identifier,
-              :scope => :content_id,
-              :case_sensitive => false,
-              :message => Proc.new { |*attrs|
-                locale = attrs.last[:value] rescue false
-                humanized_locale = Locale.find_by_iso_code(locale.to_s)
-                humanized_locale = humanized_locale.native_name if humanized_locale
-                I18n.t(
-                  'ubiquo.i18n.locale_uniqueness_per_entity',
-                  :model => self.model_name.human,
-                  :object_locale => humanized_locale
-                )
+              :uniqueness => {
+                :identifier => uniqueness_per_entity_validation_identifier,
+                :scope => :content_id,
+                :case_sensitive => false,
+                :message => Proc.new { |*attrs|
+                  locale = attrs.last[:value] rescue false
+                  humanized_locale = Locale.find_by_iso_code(locale.to_s)
+                  humanized_locale = humanized_locale.native_name if humanized_locale
+                  I18n.t(
+                    'ubiquo.i18n.locale_uniqueness_per_entity',
+                    :model => self.model_name.human,
+                    :object_locale => humanized_locale
+                  )
+                }
               }
             ]
         end
@@ -371,7 +373,7 @@ module UbiquoI18n
 
         # Assure no duplicated objects for the same locale
         def add_locale_uniqueness_per_entity_validation
-          validates_uniqueness_of *uniqueness_per_entity_validation_options
+          validates *uniqueness_per_entity_validation_options
         end
 
       end

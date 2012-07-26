@@ -4,7 +4,7 @@ class CategoryRelation < ActiveRecord::Base
   belongs_to :related_object, :polymorphic => true
 
   before_create :create_position
-  validates_presence_of :category, :related_object, :attr_name
+  validates :category, :related_object, :attr_name, :presence => true
 
   attr_accessible :category_id, :related_object_id, :related_object_type, :position, :attr_name, :related_object, :category
 

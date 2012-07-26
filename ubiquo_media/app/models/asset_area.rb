@@ -5,10 +5,10 @@ class AssetArea < ActiveRecord::Base
 
   belongs_to :asset
 
-  validates_presence_of :asset_id, :top, :left, :width, :height, :style
-  validates_numericality_of :top,:left,:width,:height,
-    :only_integer => false, :greater_than => -1
-  validates_numericality_of :width,:height, :greater_than => 0
+  validates :asset_id, :top, :left, :width, :height, :style, :presence => true
+  validates :top, :left, :width, :height,
+    :numericality => { :only_integer => false, :greater_than => -1 }
+  validates :width,:height, :numericality => { :greater_than => 0 }
 
   attr_accessible :asset_id, :style, :top, :left, :width, :height, :asset
 

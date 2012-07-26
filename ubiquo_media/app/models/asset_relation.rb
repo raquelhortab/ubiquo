@@ -2,7 +2,7 @@ class AssetRelation < ActiveRecord::Base
   belongs_to :asset, :class_name => "Asset"
   belongs_to :related_object, :polymorphic => true
 
-  validates_presence_of :asset
+  validates :asset, :presence => true
 
   before_create :set_attribute_values
 

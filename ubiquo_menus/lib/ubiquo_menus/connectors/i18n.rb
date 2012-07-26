@@ -127,11 +127,13 @@ module UbiquoMenus
         def self.included(klass)
           klass.send :translatable, :name
           klass.share_translations_for :menu_items
-          klass.send(:validates_uniqueness_of,
+          klass.send(:validates,
                      :key,
-                     :scope       => [:locale],
-                     :allow_blank => true,
-                     :case_sensitive => false)
+                     :uniqueness => {
+                       :scope       => [:locale],
+                       :allow_blank => true,
+                       :case_sensitive => false
+                     })
           klass.send(:extend, ClassMethods)
           klass.send(:include, InstanceMethods)
           I18n.register_uhooks klass, InstanceMethods, ClassMethods

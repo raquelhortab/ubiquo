@@ -26,7 +26,7 @@ end
 
 class TestWidgetWithValidations < Widget
   self.allowed_options = :number
-  self.validates_numericality_of :number
+  self.validates :number, :numericality => true
 end
 
 
@@ -41,5 +41,5 @@ end
 Object.send(:remove_const, :StaticSection)
 class StaticSection < Widget
   self.allowed_options = [:title, :summary, :body]
-  validates_presence_of :title
+  validates :title, :presence => true
 end

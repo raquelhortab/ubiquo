@@ -1,6 +1,6 @@
 class GenericDetail < Widget
   self.allowed_options = [:model]
-  validates_presence_of :model
+  validates :model, :presence => true
 
   # Returns the element to be shown
   # If the model of the generic detail has a +generic_detail_element+ method,

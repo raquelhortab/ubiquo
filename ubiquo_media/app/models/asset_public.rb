@@ -7,7 +7,7 @@ class AssetPublic < Asset
                   :processors => Ubiquo::Settings.context(:ubiquo_media).get(:media_processors_list),
                   :storage    => Ubiquo::Settings.context(:ubiquo_media).get(:media_storage)
 
-  validates_attachment_presence :resource
+  validates :resource, :attachment_presence => true
 
   after_resource_post_process :generate_geometries
 end

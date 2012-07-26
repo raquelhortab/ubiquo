@@ -32,7 +32,7 @@
 #
 #  class LastNews < Widget
 #    self.allowed_options = [:news_to_show]
-#    validates_numericality_of :news_to_show
+#    validates :news_to_show, :numericality => true
 #
 #    def last_news(number = nil)
 #      News.all(:limit => number || news_to_show, :order => :publish_date)

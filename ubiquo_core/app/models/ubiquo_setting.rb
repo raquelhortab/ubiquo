@@ -3,8 +3,7 @@ class UbiquoSetting < ActiveRecord::Base
   serialize :value
   serialize :options
   serialize :allowed_values
-  validates_presence_of :context
-  validates_presence_of :type
+  validates :context, :type, :presence => true
   # don't work as expected, probably because of the getters
   #validates_uniqueness_of :key, :scope => [:context]
   validate :override_enabled?

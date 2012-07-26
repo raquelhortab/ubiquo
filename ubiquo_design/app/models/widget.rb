@@ -16,7 +16,7 @@ class Widget < ActiveRecord::Base
 
   attr_accessor :update_page_denied
 
-  validates_presence_of :name, :block
+  validates :name, :block, :presence => true
 
   belongs_to :block
 
