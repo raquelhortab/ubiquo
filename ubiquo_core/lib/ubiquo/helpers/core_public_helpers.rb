@@ -11,8 +11,8 @@ module Ubiquo
         else
           protected_path = Rails.root.join(Ubiquo::Settings.get(:attachments)[:private_path])
           path = object.send(attribute).path(style)
-          relative_path = path.split(protected_path).last
-          CGI::unescape(ubiquo_attachment_url(:path => relative_path))
+          relative_path = path.split(protected_path.to_s).last
+          CGI::unescape(ubiquo.attachment_url(:path => relative_path))
         end
       end
 
