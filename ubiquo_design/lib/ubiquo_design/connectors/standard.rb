@@ -75,7 +75,14 @@ module UbiquoDesign
         end
         module Helper
           def uhook_link_to_edit_widget(widget)
-            link_to t('ubiquo.design.widget_edit'), ubiquo.page_widget_path(@page, widget), :class => "edit lightwindow", :type => "page", :params => "lightwindow_form=widget_edit_form,lightwindow_width=610", :id => "edit_widget_#{widget.id}", :alt =>t('ubiquo.design.widget_edit'), :title=>t('ubiquo.design.widget_edit')
+            link_to t('ubiquo.design.widget_edit'),
+                    ubiquo.page_widget_path(@page, widget),
+                    :class  => "edit lightwindow",
+                    :type   => "page",
+                    :params => "lightwindow_form=widget_edit_form,lightwindow_width=610",
+                    :id     => "edit_widget_#{widget.id}",
+                    :alt    => t('ubiquo.design.widget_edit'),
+                    :title  => t('ubiquo.design.widget_edit')
           end
           def uhook_load_widgets(block)
             block.widgets
@@ -136,8 +143,14 @@ module UbiquoDesign
         module Helper
           def uhook_static_page_actions(page)
             [
-              link_to(t('ubiquo.edit'), ubiquo.edit_static_page_path(page)),
-              (link_to(t('ubiquo.remove'), ubiquo.static_page_path(page), :data => {:confirm => t('ubiquo.design.confirm_page_removal')}, :method => :delete) unless page.key?)
+              link_to(t('ubiquo.edit'),
+                      ubiquo.edit_static_page_path(page),
+                      :class => 'btn-edit'),
+              (link_to(t('ubiquo.remove'),
+                       ubiquo.static_page_path(page),
+                       :data   => { :confirm => t('ubiquo.design.confirm_page_removal') },
+                       :method => :delete,
+                       :class  => 'btn-delete') unless page.key?)
             ].compact
           end
 
@@ -173,9 +186,15 @@ module UbiquoDesign
         module Helper
           def uhook_page_actions(page)
             [
-              link_to(t('ubiquo.edit'), ubiquo.edit_page_path(page), :class => 'btn-edit'),
+              link_to(t('ubiquo.edit'),
+                      ubiquo.edit_page_path(page),
+                      :class => 'btn-edit'),
               link_to(t('ubiquo.design.design'), ubiquo.page_design_path(page)),
-              (link_to(t('ubiquo.remove'), ubiquo.page_path(page), :data => {:confirm => t('ubiquo.design.confirm_page_removal')}, :method => :delete, :class => 'btn-delete') unless page.key?)
+              (link_to(t('ubiquo.remove'),
+                       ubiquo.page_path(page),
+                       :data   => { :confirm => t('ubiquo.design.confirm_page_removal') },
+                       :method => :delete,
+                       :class  => 'btn-delete') unless page.key?)
             ].compact
           end
 
