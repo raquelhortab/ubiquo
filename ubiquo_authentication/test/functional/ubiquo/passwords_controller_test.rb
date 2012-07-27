@@ -10,7 +10,8 @@ class Ubiquo::PasswordsControllerTest < ActionController::TestCase
 
   def test_should_reset_password
     UbiquoUser.any_instance.expects("reset_password!")
-    UbiquoUsersNotifier.expects(:deliver_forgot_password).once.returns(nil)
+    mailer = stub(:deliver)
+    UbiquoUsersNotifier.expects(:forgot_password).once.returns(mailer)
     u = UbiquoUser.first
     post :create, :email => u.email
     assert_redirected_to ubiquo.new_session_path

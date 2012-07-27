@@ -52,11 +52,9 @@ class Ubiquo::UbiquoUsersController < UbiquoController
     respond_to do |format|
       if is_admin_to_allow_admin && @ubiquo_user.save
         if params[:send_confirm_creation]
-          UbiquoUsersNotifier.deliver_confirm_creation(
-            @ubiquo_user, 
-            params[:welcome_message], 
-            request.host_with_port
-            )
+          UbiquoUsersNotifier.confirm_creation(@ubiquo_user,
+                                               params[:welcome_message],
+                                               request.host_with_port).deliver
         end
         flash[:notice] = t("ubiquo.auth.user_created")
         format.html { redirect_to(ubiquo.ubiquo_users_path) }

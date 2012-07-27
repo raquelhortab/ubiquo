@@ -11,7 +11,7 @@ class Ubiquo::PasswordsController < ApplicationController
     @user = UbiquoUser.find_by_email(params[:email])
     if @user
       @user.reset_password!
-      UbiquoUsersNotifier.deliver_forgot_password(@user, request.host_with_port)
+      UbiquoUsersNotifier.forgot_password(@user, request.host_with_port).deliver
       flash[:notice] = t 'ubiquo.auth.password_reset'
       redirect_to ubiquo.new_session_path
     else

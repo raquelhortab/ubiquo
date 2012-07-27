@@ -30,7 +30,8 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   end
 
   def test_should_create_ubiquo_user
-    UbiquoUsersNotifier.expects(:deliver_confirm_creation).once.returns(nil)
+    mailer = stub(:deliver)
+    UbiquoUsersNotifier.expects(:confirm_creation).once.returns(mailer)
     assert_difference('UbiquoUser.count') do
       post :create, :send_confirm_creation => "1", :ubiquo_user => { :name => "name", :surname => "surname", :login => 'ubiquo_userlogin', :email => "test@test.com", :password => '123456', :password_confirmation => '123456', :is_admin => false, :is_active => false}
     end
@@ -39,7 +40,7 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   end
 
   def test_shouldnt_create_ubiquo_user_if_wrong_ubiquo_user
-    UbiquoUsersNotifier.expects(:deliver_confirm_creation).never
+    UbiquoUsersNotifier.expects(:confirm_creation).never
     assert_no_difference('UbiquoUser.count') do
       post :create, :ubiquo_user => { :login => nil }
     end

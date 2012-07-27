@@ -12,12 +12,12 @@
     <%= form.hidden_field :locale, :value => "" %>
   <% end %>
   <%= form.group :type => :fieldset, :legend => UbiquoUser.human_attribute_name("photo") do %>
-    <% if form.object.photo.original_filename -%>
+    <% if photo = form.object.photo.original_filename -%>
       <%= image_tag(url_for_file_attachment(form.object, :photo, :thumb)) %>
     <% end %>
     <%= form.file_field :photo %>
-    <% if form.object.photo.original_filename -%>
-      <%= link_to t('ubiquo.auth.current_file'), form.object.photo.url %>
+    <% if photo -%>
+      <%= link_to t('ubiquo.auth.current_file'), url_for_file_attachment(form.object, :photo) %>
     <% end %>
   <% end %>
 <% end %>
