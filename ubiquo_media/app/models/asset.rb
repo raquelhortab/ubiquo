@@ -128,6 +128,8 @@ class Asset < ActiveRecord::Base
       FileUtils.mv backup_path, self.resource.path
       self.asset_areas.destroy_all
       self.resource.reprocess!
+      # The asset must be saved to refresh update_at field for a correct caching of the asset
+      self.save!
       true
     end
   end
