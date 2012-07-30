@@ -237,8 +237,7 @@ module Ubiquo
 
     # example inherited_value format = 'ubiquo.elements_per_page'
     def self.add_inheritance(name, inherited_value)
-      raise InvalidOptionName if !check_valid_name(name)
-      raise OptionNotFound if !self.option_exists?(name)
+      check_option_exists(name)
       name = name.to_sym
       settings[self.current_context][name][:options][:inherits] = inherited_value
     end
@@ -306,6 +305,35 @@ module Ubiquo
     #  => 2
     def self.get(name, options = {})
       uhook_get(name, options)
+    end
+
+    def self.default_get_behaviour(name, options)
+      check_option_exists(name)
+      name = name.to_sym
+
+      if tree = settings[self.current_context][name][:options][:inherits]
+        raise 'unsupported inheritance method' if tree.class != Symbol &&
+                                                  (tree.class == String && tree.split('.').length != 2 ||
+                                                  tree.class == Hash && tree.keys.length != 1 && !context_exists?(tree.keys.first))
+
+        if tree.class == String
+          inherited_context, inherited_key = tree.split('.')
+        end
+        if tree.class == Hash
+          inherited_context, inherited_key = tree.keys.first, tree.values.first
+        end
+        if tree.class == Symbol
+          inherited_context, inherited_key = default_context, tree
+        end
+        self.context(inherited_context).get(inherited_key)
+      else
+        raise Ubiquo::Settings::ValueNeverSet if settings[self.current_context][name][:value].nil? && !nullable?(name)
+        if overridable?
+          settings[self.current_context][name][:value]
+        else
+          settings[self.current_context][name][:options][:default_value]
+        end
+      end
     end
 
     def self.call(name, run_in, options = {})
@@ -409,6 +437,11 @@ module Ubiquo
 
     def self.check_valid_context_name(name)
       self.check_valid_name(name) || !@loaded
+    end
+
+    def self.check_option_exists(name)
+      raise InvalidOptionName if !check_valid_name(name)
+      raise OptionNotFound if !self.option_exists?(name)
     end
 
     def self.block_assignment(&block)

@@ -2,34 +2,8 @@ module UbiquoCategories
   module Connectors
     class I18n < Base
 
-      # Validates the ubiquo_i18n-related dependencies
-      # Returning false will halt the connector load
       def self.validate_requirements
-        unless Ubiquo::Plugin.registered[:ubiquo_i18n]
-          unless Rails.env.test?
-            raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
-          else
-            return false
-          end
-        end
-        if ::Category.table_exists?
-          category_columns = ::Category.columns.map(&:name).map(&:to_sym)
-          unless [:locale, :content_id].all?{|field| category_columns.include? field}
-            if Rails.env.test?
-              ::ActiveRecord::Base.connection.change_table(:categories, :translatable => true){}
-              if ::ActiveRecord::Base.connection.class.included_modules.include?(Ubiquo::Adapters::Mysql)
-                # "Supporting" DDL transactions for mysql
-                ::ActiveRecord::Base.connection.begin_db_transaction
-                ::ActiveRecord::Base.connection.create_savepoint
-              end
-              ::Category.reset_column_information
-            else
-              raise ConnectorRequirementError,
-              "The categories table does not have the i18n fields. " +
-                "To use this connector, update the table enabling :translatable => true"
-            end
-          end
-        end
+        validate_i18n_requirements(::Category)
       end
 
       def self.unload!

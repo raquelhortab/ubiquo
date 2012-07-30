@@ -80,6 +80,36 @@ module Ubiquo
         self.mock_helper_stubs = future_stubs
       end
 
+      # Validates the ubiquo_i18n-related dependencies
+      # Returning false will halt the connector load
+      def self.validate_i18n_requirements(model)
+        unless Ubiquo::Plugin.registered[:ubiquo_i18n]
+          unless Rails.env.test?
+            raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
+          else
+            return false
+          end
+        end
+        if model.table_exists?
+          model_columns = model.columns.map(&:name).map(&:to_sym)
+          unless [:locale, :content_id].all?{|field| model_columns.include? field}
+            if Rails.env.test?
+              ::ActiveRecord::Base.connection.change_table(model.table_name, :translatable => true){}
+              if ::ActiveRecord::Base.connection.class.included_modules.include?(Ubiquo::Adapters::Mysql)
+                # "Supporting" DDL transactions for mysql
+                ::ActiveRecord::Base.connection.begin_db_transaction
+                ::ActiveRecord::Base.connection.create_savepoint
+              end
+              model.reset_column_information
+            else
+              raise ConnectorRequirementError,
+              "The #{model.table_name} table does not have the i18n fields. " +
+                "To use this connector, update the table enabling :translatable => true"
+            end
+          end
+        end
+      end
+
       # Raised when a connector requirement is not met
       class ConnectorRequirementError < StandardError; end
 

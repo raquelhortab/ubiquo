@@ -2,34 +2,8 @@ module Ubiquo
   module SettingsConnectors
     class I18n < Standard
 
-      # Validates the ubiquo_i18n-related dependencies
-      # Returning false will halt the connector load
       def self.validate_requirements
-        unless Ubiquo::Plugin.registered[:ubiquo_i18n]
-          unless Rails.env.test?
-            raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
-          else
-            return false
-          end
-        end
-        if ::UbiquoSetting.table_exists?
-          setting_columns = ::UbiquoSetting.columns.map(&:name).map(&:to_sym)
-          unless [:locale, :content_id].all?{|field| setting_columns.include? field}
-            if Rails.env.test?
-              ::ActiveRecord::Base.connection.change_table(:settings, :translatable => true){}
-              if ::ActiveRecord::Base.connection.class.included_modules.include?(Ubiquo::Adapters::Mysql)
-                # "Supporting" DDL transactions for mysql
-                ::ActiveRecord::Base.connection.begin_db_transaction
-                ::ActiveRecord::Base.connection.create_savepoint
-              end
-              ::UbiquoSetting.reset_column_information
-            else
-              raise ConnectorRequirementError,
-              "The settings table does not have the i18n fields. " +
-                "To use this connector, update the table enabling :translatable => true"
-            end
-          end
-        end
+        validate_i18n_requirements(::UbiquoSetting)
       end
 
       def self.unload!
@@ -55,15 +29,7 @@ module Ubiquo
           def uhook_default_value(name = nil, options = {})
             if translatable?(name)
               locale = options[:locale] rescue nil
-              if locale && translation_exists?(name, locale)
-                return locale, settings[current_context][name][:options][:default_value][locale]
-              elsif translation_exists?(name, default_or_first_locale(name))
-                locale = default_or_first_locale(name)
-                return locale, settings[current_context][name][:options][:default_value][locale]
-              else
-                locale = default_or_first_locale(name)
-                return locale, settings[current_context][name][:options][:default_value][locale]
-              end
+              _uhook_get_value_by_locale_and_key(locale, name, :default_value)
             else
               return default_locale, settings[current_context][name][:options][:default_value]
             end
@@ -74,17 +40,21 @@ module Ubiquo
             return nil if settings[current_context][name][:options][:allowed_values].blank?
             if translatable?(name)
               locale = options[:locale]
-              if locale && translation_exists?(name, locale)
-                return locale, settings[current_context][name][:options][:allowed_values][locale]
-              elsif translation_exists?(name, default_or_first_locale(name))
-                locale = default_or_first_locale(name)
-                return locale, settings[current_context][name][:options][:allowed_values][locale]
-              else
-                locale = default_or_first_locale(name)
-                return locale, settings[current_context][name][:options][:allowed_values][locale]
-              end
+              _uhook_get_value_by_locale_and_key(locale, name, :allowed_values)
             else
               return settings[current_context][name][:options][:allowed_values]
+            end
+          end
+
+          def _uhook_get_value_by_locale_and_key locale, name, key
+            if locale && translation_exists?(name, locale)
+              return locale, settings[current_context][name][:options][key][locale]
+            elsif translation_exists?(name, default_or_first_locale(name))
+              locale = default_or_first_locale(name)
+              return locale, settings[current_context][name][:options][key][locale]
+            else
+              locale = default_or_first_locale(name)
+              return locale, settings[current_context][name][:options][key][locale]
             end
           end
 
@@ -219,51 +189,27 @@ module Ubiquo
 
           # Get the value of a setting
           def uhook_get(name, options = {})
-            raise Ubiquo::Settings::InvalidOptionName if !check_valid_name(name)
-            raise Ubiquo::Settings::OptionNotFound if !self.option_exists?(name)
-            name = name.to_sym
-
-            if tree = settings[self.current_context][name][:options][:inherits]
-              raise 'unsupported inheritance method' if tree.class != Symbol &&
-                                                        (tree.class == String && tree.split('.').length != 2 ||
-                                                        tree.class == Hash && tree.keys.length != 1 && !context_exists?(tree.keys.first))
-
-              if tree.class == String
-                inherited_context, inherited_key = tree.split('.')
-              end
-              if tree.class == Hash
-                inherited_context, inherited_key = tree.keys.first, tree.values.first
-              end
-              if tree.class == Symbol
-                inherited_context, inherited_key = default_context, tree
-              end
-              self.context(inherited_context).get(inherited_key)
-            else
-              if translatable?(name)
-                if options.is_a?(Hash)
-                  locale = options[:locale]
-                  locale = default_or_first_locale(name) if !locale && options[:any_value]
-                else
-                  locale = options
-                end
-                locale ||= default_locale
-                locale = locale.to_sym
-                raise Ubiquo::Settings::ValueNeverSet if (settings[self.current_context][name][:value].nil? ||
-                                                        settings[self.current_context][name][:value].nil?) &&
-                                                        !nullable?(name) ||!translation_exists?(name, locale)
-                if overridable?
-                  settings[self.current_context][name][:value][locale]
-                else
-                  settings[self.current_context][name][:options][:default_value][locale]
-                end
+            check_option_exists(name)
+            tree = settings[self.current_context][name][:options][:inherits]
+            if !tree && translatable?(name)
+              if options.is_a?(Hash)
+                locale = options[:locale]
+                locale = default_or_first_locale(name) if !locale && options[:any_value]
               else
-                raise Ubiquo::Settings::ValueNeverSet if settings[self.current_context][name][:value].nil? && !nullable?(name)
-                if overridable?
-                  settings[self.current_context][name][:value]
-                else
-                  settings[self.current_context][name][:options][:default_value]
-                end
+                locale = options
               end
+              locale ||= default_locale
+              locale = locale.to_sym
+              raise Ubiquo::Settings::ValueNeverSet if (settings[self.current_context][name][:value].nil? ||
+                                                      settings[self.current_context][name][:value].nil?) &&
+                                                      !nullable?(name) ||!translation_exists?(name, locale)
+              if overridable?
+                settings[self.current_context][name][:value][locale]
+              else
+                settings[self.current_context][name][:options][:default_value][locale]
+              end
+            else
+              default_get_behaviour(name, options)
             end
           end
 

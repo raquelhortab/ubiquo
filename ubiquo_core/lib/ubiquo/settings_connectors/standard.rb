@@ -86,8 +86,7 @@ module Ubiquo
                 set(name, default_value)
               end
             else
-              raise Ubiquo::Settings::InvalidOptionName if !check_valid_name(name)
-              raise Ubiquo::Settings::OptionNotFound if !self.option_exists?(name)
+              check_option_exists(name)
               name = name.to_sym
               options = settings[current_context][name][:options].merge(options)
               check_type(options[:value_type], value) if self.loaded && options[:value_type]
@@ -104,43 +103,12 @@ module Ubiquo
           end
 
           def uhook_get(name, options = {})
-            raise Ubiquo::Settings::InvalidOptionName if !check_valid_name(name)
-            raise Ubiquo::Settings::OptionNotFound.new(name) if !self.option_exists?(name)
-            name = name.to_sym
-
-            if tree = settings[self.current_context][name][:options][:inherits]
-              raise 'unsupported inheritance method' if tree.class != Symbol &&
-                                                        (tree.class == String && tree.split('.').length != 2 ||
-                                                        tree.class == Hash && tree.keys.length != 1 && !context_exists?(tree.keys.first))
-
-              if tree.class == String
-                inherited_context, inherited_key = tree.split('.')
-              end
-              if tree.class == Hash
-                inherited_context, inherited_key = tree.keys.first, tree.values.first
-              end
-              if tree.class == Symbol
-                inherited_context, inherited_key = default_context, tree
-              end
-              self.context(inherited_context).get(inherited_key)
-            else
-              raise Ubiquo::Settings::ValueNeverSet if settings[self.current_context][name][:value].nil? && !nullable?(name)
-              if overridable?
-                settings[self.current_context][name][:value]
-              else
-                settings[self.current_context][name][:options][:default_value]
-              end
-            end
+            default_get_behaviour(name, options)
           end
 
           def uhook_initialize options = {}
-#            uhook_reinitialize options
             self.settings = { default_context => {} }
           end
-
-#          def uhook_reinitialize options = {}
-#            self.overridable = options[:settings_overridable].present?
-#          end
 
           def uhook_default_options
             {
