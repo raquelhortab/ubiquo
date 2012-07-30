@@ -226,7 +226,7 @@ module UbiquoI18n
 
           define_method 'destroy_content' do
             self.translations.each(&:destroy)
-            self.destroy
+            self.reload.destroy
           end
 
         end
