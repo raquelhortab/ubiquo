@@ -3,6 +3,8 @@ class Ubiquo::UbiquoUsersController < UbiquoController
   #eval this option is a lambda that will be called in that context. Normally contains the access control method invocation
   ubiquo_config_call(:user_access_control, {:context => :ubiquo_authentication})
 
+  before_filter :load_roles, :only => [:new, :edit]
+  
   # GET /ubiquo_users
   # GET /ubiquo_users.xml
   def index
@@ -104,6 +106,12 @@ class Ubiquo::UbiquoUsersController < UbiquoController
       format.html { redirect_to(ubiquo.ubiquo_users_path) }
       format.xml  { head :ok }
     end
+  end
+  
+  private
+  
+  def load_roles
+    @roles = Role.all rescue []
   end
 
 end

@@ -21,7 +21,7 @@ module UbiquoAccessControl
           end
         end
         content_tag("fieldset") do
-          content_tag("legend", t("ubiquo.auth.roles")) + check_boxes.join("\n")
+          content_tag("legend", t("ubiquo.auth.roles")) + check_boxes.join("\n").html_safe
         end + hidden_field_tag("ubiquo_user[role_ids][]", '')
       end
 

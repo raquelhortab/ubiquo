@@ -30,7 +30,9 @@
     <%= form.check_box :is_admin, :class => "checkbox" %>
   <% end %>
   <%= form.check_box :is_active, :class => "checkbox" %>
-  <%#= user_permission_fields(form) if respond_to?(:user_permission_fields) %>
+
+  <%= user_permission_fields(form) if respond_to?(:user_permission_fields) %>
+
 <% end %>
 <% if form.object.new_record? %>
   <%= form.group :type => :fieldset, :legend => t("ubiquo.auth.extra_data") do %>
