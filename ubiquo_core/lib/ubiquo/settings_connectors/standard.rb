@@ -91,7 +91,10 @@ module Ubiquo
               name = name.to_sym
               options = settings[current_context][name][:options].merge(options)
               check_type(options[:value_type], value) if self.loaded && options[:value_type]
-              options.merge!(:default_value => value) if !options.delete(:is_a_override)
+              if !options.delete(:is_a_override)
+                options.merge!(:default_value => value)
+                options[:original_parameters].merge!({:default_value => value})
+              end
               options.delete(:inherits)
               settings[current_context][name] = {
                 :options => options,
