@@ -51,7 +51,7 @@
                         <span><%= [Paperclip::Geometry.parse(format)].map{|e|"#{e.width.to_i}x#{e.height.to_i}"}.first %></span>
                       </div>
                       <div class="resize-box-detail-image">
-                              <%=  image_tag(url_for_media_attachment(@asset, style.to_sym)) %>
+                              <%=  image_tag(url_for_media_attachment(@asset, style.to_sym, :add_timestamp => true)) %>
                       </div>
                       <% end %>
                     </li>
