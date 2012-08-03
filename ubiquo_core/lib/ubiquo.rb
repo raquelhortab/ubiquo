@@ -87,6 +87,13 @@ module Ubiquo
     end
     include Ubiquo::Engine::Base
 
+    initializer :tinymce_mce_available_languages do
+      TinyMCE::Rails::Configuration.class_eval do
+        def self.available_languages
+          Ubiquo.supported_locales
+        end
+      end
+    end
 
   end
 
