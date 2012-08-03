@@ -47,7 +47,7 @@ module Ubiquo
           def uhook_add(name = nil, default_value = nil, options = {}, &block)
             if name.is_a?(UbiquoSetting)
               return nil if !overridable?
-              context(name.context).set(name.key, name.value)
+              context(name.context).set(name.key, name.value, {:is_a_override => true})
               name
             # only used by plugin or application, not for override
             elsif name.is_a?(Hash)

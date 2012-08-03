@@ -13,7 +13,7 @@ module Ubiquo
                 keepable_params.update(filter_field => object.send(@options[:id_field]))
                 result += @context.content_tag(:li) do
                   url_for_options = @context.params.merge(keepable_params || {})
-                  @context.link_to name.html_safe, url_for_options, :class => css_class
+                  @context.link_to name.to_s.html_safe, url_for_options, :class => css_class
                 end
               end
             end
