@@ -22,13 +22,13 @@ class Ubiquo::UbiquoUsersControllerTest < ActionController::TestCase
   def test_should_get_new
     get :new
     assert_response :success
-    assert [], assigns(:roles)
+    assert_equal [], assigns(:roles)
   end
 
   def test_should_get_edit
     get :edit, :id => ubiquo_users(:josep).id
     assert_response :success
-    assert [], assigns(:roles)
+    assert_equal [], assigns(:roles)
   end
 
   def test_should_create_ubiquo_user
