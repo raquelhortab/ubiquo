@@ -176,39 +176,14 @@ module Ubiquo
       end
     end
 
-    def self.boolean(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoBooleanSetting)
-      uhook_add(name, default_value, options, &block)
-    end
-
-    def self.integer(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoIntegerSetting)
-      uhook_add(name, default_value, options, &block)
-    end
-
-    def self.string(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoStringSetting)
-      uhook_add(name, default_value, options, &block)
-    end
-
-    def self.symbol(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoSymbolSetting)
-      uhook_add(name, default_value, options, &block)
-    end
-
-    def self.email(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoEmailSetting)
-      uhook_add(name, default_value, options, &block)
-    end
-
-    def self.password(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoPasswordSetting)
-      uhook_add(name, default_value, options, &block)
-    end
-
-    def self.list(name = nil, default_value = nil, options = {}, &block)
-      options.merge!(:value_type => UbiquoListSetting)
-      uhook_add(name, default_value, options, &block)
+    # Create convenience methods to add new settings by type
+    %w{boolean integer string symbol email password list}.each do |name|
+      eval <<-CODE
+        def self.#{name}(name = nil, default_value = nil, options = {}, &block)
+          options.merge!(:value_type => Ubiquo#{name.capitalize}Setting)
+          uhook_add(name, default_value, options, &block)
+        end
+      CODE
     end
 
     def self.check_type(klass, values)
