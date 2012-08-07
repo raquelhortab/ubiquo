@@ -11,7 +11,7 @@ task :default => %w(test)
   task task_name do
     errors = []
     PROJECTS.each do |project|
-      puts "Running tests in #{project}"
+      puts "\n******** Running tests in #{project} ***********\n\n"
       system(%(cd #{project} && #{$0} #{task_name})) || errors << project
     end
     fail("Errors in #{errors.join(', ')}") unless errors.empty?
