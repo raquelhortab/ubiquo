@@ -1,5 +1,16 @@
 test:
+<% case ENV['ARCONN']
+   when 'postgresql' %>
+  adapter: postgresql
+  encoding: unicode
+  database: ubiquo_core_test
+<% when 'mysql2' %>
+  adapter: mysql2
+  encoding: utf8
+  database: ubiquo_core_test
+<% else %>
   adapter: sqlite3
   database: db/test.sqlite3
   pool: 5
   timeout: 5000
+<% end %>
