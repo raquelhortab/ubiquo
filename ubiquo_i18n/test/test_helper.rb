@@ -1,19 +1,11 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
-
-ActionMailer::Base.delivery_method = :test
-ActionMailer::Base.perform_deliveries = false
-ActionMailer::Base.default_url_options[:host] = "test.com"
-
-Rails.backtrace_cleaner.remove_silencers!
+require File.expand_path("../dummy/config/application.rb",  __FILE__)
+require 'ubiquo/test/test_helper'
 
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
-
-ActionController::TestCase.route_testing_engine = :ubiquo_i18n
 
 RoutingFilter.active = false if defined?(RoutingFilter)
 
@@ -45,6 +37,7 @@ Object.const_set("InheritanceTestModel", Class.new(ActiveRecord::Base)) unless O
 class ActiveSupport::TestCase
 # Not indented to avoid history pollution
 def self.create_test_model_backend
+  self.fixture_path = File.dirname(__FILE__) + '/fixtures'
   return if defined? @@already_built
 
   conn = ActiveRecord::Base.connection

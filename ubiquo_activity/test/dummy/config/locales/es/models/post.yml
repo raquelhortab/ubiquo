@@ -1,6 +1,0 @@
-es:
-  activerecord:
-    models:
-      post: "Post"
-    attributes:
-      post:

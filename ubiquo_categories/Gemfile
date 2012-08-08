@@ -9,4 +9,5 @@ group :development, :test do
   gem 'ruby-debug-base19x', '~> 0.11.30.pre4'
   gem 'ruby-debug19'
   gem "ubiquo_core", :path => ".."
+  gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
 end

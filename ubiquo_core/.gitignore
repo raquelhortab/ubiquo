@@ -8,4 +8,6 @@ test/dummy/log
 test/dummy/db/*.sqlite3
 test/dummy/config/tiny_mce.yml
 test/dummy/public
+test/dummy/protected
 test/dummy/tmp
+test/dummy/db/schema.rb

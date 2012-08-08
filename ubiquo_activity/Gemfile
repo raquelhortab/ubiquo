@@ -15,3 +15,4 @@ path "../" do
   gem "ubiquo_authentication"
 end
 
+gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'

@@ -1,19 +1,15 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
-require 'ruby-debug'
-
-ActionMailer::Base.delivery_method = :test
-ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.default_url_options[:host] = "test.com"
-
-Rails.backtrace_cleaner.remove_silencers!
+require File.expand_path("../dummy/config/application.rb",  __FILE__)
+require 'ubiquo/test/test_helper'
 
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
-ActionController::TestCase.route_testing_engine = :ubiquo_categories
+
+class ActiveSupport::TestCase
+  self.fixture_path = File.dirname(__FILE__) + '/fixtures'
+end
 
 def create_categories_test_model_backend
   # Creates a test table for AR things work properly
@@ -42,7 +38,6 @@ def destroy_categories_test_model_backend
 
   %w{CategoryTranslatableTestModel CategoryTestModelBase EmptyTestModelBase CategoryTestModel}.each do |model_name|
     table = model_name.tableize
-    translatable = table != 'category_test_models'
 
     conn.drop_table table if conn.tables.include?(table)
 
@@ -129,8 +124,4 @@ end
 
 def mock_categories_helper
   mock_helper(:ubiquo_categories)
-end
-
-if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
-  ActiveRecord::Base.connection.client_min_messages = "ERROR"
 end
