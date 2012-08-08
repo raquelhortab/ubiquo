@@ -76,7 +76,7 @@ module UbiquoScaffold
       class_option :run_migration,
         desc: "Run pending migrations at the end",
         type: :boolean,
-        default: true
+        default: !Rails.env.test?
 
       def self.source_root
         path = File.join(File.dirname(__FILE__), 'ubiquo', generator_name, 'templates')
