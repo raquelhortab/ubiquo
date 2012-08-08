@@ -29,7 +29,7 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
   def test_should_update_property_values
     job = create_job
     ActiveJob::PROPERTIES.each do |property|
-      job.expects("update_attribute").with(property.to_sym, 0)
+      job.expects("update_attributes").with(property.to_sym => 0)
       job.set_property(property.to_sym, 0)
     end
   end
@@ -38,9 +38,9 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
     ActiveJob.delete_all
     job = create_job
     job_bis = ActiveJob.first
-    job_bis.update_attribute(:state, 2)
+    job_bis.update_attributes(:state => 2)
     assert_raise ActiveRecord::StaleObjectError do
-      job.update_attribute(:state, 3)
+      job.update_attributes(:state => 3)
     end
   end
 
@@ -60,17 +60,17 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
 
   def test_should_filter_by_filter_date_start
     job = create_job()
-    job.update_attribute(:created_at, 1.year.from_now)
+    job.update_column(:created_at, 1.year.from_now)
     assert_equal [], ActiveJob.filtered_search({:filter_date_start => 2.years.from_now})
-    job.update_attribute(:created_at, 3.years.from_now)
+    job.update_column(:created_at, 3.years.from_now)
     assert_equal_set [job], ActiveJob.filtered_search({:filter_date_start => 2.years.from_now})
   end
 
   def test_should_filter_by_filter_date_end
     job = create_job()
-    job.update_attribute(:created_at, 1.years.ago)
+    job.update_column(:created_at, 1.years.ago)
     assert_equal [], ActiveJob.filtered_search({:filter_date_end => 2.years.ago})
-    job.update_attribute(:created_at, 3.years.ago)
+    job.update_column(:created_at, 3.years.ago)
     assert_equal_set [job], ActiveJob.filtered_search({:filter_date_end => 2.years.ago})
   end
 

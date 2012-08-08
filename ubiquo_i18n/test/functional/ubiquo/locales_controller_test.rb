@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + "/../../test_helper"
 
 class Ubiquo::LocalesControllerTest < ActionController::TestCase
-  include Ubiquo::Engine.routes.url_helpers
-  include Rails.application.routes.mounted_helpers
 
   def teardown
     Locale.current = nil
@@ -36,13 +34,15 @@ class Ubiquo::LocalesControllerTest < ActionController::TestCase
   end
 
   def test_shouldnt_update_locales_if_default_is_not_selected
+    previous_default = Locale.default
     selected_locales = Locale.ordered[1..2].map{|l|l.id.to_s}
     default_locale = Locale.ordered[0].id.to_s
 
     put :update, :selected_locales => selected_locales, :default_locale => default_locale
     assert_redirected_to ubiquo.locales_path(:locale => Locale.current)
 
-    assert_equal Locale.ordered[1].iso_code, Locale.default
+    assert_not_equal previous_default, default_locale
+    assert_equal previous_default, Locale.default
 
   end
 

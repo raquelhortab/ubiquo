@@ -38,6 +38,8 @@ class ActiveSupport::TestCase
 # Not indented to avoid history pollution
 def self.create_test_model_backend
   self.fixture_path = File.dirname(__FILE__) + '/fixtures'
+  fixtures :all
+
   return if defined? @@already_built
 
   conn = ActiveRecord::Base.connection

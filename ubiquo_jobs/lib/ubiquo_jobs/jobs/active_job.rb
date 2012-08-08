@@ -49,7 +49,7 @@ module UbiquoJobs
       # Save updated attributes.
       # Optimistic locking is handled automatically by Active Record
       def set_property(property, value)
-        update_attribute property, value
+        update_attributes property => value
       end
 
       # Returns the outputted results of the job execution, if any

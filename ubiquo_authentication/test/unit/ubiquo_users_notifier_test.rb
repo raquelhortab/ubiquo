@@ -24,7 +24,7 @@ class UbiquoUsersNotifierTest < ActionMailer::TestCase
     assert !ActionMailer::Base.deliveries.empty?
 
     assert_equal [ubiquo_user.email], email.to
-    assert_match /#{ubiquo_user.password}/, email.encoded
+    assert_match /#{Regexp.escape(ubiquo_user.password)}/, email.encoded
     assert_match /#{ubiquo_user.login}/, email.encoded
     assert_match /#{Ubiquo::Settings.get(:app_title)}/, email.subject
     assert_match /Welcome message/, email.encoded

@@ -110,7 +110,7 @@ module UbiquoMedia
                 relation = proxy_association.owner.send("#{field}_asset_relations").select do |ar|
                   ar.asset == asset
                 end.first
-                relation.update_attribute :position, i+1 if relation
+                relation.update_attributes :position => i+1 if relation
               end
             end
 

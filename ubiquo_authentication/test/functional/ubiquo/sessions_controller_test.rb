@@ -9,7 +9,7 @@ class Ubiquo::SessionsControllerTest < ActionController::TestCase
   end
 
   def test_should_not_login_for_inactive_accounts
-    ubiquo_users(:josep).update_attribute(:is_active, false)
+    ubiquo_users(:josep).update_attributes(:is_active => false)
     post :create, :login => 'josep', :password => 'test'
     assert session[:ubiquo][:ubiquo_user_id].nil?
     assert_response :success

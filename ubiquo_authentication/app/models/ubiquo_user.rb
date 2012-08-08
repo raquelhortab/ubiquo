@@ -14,17 +14,17 @@ class UbiquoUser < ActiveRecord::Base
 
   validates :name, :surname, :presence => true
   validates :password_confirmation, :presence => { :if => :password_required? }
-  validates :password, :presence     => true, 
+  validates :password, :presence     => true,
                        :length       => { :within => 4..40 },
                        :confirmation => true,
-                       :if           => :password_required? 
+                       :if           => :password_required?
   validates :login, :presence   => true,
                     :length     => { :within => 3..40 },
                     :uniqueness => { :case_sensitive => false }
   validates :email, :presence   => true,
                     :uniqueness => { :case_sensitive => false },
                     :format     => { :with => /\A([a-z0-9#_.-]+)@([a-z0-9-]+)\.([a-z.]+)\Z/i }
-  
+
   before_save :encrypt_password
 
   # prevents a ubiquo_user from submitting a crafted form that bypasses activation
@@ -53,7 +53,8 @@ class UbiquoUser < ActiveRecord::Base
       }
       user = UbiquoUser.create(admin_user)
       unless user.new_record?
-        user.update_attribute :is_superadmin, true
+        user.is_superadmin = true
+        user.save
       end
       user
     end
