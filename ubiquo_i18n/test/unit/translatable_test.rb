@@ -132,9 +132,10 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
   def test_should_update_non_translatable_attributes_in_instances_sharing_content_id_on_update
     ca = create_model(:my_field => 'f1', :my_other_field => 'f2', :locale => 'ca')
     es = create_model(:my_field => 'newf1', :my_other_field => 'newf2', :locale => 'es', :content_id => ca.content_id)
-    ca.update_attribute :my_other_field, 'common'
+    ca.update_column :my_other_field, 'common'
+    ca.save
     assert_equal 'common', es.reload.my_other_field
-    es.update_attribute :my_field, 'mine'
+    es.update_column :my_field, 'mine'
     assert_equal 'f1', ca.reload.my_field
   end
 
@@ -142,7 +143,7 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
     test_1 = create_model(:my_field => 'f1', :my_other_field => 'f2', :locale => 'ca')
     test_2 = create_model(:my_field => 'newf1', :my_other_field => 'newf2', :locale => 'es', :content_id => test_1.content_id)
     test_1.without_updating_translations do
-      test_1.update_attribute :my_other_field, 'common'
+      test_1.update_column :my_other_field, 'common'
     end
     assert_equal 'newf2', test_2.reload.my_other_field
   end
@@ -153,11 +154,11 @@ class Ubiquo::TranslatableTest < ActiveSupport::TestCase
 
     test_1.without_updating_translations do
       test_1.without_updating_translations do
-        test_1.update_attribute :my_other_field, 'common1'
+        test_1.update_column :my_other_field, 'common1'
       end
       assert_equal 'newf2', test_2.reload.my_other_field
 
-      test_1.update_attribute :my_other_field, 'common2'
+      test_1.update_column :my_other_field, 'common2'
     end
     assert_equal 'newf2', test_2.reload.my_other_field
   end

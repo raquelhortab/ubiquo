@@ -214,7 +214,7 @@ class AssetTest < ActiveSupport::TestCase
       :resource    => _test_file,
     }
     AssetPublic.create(default_options.merge(options)).tap do |asset|
-      asset.update_attribute :created_at, created_at if created_at
+      asset.update_column :created_at, created_at if created_at
     end
   end
 

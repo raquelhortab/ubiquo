@@ -406,7 +406,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
     }
 
     asset = AssetPublic.create(default_options.merge(options))
-    asset.update_attribute :created_at, created_at if created_at
+    asset.update_column :created_at, created_at if created_at
     # Save asset to destroy on teardown
     @created_assets << asset
     asset

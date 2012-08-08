@@ -89,7 +89,7 @@ class ActivityInfoTest < ActiveSupport::TestCase
     activity_info = create_activity_info(:related_object => related_object)
 
     assert_difference('Version.count') do
-      related_object.update_attribute :title, 'foo_2'
+      related_object.update_attributes :title => 'foo_2'
     end
 
     assert related_object.destroy
@@ -101,9 +101,9 @@ class ActivityInfoTest < ActiveSupport::TestCase
   test "should filter by date" do
     ActivityInfo.delete_all
     activity1, activity2 = create_activity_info, create_activity_info
-    activity1.update_attribute :created_at, 4.days.ago
+    activity1.update_column :created_at, 4.days.ago
     activity2 = create_activity_info
-    activity2.update_attribute :created_at, 2.days.ago
+    activity2.update_column :created_at, 2.days.ago
     fake_activity = create_activity_info
     searched_activities = ActivityInfo.filtered_search({ "filter_date_start" => 3.days.ago,
                                                          "filter_date_end" => 1.days.ago,

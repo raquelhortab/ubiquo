@@ -513,7 +513,7 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
     ca = create_model(:locale => 'ca', :my_other_field => 'shared', :my_field => 'uniq_ca')
     Locale.current = 'es'
     assert_no_difference 'TestModel.count' do
-      ca.update_attribute :my_field, 'new_uniq'
+      ca.update_column :my_field, 'new_uniq'
     end
     assert_equal 'new_uniq', ca.reload.my_field
     assert_equal 'shared', ca.my_other_field
@@ -526,7 +526,8 @@ class Ubiquo::ActiveRecordHelpersTest < ActiveSupport::TestCase
 
     Locale.current = 'es'
     assert_no_difference 'TestModel.count' do
-      ca.update_attribute :my_other_field, 'new_shared'
+      ca.update_column :my_other_field, 'new_shared'
+      ca.save
     end
 
     assert_equal 'es', es.locale

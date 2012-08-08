@@ -16,9 +16,9 @@ class Ubiquo::VersionableTest < ActiveSupport::TestCase
   def test_should_get_versions
     versionable = create_versionable_model(:my_field => '1')
     assert_equal 1, versionable.versions.size
-    versionable.update_attribute :my_field, '2'
+    versionable.update_attributes :my_field => '2'
     assert_equal 2, versionable.versions.size
-    versionable.update_attribute :my_field, '3'
+    versionable.update_attributes :my_field => '3'
     assert_equal 3, versionable.versions.size
   end
 
@@ -42,7 +42,7 @@ class Ubiquo::VersionableTest < ActiveSupport::TestCase
     versionable_2 = create_versionable_model(:my_field => 'val')
 
     assert_equal 2, TestVersionableModel.count
-    versionable_1.update_attribute :my_field, 'new'
+    versionable_1.update_attributes :my_field => 'new'
     assert_equal 2, versionable_1.versions.size
     assert_equal 1, versionable_2.versions.size
   end
@@ -50,7 +50,7 @@ class Ubiquo::VersionableTest < ActiveSupport::TestCase
   def test_should_execute_without_versionable
     set_test_model_as_versionable
     versionable = create_versionable_model
-    TestVersionableModel.without_versionable {versionable.update_attribute :my_field, 'value'}
+    TestVersionableModel.without_versionable {versionable.update_attributes :my_field => 'value'}
     assert_equal 1, versionable.versions.count
   end
 
@@ -58,7 +58,7 @@ class Ubiquo::VersionableTest < ActiveSupport::TestCase
     set_test_model_as_versionable({:max_amount => 3})
     versionable = create_versionable_model
     5.times do |i|
-     versionable.update_attribute :my_field, "val#{i}"
+     versionable.update_attributes :my_field => "val#{i}"
      assert versionable.versions.size <= 3
     end
     assert_equal 3, versionable.versions.reload.size
@@ -71,7 +71,7 @@ class Ubiquo::VersionableTest < ActiveSupport::TestCase
     TestVersionableModel.delete_all
     versionable = create_versionable_model
     5.times do |i|
-     versionable.update_attribute :my_field, "val#{i}"
+     versionable.update_attributes :my_field => "val#{i}"
     end
     assert_equal 6, Version.count
     versionable.destroy
@@ -81,7 +81,7 @@ class Ubiquo::VersionableTest < ActiveSupport::TestCase
   def test_should_restore_version
     set_test_model_as_versionable
     versionable = create_versionable_model(:my_field => 'val')
-    versionable.update_attribute :my_field, 'new'
+    versionable.update_attributes :my_field => 'new'
     old_version = versionable.versions.last
 
     versionable.restore(old_version.id)

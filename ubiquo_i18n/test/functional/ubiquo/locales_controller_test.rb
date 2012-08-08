@@ -20,7 +20,7 @@ class Ubiquo::LocalesControllerTest < ActionController::TestCase
     assert_not_equal 0, Locale.count
     Locale.update_all :is_active => false
     Locale.update_all :is_default => false
-    Locale.first.update_attribute :is_default, true
+    Locale.first.update_column :is_default, true
 
     assert_equal [], Locale.active
 

@@ -40,7 +40,7 @@ class Menu < ActiveRecord::Base
       #  - items that have been deleted via nested_attributes will still exists
       #  but should be ignored
       unless menu_item.uhook_skip_for_position_calculation? || menu_item.frozen?
-        menu_item.update_attribute(:position, position)
+        menu_item.update_attributes(:position => position)
       end
       position + 1
     end

@@ -138,7 +138,7 @@ module Connectors
         s2.save
         assert s2.id
         assert_equal 'hola_redefinido', Ubiquo::Settings[:foo_context_1].get(:new_setting, :es_ES)
-        s2.update_attribute :value, 'hola_redefinit'
+        s2.update_column :value, 'hola_redefinit'
         assert_equal 'hola_redefinit', Ubiquo::Settings[:foo_context_1].get(:new_setting, :ca_ES)
       end
 

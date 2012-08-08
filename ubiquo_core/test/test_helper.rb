@@ -4,7 +4,7 @@
 ENV["RAILS_ENV"] = "test"
 
 require 'ubiquo/test/dummy_app'
-Ubiquo::Test::TestHelper.load
+require 'ubiquo/test/test_helper'
 
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)

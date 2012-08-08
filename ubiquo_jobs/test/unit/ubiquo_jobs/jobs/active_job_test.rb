@@ -96,7 +96,7 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
     job_1.dependencies << job_2
     assert_equal job_2, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
-    job_2.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
+    job_2.reload.update_column :state, UbiquoJobs::Jobs::Base::STATES[:finished]
     assert_equal job_1, ActiveManager.get('me')
   end
 
@@ -117,17 +117,17 @@ class UbiquoJobs::Jobs::ActiveJobTest < ActiveSupport::TestCase
     # 4 is the only one without dependencies
     assert_equal job_4, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
-    job_4.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
+    job_4.reload.update_column :state, UbiquoJobs::Jobs::Base::STATES[:finished]
 
     # 3 can't trigger until 2
     assert_equal job_2, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
-    job_2.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
+    job_2.reload.update_column :state, UbiquoJobs::Jobs::Base::STATES[:finished]
 
     # job_3 turn, then 1 can run
     assert_equal job_3, ActiveManager.get('me')
     assert_nil ActiveManager.get('you')
-    job_3.reload.update_attribute :state, UbiquoJobs::Jobs::Base::STATES[:finished]
+    job_3.reload.update_column :state, UbiquoJobs::Jobs::Base::STATES[:finished]
     assert_equal job_1, ActiveManager.get('me')
   end
 

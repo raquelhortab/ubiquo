@@ -1,16 +1,17 @@
+<% db_name = (ENV['UGEM'] || 'ubiquo_core') + 'test' %>
 test:
 <% case ENV['ARCONN']
    when 'postgresql' %>
   adapter: postgresql
   encoding: unicode
-  database: ubiquo_core_test
+  database: <%= db_name %>
 <% when 'mysql2' %>
   adapter: mysql2
   encoding: utf8
-  database: ubiquo_core_test
+  database: <%= db_name %>
 <% else %>
   adapter: sqlite3
-  database: db/test.sqlite3
+  database: db/<%= db_name %>.sqlite3
   pool: 5
   timeout: 5000
 <% end %>

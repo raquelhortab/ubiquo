@@ -267,8 +267,8 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal 2, model.category_relations.count
     first = model.category_relations.first
     last = model.category_relations.last
-    first.update_attribute :position, 2
-    last.update_attribute :position, 1
+    first.update_column :position, 2
+    last.update_column :position, 1
     assert_not_equal first, model.reload.category_relations.first
     assert_equal first, model.reload.category_relations.last
   end

@@ -4,12 +4,9 @@ ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/application.rb",  __FILE__)
 require 'ubiquo/test/test_helper'
-require File.expand_path("../test_support/database.rb",  __FILE__)
-require File.expand_path("../test_support/url_helper.rb",  __FILE__)
 
-TestSupport::Database.check_psql_adapter
-# Run any available migration
-TestSupport::Database.migrate!
+ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
+ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
 UbiquoDesign::Structure.define{}
 

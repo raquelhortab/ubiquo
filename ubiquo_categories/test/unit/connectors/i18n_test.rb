@@ -329,7 +329,7 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
       set = create_category_set
       set.categories << 'Category'
       category = Category.last
-      category.update_attribute :locale, 'en'
+      category.update_column :locale, 'en'
       cat_category = category.translate('ca', :copy_all => true)
       cat_category.save
       assert_equal category, set.reload.select_fittest(category)

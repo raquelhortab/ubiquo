@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::MenusControllerTest < ActionController::TestCase
 
-  include TestSupport::UrlHelper
-
   def test_should_get_index
 
     get :index

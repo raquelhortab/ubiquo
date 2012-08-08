@@ -583,12 +583,13 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     origin.reload # due to https://github.com/rails/rails/issues/5563
     parent = TestModel.find(origin.test_model.id)
 
-    origin.update_attribute :test_model_id, nil
+    origin.update_column :test_model_id, nil
+    origin.save
     assert_nil origin.reload.test_model
     assert_nil translated_origin.reload.test_model
 
     # now revert and try update_attributes, which is slightly different...
-    origin.update_attribute :test_model_id, parent.id
+    origin.update_column :test_model_id, parent.id
     assert_equal parent, origin.test_model
     origin.update_attributes :test_model_id => nil
     assert_nil origin.test_model
@@ -599,7 +600,8 @@ class Ubiquo::SharedRelationsTest < ActiveSupport::TestCase
     origin, translated_origin = create_test_model_with_relation_and_translation
     assert_not_nil origin.test_model
 
-    origin.reload.update_attribute :test_model_id, nil
+    origin.reload.update_column :test_model_id, nil
+    origin.save
     assert_nil origin.reload.test_model
     assert_nil translated_origin.reload.test_model
   end

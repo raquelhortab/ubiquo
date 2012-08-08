@@ -117,7 +117,7 @@ class Page < ActiveRecord::Base
         end
       end
 
-      published_page.reload.update_attribute(:is_modified, false)
+      published_page.reload.update_attributes(:is_modified => false)
 
       self.update_attributes(
         :is_modified => false,

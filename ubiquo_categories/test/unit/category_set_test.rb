@@ -91,7 +91,7 @@ class CategorySetTest < ActiveSupport::TestCase
   def test_is_editable_method
     set = create_category_set :is_editable => true
     assert set.is_editable?
-    set.update_attribute :is_editable, false
+    set.update_column :is_editable, false
     assert !set.is_editable?
   end
 

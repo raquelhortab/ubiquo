@@ -3,7 +3,7 @@ class Ubiquo::SuperadminHomesControllerTest < ActionController::TestCase
 
   test "should get show if superadmin" do
     login(:admin)
-    ubiquo_users(:admin).update_attribute :is_superadmin, true
+    ubiquo_users(:admin).update_column :is_superadmin, true
     get :show
     assert_response :ok
   end

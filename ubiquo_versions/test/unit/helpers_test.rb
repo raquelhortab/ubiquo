@@ -19,7 +19,7 @@ class UbiquoVersions::Extensions::HelpersTest < ActionView::TestCase
 
   def test_show_versions_contents
     model = TestVersionableModel.create
-    model.update_attribute :my_field, 'new_value'
+    model.update_column :my_field, 'new_value'
     show_versions(model)
 #    html_content = HTML::Document.new(html)
 #    assert_select "div.version-box" do

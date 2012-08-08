@@ -42,7 +42,10 @@ end
     task :test => "test_#{adapter}"
 
     # Set the connection environment for the adapter
-    task(:env) { ENV['ARCONN'] = adapter }
+    task(:env) do
+      ENV['ARCONN'] = adapter
+      ENV['UGEM'] = 'ubiquo_core'
+    end
   end
 
   # Make sure the adapter test evaluates the env setting task

@@ -81,8 +81,8 @@ class PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_print_default_desc_and_keywords
-    pages(:one).update_attribute :meta_description, 'description'
-    pages(:one).update_attribute :meta_keywords, %{key_on'e,key_tw"o}
+    pages(:one).update_column :meta_description, 'description'
+    pages(:one).update_column :meta_keywords, %{key_on'e,key_tw"o}
     get :show, :key => pages(:one).key
 
     assert_select "meta[name=description][content=description]"

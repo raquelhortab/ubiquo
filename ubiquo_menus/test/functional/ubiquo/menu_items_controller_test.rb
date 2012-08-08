@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::MenuItemsControllerTest < ActionController::TestCase
 
-  include TestSupport::UrlHelper
-
   def test_should_get_index_in_js_format
 
     get :index, :menu_id => (Menu.first || create_menu).id, :format => 'js'

@@ -79,7 +79,7 @@ class Ubiquo::SessionsControllerTest < ActionController::TestCase
   def test_should_fail_expired_cookie_login
     @request.session.delete(:ubiquo) #logout
     ubiquo_users(:josep).remember_me
-    ubiquo_users(:josep).update_attribute :remember_token_expires_at, 5.minutes.ago
+    ubiquo_users(:josep).update_column :remember_token_expires_at, 5.minutes.ago
     @request.cookies["auth_token"] = cookie_for(:josep)
     get :new
     assert !@controller.send(:logged_in?)

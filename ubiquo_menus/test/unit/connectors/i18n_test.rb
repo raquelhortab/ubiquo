@@ -29,7 +29,7 @@ class UbiquoMenus::Connectors::I18nTest < ActiveSupport::TestCase
 
     def test_copy_data_on_translate
       mi = create_menu_item
-      mi.update_attribute :position, 5
+      mi.update_column :position, 5
       translation = mi.translate('ca_ES')
       translation.save
       assert !mi.new_record?

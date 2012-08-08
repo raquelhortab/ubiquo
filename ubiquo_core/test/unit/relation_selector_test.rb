@@ -85,7 +85,7 @@ class Ubiquo::RelationSelectorTest < ActionView::TestCase
     object = prepare_relation_selector_instances
 
     related_instance = object.test_only_model_twos.first
-    related_instance.update_attribute :test_only_model_id, object.id
+    related_instance.update_column :test_only_model_id, object.id
     r = relation_selector('test_only_model_two',
       :test_only_model,
       :object => related_instance,
@@ -128,7 +128,6 @@ class Ubiquo::RelationSelectorTest < ActionView::TestCase
     obj1.test_only_model_two = nil
     obj1.save
 
-    nil.expects(:id).never
     r = relation_selector('test_only_model',
       :test_only_model_two,
       :object => obj1,
