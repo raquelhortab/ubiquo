@@ -24,5 +24,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pg", "~> 0.14"
   s.add_development_dependency "mysql2", "~> 0.3"
   s.add_development_dependency "mocha", "~> 0.10.0"
+  s.add_development_dependency "debugger", "~> 1.2.0"
 
 end
