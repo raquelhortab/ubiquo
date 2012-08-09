@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path("../../ubiquo_core/lib", __FILE__)
 require "ubiquo/version"
 
 Gem::Specification.new do |s|
