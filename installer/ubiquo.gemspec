@@ -50,5 +50,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<rails>, ["~> 3.2.0.rc2"])
   end
+
+  s.add_development_dependency "jeweler", "~> 1.3.5"
 end
 
