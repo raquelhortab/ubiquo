@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
   s.add_dependency "paper_trail"
 
   s.add_development_dependency "sqlite3", "~> 1.3.5"
+  s.add_development_dependency "pg", "~> 0.14"
+  s.add_development_dependency "mysql2", "~> 0.3"
   s.add_development_dependency "mocha", "~> 0.10.0"
 
 end

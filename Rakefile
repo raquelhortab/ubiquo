@@ -1,6 +1,8 @@
 require 'rake'
 require 'rake/testtask'
 
+Dir.glob("tasks/*.rake").each {|f| import f}
+
 PROJECTS = Dir.glob('*').select{|f| File.directory?(f) && File.exists?(File.join(f, 'Rakefile'))}
 
 desc 'Run all tests by default'
@@ -13,7 +15,7 @@ task :default => %w(test)
     errors = []
     PROJECTS.each do |project|
       puts "\n******** Running tests in #{project} ***********\n\n"
-      system(%(cd #{project} && #{$0} #{task_name} UGEM=#{project})) || errors << project
+      system(%(cd #{project} && #{$0} #{task_name})) || errors << project
     end
     fail("Errors in #{errors.join(', ')}") unless errors.empty?
   end

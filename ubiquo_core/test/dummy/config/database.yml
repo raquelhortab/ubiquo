@@ -1,4 +1,4 @@
-<% db_name = (ENV['UGEM'] || 'ubiquo_core') + 'test' %>
+<% db_name = (ENV['UGEM'] || 'ubiquo_core') + '_test' %>
 test:
 <% case ENV['ARCONN']
    when 'postgresql' %>

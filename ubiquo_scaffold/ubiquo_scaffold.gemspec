@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ubiquo_core", ["~> 0.9.0.b1"]
   s.add_runtime_dependency "rails", ["~> 3.2.0"]
   s.add_development_dependency "sqlite3", "~> 1.3.5"
+  s.add_development_dependency "pg", "~> 0.14"
+  s.add_development_dependency "mysql2", "~> 0.3"
   s.add_development_dependency "mocha", "~> 0.10.0"
 
 end
