@@ -1,29 +1,7 @@
 # encoding: utf-8
 require 'rubygems'
 require 'rake'
-
-require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "ubiquo"
-    gem.summary = %Q{command line application for building ubiquo based applications.}
-    gem.description = %Q{This gem provides a command-line interface to speed up the creation of ubiquo based apps.}
-    gem.email = "rsalvado@gnuine.com"
-    gem.homepage = "http://www.ubiquo.me"
-    gem.authors = [
-      "Albert Callarisa",
-      "Jordi Beltran",
-      "Bernat Foj",
-      "Eric García",
-      "Felip Ladrón",
-      "David Lozano",
-      "Antoni Reina",
-      "Ramon Salvadó",
-      "Arnau Sánchez"
-    ]
-    gem.add_dependency(%q<rails>, '~> 3.2.0.rc2')
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
+require "bundler/gem_tasks"
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
@@ -44,8 +22,6 @@ rescue LoadError
     abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
   end
 end
-
-task :test => :check_dependencies
 
 task :default => :test
 
