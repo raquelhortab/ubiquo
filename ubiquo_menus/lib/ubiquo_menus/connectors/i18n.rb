@@ -4,25 +4,7 @@ module UbiquoMenus
 
       # Validates the ubiquo_i18n-related dependencies
       def self.validate_requirements
-        unless Ubiquo::Plugin.registered[:ubiquo_i18n]
-          raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
-        end
-        [::MenuItem, ::Menu].each do |klass|
-          if klass.table_exists?
-            klass.reset_column_information
-            columns = klass.columns.map(&:name).map(&:to_sym)
-            unless [:locale, :content_id].all?{|field| columns.include? field}
-              if Rails.env.test?
-                ::ActiveRecord::Base.connection.change_table(klass.table_name, :translatable => true){}
-                klass.reset_column_information
-              else
-                raise ConnectorRequirementError,
-                  "The #{klass.table_name} table does not have the i18n fields. " +
-                  "To use this connector, update the table enabling :translatable => true"
-              end
-            end
-          end
-        end
+        validate_i18n_requirements(::MenuItem, ::Menu)
       end
 
       def self.unload!

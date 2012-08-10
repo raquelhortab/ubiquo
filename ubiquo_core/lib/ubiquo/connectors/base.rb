@@ -82,7 +82,7 @@ module Ubiquo
 
       # Validates the ubiquo_i18n-related dependencies
       # Returning false will halt the connector load
-      def self.validate_i18n_requirements(model)
+      def self.validate_i18n_requirements(*models)
         unless Ubiquo::Plugin.registered[:ubiquo_i18n]
           unless Rails.env.test?
             raise ConnectorRequirementError, "You need the ubiquo_i18n plugin to load #{self}"
@@ -90,6 +90,14 @@ module Ubiquo
             return false
           end
         end
+        models.each do |model|
+          [model] + model.send(:subclasses).each do |klass|
+            ensure_table_is_i18n_enabled(model)
+          end
+        end
+      end
+
+      def ensure_table_is_i18n_enabled(model)
         if model.table_exists?
           model_columns = model.columns.map(&:name).map(&:to_sym)
           unless [:locale, :content_id].all?{|field| model_columns.include? field}
