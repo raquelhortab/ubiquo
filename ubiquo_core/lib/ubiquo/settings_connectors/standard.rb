@@ -201,17 +201,8 @@ module Ubiquo
 
             actions << link_to_function(save_text, javascript_handler, :class => 'btn-save')
 
-            if ubiquo_setting.id
-              restore_text = t('ubiquo.ubiquo_setting.index.restore_default')
-              restore_url  = ubiquo.ubiquo_setting_path(ubiquo_setting)
-              confirm_text = t('ubiquo.ubiquo_setting.index.confirm_restore_default')
+            actions << restore_link(ubiquo_setting) if ubiquo_setting.id
 
-              actions << link_to(restore_text,
-                                  restore_url,
-                                  :data => {:confirm => confirm_text},
-                                  :method  => :delete,
-                                  :class   => 'btn-restore')
-            end
             actions
           end
 

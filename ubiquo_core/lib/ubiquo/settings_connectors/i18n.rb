@@ -49,9 +49,6 @@ module Ubiquo
           def _uhook_get_value_by_locale_and_key locale, name, key
             if locale && translation_exists?(name, locale)
               return locale, settings[current_context][name][:options][key][locale]
-            elsif translation_exists?(name, default_or_first_locale(name))
-              locale = default_or_first_locale(name)
-              return locale, settings[current_context][name][:options][key][locale]
             else
               locale = default_or_first_locale(name)
               return locale, settings[current_context][name][:options][key][locale]
@@ -352,15 +349,7 @@ module Ubiquo
             actions << link_to_function(save_text, javascript_handler, :class => 'btn-save')
 
             if ubiquo_setting.id && !ubiquo_setting.generated_from_another_value?
-              restore_text = t('ubiquo.ubiquo_setting.index.restore_default')
-              restore_url  = ubiquo.ubiquo_setting_path(ubiquo_setting)
-              confirm_text = t('ubiquo.ubiquo_setting.index.confirm_restore_default')
-
-              actions << link_to(restore_text,
-                                  restore_url,
-                                  :data => {:confirm => confirm_text},
-                                  :method  => :delete,
-                                  :class   => 'btn-restore')
+              actions << restore_link(ubiquo_setting)
             end
             actions
           end
