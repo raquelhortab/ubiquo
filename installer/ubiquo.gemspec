@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   %w{access_control activity authentication categories core design i18n
       jobs media menus scaffold versions
   }.each do |ubiquo_gem|
-    s.add_runtime_dependency "ubiquo_#{ubiquo_gem}", Ubiquo.version
+#    s.add_runtime_dependency "ubiquo_#{ubiquo_gem}", Ubiquo.version
   end
 
 end
