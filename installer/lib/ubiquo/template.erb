@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 external_plugins = %w[
   calendar_date_select
   exception_notification
@@ -149,7 +150,7 @@ CODE
 #   sender_adress -> email to user in from when delivering error message (Ex: notifier@foo.com)
 initializer 'exception_notifier.rb', <<-CODE
 # Exception notification
-#{appname.camelize}::Application.config.middleware.use ExceptionNotifier,
+#{appname.underscore.camelize}::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[#{appname} \#\{Rails.env\} ERROR]",
   :sender_address => %("Application Error" <#{sender_address}>),
   :exception_recipients => %w( #{exception_recipient} )
@@ -246,7 +247,7 @@ CODE
 end
 
 file 'config/routes.rb', <<-CODE
-#{appname.camelize}::Application.routes.draw do
+#{appname.underscore.camelize}::Application.routes.draw do
   Ubiquo::Engine.routes.draw do
     scope :ubiquo do
       # all the resources under ubiquo should be declared here:
