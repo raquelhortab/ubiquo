@@ -2,7 +2,7 @@
   <dl>
   <%- if options[:translatable] -%>
     <dt><%%= <%= class_name %>.human_attribute_name('locale') %>:</dt>
-    <dd><%%= Locale.find_by_iso_code(<%= singular_name %>.locale).native_name %></dd>
+    <dd><%%= Locale.find_by_iso_code(<%= singular_name %>.locale).native_name.capitalize.html_safe %></dd>
   <%- end -%>
   <%- if options[:versionable] -%>
     <dt><%%= <%= class_name %>.human_attribute_name('version_number') %>:</dt>

@@ -15,6 +15,7 @@ module UbiquoCategories
         def self.included(klass)
           klass.send(:extend, ClassMethods)
           klass.send(:translatable, :name, :description)
+#          klass.send(:attr_accessible, :content_id, :locale)
           I18n.register_uhooks klass, ClassMethods
         end
 
@@ -138,7 +139,7 @@ module UbiquoCategories
           def uhook_category_partial category
             locale = ::Locale.find_by_iso_code(category.locale)
             content_tag(:dt, ::Category.human_attribute_name("locale") + ':') +
-            content_tag(:dd, (locale.native_name rescue t('ubiquo.category.any')))
+            content_tag(:dd, (locale.native_name.capitalize.html_safe rescue t('ubiquo.category.any')))
           end
         end
 

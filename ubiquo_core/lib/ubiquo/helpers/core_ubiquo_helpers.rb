@@ -93,7 +93,7 @@ module Ubiquo
           content_tag(:div, :class => "header") do
             content_tag(:h3, title) + extra_header
           end + \
-          content_tag(:div, block.call, :class => "content")
+          content_tag(:div, capture(&block), :class => "content")
         end
       end
 
