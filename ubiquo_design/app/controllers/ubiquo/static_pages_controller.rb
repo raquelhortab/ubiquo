@@ -63,12 +63,12 @@ class Ubiquo::StaticPagesController < UbiquoController
 
   def edit
     @static_page = Page.find(params[:id])
-    @widget = @static_page.uhook_static_section_widget(current_locale) || uhook_new_widget
+    @widget = @static_page.uhook_static_section_widget(Ubiquo::Plugin.registered[:ubiquo_i18n] ? current_locale : nil) || uhook_new_widget
   end
 
   def update
     @static_page = Page.find(params[:id])
-    @widget = params[:from].present? ? uhook_new_widget : (@static_page.uhook_static_section_widget(current_locale) || uhook_create_widget)
+    @widget = params[:from].present? ? uhook_new_widget : (@static_page.uhook_static_section_widget(Ubiquo::Plugin.registered[:ubiquo_i18n] ? current_locale : nil) || uhook_create_widget)
     if @widget.new_record?
       block_type = Ubiquo::Settings.context(:ubiquo_design).get(:block_type_for_static_section_widget)
       @static_page.add_widget(block_type, @widget)
