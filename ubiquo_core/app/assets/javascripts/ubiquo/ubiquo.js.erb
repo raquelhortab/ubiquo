@@ -407,6 +407,7 @@ function collectAndSendValues(selectedContext, selectedSettingKey){
   form.submit();
   return false;
 }
-//Init tabs before page load but after required dom objects loaded.
-//This initalization could be done on dom:loaded but it creates a strange effect.
-Ubiquo.Forms.createTabs(".form-tab-container","legend");
+
+document.observe("dom:loaded", function() {
+  Ubiquo.Forms.createTabs(".form-tab-container","legend");
+});
