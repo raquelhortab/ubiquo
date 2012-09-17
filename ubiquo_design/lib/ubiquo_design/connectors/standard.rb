@@ -34,7 +34,9 @@ module UbiquoDesign
                   new_widget.send(key) << relation.dup
                 end
               elsif widget.class.is_a_clonable_has_one?(reflection)
-                new_widget.send("build_#{key}", widget.send(key).attributes)
+                relation_attributes = widget.send(key).attributes.dup
+                relation_attributes.delete("id")
+                new_widget.send("build_#{key}", relation_attributes)
               end
             end
           end

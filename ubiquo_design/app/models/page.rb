@@ -9,7 +9,7 @@ class Page < ActiveRecord::Base
     end
   end
 
-  attr_accessible :name, :url_name, :key, :page_template, :is_modified, :is_static, :published_id, :parent_id, :meta_title, :meta_keywords, :meta_description
+  attr_accessible :name, :url_name, :key, :page_template, :is_modified, :is_static, :published_id, :parent_id, :meta_title, :meta_keywords, :meta_description, :id, :created_at, :updated_at
 
   before_save :compose_url_name_with_parent_url
   before_create :assign_template_blocks
