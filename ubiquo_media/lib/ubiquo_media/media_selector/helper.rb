@@ -20,7 +20,7 @@ module UbiquoMedia
           :visibility => Ubiquo::Settings.context(:ubiquo_media).get(:force_visibility) || options[:visibility],
           :counter => @counter
         }
-        render :partial => 'ubiquo/asset_relations/media_selector.html.erb', :locals => locals
+        render :partial => 'ubiquo/asset_relations/media_selector', :locals => locals
       end
 
       # Returns an <a> element linking to the given asset in a popup

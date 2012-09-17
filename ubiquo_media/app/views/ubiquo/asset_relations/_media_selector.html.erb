@@ -1,4 +1,4 @@
-<%= render :partial => "ubiquo/asset_relations/media_javascript.html.erb" %>
+<%= render :partial => "ubiquo/asset_relations/media_javascript" %>
 <% locals = {
      :field => field,
      :counter => counter,
@@ -20,14 +20,14 @@
     <fieldset>
       <legend><%= t('ubiquo.media.media_item_new') %></legend>
       <div class="add" id="add_<%= counter%>">
-      	<%= render :partial => 'ubiquo/asset_relations/asset_form.html.erb',
+      	<%= render :partial => 'ubiquo/asset_relations/asset_form',
               	   :locals => locals %>
       </div>
     </fieldset>
     <fieldset>
       <legend><%= t('ubiquo.media.select_existing_media_item') %></legend>
       <div class="search-block" id="search_<%= counter%>">
-       	<%= render :partial => 'ubiquo/asset_relations/asset_search.html.erb',
+       	<%= render :partial => 'ubiquo/asset_relations/asset_search',
                	   :locals => locals %>
       </div>
       <div id="asset_search_results_<%= counter %>" class="search-results">
