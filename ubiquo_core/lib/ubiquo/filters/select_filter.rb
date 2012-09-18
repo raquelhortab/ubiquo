@@ -20,9 +20,10 @@ module Ubiquo
         header_option = @options[:all_caption] ? "<option value=''>".html_safe + @options[:all_caption] + "</option>".html_safe : "".html_safe
         field_value = (@context.params[filter_field] =~ /^\d+/)? @context.params[filter_field].to_i : @context.params[filter_field]
         field_value = @context.params[filter_field].map(&:to_i) if @context.params[filter_field].is_a?(Array)
+        url_for_options = @context.params.dup.merge(@options[:url_for_options] || {})
         lateral_filter(@options) do |keepable_params|
           @context.content_tag(:div, :id => 'select_filter_content') do
-            @context.form_tag(@options[:url_for_options], :method => :get) do
+            @context.form_tag(url_for_options, :method => :get) do
               @context.content_tag(:div, :class => 'form-item-submit') do
                 hidden_fields(keepable_params) + \
                 @context.select_tag(filter_field,
