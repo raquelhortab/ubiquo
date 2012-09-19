@@ -384,7 +384,6 @@ function collectAndSendValues(selectedContext, selectedSettingKey){
           else {
             if(isCheckbox(settingsRows[j], settingKey)){
               settingValue = settingsRows[j].getElementsBySelector('input[name="' + settingKey + '"]').first().checked;
-              settingValue = false;
             } else if(isPassword(settingsRows[j], settingKey)){
               settingValue = settingsRows[j].getElementsBySelector('input[name="' + settingKey + '"]').first().value;
               var confirmationKey = "confirmation_" + settingKey;
