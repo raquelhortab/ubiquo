@@ -2,7 +2,7 @@
   <%= link_to "?", "/", {
         :title => t("ubiquo.form_help_title"),
         :class => "btn-help",
-        :onclick => "this.getOffsetParent().toggleClassName('active'); return false;",
+        :onclick => "this.getOffsetParent().toggleClassName('active'); return false;".html_safe,
         :tabindex => 100
       }
   %>

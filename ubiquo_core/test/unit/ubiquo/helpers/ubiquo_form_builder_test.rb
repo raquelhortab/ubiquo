@@ -92,7 +92,7 @@ class Ubiquo::Helpers::UbiquoFormBuilderTest < ActionView::TestCase
         # Custom params
         f.create_button("c-custom", :class => "bt-create2") +
           f.create_button( nil, :i18n_label_key => "ubiquo.create-custom") +
-          f.back_button("back-custom", { :js_function => "alert('foo');", :class => "bt-back2" }) +
+          f.back_button("back-custom", { :js_function => "alert('foo');".html_safe, :class => "bt-back2" }) +
           f.update_button("u-custom", :class => "bt-update2") +
           f.update_button(nil, :i18n_label_key => "ubiquo.save-custom")
       end
