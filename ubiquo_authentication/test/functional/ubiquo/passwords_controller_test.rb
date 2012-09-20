@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
-require 'ubiquo/passwords_controller'
 
 class Ubiquo::PasswordsControllerTest < ActionController::TestCase
 
