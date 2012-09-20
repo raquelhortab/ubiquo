@@ -1,3 +1,5 @@
+require 'lockfile'
+
 module Ubiquo
   module Cron
 
