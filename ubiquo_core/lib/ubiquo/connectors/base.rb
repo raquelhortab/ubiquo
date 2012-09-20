@@ -91,13 +91,13 @@ module Ubiquo
           end
         end
         models.each do |model|
-          [model] + model.send(:subclasses).each do |klass|
-            ensure_table_is_i18n_enabled(model)
+          ([model] + model.send(:subclasses)).each do |klass|
+            ensure_table_is_i18n_enabled(klass)
           end
         end
       end
 
-      def ensure_table_is_i18n_enabled(model)
+      def self.ensure_table_is_i18n_enabled(model)
         if model.table_exists?
           model_columns = model.columns.map(&:name).map(&:to_sym)
           unless [:locale, :content_id].all?{|field| model_columns.include? field}

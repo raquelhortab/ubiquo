@@ -135,8 +135,10 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_show_category should redirect if not current locale' do
+      ubiquo_response = mock
       Ubiquo::CategoriesController.any_instance.expects(:current_locale).at_least_once.returns('ca')
-      Ubiquo::CategoriesController.any_instance.expects(:ubiquo_category_set_categories_url).at_least_once.returns('')
+      Ubiquo::CategoriesController.any_instance.expects(:ubiquo).at_least_once.returns(ubiquo_response)
+      ubiquo_response.expects(:category_set_categories_url).at_least_once.returns('')
       Ubiquo::CategoriesController.any_instance.expects(:redirect_to).at_least_once
       assert_equal false, Ubiquo::CategoriesController.new.uhook_show_category(Category.new(:locale => 'en'))
     end
@@ -147,8 +149,10 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_edit_category should redirect if not current locale' do
+      ubiquo_response = mock
       Ubiquo::CategoriesController.any_instance.expects(:current_locale).at_least_once.returns('ca')
-      Ubiquo::CategoriesController.any_instance.expects(:ubiquo_category_set_categories_url).at_least_once.returns('')
+      Ubiquo::CategoriesController.any_instance.expects(:ubiquo).at_least_once.returns(ubiquo_response)
+      ubiquo_response.expects(:category_set_categories_url).at_least_once.returns('')
       Ubiquo::CategoriesController.any_instance.expects(:redirect_to).at_least_once
       assert_equal false, Ubiquo::CategoriesController.new.uhook_edit_category(Category.new(:locale => 'en'))
     end
@@ -204,14 +208,16 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_index_actions should return translate and remove link if not current locale' do
+      ubiquo_response = mock
       set = create_category_set
       set.categories << ['category', {:locale => 'ca'}]
       category = set.categories.first
 
       mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.expects(:current_locale).at_least_once.returns('en')
-      I18n::UbiquoCategoriesController::Helper.expects(:ubiquo_category_set_category_path).with(set, category, :destroy_content => true)
-      I18n::UbiquoCategoriesController::Helper.expects(:new_ubiquo_category_set_category_path).with(:from => category.content_id)
+      I18n::UbiquoCategoriesController::Helper.stubs(:ubiquo).returns(ubiquo_response)
+      ubiquo_response.expects(:category_set_category_path).with(set, category, :destroy_content => true)
+      ubiquo_response.expects(:new_category_set_category_path).with(:from => category.content_id)
       I18n::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_category_index_actions
       end
@@ -221,13 +227,17 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_index_actions should return removes and edit links if current locale' do
+      ubiquo_response = mock
+      
       set = create_category_set
       set.categories << ['category', {:locale => 'ca'}]
       category = set.categories.first
 
       mock_categories_helper
       I18n::UbiquoCategoriesController::Helper.stubs(:current_locale).returns('ca')
-      I18n::UbiquoCategoriesController::Helper.expects(:ubiquo_category_set_category_path).with(set, category, :destroy_content => true)
+      I18n::UbiquoCategoriesController::Helper.stubs(:ubiquo).returns(ubiquo_response)
+      ubiquo_response.stubs(:new_category_set_category_path).returns("link")
+      ubiquo_response.expects(:category_set_category_path).with(set, category, :destroy_content => true)
 
       I18n::UbiquoCategoriesController::Helper.module_eval do
         module_function :uhook_category_index_actions

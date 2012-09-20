@@ -18,7 +18,7 @@ def create_categories_test_model_backend
   %w{CategoryTranslatableTestModel CategoryTestModelBase EmptyTestModelBase CategoryTestModel}.each do |model_name|
     table = model_name.tableize
     translatable = table != 'category_test_models'
-
+    
     conn.create_table table, :translatable => translatable do |t|
       t.string :my_field
     end unless conn.tables.include?(table)
@@ -34,7 +34,7 @@ def create_categories_test_model_backend
 end
 
 def destroy_categories_test_model_backend
-    conn = ActiveRecord::Base.connection
+  conn = ActiveRecord::Base.connection
 
   %w{CategoryTranslatableTestModel CategoryTestModelBase EmptyTestModelBase CategoryTestModel}.each do |model_name|
     table = model_name.tableize
@@ -124,4 +124,18 @@ end
 
 def mock_categories_helper
   mock_helper(:ubiquo_categories)
+end
+
+def mock_url_options(path_segments, locale)
+  {:host=>"test.host",
+    :port=>3000,
+    :protocol=>"http://",
+    :_path_segments=> path_segments,
+    :locale=> locale,
+    :script_name=>"/ubiquo"
+  }
+end
+
+def is_ubiquo_i18n_plugin_registered?
+  Ubiquo::Plugin.registered[:ubiquo_i18n]
 end

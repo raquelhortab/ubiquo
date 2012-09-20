@@ -96,13 +96,33 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
 
     test 'uhook_show_category should not break' do
       mock_categories_controller
+      ActionDispatch::Routing::RoutesProxy.any_instance.stubs(:url_options).
+        returns(mock_url_options(
+          {
+            :action => "show",
+            :controller => "ubiquo_categories",
+            :category_set_id => CategorySet.first.id,
+            :locale => "ca"
+          },
+          "ca"
+        ))
       assert_nothing_raised do
         Ubiquo::CategoriesController.new.uhook_show_category Category.new
       end
     end
-
+    
     test 'uhook_edit_category should not break' do
       mock_categories_controller
+      ActionDispatch::Routing::RoutesProxy.any_instance.stubs(:url_options).
+        returns(mock_url_options(
+          {
+            :action => "show",
+            :controller => "ubiquo_categories",
+            :category_set_id => CategorySet.first.id,
+            :locale => "ca"
+          },
+          "ca"
+        ))
       assert_nothing_raised do
         Ubiquo::CategoriesController.new.uhook_edit_category Category.new
       end

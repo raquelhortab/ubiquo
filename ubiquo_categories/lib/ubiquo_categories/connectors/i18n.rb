@@ -99,11 +99,11 @@ module UbiquoCategories
           def uhook_category_index_actions category_set, category
             actions = []
             if category.in_locale?(current_locale)
-              actions << link_to(t("ubiquo.view"), [:ubiquo, category_set, category])
+              actions << link_to(t("ubiquo.view"), [ubiquo, category_set, category])
             end
 
             if category.in_locale?(current_locale)
-              actions << link_to(t("ubiquo.edit"), [:edit, :ubiquo, category_set, category], :class => 'btn-edit')
+              actions << link_to(t("ubiquo.edit"), [ubiquo, :edit, category_set, category], :class => 'btn-edit')
             end
 
             unless category.in_locale?(current_locale)
@@ -121,7 +121,7 @@ module UbiquoCategories
               )
 
             if category.in_locale?(current_locale, :skip_any => true) && !category.translations.empty?
-              actions << link_to(t("ubiquo.remove_translation"), [:ubiquo, category_set, category],
+              actions << link_to(t("ubiquo.remove_translation"), [ubiquo, category_set, category],
                 :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete
                 )
             end
@@ -163,7 +163,7 @@ module UbiquoCategories
           # Performs any required action on category when in show
           def uhook_show_category category
             unless category.in_locale?(current_locale)
-              redirect_to(ubiquo_category_set_categories_url)
+              redirect_to(ubiquo.category_set_categories_url)
               false
             end
           end
@@ -171,7 +171,7 @@ module UbiquoCategories
           # Performs any required action on category when in edit
           def uhook_edit_category category
             unless category.in_locale?(current_locale)
-              redirect_to(ubiquo_category_set_categories_url)
+              redirect_to(ubiquo.category_set_categories_url)
               false
             end
           end
