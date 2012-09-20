@@ -3,6 +3,7 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
 
+require File.expand_path("../dummy/config/application.rb",  __FILE__)
 require 'ubiquo/test/dummy_app'
 require 'ubiquo/test/test_helper'
 
