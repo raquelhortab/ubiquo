@@ -20,6 +20,8 @@ class Locale < ActiveRecord::Base
 
   attr_accessible :iso_code, :english_name, :native_name, :is_active, :is_default
 
+  after_save :clear_cache
+
   def self.default
     defaults.first.try(:iso_code)
   end
@@ -54,6 +56,12 @@ class Locale < ActiveRecord::Base
   # Clears any cached instance in this model
   def self.clear_cache
     self.cached_locales = nil
+  end
+
+  # Instance method to clear the cache on a change
+  def clear_cache
+    self.class.clear_cache
+    # TODO clear ubiquo_locale route cache
   end
 
   protected

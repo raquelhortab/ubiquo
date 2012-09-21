@@ -10,9 +10,6 @@ ActiveRecord::Associations::BelongsToAssociation.send(:include, UbiquoI18n::Exte
 ActiveRecord::Associations::CollectionAssociation.send(:include, UbiquoI18n::Extensions::CollectionAssociation)
 ActiveRecord::Associations::Builder.send(:include, UbiquoI18n::Extensions::AssociationsBuilder)
 :UbiquoController.include! UbiquoI18n::Extensions::LocaleChanger
-:UbiquoController.include! UbiquoI18n::Extensions::LocaleUrlBuilder
 :UbiquoController.helper! UbiquoI18n::Extensions::Helpers
 :ApplicationController.include! UbiquoI18n::Extensions::LocaleUseFallbacks::Application
 :UbiquoController.include! UbiquoI18n::Extensions::LocaleUseFallbacks::Ubiquo
-
-ActionController::TestCase.send(:include, UbiquoI18n::Extensions::TestCase) if Rails.env.test?

@@ -26,7 +26,7 @@ class Ubiquo::LocalesControllerTest < ActionController::TestCase
     default_locale = Locale.ordered[1].id.to_s
 
     put :update, :selected_locales => selected_locales, :default_locale => default_locale
-    assert_redirected_to ubiquo.locales_path(:locale => Locale.current)
+    assert_redirected_to ubiquo.locales_path
 
     assert_equal 2, Locale.active.size
     assert_equal Locale.ordered[1].iso_code, Locale.default
@@ -39,7 +39,7 @@ class Ubiquo::LocalesControllerTest < ActionController::TestCase
     default_locale = Locale.ordered[0].id.to_s
 
     put :update, :selected_locales => selected_locales, :default_locale => default_locale
-    assert_redirected_to ubiquo.locales_path(:locale => Locale.current)
+    assert_redirected_to ubiquo.locales_path
 
     assert_not_equal previous_default, default_locale
     assert_equal previous_default, Locale.default
