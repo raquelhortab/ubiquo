@@ -1,5 +1,5 @@
 $:.unshift File.dirname(__FILE__)
-%w[ rubygems optparse erb tempfile ].each { |f| require f }
+%w[ rubygems optparse erb tempfile bundler ].each { |f| require f }
 
 module Ubiquo
   autoload :Options, 'ubiquo/options'
@@ -15,8 +15,11 @@ module Ubiquo
         # We need this because sometimes we upgrade edge but no stable
         options[:rails] = options[:template] == :edge ? '3.2.0.rc2' : '2.3.14'
 
+        spec = Bundler.load_gemspec(File.expand_path('../ubiquo.gemspec', __FILE__)
+        rails = spec
+
         unless Gem::Specification::find_by_name('rails', options[:rails])
-          $stderr.puts "Sorry ubiquo needs rails #{options[:rails]} to work properly."
+          $stderr.puts "Sorry ubiquo --#{options[:template]} needs rails -v=#{options[:rails]} to work properly."
           options[:show_help] = true
         end
 

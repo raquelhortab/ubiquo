@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.summary = "command line application for building ubiquo based applications."
 
   s.add_runtime_dependency "rails", "~> 3.2.7"
+  s.add_runtime_dependency "bundler", "~> 1.1.5"
 
   # add all ubiquo gems by default so that it speeds up new app creation
   %w{access_control activity authentication categories core design i18n
