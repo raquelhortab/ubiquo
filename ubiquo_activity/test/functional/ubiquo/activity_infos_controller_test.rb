@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
-require File.dirname(__FILE__) + "/../../test_support/url_helper.rb"
 
 class Ubiquo::ActivityInfosControllerTest < ActionController::TestCase
-  include TestSupport::UrlHelper
 
   def test_should_get_index
     login_with_permission(:activity_info_management)

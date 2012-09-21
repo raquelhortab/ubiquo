@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
-require File.dirname(__FILE__) + "/../../test_support/url_helper.rb"
 
 class Ubiquo::StoreActivityControllerTest < ActionController::TestCase
-  include TestSupport::UrlHelper
 
   def test_should_register_successful_activity_info_in_create
     ActivityInfo.delete_all

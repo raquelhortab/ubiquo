@@ -3,11 +3,9 @@ ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/application.rb",  __FILE__)
 require File.expand_path("../test_support/database.rb",  __FILE__)
-require File.expand_path("../test_support/url_helper.rb",  __FILE__)
 require File.expand_path("../test_support/access_control.rb",  __FILE__)
 require 'ubiquo/test/test_helper'
 
-TestSupport::Database.check_psql_adapter
 # Run any available migration
 TestSupport::Database.migrate!
 TestSupport::Database.create_test_model
@@ -18,9 +16,6 @@ class ActiveSupport::TestCase
 
   protected
 end
-
-# FIXME, I copied authentication migration to dummy
-ActiveRecord::Migrator.migrate File.expand_path("./test/dummy/db/migrate")
 
 class Versionable < ActiveRecord::Base
   has_paper_trail

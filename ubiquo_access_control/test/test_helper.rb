@@ -7,7 +7,6 @@ require 'ubiquo/test/test_helper'
 
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
 class ActiveSupport::TestCase
   self.fixture_path = File.dirname(__FILE__) + '/fixtures'

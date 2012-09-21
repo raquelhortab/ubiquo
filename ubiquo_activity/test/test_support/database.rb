@@ -16,12 +16,6 @@ module TestSupport
         ::ActiveRecord::Migrator.migrate migrations_dir
       end
 
-      def check_psql_adapter
-        if connection.class.to_s == "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
-          connection.client_min_messages = "ERROR"
-        end
-      end
-
       def create_test_model
         create_table :test_models do |t|
           t.string :name

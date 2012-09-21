@@ -6,7 +6,6 @@ require File.expand_path("../dummy/config/application.rb",  __FILE__)
 require 'ubiquo/test/test_helper'
 
 ActiveRecord::Migrator.migrate File.expand_path("../../install/db/migrate/", __FILE__)
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
 UbiquoDesign::Structure.define{}
 
