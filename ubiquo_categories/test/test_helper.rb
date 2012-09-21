@@ -18,7 +18,7 @@ def create_categories_test_model_backend
   %w{CategoryTranslatableTestModel CategoryTestModelBase EmptyTestModelBase CategoryTestModel}.each do |model_name|
     table = model_name.tableize
     translatable = table != 'category_test_models'
-    
+
     conn.create_table table, :translatable => translatable do |t|
       t.string :my_field
     end unless conn.tables.include?(table)

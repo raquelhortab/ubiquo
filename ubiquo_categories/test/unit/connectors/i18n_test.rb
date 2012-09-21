@@ -208,41 +208,38 @@ class UbiquoCategories::Connectors::I18nTest < ActiveSupport::TestCase
     end
 
     test 'uhook_category_index_actions should return translate and remove link if not current locale' do
-      ubiquo_response = mock
       set = create_category_set
       set.categories << ['category', {:locale => 'ca'}]
       category = set.categories.first
 
       mock_categories_helper
-      I18n::UbiquoCategoriesController::Helper.expects(:current_locale).at_least_once.returns('en')
-      I18n::UbiquoCategoriesController::Helper.stubs(:ubiquo).returns(ubiquo_response)
-      ubiquo_response.expects(:category_set_category_path).with(set, category, :destroy_content => true)
-      ubiquo_response.expects(:new_category_set_category_path).with(:from => category.content_id)
-      I18n::UbiquoCategoriesController::Helper.module_eval do
+      helper_module = I18n::UbiquoCategoriesController::Helper
+      %w{category_translate_link category_remove_link}.each do |action|
+        helper_module.expects(action)
+      end
+      helper_module.module_eval do
         module_function :uhook_category_index_actions
       end
-      actions = I18n::UbiquoCategoriesController::Helper.uhook_category_index_actions set, category
+      actions = helper_module.uhook_category_index_actions set, category
       assert actions.is_a?(Array)
       assert_equal 2, actions.size
     end
 
     test 'uhook_category_index_actions should return removes and edit links if current locale' do
-      ubiquo_response = mock
-      
       set = create_category_set
-      set.categories << ['category', {:locale => 'ca'}]
+      set.categories << ['category']
       category = set.categories.first
 
       mock_categories_helper
-      I18n::UbiquoCategoriesController::Helper.stubs(:current_locale).returns('ca')
-      I18n::UbiquoCategoriesController::Helper.stubs(:ubiquo).returns(ubiquo_response)
-      ubiquo_response.stubs(:new_category_set_category_path).returns("link")
-      ubiquo_response.expects(:category_set_category_path).with(set, category, :destroy_content => true)
-
-      I18n::UbiquoCategoriesController::Helper.module_eval do
+      helper_module = I18n::UbiquoCategoriesController::Helper
+      helper_module.module_eval do
         module_function :uhook_category_index_actions
       end
-      actions = I18n::UbiquoCategoriesController::Helper.uhook_category_index_actions set, category
+      %w{category_edit_link category_remove_link category_view_link }.each do |action|
+        helper_module.expects(action)
+      end
+
+      actions = helper_module.uhook_category_index_actions(set, category)
       assert actions.is_a?(Array)
       assert_equal 3, actions.size
     end

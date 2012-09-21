@@ -31,4 +31,16 @@ module Ubiquo::CategoriesHelper
       })
   end
 
+  def category_view_link(category, category_set)
+    link_to(t("ubiquo.view"), [ubiquo, category_set, category])
+  end
+
+  def category_remove_link(category, category_set)
+    link_to(t('ubiquo.remove'), [ubiquo, category_set, category], :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete, :class => 'btn-delete')
+  end
+
+  def category_edit_link(category, category_set)
+    link_to(t("ubiquo.edit"), [ubiquo, :edit, category_set, category], :class => 'btn-edit')
+  end
+
 end

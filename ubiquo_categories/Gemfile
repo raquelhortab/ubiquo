@@ -6,5 +6,6 @@ gemspec
 # Using the git version to get 1.9.3 support
 group :development, :test do
   gem "ubiquo_core", :path => ".."
+  gem "ubiquo_i18n", :path => ".."
   gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
 end

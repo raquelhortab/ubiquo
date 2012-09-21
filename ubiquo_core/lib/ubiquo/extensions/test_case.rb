@@ -43,10 +43,6 @@ module Ubiquo
 
         def mock_routes controller = nil
           (controller || stubbed_controller).any_instance.stubs(:request).returns(ActionController::TestRequest.new)
-          if Ubiquo.const_defined?('CategoriesController')
-            Ubiquo::CategoriesController.any_instance.stubs(:redirect_to)
-            Ubiquo::CategoriesController.any_instance.stubs(:url_for).returns('')
-          end
         end
 
         def mock_response controller = nil

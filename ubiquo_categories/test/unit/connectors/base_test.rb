@@ -110,7 +110,7 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
         Ubiquo::CategoriesController.new.uhook_show_category Category.new
       end
     end
-    
+
     test 'uhook_edit_category should not break' do
       mock_categories_controller
       ActionDispatch::Routing::RoutesProxy.any_instance.stubs(:url_options).
@@ -167,16 +167,12 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
 
     test 'uhook_category_index_actions should return array' do
       mock_categories_helper
-      Base.current_connector::UbiquoCategoriesController::Helper.module_eval do
+      helper_module = Base.current_connector::UbiquoCategoriesController::Helper
+      helper_module.module_eval do
         module_function :uhook_category_index_actions
       end
-      set, category = [CategorySet.new, Category.new]
-      Base.current_connector::UbiquoCategoriesController::Helper.stubs(:t).returns('t')
-      Base.current_connector::UbiquoCategoriesController::Helper.stubs(:ubiquo).returns(':ubiquo')
-      Base.current_connector::UbiquoCategoriesController::Helper.expects(:t).at_least_once.returns('t')
-      Base.current_connector::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [':ubiquo', :edit, set, category], {:class => 'btn-edit'})
-      Base.current_connector::UbiquoCategoriesController::Helper.expects(:link_to).with('t', [':ubiquo', set, category], {:data => {:confirm => 't'}, :method => :delete, :class => 'btn-delete'})
-      assert Base.current_connector::UbiquoCategoriesController::Helper.uhook_category_index_actions(set, category).is_a?(Array)
+      set, category = [CategorySet.new, Category.new(:locale => Locale.current)]
+      assert helper_module.uhook_category_index_actions(set, category).is_a?(Array)
     end
 
     test 'uhook_category_form should return string' do

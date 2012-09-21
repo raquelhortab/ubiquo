@@ -100,31 +100,21 @@ module UbiquoCategories
           def uhook_category_index_actions category_set, category
             actions = []
             if category.in_locale?(current_locale)
-              actions << link_to(t("ubiquo.view"), [ubiquo, category_set, category])
+              actions << category_view_link(category, category_set)
             end
 
             if category.in_locale?(current_locale)
-              actions << link_to(t("ubiquo.edit"), [ubiquo, :edit, category_set, category], :class => 'btn-edit')
+              actions << category_edit_link(category, category_set)
             end
 
             unless category.in_locale?(current_locale)
-              actions << link_to(
-                t("ubiquo.translate"),
-                ubiquo.new_category_set_category_path(
-                  :from => category.content_id
-                  )
-                )
+              actions << category_translate_link(category, category_set)
             end
 
-            actions << link_to(t("ubiquo.remove"),
-              ubiquo.category_set_category_path(category_set, category, :destroy_content => true),
-              :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete, :class => 'btn-delete'
-              )
+            actions << category_remove_link(category, category_set)
 
             if category.in_locale?(current_locale, :skip_any => true) && !category.translations.empty?
-              actions << link_to(t("ubiquo.remove_translation"), [ubiquo, category_set, category],
-                :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete
-                )
+              actions << category_remove_translation_link(category, category_set)
             end
 
             actions
@@ -140,6 +130,28 @@ module UbiquoCategories
             locale = ::Locale.find_by_iso_code(category.locale)
             content_tag(:dt, ::Category.human_attribute_name("locale") + ':') +
             content_tag(:dd, (locale.native_name.capitalize.html_safe rescue t('ubiquo.category.any')))
+          end
+
+          def category_translate_link(category, category_set)
+            link_to(
+              t("ubiquo.translate"),
+              ubiquo.new_category_set_category_path(
+                :from => category.content_id
+              )
+            )
+          end
+
+          def category_remove_link(category, category_set)
+            link_to(t("ubiquo.remove"),
+              ubiquo.category_set_category_path(category_set, category, :destroy_content => true),
+              :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete, :class => 'btn-delete'
+            )
+          end
+
+          def category_remove_translation_link(category, category_set)
+            link_to(t("ubiquo.remove_translation"), [ubiquo, category_set, category],
+              :data => {:confirm => t("ubiquo.category.index.confirm_removal")}, :method => :delete
+            )
           end
         end
 
@@ -278,10 +290,9 @@ module UbiquoCategories
 
       def self.prepare_mocks
         add_mock_helper_stubs({
-          :show_translations => '', :ubiquo_category_set_categories_url => '',
-          :ubiquo_category_set_category_path => '', :current_locale => '',
+          :show_translations => '', :current_locale => Locale.current,
           :content_tag => '', :hidden_field_tag => '', :locale => Category,
-          :new_ubiquo_category_set_category_path => ''
+          :category_view_link => '', :category_edit_link => '', :category_remove_link => ''
         })
       end
 
