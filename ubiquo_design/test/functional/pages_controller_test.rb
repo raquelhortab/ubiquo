@@ -86,7 +86,7 @@ class PagesControllerTest < ActionController::TestCase
     get :show, :key => pages(:one).key
 
     assert_select "meta[name=description][content=description]"
-    assert_select "meta[name=keywords][content=key_on'e,key_tw&quot;o]"
+    assert_select "meta[name=keywords][content=key_on&#x27;e,key_tw&quot;o]"
   end
 
   def test_should_not_get_page_by_inexistent_key

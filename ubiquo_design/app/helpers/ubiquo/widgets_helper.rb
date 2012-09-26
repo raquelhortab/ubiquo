@@ -35,15 +35,18 @@ module Ubiquo::WidgetsHelper
   end
 
   def li_widget_attributes(widget, page)
+    attributes = {}
     classes = ["widget"]
     classes << "error" unless widget.valid?
     classes << "inherited" unless page.blocks.include?(widget.block)
-    attrs = ["id= 'widget_#{widget.id}'", "class= '#{classes.join(' ')}'"]
+    attributes[:class] = classes.join(' ')
+    attributes[:id] = "widget_#{widget.id}"
+
     unless widget.valid?
-      attrs << ["alt='#{t("ubiquo.design.widget_error")}'"]
-      attrs << ["title='#{t("ubiquo.design.widget_error")}'"]
+      attributes[:alt] = "#{t("ubiquo.design.widget_error")}"
+      attributes[:title] = "#{t("ubiquo.design.widget_error")}"
     end
-    attrs.join(' ')
+    attributes
   end
 
 end

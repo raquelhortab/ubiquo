@@ -1,5 +1,4 @@
-<li <%= li_widget_attributes(widget, @page) %>>
-
+<%= content_tag :li, li_widget_attributes(widget, @page) do %>
   <% if @page.blocks.include?(widget.block) %>
     <%= link_to_remote t('ubiquo.design.widget_removal'),
                        :url => ubiquo.page_widget_path(@page, widget),
@@ -34,4 +33,4 @@
       <% end %>
     <% end %>
   </div>
-</li>
+<% end %>

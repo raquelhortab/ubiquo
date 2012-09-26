@@ -80,7 +80,8 @@ module Connectors
 
     test "ubiquo pages_controller create page" do
       attributes = create_page.attributes
-      attributes[:url_name] = "test"
+      attributes["url_name"] = "test"
+      attributes.delete("id")
       Ubiquo::PagesController.any_instance.stubs(:params => {:page => attributes})
       p = nil
       assert_difference "Page.count" do
