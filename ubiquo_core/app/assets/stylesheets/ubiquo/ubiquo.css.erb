@@ -494,7 +494,8 @@ table, th, td { border: none;}
 		}
 
 /*--- botons ---*/
-a.new, #content .form_buttons input, #content .form-item-submit input { /* list all buttons here */
+a.new, #content .form_buttons input, #content .form-item-submit input,
+.content-widget .form_buttons input, .content-widget .form-item-submit input { /* list all buttons here */
 	display: block;
 	width: 12em;
 	padding: .4em .7em .5em;
@@ -522,10 +523,12 @@ a.new:active {
 	/*text-shadow: none;
 	-moz-box-shadow: none;*/
 }
-a.new, #content .form-item-submit input.bt-create {
+a.new, #content .form-item-submit input.bt-create,
+.content-widget .form-item-submit input.bt-create {
 	background-image: url(<%= asset_path("ubiquo/bg-button-add.png") %>);
 }
-#content .form-item-submit input.bt-update, #content .form-item-submit input.bt-submit {
+#content .form-item-submit input.bt-update, #content .form-item-submit input.bt-submit, 
+.content-widget .form-item-submit input.bt-update, .content-widget .form-item-submit input.bt-submit {
 	background-image: url(<%= asset_path("ubiquo/bg-button-save.png") %>);
 }
 
@@ -585,14 +588,17 @@ a.new, #content .form-item-submit input.bt-create {
 	clear: right;
 	margin: 0 0 2em;
 }
-#content th, #content td {
+#content th, #content td,
+.content-widget th, .content-widget td {
 	border-right: 1px solid #FFF;
 	border-bottom: 1px solid #FFF;
 }
-#content th:last-child, #content td:last-child, #content th.actions, #content td.actions {
+#content th:last-child, #content td:last-child, #content th.actions, #content td.actions,
+.content-widget th:last-child, .content-widget td:last-child, .content-widget th.actions, .content-widget td.actions {
 	border-right: none;
 }
-#content th {
+#content th,
+.content-widget th {
 	padding: 1em .6em;
 	text-align: left;
 	font-size: 1.4em;
@@ -601,76 +607,96 @@ a.new, #content .form-item-submit input.bt-create {
 	text-transform: uppercase;
 	background-color: #e9e9e9;
 }
-#content th.actions {
+#content th.actions,
+.content-widget th.actions {
 	width: 16.8em;
 }
-#content td.actions {
+#content td.actions,
+.content-widget td.actions {
 	width: 20em;
 	text-align: right;
 }
-	#content th a {
+	#content th a,
+    .content-widget th a {
 		padding: .1em 0;
 		color: #000;
 	}
-		#content th a span {
+		#content th a span,
+        .content-widget th a span {
 			border-bottom: 1px dotted #000;
 		}
-	#content th a.order_asc, #content th a.order_desc {
+	#content th a.order_asc, #content th a.order_desc,
+    .content-widget th a.order_asc, .content-widget th a.order_desc {
 		padding-right: 25px;
 	}
-	#content th a.order_asc {
+	#content th a.order_asc.
+    .content-widget th a.order_asc {
 		background: url(<%= asset_path("ubiquo/ico-up.png") %>) no-repeat right center;
 	}
-	#content th a.order_desc {
+	#content th a.order_desc,
+    .content-widget th a.order_desc {
 		background: url(<%= asset_path("ubiquo/ico-down.png") %>) no-repeat right center;
 	}
-#content td {
+#content td,
+.content-widget td {
 	font-size: 1.4em;
 	padding: .8em .5em .7em;
 }
-	#content td td, #content td p, #content td li {
+	#content td td, #content td p, #content td li,
+    .content-widget td td, .content-widget td p, .content-widget td li {
 		font-size: 1em;
 	}
-	#content td img {
+	#content td img,
+    .content-widget td img {
   	vertical-align: bottom;
   }
-#content tr.odd td, #menu_items_list table.odd {
+#content tr.odd td, #menu_items_list table.odd,
+.content-widget tr.odd td {
 	background-color: #f6f6f6;
 }
-#content tr th.delete, #content tr td.delete, #content tr.hover th.delete, #content tr.hover td.delete {
+#content tr th.delete, #content tr td.delete, #content tr.hover th.delete, #content tr.hover td.delete,
+.content-widget tr th.delete, .content-widget tr td.delete, .content-widget tr.hover th.delete, .content-widget tr.hover td.delete {
 	background-color: #FFF;
 }
-  #content tr:hover td, #content tr.hover td {
+  #content tr:hover td, #content tr.hover td,
+  .content-widget tr:hover td, .content-widget tr.hover td {
   	background: #F0BB47;
   	border-bottom-color: #F0BB47;
   }
-  #content tr.editable:hover td,#content tr.editable.hover td{
+  #content tr.editable:hover td,#content tr.editable.hover td,
+  .content-widget tr.editable:hover td, .content-widget tr.editable.hover td {
   	cursor: pointer;
   }
-	#content td .state_true, #content td .state_false {
+	#content td .state_true, #content td .state_false,
+    .content-widget .state_true, .content-widget td .state_false {
 		text-indent: -500em;
 		display: block;
 		margin: 0 auto;
 	}
-	#content td .state_true {
+	#content td .state_true,
+    .content-widget .state_true {
 		width: 23px;
 		height: 19px;
 		background: url(<%= asset_path("ubiquo/ico-ok.png") %>) no-repeat center center;
 	}
-	#content td .state_false {
+	#content td .state_false,
+    .content-widget .state_false {
 		width: 19px;
 		height: 18px;
 		background: url(<%= asset_path("ubiquo/ico-no.png") %>) no-repeat center center;
 	}
-	#content td.actions {
+	#content td.actions,
+    .content-widget td.actions {
 	  height: 1.3em;
 	}
-	#content th.delete, #content td.delete {
+	#content th.delete, #content td.delete,
+    .content-widget th.delete, .content-widget td.delete {
 	  width: 34px;
 	  padding: 0;
 	  border: none;
 	}
-	  #content td.actions a {
+	  #content td.actions a,
+      .content-widget td.actions a {
   		text-align: right;
       font-size: .85em;
       margin-left: .3em;
@@ -680,15 +706,19 @@ a.new, #content .form-item-submit input.bt-create {
     	-webkit-border-radius: 4px;
     	border-radius: 4px;
   	}
-  	#content tr.hover td.actions a {
+  	#content tr.hover td.actions a,
+    .content-widget tr.hover td.actions a {
   	  color: #881B20;
 	  }
-  	#content td.actions a:hover {
+  	#content td.actions a:hover,
+    .content-widget td.actions a:hover {
   	  background-color: #EEE;
   	}
-  	#content table.edit_on_row_click td a.btn-delete {
+  	#content table.edit_on_row_click td a.btn-delete,
+    .content-widget table.edit_on_row_click td a.btn-delete {
 	}
-      #content table.edit_on_row_click td.delete a.btn-delete {
+      #content table.edit_on_row_click td.delete a.btn-delete,
+      .content-widget table.edit_on_row_click td.delete a.btn-delete {
   	    float: right;
   	    display: block;
   	    background: url(<%= asset_path("ubiquo/ico-delete-off.gif") %>) no-repeat center center;
@@ -706,10 +736,13 @@ a.new, #content .form-item-submit input.bt-create {
   	    height: 39px;
 	  }
 	  #content table.edit_on_row_click td a.btn-delete:hover,
-      #content table.edit_on_row_click tr.hover td a.btn-delete {
+      #content table.edit_on_row_click tr.hover td a.btn-delete,
+      .content-widget table.edit_on_row_click td a.btn-delete:hover,
+      .content-widget table.edit_on_row_click tr.hover td a.btn-delete {
 	    background: #F0BB47 url(<%= asset_path("ubiquo/ico-delete.gif") %>) no-repeat center center;
           }
-	    #content a.btn-delete span {
+	    #content a.btn-delete span,
+        .content-widget a.btn-delete span {
 	      display: none;
             }
 
@@ -766,39 +799,48 @@ a.new, #content .form-item-submit input.bt-create {
         }
 
 /*--- taula dades per TinyMCE ---*/
-#content table.mceLayout, #content .mceLayout table {
+#content table.mceLayout, #content .mceLayout table,
+.content-widget table.mceLayout, .content-widget .mceLayout table {
 	margin: 0;
 }
-#content .mceLayout th, #content .mceLayout td  {
+#content .mceLayout th, #content .mceLayout td,
+.content-widget .mceLayout th, .content-widget .mceLayout td {
 	border-right: none;
     border-bottom: none;
 }
-#content .mceLayout th:last-child, #content .mceLayout td:last-child {
+#content .mceLayout th:last-child, #content .mceLayout td:last-child,
+.content-widget .mceLayout th:last-child, .content-widget .mceLayout td:last-child {
 	border-right: none;
     border-bottom: none;
 }
-#content .mceLayout th {
+#content .mceLayout th,
+.content-widget .mceLayout th {
 	padding: 0;
 	text-align: left;
 	font-size: 1em;
 	font-weight: normal;
 	background: none;
 }
-	#content .mceLayout th a {
+	#content .mceLayout th a,
+    .content-widget .mceLayout th a {
 		color: #000;
 	}
 
-#content .mceLayout td {
+#content .mceLayout td,
+.content-widget .mceLayout td {
 	padding: 0;
 }
-#content .mceLayout tr.mceLast td {
+#content .mceLayout tr.mceLast td,
+.content-widget .mceLayout tr.mceLast td {
     border-bottom: 1px solid #CCC;
 }
 
-#content .mceLayout tr:hover {
+#content .mceLayout tr:hover,
+.content-widget .mceLayout tr:hover {
 	background: none;
 }
-	#content .mceLayout tr:hover td {
+	#content .mceLayout tr:hover td,
+    .content-widget .mceLayout tr:hover td {
 		background: none;
 	}
 
@@ -829,24 +871,38 @@ table#menu_items_list_titles {
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
 }
-#content form .error_field, #content form .file_error_field, #content form .checkbox_error_field, #content form .radio_error_field {
+.content-widget form {
+	padding: 2em;
+	background-color: #F3F6EB;
+	border: 2px solid #D5D9C2;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+    padding-bottom: 4.5em;
+}
+#content form .error_field, #content form .file_error_field, #content form .checkbox_error_field, #content form .radio_error_field,
+.content-widget form .error_field, .content-widget form .file_error_field, .content-widget form .checkbox_error_field, .content-widget form .radio_error_field {
 	border: 2px solid #B7393D;
 }
-#content form .error_field {
+#content form .error_field,
+.content-widget form .error_field {
 	padding: .2em;
 }
-#content form .file_error_field {
+#content form .file_error_field,
+.content-widget form .file_error_field {
 	padding: .2em;
     width: 21em;
     float: left;
     display: inline-block;
     margin-right: 13em;
 }
-#content form .checkbox_error_field {
+#content form .checkbox_error_field,
+.content-widget form .checkbox_error_field {
 	padding: 0.5em 0.1em 0 0.2em;
     width: 1.4em;
 }
-#content form .radio_error_field {
+#content form .radio_error_field,
+.content-widget form .radio_error_field {
 	padding: 0.5em 0.1em 0 0.2em;
     width: 1.4em;
 }
@@ -893,20 +949,25 @@ form label {
 	margin-bottom: .3em;
 }
 
-#content form input, #content form select {
+#content form input, #content form select,
+.content-widget form input, .content-widget form select {
 	display: block;
 }
 
 #content form input,
 #content form textarea,
-#content form select {
+#content form select,
+.content-widget form input,
+.content-widget form textarea,
+.content-widget form select {
 	padding: .3em;
 	border: 1px solid #eaeaea;
 	-moz-box-shadow: inset 1px 1px 2px #DDD;
 	-webkit-box-shadow: inset 1px 1px 2px #DDD;
 	box-shadow: inset 1px 1px 2px #DDD;
 }
-#content form input[type='file'] {
+#content form input[type='file'],
+.content-widget form input[type='file'] {
 	margin-right: 4em;
 	border: none;
 	-moz-box-shadow: none;
@@ -914,66 +975,82 @@ form label {
 	box-shadow: none;
 }
 
-#content form textarea {
+#content form textarea,
+.content-widget form textarea {
 	width: 99%;
 }
-#content form .datetime select {
+#content form .datetime select,
+.content-widget form .datetime select {
 	display: inline;
 }
 
-#content form .page_templates li {
+#content form .page_templates li,
+.content-widget form .page_templates li {
 	float: left;
 	margin-right: 1em;
 }
-	#content form .page_templates input {
+	#content form .page_templates input,
+    .content-widget .page_templates input {
 		display: inline;
 		vertical-align: middle;
 	}
-	#content form .page_templates label {
+	#content form .page_templates label,
+    .content-widget form .page_templates label {
 		font-weight: normal;
 		font-size: 1em;
 	}
-	#content form .page_templates img {
+	#content form .page_templates img,
+    .content-widget form .page_templates img {
 		display: block;
 	}
 
-#content .form_buttons {
+#content .form_buttons,
+.content-widget .form_buttons {
 	margin: 0;
 	font-size: 1em;
 }
-	#content .form_buttons input {
+	#content .form_buttons input,
+    .content-widget .form_buttons input {
 		float: right;
 		margin-left: 1em;
 		border: none;
 	}
 
 	/* new form markup for v0.8 */
-	#content .form-item, #content .form-item-inline {
+	#content .form-item, #content .form-item-inline,
+    .content-widget .form-item, .content-widget .form-item-inline {
 		font-size: 1.4em;
 		margin-bottom: .8em;
 	}
-		#content .form-item p, #content .form-item-inline p {
+		#content .form-item p, #content .form-item-inline p,
+        .content-widget .form-item p, .content-widget .form-item-inline p {
 			font-size: 1em;
 			margin-bottom: .3em;
 		}
-		#content .form-item p {
+		#content .form-item p,
+        .content-widget .form-item p {
 			clear: both;
 			padding: .4em 0 0 11em;
 		}
-		#content .form-item p.description, #content .form-item p.translation-info {
+		#content .form-item p.description, #content .form-item p.translation-info,
+        .content-widget .form-item p.description, .content-widget .form-item p.translation-info {
 			font-size: .9em;
 			padding-left: 12.2em;
 		}
-		#content .form-item p.description {
+		#content .form-item p.description,
+        .content-widget .form-item p.description {
 			color: #666;
 		}
-		#content .form-item p.translation-info {
+		#content .form-item p.translation-info,
+        .content-widget .form-item p.translation-info {
 			color: #828282;
 		}
-	#content .form-item-submit {
+	#content .form-item-submit,
+    .content-widget .form-item-submit {
 		text-align: right;
 	}
-		#content .form-item label {
+		#content .form-item label,
+        .content-widget .form-item label {
 			display: block;
 			float: left;
 			text-align: right;
@@ -982,18 +1059,22 @@ form label {
 			width: 10em;
 			margin: 0 1em 0 0;
 		}
-                #content .form-item-inline label {
+                #content .form-item-inline label,
+                .content-widget .form-item-inline label {
                         margin-right: .3em;
                 }
-                #content .form-item .required_field {
+                #content .form-item .required_field,
+                .content-widget .form-item .required_field {
 			font-weight: bold;
 		}
-		#content .form-item input, #content .form-item select, #content .form-item textarea, #content .form-item .mceEditor, #content .form-item .checkbox {
+		#content .form-item input, #content .form-item select, #content .form-item textarea, #content .form-item .mceEditor, #content .form-item .checkbox,
+        .content-widget .form-item input, .content-widget .form-item select, .content-widget .form-item textarea, .content-widget .form-item .mceEditor, .content-widget .form-item .checkbox {
 			display: block;
 			float: left;
 			width: 40%;
 		}
-                #content .form-item-inline input, #content .form-item-inline select, #content .datetime select {
+                #content .form-item-inline input, #content .form-item-inline select, #content .datetime select,
+                .content-widget .form-item-inline input, .content-widget .form-item-inline select, .content-widget .datetime select {
 			display: inline;
 			float: none;
 			width: auto;
@@ -1002,7 +1083,8 @@ form label {
         .calendar_date_select_popup_icon {
             margin-left: 10px;
         }
-                #content .relation-selector.relation-type-checkbox input {
+                #content .relation-selector.relation-type-checkbox input,
+                .content-widget .relation-selector.relation-type-checkbox input {
                     margin-right: .3em;
                 }
                 /* help popup */
@@ -1050,7 +1132,8 @@ form label {
                         height: 13px;
                         background: url(<%= asset_path("ubiquo/bg-form-help-arrow.png") %>) no-repeat center center;
                   }
-		  #content .form-help .content p {
+		  #content .form-help .content p,
+          .content-widget .form-help .content p {
                         clear: none;
                         color: #555;
                         font-size: 1.2em;
@@ -1059,13 +1142,15 @@ form label {
                   }
                   /* ---------- */
 
-                  #content .datetime select {
+                  #content .datetime select,
+                  .content-widget .datetime select {
 			display: inline;
 			float: none;
 			width: auto;
                   }
 
-                  #content .datetime input {
+                  #content .datetime input,
+                  .content-widget .datetime input {
 			display: inline;
 			width: auto;
                   }
@@ -1081,7 +1166,8 @@ form label {
 	-webkit-box-shadow: inset 1px 1px 2px #DDD;
 	box-shadow: inset 1px 1px 2px #DDD;*/
 		}
-		#content input.checkbox, #content input.radio {
+		#content input.checkbox, #content input.radio,
+        .content-widget input.checkbox, .content-widget input.radio {
 			width: auto;
 			padding-top: .2em;
                         margin-right: .5em;
@@ -1089,10 +1175,12 @@ form label {
                 #content .form-item-inline input.checkbox, #content .form-item-inline input.radio {
                         margin-right: 2em;
 		}
-		#content .form-item .mceEditor {
+		#content .form-item .mceEditor,
+        .content-widget .form-item .mceEditor {
 			width: 78%;
 		}
-		#content .form-item-submit input {
+		#content .form-item-submit input,
+        .content-widget .form-item-submit input {
 			/*display: inline;*/
 			float: right;
 			margin-left: .5em;
