@@ -147,11 +147,11 @@ class Page < ActiveRecord::Base
   end
 
   def expire
-    ActionController::Base.perform_caching ?  
+    ActionController::Base.perform_caching ?
       UbiquoDesign.cache_manager.expire_page(self) : true
   end
 
-  # Returns true if the page has been published
+  # Returns true if the page has been published.
   def published?
     published_id
   end
