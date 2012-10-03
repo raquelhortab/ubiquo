@@ -142,7 +142,6 @@ class Page < ActiveRecord::Base
     end
   end
 
-
   def expire_varnish
     if defined? VARNISH_SERVER
       ['es','ca'].each do |suffix|

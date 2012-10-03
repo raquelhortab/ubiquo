@@ -344,6 +344,28 @@ class PageTest < ActiveSupport::TestCase
     page.save
 
     assert !page.is_previewable?
+    Free.create(
+      :name => "Test widget",
+      :block_id => page.blocks.first.id,
+      :content => "content for test widget")
+    page.save
+    assert !page.is_previewable?
+  end
+
+  def test_should_not_capture_all_exceptions
+    page = create_page
+    widget = Free.new(
+      :name => "Test widget",
+      :content => "content for test widget")
+    widget.expects(:save).raises(Interrupt, "Stop")
+    assert_raise(Interrupt) do
+      page.add_widget(:main, widget )
+    end
+
+    page.expects(:clear_published_page).raises(Interrupt, "Stop")
+    assert_raise(Interrupt) do
+      page.publish
+    end
   end
 
   private
