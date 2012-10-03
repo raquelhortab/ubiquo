@@ -472,6 +472,7 @@ class PageTest < ActiveSupport::TestCase
       :published_id  => nil,
       :is_modified   => true
     }.merge(options))
+  end
 
   def test_should_be_expirable_by_a_superadmin
     original = Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?]

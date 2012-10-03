@@ -26,7 +26,19 @@ Ubiquo::Plugin.register(:ubiquo_design, :plugin => UbiquoDesign) do |config|
   config.add :memcache, { :server => '127.0.0.1', :timeout => 0 }
   config.add :generic_models, []
   config.add :block_type_for_static_section_widget, 'main'
-
+  config.add :widget_ttl, 10.minutes
+  config.add :page_ttl, {
+    :client => {
+      :minimum => 0.minutes,
+      :default => 0.minutes
+    },
+    :server => {
+      :minimum => 1.minute,
+      :default => 10.minutes
+    }
+  }
+  config.add(:async_varnish_expiration, false)
+  config.add(:public_host, lambda{|options| 'replaceme.com'})
 end
 
 groups = Ubiquo::Settings.get :model_groups

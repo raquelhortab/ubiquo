@@ -33,9 +33,7 @@ class Widget < ActiveRecord::Base
   after_save :update_page
   after_destroy :update_page
 
-  named_scope :published,
-              :conditions => ::Page.published_conditions,
-              :include => {:block => :page}
+  scope :published, where("pages.published_id IS NULL AND pages.is_modified = ?", false).includes(:block => :page)
 
   def without_page_expiration
     self.update_page_denied = true

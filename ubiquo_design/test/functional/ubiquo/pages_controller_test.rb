@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::PagesControllerTest < ActionController::TestCase
-  use_ubiquo_fixtures
 
   def setup
     login_as :admin

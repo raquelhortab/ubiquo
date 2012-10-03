@@ -5,12 +5,12 @@ class ProxyServer < ActiveRecord::Base
 
   DEAD_MINUTES = 5
 
-  named_scope :alive, lambda{
-    {:conditions => { :updated_at => (DEAD_MINUTES.minutes.ago .. 0.minutes.ago) }}
+  scope :alive, lambda{
+    where(:updated_at => (DEAD_MINUTES.minutes.ago .. 0.minutes.ago))
   }
 
-  named_scope :obsolete, lambda{
-    {:conditions => ["updated_at < ?", DEAD_MINUTES.minutes.ago] }
+  scope :obsolete, lambda{
+    where("updated_at < ?", DEAD_MINUTES.minutes.ago)
   }
 
   # Exception raised when the remote server cannot be found.
