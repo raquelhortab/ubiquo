@@ -1,4 +1,5 @@
 class ProxyServer < ActiveRecord::Base
+  attr_accessible :host, :port
 
   validates_presence_of :host
   validates_presence_of :port

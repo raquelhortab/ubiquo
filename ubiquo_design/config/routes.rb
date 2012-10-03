@@ -44,6 +44,8 @@ Ubiquo::Engine.routes.draw do
 end
 
 Rails.application.routes.draw do
+  match "/discovery/:type", :to => "discovery#create",  :format => "xml", :via => [:post]
+
   # Proposal for public routes.
   match '/', :to => 'pages#show', :url => ''
   match '/page/:page',
