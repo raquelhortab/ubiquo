@@ -343,6 +343,8 @@ class Page < ActiveRecord::Base
   end
 
   %w{client server}.each do |expiration_type|
+    attr_accessible :"#{expiration_type}_expiration"
+
     define_method "#{expiration_type}_expiration" do
       setting = Ubiquo::Settings[:ubiquo_design][:page_ttl]
       default_time = setting[expiration_type.to_sym][:default] if setting[expiration_type.to_sym]
