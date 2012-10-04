@@ -9,6 +9,13 @@ Ubiquo::Engine.routes.draw do
   end
 
   resources :pages do
+    member do
+      put :expire
+    end
+    collection do
+      get :expirations
+      put :expire_pages
+    end
     resources :widgets do
       collection do
         # TODO: review this action
@@ -16,13 +23,10 @@ Ubiquo::Engine.routes.draw do
         post :change_order
         put :change_order
         delete :change_order
-        get :expirations
-        put :expire_pages
       end
 
       member do
         post :change_name
-        put :expire
       end
     end
 

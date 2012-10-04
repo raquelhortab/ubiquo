@@ -38,6 +38,12 @@ Ubiquo::Plugin.register(:ubiquo_design, :plugin => UbiquoDesign) do |config|
     }
   }
   config.add(:async_varnish_expiration, false)
+  config.add :page_can_be_expired?, lambda {|page, user|
+    true
+  }
+  config.add :expiration_permit, lambda{
+    permit?("expiration_management")
+  }
   config.add(:public_host, lambda{|options| 'replaceme.com'})
 end
 

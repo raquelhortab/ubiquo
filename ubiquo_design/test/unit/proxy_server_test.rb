@@ -12,14 +12,14 @@ class ProxyServerTest < ActiveSupport::TestCase
   def test_should_require_host
     assert_no_difference "ProxyServer.count" do
       proxy_server = create_proxy_server(:host => "")
-      assert proxy_server.errors.on(:host)
+      assert proxy_server.errors[:host]
     end
   end
 
   def test_should_require_port
     assert_no_difference "ProxyServer.count" do
       proxy_server = create_proxy_server(:port => "")
-      assert proxy_server.errors.on(:port)
+      assert proxy_server.errors[:port]
     end
   end
 

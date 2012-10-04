@@ -2,10 +2,6 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class Ubiquo::PagesControllerTest < ActionController::TestCase
 
-  def setup
-    login_as :admin
-  end
-
   def test_should_get_index
     get :index
     assert_response :success
@@ -94,11 +90,10 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
     page = create_page(:url_name => 'one')
     Page.any_instance.expects(:expire)
     put :expire, :id => page.id
-    assert_redirected_to ubiquo_pages_path
+    assert_redirected_to ubiquo.pages_path
   end
 
   def test_should_get_expirations_page_as_admin
-    login_as :admin
     UbiquoUser.any_instance.stubs(:is_superadmin?).returns(false)
 
     get :expirations
@@ -108,7 +103,6 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_get_expirations_and_show_expire_all_button_as_superadmin
-    login_as :admin
     UbiquoUser.any_instance.stubs(:is_superadmin?).returns(true)
 
     get :expirations
@@ -126,7 +120,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   def test_should_redirect_to_index_if_do_not_have_permissions
     without_expiration_permission do
       get :expirations
-      assert_redirected_to ubiquo_pages_path
+      assert_redirected_to ubiquo.pages_path
     end
   end
 
@@ -135,7 +129,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
 
     Page.expects(:expire_all).returns(true)
     put :expire_pages, :expire_all => true
-    assert_redirected_to expirations_ubiquo_pages_path
+    assert_redirected_to ubiquo.expirations_pages_path
     assert_not_nil flash[:notice]
   end
 
@@ -143,46 +137,42 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
     UbiquoUser.any_instance.stubs(:is_superadmin?).returns(false)
     Page.expects(:expire_all).never
     put :expire_pages, :expire_all => true
-    assert_redirected_to expirations_ubiquo_pages_path
+    assert_redirected_to ubiquo.expirations_pages_path
     assert_not_nil flash[:error]
   end
 
   def test_should_expire_some_pages
-    login_as :admin
     one = create_page(:url_name => 'one')
     two = create_page(:url_name => 'two')
     Page.expects(:expire).with([one.id.to_s, two.id.to_s]).returns([one, two])
     put :expire_pages,
         :expire_selected => true,
         :selector        => { :pages => [one.id.to_s, two.id.to_s] }
-    assert_redirected_to expirations_ubiquo_pages_path
+    assert_redirected_to ubiquo.expirations_pages_path
     assert_not_nil flash[:notice]
   end
 
   def test_should_try_to_expire_some_pages_and_show_error_message
-    login_as :admin
     one = create_page(:url_name => 'one')
     Page.expects(:expire).with([one.id.to_s]).returns([])
     put :expire_pages,
         :expire_selected => true,
         :selector        => { :pages => [one.id.to_s] }
-    assert_redirected_to expirations_ubiquo_pages_path
+    assert_redirected_to ubiquo.expirations_pages_path
     assert_equal I18n.t("ubiquo.page.any_page_expired"), flash[:error]
   end
 
   def test_should_expire_url
-    login_as :admin
     url = 'http://www.fcbarcelona.com'
     Page.expects(:expire_url).with(url)
     put :expire_pages,
         :expire_selected => true,
         :url             => url
-    assert_redirected_to expirations_ubiquo_pages_path
+    assert_redirected_to ubiquo.expirations_pages_path
     assert_not_nil flash[:notice]
   end
 
   def test_should_render_expire_if_superadmin
-    login_as :admin
     UbiquoUser.any_instance.stubs(:is_superadmin?).returns(true)
 
     pages = [create_page(:url_name => 'one')]

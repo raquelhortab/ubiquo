@@ -10,7 +10,7 @@ module UbiquoDesign
       #   context: possible context to create multiple policies
       def define(context = nil, &block)
         with_scope(context) do
-          store_definition(block.bind(self).call || {})
+          store_definition(block.ubind(self).call || {})
         end
       end
 
