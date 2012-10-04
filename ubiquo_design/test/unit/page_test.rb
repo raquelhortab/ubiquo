@@ -1,6 +1,13 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
 
 class PageTest < ActiveSupport::TestCase
+  unless ActionController::Base.included_modules.include? UbiquoDesign::CacheRendering
+    ActionController::Base.send(:include, UbiquoDesign::CacheRendering)
+  end
+
+  unless ActiveRecord::Base.included_modules.include? UbiquoDesign::CacheExpiration::ActiveRecord
+    ActiveRecord::Base.send(:include, UbiquoDesign::CacheExpiration::ActiveRecord)
+  end
 
   # Page.publish is a transaction
   self.use_transactional_fixtures = false
@@ -166,6 +173,7 @@ class PageTest < ActiveSupport::TestCase
         assert_no_difference "Widget.count" do # no cloned widgets
           assert_raise ActiveRecord::RecordInvalid do
             assert !page.publish
+
           end
         end
       end
@@ -371,14 +379,15 @@ class PageTest < ActiveSupport::TestCase
   def test_should_expire_page_on_destroy
     page = create_page
     caching_on
-    UbiquoDesign.cache_manager.expects(:expire_page).with(page).returns(true)
+    UbiquoDesign.cache_manager.expects(:expire_by_model).once.with(page, nil).returns(true)
+    UbiquoDesign.cache_manager.expects(:expire_by_model).twice.returns(true)
     page.destroy
   end
 
   def test_should_expire_page_on_save
     page = create_page
     caching_on
-    UbiquoDesign.cache_manager.expects(:expire_page).with(page).returns(true)
+    UbiquoDesign.cache_manager.expects(:expire_by_model).once.with(page, nil).returns(true)
     page.save
   end
 
@@ -522,7 +531,7 @@ class PageTest < ActiveSupport::TestCase
   end
 
   def caching_on
-    ActionController::Base.expects(:perform_caching).at_least_once.returns(true)
+    ActionController::Base.stubs(:perform_caching).returns(true)
   end
 
 end
