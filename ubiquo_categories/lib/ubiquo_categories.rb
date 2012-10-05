@@ -1,5 +1,4 @@
 require 'ubiquo'
-require 'ubiquo_i18n'
 
 module UbiquoCategories
   class Engine < Rails::Engine
