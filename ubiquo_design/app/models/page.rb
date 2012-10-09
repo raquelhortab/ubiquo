@@ -132,8 +132,7 @@ class Page < ActiveRecord::Base
   def options_for_url(url_for_options = {})
     # there are custom routes for actions other than :show
     unless url_for_options[:action] && url_for_options[:action].to_s != 'show'
-      # url must be an array of components to avoid a rails escaping bug
-      url = "#{self.url(url_for_options)}/#{url_for_options.delete(:url)}".split('/').delete_if(&:blank?)
+      url = "#{self.url(url_for_options)}/#{url_for_options.delete(:url)}".split('/').delete_if(&:blank?).join
     end
     {
       :controller => '/pages',
