@@ -11,7 +11,7 @@ module Ubiquo::StaticPagesHelper
     render(:partial => "shared/ubiquo/lists/standard",
            :locals => {
              :name => 'page',
-             :headers => [:name, :url_name, :published_id],
+             :headers => [:name, :url_name, :is_published],
              :rows => collection.collect do |static_page|
                {
                  :id => static_page.id,
