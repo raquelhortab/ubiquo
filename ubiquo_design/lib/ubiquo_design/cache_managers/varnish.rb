@@ -160,7 +160,7 @@ module UbiquoDesign
               Widget.class_by_key(key).published.each do |widget|
                 # skip the widgets when they have a defined block and it does not return true
                 unless policy && !policy.call(widget, instance)
-                  widgets_to_expire << [widget]
+                  widgets_to_expire << [widget, :scope => instance]
                 end
               end
             end
