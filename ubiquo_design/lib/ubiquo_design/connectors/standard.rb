@@ -200,7 +200,6 @@ module UbiquoDesign
               (if page.can_be_expired_by?(current_ubiquo_user) && page.published?
                 link_to(t('ubiquo.page.expire'), ubiquo.expire_page_path(:id => page.id), :method => :put)
               end),
-              (link_to(t('ubiquo.remove'), [:ubiquo, page], :confirm => t('ubiquo.design.confirm_page_removal'), :method => :delete, :class => 'btn-delete') unless page.key?)
             ].compact
           end
 
