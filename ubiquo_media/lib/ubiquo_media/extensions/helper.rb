@@ -17,7 +17,7 @@ module UbiquoMedia
         if asset.asset_type.key == "image"
           asset.resource.url(:thumb)
         else
-          "/images/ubiquo/media/ico-#{asset.asset_type.key}.png"
+          "/assets/ubiquo/media/ico-#{asset.asset_type.key}.png"
         end
       end
 
