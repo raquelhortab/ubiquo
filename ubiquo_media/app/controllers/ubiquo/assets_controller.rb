@@ -65,6 +65,7 @@ class Ubiquo::AssetsController < UbiquoController
       if ok
         format.html do
           flash[:notice] = t('ubiquo.media.asset_created')
+          return if check_redirects(@asset)
           redirect_to(ubiquo.assets_path)
         end
         format.xml  { render :xml => @asset, :status => :created, :location => @asset }
@@ -125,6 +126,7 @@ class Ubiquo::AssetsController < UbiquoController
     respond_to do |format|
       if @asset.update_attributes(params[:asset])
         flash[:notice] = t('ubiquo.media.asset_updated')
+        return if check_redirects(@asset)
         format.html { redirect_to(ubiquo.assets_path) }
         format.xml  { head :ok }
       else

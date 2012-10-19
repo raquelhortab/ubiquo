@@ -60,6 +60,7 @@ class Ubiquo::CategorySetsController < UbiquoController
     respond_to do |format|
       if @category_set.save
         flash[:notice] = t("ubiquo.category_set.created")
+        return if check_redirects(@category_set)
         format.html { redirect_to(ubiquo.category_sets_url) }
         format.xml  { render :xml => @category_set, :status => :created, :location => @category_set }
       else
@@ -76,6 +77,7 @@ class Ubiquo::CategorySetsController < UbiquoController
     respond_to do |format|
       if @category_set.update_attributes(params[:category_set])
         flash[:notice] = t("ubiquo.category_set.edited")
+        return if check_redirects(@category_set)
         format.html { redirect_to(ubiquo.category_sets_url) }
         format.xml  { head :ok }
       else

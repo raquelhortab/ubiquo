@@ -33,6 +33,7 @@ es:
     cancel: "Cancelar"
     confirm_item_removal: "Estás seguro de querer borrar este item?"
     save: "Guardar"
+    save_and_continue: "Guardar y continuar"
     search: "Buscar"
     empty: "No hay resultados para %{thing}"
     help: "Ayuda"

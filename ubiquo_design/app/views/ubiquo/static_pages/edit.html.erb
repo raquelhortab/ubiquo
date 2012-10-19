@@ -3,15 +3,19 @@
 <%= error_messages_for 'static_page' %>
 
 <%= form_for @static_page,
-            :url => ubiquo.static_page_path(@static_page),
-            :html => { :method => :put } do |form| %>
+  :url => ubiquo.static_page_path(@static_page),
+  :html => { :method => :put } do |form| %>
   <%= render :partial => 'form', :locals => { :form => form } %>
   <div class="form-item-submit">
     <input type="button" id="save_publish" value="<%=t('ubiquo.design.static_pages.save_and_publish')%>" class="bt-save_and_publish" />
     <%= form.submit t('ubiquo.save'), :class => "bt-update" %>
+    <%= form.submit t('ubiquo.save_and_continue'),
+                    :class => "bt-save-continue",
+                    :id    => 'card_save_and_continue',
+                    :name  => 'save_and_continue' %>
     <%= button_to_function t('ubiquo.back_to_list'),
-        "document.location.href='#{ubiquo.static_pages_path}'",
-        :class => "bt-back" %>
+      "document.location.href='#{ubiquo.static_pages_path}'",
+      :class => "bt-back" %>
   </div>
 <% end %>
 
@@ -19,7 +23,7 @@
   <div class="sidebar_box">
     <div id="page_info">
       <%= render :partial => 'ubiquo/designs/pageinfo_sidebar',
-                 :locals => { :page => @static_page, :page_type => 'static_page' } %>
+        :locals => { :page => @static_page, :page_type => 'static_page' } %>
     </div>
   </div>
   <%= help_block_sidebar(t("ubiquo.helpmsg.design.page.edit")) %>

@@ -56,6 +56,12 @@ Ubiquo::Settings.context(:ubiquo_form_builder) do |context|
       :i18n_label_key => "ubiquo.save",
       :class => "bt-update",
     },
+    :save_and_continue_button => {
+      :i18n_label_key => 'ubiquo.save_and_continue',
+      :class => 'bt-save-continue',
+      :id    => 'card_save_and_continue',
+      :name  => 'save_and_continue'
+    },
     :back_button => {
       :i18n_label_key => "ubiquo.back_to_list",
     },

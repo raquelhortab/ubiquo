@@ -497,8 +497,8 @@ table, th, td { border: none;}
 a.new, #content .form_buttons input, #content .form-item-submit input,
 .content-widget .form_buttons input, .content-widget .form-item-submit input { /* list all buttons here */
 	display: block;
-	width: 12em;
-	padding: .4em .7em .5em;
+	width: auto;
+	padding: .4em 1em .5em;
 	font-size: 1.3em;
 	text-align: center;
 	line-height: 1.6;
@@ -525,11 +525,18 @@ a.new:active {
 }
 a.new, #content .form-item-submit input.bt-create,
 .content-widget .form-item-submit input.bt-create {
+        padding-left: 3em;
 	background-image: url(<%= asset_path("ubiquo/bg-button-add.png") %>);
 }
 #content .form-item-submit input.bt-update, #content .form-item-submit input.bt-submit, 
 .content-widget .form-item-submit input.bt-update, .content-widget .form-item-submit input.bt-submit {
+        padding-left: 3em;
 	background-image: url(<%= asset_path("ubiquo/bg-button-save.png") %>);
+}
+
+#content .form-item-submit input.bt-save-continue, #content-widget .form-item-submit input.bt-save-continue {
+    background-image: url(<%= asset_path("ubiquo/bg-button-save-continue.png") %>);
+    padding-left: 3em;
 }
 
 /*--- handle ---*/

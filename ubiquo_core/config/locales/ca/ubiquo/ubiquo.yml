@@ -33,6 +33,7 @@ ca:
     cancel: "Cancelar"
     confirm_item_removal: "Estàs segur de voler eliminar aquest ítem?"
     save: "Guardar"
+    save_and_continue: "Guardar i continuar"
     search: "Buscar"
     empty: "No hi ha resultats per %{thing}"
     help: "Ajuda"

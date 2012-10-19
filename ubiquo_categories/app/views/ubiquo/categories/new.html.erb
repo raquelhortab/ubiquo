@@ -10,15 +10,19 @@
 
 <%= form_for([ubiquo, @category_set, @category]) do |form| %>
   <%= render :partial => 'form', :locals => {:form => form} %>
-    <div class="form-item-submit">
-      <%= form.submit t('ubiquo.create'), :class => "bt-submit" %>
-      <%= button_to_function t('ubiquo.back_to_list'),
+  <div class="form-item-submit">
+    <%= form.submit t('ubiquo.create'), :class => "bt-submit" %>
+    <%= form.submit t('ubiquo.save_and_continue'),
+                    :class => "bt-save-continue",
+                    :id    => 'card_save_and_continue',
+                    :name  => 'save_and_continue' %>
+    <%= button_to_function t('ubiquo.back_to_list'),
       "document.location.href='#{ubiquo.category_set_categories_path(params[:category_set_id])}'", :class => "bt-back" %>
-    </div>
+  </div>
 <% end %>
 
 <% content_for :sidebar do %>
-	<%= uhook_new_category_sidebar @category %>
+  <%= uhook_new_category_sidebar @category %>
   <h3><%= t('ubiquo.help') %></h3>
   <p><%= t("ubiquo.category.new.help_message") %></p>
 <% end %>

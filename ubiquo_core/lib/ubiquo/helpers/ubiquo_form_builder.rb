@@ -262,6 +262,14 @@ module Ubiquo
         text = text || @template.t(options.delete(:i18n_label_key))
         submit(text, options)
       end
+      
+      # Button to save and continue on the edit and update form
+      def save_and_continue_button(text = nil, options = {} )
+        options = options.reverse_merge(default_tag_options[:save_and_continue_button])
+        text = text || @template.t(options.delete(:i18n_label_key))
+
+        submit text, options
+      end
 
       # Creates a tab on the current block.
       # It raises an exception unless last group is a group(:type=> :tabbed)

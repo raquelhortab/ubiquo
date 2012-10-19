@@ -68,6 +68,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     respond_to do |format|
       if @<%= singular_name %>.save
         flash[:notice] = t("ubiquo.<%= singular_name %>.created")
+        return if check_redirects(@<%= singular_name %>)
         format.html { redirect_to(ubiquo.<%= plural_name %>_url) }
         format.json { render json: @<%= singular_name %>, status: :created, location: @<%= singular_name %> }
       else
@@ -95,6 +96,7 @@ class Ubiquo::<%= controller_class_name %> < UbiquoController
     respond_to do |format|
       if ok
         flash[:notice] = t("ubiquo.<%= singular_name %>.edited")
+        return if check_redirects(@<%= singular_name %>)
         format.html { redirect_to(ubiquo.<%= plural_name %>_url) }
         format.json { head :ok }
       else
