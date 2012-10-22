@@ -69,3 +69,6 @@ en:
       actions: "Actions"
       from: "From"
       to: "To"
+    paginator:
+      cursor: "%{current_page} of %{total_pages}"
+      total_items: "Total: %{count}"

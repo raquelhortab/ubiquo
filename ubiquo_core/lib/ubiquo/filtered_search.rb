@@ -85,7 +85,7 @@ module Ubiquo
         scopes = select_scopes(params, options[:scopes])
         scopes.inject(self) do |results, pair|
           pair.last.blank? ? results : results.send(pair.first, pair.last)
-        end.all(options.except(:scopes))
+        end.scoped(options.except(:scopes))
       end
 
       protected

@@ -71,3 +71,6 @@ es:
       from: "Desde"
       to: "Hasta"
       date: "Fecha"
+    paginator:
+      cursor: "%{current_page} de %{total_pages}"
+      total_items: "Total: %{count}"

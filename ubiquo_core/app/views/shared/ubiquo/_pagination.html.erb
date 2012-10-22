@@ -1,12 +1,21 @@
 <div class="pagination">
+  <span class="total">
+    <%= t("ubiquo.paginator.total_items", :count => item_pages[:total_items]) %>
+  </span>
   <% if item_pages %>
-    <% %w{next previous}.each do |dir| %>
-      <% page = page = item_pages[dir.to_sym] %>
-      <% html_options = {:class => "bot_pag_#{dir}#{' disabled' unless page}"} %>
-      <% if page %>
-        <%= link_to t("ubiquo.#{dir}"), params.merge({:page => page}), html_options %>
+    <% %w(next cursor previous).each do |dir| %>
+      <% if dir == "cursor" %>
+        <%= content_tag(:span,
+                        t("ubiquo.paginator.cursor", :current_page => item_pages[:current_page],
+                                                     :total_pages  => item_pages[:total_pages])) %>
       <% else %>
-        <%= content_tag(:span, t("ubiquo.#{dir}"), html_options) %>
+        <% page = item_pages[dir.to_sym] %>
+        <% html_options = { :class => "bot_pag_#{dir}#{' disabled' unless page}" } %>
+        <% if page %>
+          <%= link_to t("ubiquo.#{dir}"), params.merge({ :page => page }), html_options %>
+        <% else %>
+          <%= content_tag(:span, t("ubiquo.#{dir}"), html_options) %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

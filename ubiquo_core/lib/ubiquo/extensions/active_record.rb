@@ -26,15 +26,24 @@ module Ubiquo
       #   requested items
       # ]
       def ubiquo_paginate(options = {})
-        options.delete_if{|o1,o2| o2.blank? }
-        options.reverse_merge!({:page => 1, :per_page => Ubiquo::Settings.get(:elements_per_page) })
-        items = self.with_scope(:find => {:limit => (options[:per_page].to_i + 1), :offset => (options[:per_page].to_i * (options[:page].to_i - 1))}) do
+        options.delete_if { |o1,o2| o2.blank? }
+        options.reverse_merge!({ :page     => 1,
+                                 :per_page => Ubiquo::Settings.get(:elements_per_page) })
+                             
+        items = self.with_scope(:find => { :limit => (options[:per_page].to_i + 1),
+                                                     :offset => (options[:per_page].to_i * (options[:page].to_i - 1))}) do
           yield
         end
+        
+        total_items = yield.count
+        
         [
          {
-           :previous => (options[:page].to_i > 1 ? options[:page].to_i - 1 : nil),
-           :next => (items.delete_at(options[:per_page].to_i).nil? ? nil : options[:page].to_i + 1)
+           :current_page => (options[:page] || 1),
+           :total_items  => total_items,
+           :total_pages  => (total_items / (options[:per_page] || Ubiquo::Settings.get(:elements_per_page)).to_f ).ceil,
+           :previous     => (options[:page].to_i > 1 ? options[:page].to_i - 1 : nil),
+           :next         => (items.delete_at(options[:per_page].to_i).nil? ? nil : options[:page].to_i + 1)
          },
          items
         ]

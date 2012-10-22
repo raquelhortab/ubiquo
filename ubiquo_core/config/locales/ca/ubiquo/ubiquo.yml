@@ -68,4 +68,7 @@ ca:
     base:
       actions: "Accions"
       from: "Des de"
-      to: "Fins a"
+      to: "Fins a"      
+    paginator:
+      cursor: "%{current_page} de %{total_pages}"
+      total_items: "Total: %{count}"
