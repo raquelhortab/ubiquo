@@ -16,6 +16,11 @@ module Ubiquo
       #     add_callback(:callback_string)
       #     remove_callback(:callback_string)
       #     related_object_id_field(:id_field)
+      #     js_class: (used as the javascript class for automcomplete,
+      #                default: RelationAutoCompleteSelector)
+      #     hintText: (used as the hint text showed in autocomplete selector)
+      #     noResultsText: (used as text when there are no results in autocomplete selector)
+      #     searchingText: (used as searching text in autocomplete selector)
       # options will have an additional parameter giving the
       # related_object field human-readable identifier(s)
 
@@ -184,6 +189,13 @@ module Ubiquo
       end
 
       def relation_autocomplete_selector(object, object_name, key, related_objects, humanized_field, relation_type, options = {})
+        options.reverse_merge!(
+          :js_class        => options[:js_class] || "RelationAutoCompleteSelector",
+          :hint_text       => options[:hint_text] || I18n.t("ubiquo.relation_selector.hint_text"),
+          :no_results_text => options[:no_results_text] || I18n.t("ubiquo.relation_selector.no_results_text"),
+          :searching_text  => options[:searching_text] || I18n.t("ubiquo.relation_selector.searching_text")
+        )
+        
         url_params = {:format => :js}
         url_params.merge!(options[:url_params]) if options[:url_params].present?
 
@@ -209,8 +221,9 @@ module Ubiquo
         else
           "'#{options[:remove_callback]}'"
         end
+        
         js_autocomplete =<<-JS
-          var autocomplete = new RelationAutoCompleteSelector(
+          var autocomplete = new #{options[:js_class]}(
             '#{autocomplete_options[:url]}',
             '#{object_name}',
             '#{options[:key_field]}',
@@ -220,7 +233,10 @@ module Ubiquo
             '#{humanized_field}',
             '#{options[:related_object_id_field]}',
             #{options[:add_callback]},
-            #{options[:remove_callback]}
+            #{options[:remove_callback]},
+            '#{options[:hint_text]}',
+            '#{options[:no_results_text]}',
+            '#{options[:searching_text]}'
           )
         JS
         js_code = if (request.format rescue nil) == :js

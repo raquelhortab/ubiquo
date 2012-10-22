@@ -115,7 +115,7 @@ document.observe("dom:loaded", function() {
 });
 
 var AutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection, style, editable, token_limit, options) {
+  initialize: function(url, object_name, key, initial_collection, style, editable, token_limit, options, hintText, noResultsText, searchingText) {
     this.options = Object.extend({
         trim:false, 
         unique:true,
@@ -133,9 +133,9 @@ var AutoCompleteSelector = Class.create({
     this.prePopulate = initial_collection;
     this.editable = editable;
     this.CAPTIONS = {
-      hintText: "Type in a search term",
-      noResultsText: "No results",
-      searchingText: "Searching..."
+      hintText: hintText,
+      noResultsText: noResultsText,
+      searchingText: searchingText
     },
     this.CLASSES = {
       tokenList: style + "-token-input-list",

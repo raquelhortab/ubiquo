@@ -10,6 +10,11 @@ module UbiquoCategories
       #     set  (CategorySet to obtains selector categories)
       #     include_blank (defaults to false, true to show a blank option if applicable)
       #     autocomplete_style (:tag, :list)
+      #     js_class: (used as the javascript class for automcomplete,
+      #                default: AutoCompleteSelector)
+      #     hintText: (used as the hint text showed in autocomplete selector)
+      #     noResultsText: (used as text when there are no results in autocomplete selector)
+      #     searchingText: (used as searching text in autocomplete selector)
       #   html_options: options for the wrapper (optional)
       def category_selector(object_name, key, options = {}, html_options = {})
         object = options[:object]
@@ -140,6 +145,13 @@ module UbiquoCategories
       end
 
       def category_autocomplete_selector(object, object_name, key, categories, set, options = {})
+        options.reverse_merge!(
+          :js_class        => options[:js_class] || "AutoCompleteSelector",
+          :hint_text       => options[:hint_text] || I18n.t("ubiquo.category_selector.hint_text"),
+          :no_results_text => options[:no_results_text] || I18n.t("ubiquo.category_selector.no_results_text"),
+          :searching_text  => options[:searching_text] || I18n.t("ubiquo.category_selector.searching_text")
+        )
+        
         style = options[:autocomplete_style] || "tag"
         unless ["list", "tag"].include?(style)
           raise "Invalid option for autocomplete_style"
@@ -161,14 +173,18 @@ module UbiquoCategories
         size = (obj_size == :many ? 'null' : obj_size.to_i)
 
         js_autocomplete =<<-JS
-          var autocomplete = new AutoCompleteSelector(
+          var autocomplete = new #{options[:js_class]}(
             '#{autocomplete_options[:url]}',
             '#{object_name}',
             '#{key}',
             #{autocomplete_options[:current_values]},
             '#{autocomplete_options[:style]}',
             #{set.is_editable?},
-            #{size}
+            #{size},
+            {},
+            '#{options[:hint_text]}',
+            '#{options[:no_results_text]}',
+            '#{options[:searching_text]}'
           )
         JS
         js_code = if (request.format rescue nil) == :js

@@ -6,3 +6,6 @@ es:
     category_selector:
       new_element: "Nuevo elemento"
       add_element: "Añadir"
+      hint_text: "Escribe el término de búsqueda"
+      no_results_text: "No hay resultados"
+      searching_text: "Buscando..."

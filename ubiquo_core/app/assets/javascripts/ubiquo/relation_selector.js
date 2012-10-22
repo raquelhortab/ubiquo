@@ -1,5 +1,5 @@
 var RelationAutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection, style, limit, query_param, id_query_param, add_callback, remove_callback) {
+  initialize: function(url, object_name, key, initial_collection, style, limit, query_param, id_query_param, add_callback, remove_callback, hintText, noResultsText, searchingText) {
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
@@ -14,9 +14,9 @@ var RelationAutoCompleteSelector = Class.create({
     this.addCallback = add_callback;
     this.removeCallback = remove_callback;
     this.CAPTIONS = {
-      hintText: "Type in a search term",
-      noResultsText: "No results",
-      searchingText: "Searching..."
+      hintText: hintText,
+      noResultsText: noResultsText,
+      searchingText: searchingText
     },
     this.CLASSES = {
       tokenList: style + "-token-input-list",

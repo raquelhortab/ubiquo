@@ -6,3 +6,6 @@ ca:
     category_selector:
       new_element: "Nou element"
       add_element: "Afegir"
+      hint_text: "Escriu el terme de cerca"
+      no_results_text: "No hi ha resultats"
+      searching_text: "Cercant..."

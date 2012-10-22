@@ -72,3 +72,7 @@ ca:
     paginator:
       cursor: "%{current_page} de %{total_pages}"
       total_items: "Total: %{count}"
+    relation_selector:
+      hint_text: "Escriu el terme de cerca"
+      no_results_text: "No hi ha resultats"
+      searching_text: "Cercant..."

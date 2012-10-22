@@ -74,3 +74,7 @@ es:
     paginator:
       cursor: "%{current_page} de %{total_pages}"
       total_items: "Total: %{count}"
+    relation_selector:
+      hint_text: "Escribe el término de búsqueda"
+      no_results_text: "No hay resultados"
+      searching_text: "Buscando..."
