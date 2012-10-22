@@ -27,6 +27,7 @@ ActiveRecord::Base.send(:extend, Ubiquo::Extensions::ConfigCaller)
 ActiveRecord::SpawnMethods.send(:include, Ubiquo::Extensions::DistinctOption)
 :UbiquoController.include! Ubiquo::Extensions::ConfigCaller
 :UbiquoController.extend! Ubiquo::Extensions::ConfigCaller
+:UbiquoController.include! Ubiquo::Extensions::Controller
 ActionView::Base.send(:include, Ubiquo::Extensions::ConfigCaller)
 ActionView::Base.send(:extend, Ubiquo::Extensions::ConfigCaller)
 
