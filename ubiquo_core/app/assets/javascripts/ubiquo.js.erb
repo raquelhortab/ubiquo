@@ -1,0 +1,22 @@
+//= require prototype
+//= require prototype_ujs
+//= require effects
+//= require dragdrop
+//= require controls
+//= require tinymce
+//= require jquery
+//= require jquery_ujs
+//= require ubiquo/ubiquo
+//= require ubiquo/lightwindow
+//= require ubiquo/lightwindow_ubiquo
+//= require ubiquo/relation_selector
+
+<% 
+    env      = asset_environment rescue {}
+    plugins  = []
+    plugins += Ubiquo::Plugin.registered_plugins.reject { |a| a == :ubiquo }.select { |a| env[a.to_s] }
+    
+    plugins.each do |plugin|
+      require_asset(plugin.to_s)
+    end
+ %>
