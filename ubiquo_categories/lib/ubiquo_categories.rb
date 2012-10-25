@@ -20,6 +20,10 @@ module UbiquoCategories
     initializer :load_connector, :after => :load_config_initializers do
       UbiquoCategories::Connectors.load!
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo_categories.*)
+    end
 
   end
 end

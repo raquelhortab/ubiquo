@@ -22,6 +22,10 @@ module UbiquoDesign
       require 'ubiquo_design/init_settings.rb'
       _loader
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo_design.*)
+    end
 
     protected
 

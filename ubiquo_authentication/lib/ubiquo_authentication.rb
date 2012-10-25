@@ -16,6 +16,10 @@ module UbiquoAuthentication
     initializer :register_ubiquo_plugin do
       require 'ubiquo_authentication/init_settings.rb'
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/login.css)
+    end
 
   end
 end

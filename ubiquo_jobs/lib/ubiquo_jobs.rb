@@ -11,6 +11,10 @@ module UbiquoJobs
     initializer :register_ubiquo_plugin do
       require 'ubiquo_jobs/init_settings.rb'
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo_jobs.*)
+    end
   end
 
   # Return the manager class to use. You can override the default by setting

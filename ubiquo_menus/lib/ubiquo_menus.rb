@@ -18,6 +18,10 @@ module UbiquoMenus
       require 'ubiquo_menus/init_settings.rb'
       _loader
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo_menu.*)
+    end
 
     protected
 

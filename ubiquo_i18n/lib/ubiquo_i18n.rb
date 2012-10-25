@@ -20,6 +20,10 @@ module UbiquoI18n
     initializer :load_locale, :after => :load_config_initializers do
       Locale.current = Locale.default if Locale.table_exists?
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo_i18n.js)
+    end
 
   end
 end

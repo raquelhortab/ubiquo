@@ -21,7 +21,7 @@ module Ubiquo
           # the default ones will be used
           config.paths["app/views"] << "#{config.root}/install/app/views"
           config.autoload_paths << "#{config.root}/install/app/controllers"
-
+          
           isolate_namespace Ubiquo
 
           # Define ubiquo:install task
@@ -93,6 +93,10 @@ module Ubiquo
           Ubiquo.supported_locales
         end
       end
+    end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo.*)
     end
 
   end

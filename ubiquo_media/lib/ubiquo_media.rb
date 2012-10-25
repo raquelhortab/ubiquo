@@ -30,5 +30,10 @@ module UbiquoMedia
     initializer :load_connector, :after => :load_config_initializers do
       UbiquoMedia::Connectors.load!
     end
+    
+    initializer :ubiquo_assets_precompile do |app|
+      app.config.assets.precompile += %w(ubiquo/ubiquo_media.*)
+    end
+    
   end
 end
