@@ -13,16 +13,16 @@ module Ubiquo
         options = options.merge(env_opts) if env_opts
 
         # We need this because sometimes we upgrade edge but no stable
-        options[:rails] = options[:template] == :edge ? '3.2.0.rc2' : '2.3.14'
-
-        spec = Bundler.load_gemspec(File.expand_path('../ubiquo.gemspec', __FILE__)
-        rails = spec
-
-        unless Gem::Specification::find_by_name('rails', options[:rails])
-          $stderr.puts "Sorry ubiquo --#{options[:template]} needs rails -v=#{options[:rails]} to work properly."
-          options[:show_help] = true
-        end
-
+#        options[:rails] = options[:template] == :edge ? '3.2.0.rc2' : '2.3.14'
+#
+#        spec = Bundler.load_gemspec(File.expand_path('../ubiquo.gemspec', __FILE__)
+#        rails = spec
+#
+#        unless Gem::Specification::find_by_name('rails', options[:rails])
+#          $stderr.puts "Sorry ubiquo --#{options[:template]} needs rails -v=#{options[:rails]} to work properly."
+#          options[:show_help] = true
+#        end
+#
         if `which git` == ''
           $stderr.puts "Sorry you need to install git (> 1.5.3). See http://git-scm.com/"
           options[:show_help] = true
