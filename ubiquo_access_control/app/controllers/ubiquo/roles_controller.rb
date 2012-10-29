@@ -46,6 +46,7 @@ class Ubiquo::RolesController < UbiquoController
             @role.permissions << perm
           end
         end
+        return if check_redirects(@role)
         flash[:notice] = t('ubiquo.auth.role_created')
         format.html { redirect_to(ubiquo.roles_path) }
         format.xml  { render :xml => @role, :status => :created, :location => @role }
@@ -68,6 +69,7 @@ class Ubiquo::RolesController < UbiquoController
     end
     respond_to do |format|
       if @role.update_attributes(params[:role])
+        return if check_redirects(@role)
         flash[:notice] = t('ubiquo.auth.role_edited')
         format.html { redirect_to(ubiquo.roles_path) }
         format.xml  { head :ok }
