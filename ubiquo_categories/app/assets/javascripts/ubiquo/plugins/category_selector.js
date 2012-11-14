@@ -457,7 +457,6 @@ var AutoCompleteSelector = Class.create({
     
     // Clear input box and make sure it keeps focus
     this.input_box.value = "";
-    this.input_box.focus();
     this.selected_dropdown_item = null;
     // Don't show the help dropdown, they've got the idea
     this.hide_dropdown();
