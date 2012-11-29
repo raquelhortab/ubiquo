@@ -12,14 +12,13 @@ class Ubiquo::UbiquoUserProfilesController < UbiquoController
       params.delete(atr.to_sym) if params[atr.to_sym].blank?
     end
     
-
     respond_to do |format|
       if @ubiquo_user.update_attributes(params[:ubiquo_user])
         flash[:notice] = t("ubiquo.auth.user_edited")
         format.html { redirect_to(ubiquo.edit_ubiquo_user_profile_path) }
         format.xml  { head :ok }
       else
-        flash[:error] = t("ubiquo.auth.user_edited_error")
+        flash[:error] = t("ubiquo.auth.user_edit_error")
         format.html { render :action => "edit" }
         format.xml  { render :xml => @ubiquo_user.errors, :status => :unprocessable_entity }
       end
