@@ -97,10 +97,10 @@ class Ubiquo::PagesController < UbiquoController
   def expirations
     respond_to do |format|
       format.html do
-        if ubiquo_config_call :expiration_permit, {:context => :ubiquo_design}
+        if ubiquo_config_call :expiration_permit, { :context => :ubiquo_design }
           render :action => 'expirations'
         else
-          redirect_to ubiquo_pages_path
+          redirect_to ubiquo.pages_path
         end
       end
     end
@@ -118,33 +118,33 @@ class Ubiquo::PagesController < UbiquoController
       # selected pages
       ids = params[:selector][:pages] if params[:selector]
       ids ||= Array.new
-      # url
-      url = params[:url]
-
+      
       # expiration of selected pages
       expired_pages = Page.expire(ids)
+      
       page_names = expired_pages.map do |p|
-        @template.render(:partial => 'expired_page_name', :locals => { :name => p.name })
+        view_context.render(:partial => 'expired_page_name',
+                            :locals  => { :name => p.name })
       end
 
       # expiration of url
-      if url.present?
+      if url = params[:url]
         Page.expire_url(url)
-        page_names << @template.render(:partial => 'expired_page_name',
-                                       :locals  => { :name => url })
+        page_names << view_context.render(:partial => 'expired_page_name',
+                                          :locals  => { :name => url })
       end
 
       if page_names.present?
         flash[:notice] = t("ubiquo.page.pages_expired",
                            :num_pages  => page_names.length,
-                           :page_names => page_names)
+                           :page_names => page_names.join(", "))
       else
         flash[:error] = t("ubiquo.page.any_page_expired")
       end
     end
 
     respond_to do |format|
-      format.html { redirect_to expirations_ubiquo_pages_path }
+      format.html { redirect_to ubiquo.expirations_pages_path }
     end
   end
 
@@ -155,7 +155,7 @@ class Ubiquo::PagesController < UbiquoController
     else
       flash[:error] = t("ubiquo.page.any_page_expired")
     end
-    redirect_to ubiquo_pages_path
+    redirect_to ubiquo.pages_path
   end
 
   private
