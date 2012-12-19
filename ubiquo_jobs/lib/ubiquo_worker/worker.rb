@@ -41,7 +41,7 @@ module UbiquoWorker
             end
           rescue StandardError
             log "Worker got an exception with job #{job.id rescue nil}", :error
-            log $!.inspect
+            log $!.inspect + $!.backtrace.inspect
             wait
           rescue Exception
             log "Unexpected exception! Worker main loop ended", :error
