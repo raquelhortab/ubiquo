@@ -5,3 +5,4 @@ module UbiquoJobs
 end
 
 :UbiquoController.helper! UbiquoJobs::Extensions::Helper
+require 'ubiquo_jobs/extensions/array'
