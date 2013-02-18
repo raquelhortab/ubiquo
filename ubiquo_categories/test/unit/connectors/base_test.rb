@@ -171,7 +171,7 @@ class UbiquoCategories::Connectors::BaseTest < ActiveSupport::TestCase
       helper_module.module_eval do
         module_function :uhook_category_index_actions
       end
-      set, category = [CategorySet.new, Category.new(:locale => Locale.current)]
+      set, category = [CategorySet.new, Category.new(:locale => :en)]
       assert helper_module.uhook_category_index_actions(set, category).is_a?(Array)
     end
 
