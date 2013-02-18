@@ -134,11 +134,6 @@ module UbiquoCategories
               end
             end
 
-            # Automatically set the required attr_name when creating through the through
-            define_method 'construct_owner_attributes' do |reflection|
-              super.merge(:attr_name => association_name.to_s)
-            end
-
           end
 
           self.has_many(association_name.to_sym, {
