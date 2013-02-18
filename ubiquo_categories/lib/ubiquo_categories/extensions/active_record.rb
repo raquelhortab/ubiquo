@@ -59,7 +59,11 @@ module UbiquoCategories
               :class_name => "::CategoryRelation",
               :conditions => { :attr_name => association_name }, #["category_relations.attr_name = ?", association_name],
               :dependent => :destroy,
-              :order => "category_relations.position ASC"
+              :order => "category_relations.position ASC",
+              :after_add => Proc.new{|related_object,category_relation|
+                # Required to validate presence_of in CategoryRelation
+                category_relation.related_object ||= related_object
+              }
           })
 
           association_name = field.to_s.pluralize
@@ -77,7 +81,9 @@ module UbiquoCategories
           end
 
           proc = Proc.new do
-
+            # TODO: review if these methods are called. the :before_add and :after_add 
+            # hooks could replace most of them
+            
             define_method "<<" do |categories|
               set, categories = assign_to_set.call(categories, proxy_association.owner)
               categories.each do |category|
@@ -140,8 +146,13 @@ module UbiquoCategories
               :class_name => "::Category",
               :source => :category,
               :order => "category_relations.position ASC",
+              :before_add => Proc.new do |related_object,category|
+                if related_object.send(association_name.to_sym).is_full?
+                  raise UbiquoCategories::LimitError
+                end
+              end
             },&proc)
-
+          
           define_method "#{association_name}_with_categories=" do |categories|
             categories = categories.split(options[:separator]) if categories.is_a? String
 

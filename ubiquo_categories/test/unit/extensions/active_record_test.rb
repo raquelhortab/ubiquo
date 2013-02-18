@@ -91,6 +91,15 @@ class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
     model.city = 'City'
     assert_kind_of Category, model.city
     assert_equal 1, model.category_relations.size
+    assert model.save
+  end
+
+  def test_categorized_save_by_mass_asignment
+    categorize :city
+    model = CategoryTestModel.create!({:city =>["Berlin"]}, :without_protection => true)
+    assert_kind_of Category, model.city
+    assert_equal 1, model.category_relations.size
+    assert model.save
   end
 
   def test_categorized_store_many_string_elements
@@ -334,7 +343,7 @@ def test_categorized_retrieves_categories_in_proper_order_through_association
     categorize :cities, :size => 2
     model = CategoryTestModel.new
     model.cities = ['Barcelona']
-    model.save
+    assert model.save
     assert_equal ['Barcelona'], model.cities.map(&:name)
     assert_equal 1, model.category_relations.size
     assert_equal 'cities', model.category_relations.first.attr_name
