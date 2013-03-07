@@ -88,7 +88,7 @@ class FilteredSearchTest < ActiveSupport::TestCase
     @m.reflections = { :author => stub(:table_name => 'authors') }
     params = { :order_by => 'articles.author.name', :sort_order => 'desc' }
     options = { :order => 'authors.name desc', :include => 'author' }
-    @m.expects(:filtered_search).with(params, options).returns([])
+    @m.expects(:filtered_search).with(params, options).returns([]).twice # find + count
     @m.paginated_filtered_search(params)
   end
 
@@ -97,7 +97,7 @@ class FilteredSearchTest < ActiveSupport::TestCase
     @m.reflections = { :section => stub(:table_name => 'categories') }
     params = { :order_by => 'articles.section.name', :sort_order => 'desc' }
     options = { :order => 'categories.name desc', :include => 'sections' }
-    @m.expects(:filtered_search).with(params, options).returns([])
+    @m.expects(:filtered_search).with(params, options).returns([]).twice # find + count
     @m.paginated_filtered_search(params)
   end
 

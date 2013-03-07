@@ -144,7 +144,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
     assert_equal 'MyName', assigns(:search_text)
     assert_equal 1, assigns(:page)
     assert_equal 1, assigns(:assets).size
-    expected = { 'previous' => nil, 'next' => nil }
+    expected = { 'previous' => nil, 'next' => nil, 'total_items' => 1, 'total_pages' => 1, 'current_page' => 1}
     assert_equal expected, assigns(:assets_pages)
   end
 
@@ -162,14 +162,14 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal list_size, assigns(:assets).size
-    expected = { 'previous' => nil, 'next' => 2 }
+    expected = { 'previous' => nil, 'next' => 2, 'total_items' => 2, 'total_pages'=> 2, 'current_page' => 1 }
     assert_equal expected, assigns(:assets_pages)
 
     get :search, :field => 'image', :text => 'MyName', :page => 2
 
     assert_response :success
     assert_equal list_size, assigns(:assets).size
-    expected = { 'previous' => 1, 'next' => nil }
+    expected = { 'previous' => 1, 'next' => nil, "total_items" => 2, "total_pages" => 2, "current_page" => 2 }
     assert_equal expected, assigns(:assets_pages)
   ensure
     Ubiquo::Settings.context(:ubiquo_media).set(:media_selector_list_size, 3)
@@ -249,7 +249,7 @@ class Ubiquo::AssetsControllerTest < ActionController::TestCase
 
     Ubiquo::Settings.context(:ubiquo_media).set(:media_styles_list,
       {:thumb => "100x100>", :base_to_crop => "320x200>"})
-    
+
     get :advanced_edit, :id => asset.id
 
     assert_response :success
