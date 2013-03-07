@@ -42,7 +42,7 @@ class UbiquoMenus::Connectors::I18nTest < ActiveSupport::TestCase
       assert_difference 'Menu.count', 1 do
         menu = create_menu :key=> 'my_key'
         menu = create_menu :key=> menu.key
-        assert menu.errors.on(:key)
+        assert menu.errors[:key].present?
         menu = create_menu :key=> menu.key.upcase
         assert menu.errors.on(:key)
       end
