@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + "/../../test_helper.rb"
 
 class UbiquoMenus::Connectors::I18nTest < ActiveSupport::TestCase
 
-  fixtures :menus, :menu_items
-
   if Ubiquo::Plugin.registered[:ubiquo_i18n]
     def setup
       save_current_menus_connector

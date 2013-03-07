@@ -1,11 +1,13 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in ubiquo_core.gemspec
+# Specify your gem's dependencies in ubiquo_activity.gemspec
 gemspec
 
-path "../" do
-  gem "ubiquo_core"
-  gem "ubiquo_authentication"
-end
+group :development, :test do
+  path "../" do
+    gem "ubiquo_core"
+    gem "ubiquo_authentication"
+  end
 
-gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+  gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+end

@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/../test_helper.rb"
-require 'mocha'
 
 class Ubiquo::VersionableTest < ActiveSupport::TestCase
 

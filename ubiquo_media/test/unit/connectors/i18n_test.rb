@@ -419,10 +419,10 @@ class UbiquoMedia::Connectors::I18nTest < ActiveSupport::TestCase
         UbiquoMedia.const_set(:TestModel, model)
       end
       UbiquoMedia::TestModel.class_eval do
-        set_table_name 'ubiquo_media_test_models'
+        self.table_name = 'ubiquo_media_test_models'
       end
       unless UbiquoMedia::TestModel.table_exists?
-        ActiveRecord::Base.connection.create_table(:ubiquo_media_test_models, :translatable => true) {}
+        ActiveRecord::Base.connection.create_table(UbiquoMedia::TestModel.table_name, :translatable => true) {}
       end
       UbiquoMedia::TestModel.translatable
     end

@@ -207,7 +207,7 @@ class Page < ActiveRecord::Base
 
   # Returns true if the UbiquoUser +user+ can expire this page
   def can_be_expired_by?(user)
-    user.is_superadmin? ||
+    user.respond_to?(:is_superadmin) && user.is_superadmin? ||
       Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?].call(self, user)
   end
 

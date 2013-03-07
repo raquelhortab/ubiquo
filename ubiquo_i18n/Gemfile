@@ -1,8 +1,13 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in ubiquo_media.gemspec
+# Specify your gem's dependencies in ubiquo_i18n.gemspec
 gemspec
 
-gem "ubiquo_core", :path => ".."
-gem "routing-filter"
-gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+group :development, :test do
+  path "../" do
+    gem "ubiquo_core"
+  end
+
+  gem 'routing-filter'
+  gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+end

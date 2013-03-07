@@ -23,38 +23,6 @@ module TestSupport
 
         # create models
         create_model('TestModel') do
-          media_attachment :images, :size => :many
-          media_attachment :sized, :size => 2, :required => false
-        end
-      end
-
-      def i18n_setup
-        # create tables
-        create_table :test_media_translatables, :translatable => true do |t|
-          t.string :field1
-          t.string :field2
-        end
-
-        create_table :test_media_translatable_models, :translatable => true do |t|
-          t.string :field1
-          t.string :field2
-          t.integer :test_media_translatable_id
-        end
-
-        # create models
-        create_model('TestMediaTranslatable') do
-          translatable
-          has_many :test_media_translatable_models
-          accepts_nested_attributes_for :test_media_translatable_models
-          share_translations_for :test_media_translatable_models
-          validates_length_of :test_media_translatable_models, :minimum => 1
-        end
-
-        create_model('TestMediaTranslatableModel') do
-          translatable
-          belongs_to :test_media_translatable_model_with_relation
-          media_attachment :sized,        :size => 2, :required => false
-          media_attachment :sized_shared, :size => 2, :required => true, :translation_shared => true
         end
       end
 

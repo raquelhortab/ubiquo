@@ -3,7 +3,7 @@ require 'rake/testtask'
 
 Dir.glob("tasks/*.rake").each {|f| import f}
 
-PROJECTS = Dir.glob('*').select{|f| File.directory?(f) && File.exists?(File.join(f, 'Rakefile'))}
+PROJECTS = Dir.glob('*').select{|f| File.directory?(f) && File.exists?(File.join(f, 'Rakefile'))}.sort
 
 desc 'Run all tests by default'
 task :default => %w(test)

@@ -15,4 +15,10 @@ group :development, :test do
   gem "pg", "~> 0.14"
   gem "mysql2", "~> 0.3"
   gem "mocha", "~> 0.10"
+
+  gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+  gem 'memcache'
+  gem 'paper_trail'
+  gem 'routing-filter'
+  gem 'debugger'
 end

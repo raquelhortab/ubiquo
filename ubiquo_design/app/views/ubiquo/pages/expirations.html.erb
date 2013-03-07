@@ -15,7 +15,7 @@
   </div>
   <div class="form-item-submit">
     <%= submit_tag t("ubiquo.page.expire_url"), :name => 'expire_selected', :class => 'expire_selected' %>
-    <% if current_ubiquo_user.is_superadmin? -%>
+    <% if current_ubiquo_user && current_ubiquo_user.is_superadmin? -%>
       <%= submit_tag t("ubiquo.page.expire_all_pages"), :name => 'expire_all', :class => 'expire_all' %>
     <% end -%>
   </div>

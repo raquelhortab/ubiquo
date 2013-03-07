@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/../../test_helper.rb"
-require 'mocha'
 
 class UbiquoCategories::ActiveRecordTest < ActiveSupport::TestCase
   fixtures :all
@@ -164,35 +163,35 @@ def test_categorized_retrieves_categories_in_proper_order_through_association
 
     m_0   = create_category_model # We create a record without categories
     klass = m_0.class
-    
+
     m_1, m_2, m_3 = [
       klass.create(:my_field => 'one'),
       klass.create(:my_field => 'two'),
       klass.create(:my_field => 'three')
     ]
-    
-    categories = [ 
+
+    categories = [
       { :section => 'admin',  :colors  => 'red' },
       { :section => 'design', :colors  => 'blue' },
       { :section => 'shop',   :colors  => 'green' },
     ]
-    
+
     categories.each_with_index do |c, idx|
       c.each { |k, v| eval("m_#{(idx + 1).to_s}.#{k} = '#{v}'") }
     end
-    
+
     sections_asc  = klass.includes(:sections).order('categories.name asc').all.map(&:id)
     sections_desc = klass.includes(:sections).order('categories.name desc').all.map(&:id)
     colors_asc    = klass.includes(:colors).order('categories.name asc').all.map(&:id)
     colors_desc   = klass.includes(:colors).order('categories.name desc').all.map(&:id)
-    
+
     # Deleted m_0 id because depending on the database adapter (sqlite, postgresql, mysql)
     # the order if a null name is different
     sections_asc.delete(m_0.id)
     sections_desc.delete(m_0.id)
     colors_asc.delete(m_0.id)
     colors_desc.delete(m_0.id)
-    
+
     assert_equal [m_1.id, m_2.id, m_3.id], sections_asc
     assert_equal [m_3.id, m_2.id, m_1.id], sections_desc
     assert_equal [m_2.id, m_3.id, m_1.id], colors_asc

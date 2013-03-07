@@ -108,7 +108,7 @@ class Ubiquo::PagesController < UbiquoController
 
   def expire_pages
     if params[:expire_all]
-      if current_ubiquo_user.is_superadmin?
+      if current_ubiquo_user && current_ubiquo_user.is_superadmin?
         Page.expire_all
         flash[:notice] = t("ubiquo.page.pages_all_expired")
       else
@@ -118,10 +118,10 @@ class Ubiquo::PagesController < UbiquoController
       # selected pages
       ids = params[:selector][:pages] if params[:selector]
       ids ||= Array.new
-      
+
       # expiration of selected pages
       expired_pages = Page.expire(ids)
-      
+
       page_names = expired_pages.map do |p|
         view_context.render(:partial => 'expired_page_name',
                             :locals  => { :name => p.name })

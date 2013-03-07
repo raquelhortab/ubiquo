@@ -136,7 +136,6 @@ module Ubiquo
   end
 end
 
-require 'mocha'
 # Improvement for Mocha's Mock: stub_everything with a default return value other than nil.
 class Mocha::Mock
 

@@ -1,11 +1,12 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in ubiquo_core.gemspec
+# Specify your gem's dependencies in ubiquo_categories.gemspec
 gemspec
 
-# Using the git version to get 1.9.3 support
 group :development, :test do
-  gem "ubiquo_core", :path => ".."
-  gem "ubiquo_i18n", :path => ".."
+  path "../" do
+    gem "ubiquo_core"
+    gem "ubiquo_i18n"
+  end
   gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
 end

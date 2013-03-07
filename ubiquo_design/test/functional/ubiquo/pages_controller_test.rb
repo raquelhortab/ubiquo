@@ -94,7 +94,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_get_expirations_page_as_admin
-    UbiquoUser.any_instance.stubs(:is_superadmin?).returns(false)
+    @controller.stubs(:current_ubiquo_user).returns(mocked_admin_ubiquo_user)
 
     get :expirations
     assert_response :success
@@ -103,7 +103,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_get_expirations_and_show_expire_all_button_as_superadmin
-    UbiquoUser.any_instance.stubs(:is_superadmin?).returns(true)
+    # FIXME What could we do here to ???
 
     get :expirations
     assert_response :success
@@ -125,7 +125,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_expire_all_pages_if_superadmin
-    UbiquoUser.any_instance.stubs(:is_superadmin?).returns(true)
+    @controller.stubs(:current_ubiquo_user).returns(mocked_superadmin_ubiquo_user)
 
     Page.expects(:expire_all).returns(true)
     put :expire_pages, :expire_all => true
@@ -134,7 +134,8 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_not_expire_all_pages_if_not_superadmin
-    UbiquoUser.any_instance.stubs(:is_superadmin?).returns(false)
+    @controller.stubs(:current_ubiquo_user).returns(mocked_superadmin_ubiquo_user(false))
+
     Page.expects(:expire_all).never
     put :expire_pages, :expire_all => true
     assert_redirected_to ubiquo.expirations_pages_path
@@ -173,7 +174,7 @@ class Ubiquo::PagesControllerTest < ActionController::TestCase
   end
 
   def test_should_render_expire_if_superadmin
-    UbiquoUser.any_instance.stubs(:is_superadmin?).returns(true)
+    @controller.stubs(:ubiquo_user).returns(mocked_superadmin_ubiquo_user)
 
     pages = [create_page(:url_name => 'one')]
     pages.each.map(&:publish)

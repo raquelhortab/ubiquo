@@ -3,5 +3,11 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in ubiquo_jobs.gemspec
 gemspec
 
-gem "ubiquo_core", :path => ".."
-gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+group :development, :test do
+  path "../" do
+    gem "ubiquo_core"
+  end
+
+  gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+end
+

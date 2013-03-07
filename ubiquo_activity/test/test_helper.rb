@@ -18,7 +18,7 @@ class ActiveSupport::TestCase
 end
 
 class Versionable < ActiveRecord::Base
-  has_paper_trail
+  has_paper_trail if self.respond_to?(:has_paper_trail)
   def publish
     self.is_published = true
   end

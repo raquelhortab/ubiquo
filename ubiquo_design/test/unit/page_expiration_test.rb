@@ -91,30 +91,39 @@ class PageExpirationTest < ActiveSupport::TestCase
   end
 
   def test_should_be_expirable_by_a_superadmin
+    # FIXME refactor this inside ubiquo_core's helper
     original = Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?]
-    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = lambda { false }
-    user = UbiquoUser.new
-    user.is_superadmin = true
-    assert user.is_superadmin?
-    page = create_page
-    assert page.can_be_expired_by?(user)
-    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = original
+    begin
+      Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = lambda { false }
+      user = mock('user')
+      user.stubs(:is_superadmin?).returns(true)
+      page = create_page
+      assert page.can_be_expired_by?(user)
+    rescue
+      Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = original
+    end
   end
 
   def test_should_be_expirable_by_a_user_using_setting
-    original = Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?]
-    user = UbiquoUser.new(:is_superadmin => false, :is_admin => true)
-    page = create_page
-    called = false
-    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = lambda do |_page, _user|
-      assert_equal page, _page
-      assert_equal user, _user
-      called = true
-      false
+    # FIXME refactor this inside ubiquo_core's helper
+    begin
+      original = Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?]
+      user = mock('user')
+      user.stubs(:is_superadmin?).returns(false)
+      user.stubs(:is_admin?).returns(true)
+      page = create_page
+      called = false
+      Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = lambda do |_page, _user|
+        assert_equal page, _page
+        assert_equal user, _user
+        called = true
+        false
+      end
+      assert !page.can_be_expired_by?(user)
+      assert called
+    ensure
+      Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = original
     end
-    assert !page.can_be_expired_by?(user)
-    assert called
-    Ubiquo::Settings[:ubiquo_design][:page_can_be_expired?] = original
   end
 
   private
