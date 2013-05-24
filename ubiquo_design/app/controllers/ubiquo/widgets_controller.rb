@@ -128,7 +128,8 @@ class Ubiquo::WidgetsController < UbiquoController
         Widget.transaction do
           widget_ids.each_with_index do |widget_id, index|
             widget = Widget.find(widget_id)
-            widget.update_attributes(:position => index, :block_id => block.id)
+            widget.update_column(:position, index)
+            widget.update_column(:block_id, block.id)
           end
         end
       end
