@@ -11,6 +11,6 @@
     plugins += Ubiquo::Plugin.registered_plugins.reject { |a| a == :ubiquo }.select { |a| env[a.to_s] }
     
     plugins.each do |plugin|
-      require_asset(plugin.to_s)
+      require_asset(plugin.to_s) rescue nil
     end    
  %>
