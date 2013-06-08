@@ -4,3 +4,4 @@ rvm:
 notifications:
   email:
     - ubiquoci@gnuine.com
+  on_failure: change
