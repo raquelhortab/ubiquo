@@ -5,6 +5,12 @@
     <%= f.label :name, Page.human_attribute_name("name") %>
     <%= f.text_field :name %>
   </div>
+  <% if current_ubiquo_user.is_superadmin? %>
+    <div class="form-item">
+      <%= f.label :key, Page.human_attribute_name("key") %>
+      <%= f.text_field :key %>
+    </div>
+  <% end %>
   <fieldset>
     <legend><%= t('ubiquo.design.situation') %></legend>
     <div class="form-item">
