@@ -36,10 +36,10 @@ module Ubiquo
         # generate and write the data
         File.open(fixture_path(table_name), 'w' ) do |file|
           data = ActiveRecord::Base.connection.select_all("SELECT * FROM #{table_name}")
-          file.write ordered_yaml(data.inject({}) { |hash, record|
+          file.write (data.inject({}) { |hash, record|
             hash["#{table_name}_#{"%0.3i" % fixture_id.call(record)}"] = record
             hash
-          })
+          }).to_yaml
         end
       end
 
@@ -127,17 +127,6 @@ module Ubiquo
           tables << table
         end
         tables.uniq
-      end
-
-      # This is like Hash.to_yaml except that it sorts by key before converting
-      def ordered_yaml(data)
-        YAML::quick_emit( data.object_id, {} ) do |out|
-          out.map( data.taguri, data.to_yaml_style ) do |map|
-            data.sort.each do |k, v|
-              map.add( k, v )
-            end
-          end
-        end
       end
 
       def process_groups(group_list)
