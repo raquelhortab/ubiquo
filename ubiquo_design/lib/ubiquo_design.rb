@@ -16,6 +16,7 @@ module UbiquoDesign
       require 'ubiquo_design/cache_managers/base'
       require 'ubiquo_design/cache_expiration'
       require 'ubiquo_design/cache_rendering'
+      require 'ubiquo_design/structure'
     end
 
     initializer :register_ubiquo_plugin do
