@@ -26,10 +26,7 @@ namespace :ubiquo do
     task :prepare => :environment do
         # forward, comrades, to the future!
         ENV.delete('VERSION')
-        Rake::Task["db:migrate"].execute
-
-        # Dump schema.rb (some devs like it)
-        Rake::Task["db:schema:dump"].execute
+        Rake::Task["db:schema:load"].execute
 
         # preparing test database
         Rake::Task["db:test:prepare"].execute
