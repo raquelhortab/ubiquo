@@ -1,5 +1,5 @@
 var RelationAutoCompleteSelector = Class.create({
-  initialize: function(url, object_name, key, initial_collection, style, limit, query_param, id_query_param, add_callback, remove_callback, hintText, noResultsText, searchingText) {
+  initialize: function(url, object_name, key, initial_collection, style, limit, query_param, id_query_param, add_callback, remove_callback, hintText, noResultsText, searchingText, options) {
     this.categories_url = url;
     this.object_name = object_name;
     this.key = key;
@@ -13,6 +13,7 @@ var RelationAutoCompleteSelector = Class.create({
     this.prePopulate = initial_collection;
     this.addCallback = add_callback;
     this.removeCallback = remove_callback;
+    this.options = options;
     this.CAPTIONS = {
       hintText: hintText,
       noResultsText: noResultsText,
@@ -219,6 +220,14 @@ var RelationAutoCompleteSelector = Class.create({
       }
       event.stop();
     });
+    token_list.observe('dblclick', function(event) {
+      var li = klass.get_element_from_event(event, "LI");
+      if(li && $(li) != $(this.input_token) && this.options && this.options.link_template) {
+        var id = li.readAttribute('alt').evalJSON().id;
+        window.open(this.options.link_template + '/' + id + '/edit','_blank');
+      }
+      event.stop();
+    }.bind(klass));
     token_list.observe('mouseout', function(event) {
       var li = klass.get_element_from_event(event, "LI");
       if(li && klass.selected_token !== this) {

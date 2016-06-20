@@ -195,21 +195,27 @@ module Ubiquo
           :no_results_text => options[:no_results_text] || I18n.t("ubiquo.relation_selector.no_results_text"),
           :searching_text  => options[:searching_text] || I18n.t("ubiquo.relation_selector.searching_text")
         )
-        
+
         url_params = {:format => :js}
         url_params.merge!(options[:url_params]) if options[:url_params].present?
 
         url = options[:collection_url]
-        url = url.call(url_params) if url.respond_to?(:call)
+        collection_url = url.respond_to?(:call) ? url.call(url_params) : url
+        unless options[:no_link]
+          member_url = url.respond_to?(:call) ? url.call(options[:url_params] || {}) : url
+        end
 
         autocomplete_options = {
-          :url => url,
+          :url => collection_url,
           :current_values => open_struct_from_model(
             object.send(key),
             options[:related_object_id_field] || 'id',
             humanized_field
           ),
-          :style => options[:autocomplete_style] || "tag"
+          :style => options[:autocomplete_style] || "tag",
+          :options => (options[:autocomplete_options] || {}).merge(
+            :link_template => member_url
+          )
         }
         options[:add_callback] = if options[:add_callback].blank?
           'undefined'
@@ -221,7 +227,7 @@ module Ubiquo
         else
           "'#{options[:remove_callback]}'"
         end
-        
+
         js_autocomplete =<<-JS
           var autocomplete = new #{options[:js_class]}(
             '#{autocomplete_options[:url]}',
@@ -236,7 +242,8 @@ module Ubiquo
             #{options[:remove_callback]},
             '#{options[:hint_text]}',
             '#{options[:no_results_text]}',
-            '#{options[:searching_text]}'
+            '#{options[:searching_text]}',
+            #{autocomplete_options[:options].to_json}
           )
         JS
         js_code = if (request.format rescue nil) == :js
