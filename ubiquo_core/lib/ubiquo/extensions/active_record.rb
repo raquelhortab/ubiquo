@@ -98,8 +98,9 @@ module Ubiquo
         else
           url = ":visibility_prefix/media/:class/:attachment/:id_partition/:style/:filename"
         end
+        paperclip_options = options[:paperclip].call(field, self) if options[:paperclip]
 
-        has_attached_file field,
+        has_attached_file field, {
           :url => options[:url] || url,
           :path => options[:path] || path,
           :styles => styles,
@@ -113,6 +114,7 @@ module Ubiquo
           },
           :s3_host_alias => s3[:s3_host_alias],
           :s3_headers => options[:s3_headers] || {}
+        }.merge(paperclip_options || {})
       end
 
       # Function for apply an array of scopes.
