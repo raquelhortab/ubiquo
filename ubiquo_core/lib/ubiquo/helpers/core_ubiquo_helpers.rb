@@ -142,10 +142,11 @@ module Ubiquo
         case column
           when Symbol
             link = params.clone
-            if link[:order_by] == "#{name.to_s.pluralize}.#{column.to_s}"
+            column_to_filter = column.to_s.gsub('._', '.')
+            if link[:order_by] == "#{name.to_s.pluralize}.#{column_to_filter}"
               link[:sort_order] = link[:sort_order] == "asc" ? "desc" : "asc"
             else
-              link[:order_by] = "#{name.pluralize}.#{column.to_s}"
+              link[:order_by] = "#{name.pluralize}.#{column_to_filter}"
               link[:sort_order] = "asc"
             end
             #name.classify.human_attribute_name(column.to_s.humanize)
@@ -155,13 +156,16 @@ module Ubiquo
             column_header = if column_segments.size > 1
               begin
                 # Here we are dealing with relation columns
-                assoc_model = column_segments.first.classify.constantize
-                column_name = assoc_model.human_attribute_name(column_segments.last)
-                assoc_model.human_name.downcase
+                if column_segments.last[0] == '_'
+                  name.classify.constantize.human_attribute_name(column_segments.last.sub(/^_/, ''))
+                else
+                  assoc_model = name.classify.constantize.reflections[column_segments.first.to_sym].klass
+                  assoc_model.human_name.downcase
+                end
               rescue NameError
                 # Here we are dealing with relation columns using categories
                 category = CategorySet.find_by_key(column_segments.first)
-                msg = "Couldn't find #{column_segments.first} association for #{column_name} column."
+                msg = "Couldn't find #{column_segments.first} association."
                 raise AssociationNotFound, msg unless category
                 category.name
               end
@@ -171,7 +175,7 @@ module Ubiquo
 
             link_to content_tag(:span, column_header),
                     link,
-                    { :class => (params[:order_by] == "#{name.pluralize}.#{column.to_s}" ?
+                    { :class => (params[:order_by] == "#{name.pluralize}.#{column_to_filter}" ?
                                 (params[:sort_order] == "asc" ? "order_desc" : "order_asc") : "order" )}
           when String
             column.humanize
