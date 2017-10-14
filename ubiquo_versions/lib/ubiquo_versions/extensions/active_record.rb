@@ -35,7 +35,7 @@ module UbiquoVersions
           has_paper_trail options
 
           define_method('restore') do |old_version_id|
-            Version.find(old_version_id).reify.save
+            PaperTrail::Version.find(old_version_id).reify.save
           end
 
           # delete the older versions if there are too many versions (as defined by max_amount)
@@ -48,7 +48,7 @@ module UbiquoVersions
             end
           end
 
-          Version.after_create ensure_max_amount_of_versions
+          PaperTrail::Version.after_create ensure_max_amount_of_versions
         end
 
         # Used to execute a block that would create a version without this effect

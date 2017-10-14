@@ -46,7 +46,7 @@ class ActivityInfo < ActiveRecord::Base
   end
 
   def recover_object
-    version = Version.with_item_keys(related_object_type, related_object_id).last
+    version = PaperTrail::Version.with_item_keys(related_object_type, related_object_id).last
     recovered_object = version.reify if version
     recovered_object.version_at(created_at || Time.now) if recovered_object
   end
