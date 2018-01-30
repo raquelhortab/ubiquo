@@ -45,7 +45,7 @@ module Ubiquo
             options
           )
           # array of possible values
-          related_objects = url_craft_settings object_class_name, selector_type, options
+          related_objects = get_possible_options(object_class_name, selector_type, options)
           # Finally, output is generated
           html_options.reverse_merge!({
             :class => "group relation-selector relation-type-#{selector_type}"
@@ -111,13 +111,15 @@ module Ubiquo
         Proc.new { |url_params = {}| send(:ubiquo).send("#{class_name.tableize.pluralize}_url", url_params) }
       end
 
-      def url_craft_settings class_name, selector_type, options = {}
+      def get_possible_options class_name, selector_type, options = {}
         related_objects = []
         if options[:collection_url].blank?
           options[:related_url] = "new_#{class_name.tableize.singularize}_url"
           options[:collection_url] = default_collection_url_proc(class_name)
           if selector_type != :autocomplete
-            related_objects = if class_name.constantize.respond_to?(:locale)
+            related_objects = if options[:possible_options]
+              options[:possible_options]
+            elsif class_name.constantize.respond_to?(:locale)
               # TODO this should be in a connector
               class_name.constantize.locale(current_locale, :all).all
             else
@@ -182,7 +184,7 @@ module Ubiquo
             select_tag("#{object_name}[#{options[:key_field]}]",
               options_for_select(objects_for_select,
                 :selected => selected_value(object, key,options)),
-                { :id => "#{object_name}_#{options[:key_field]}_select" })
+                { :id => "#{object_name}_#{options[:key_field]}_select" }.merge(options[:select_options] || {}))
         end
         output << relation_controls(options)
         output
