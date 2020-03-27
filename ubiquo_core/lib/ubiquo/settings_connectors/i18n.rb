@@ -147,9 +147,9 @@ module Ubiquo
               options = settings[current_context][name][:options].merge(options)
               if options[:is_translatable]
                 value = settings[current_context][name][:value].merge({ locale => value })
-                check_type(options[:value_type], value.values) if self.loaded && options[:value_type]
+                #check_type(options[:value_type], value.values) if self.loaded && options[:value_type]
               else
-                check_type(options[:value_type], value) if self.loaded && options[:value_type]
+                #check_type(options[:value_type], value) if self.loaded && options[:value_type]
               end
               if !options.delete(:is_a_override)
                 options.merge!(:default_value => value)
