@@ -12,7 +12,7 @@ group :development, :test do
   end
 
   gem "sqlite3", "~> 1.3"
-  gem "pg", "~> 0.14"
+  gem "pg", "= 0.14"
   gem "mysql2", "~> 0.3"
   gem "mocha", "~> 0.10"
 
