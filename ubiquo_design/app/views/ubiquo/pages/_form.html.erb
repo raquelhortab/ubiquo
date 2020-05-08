@@ -15,7 +15,7 @@
     <legend><%= t('ubiquo.design.situation') %></legend>
     <div class="form-item">
       <%= f.label :parent_id, Page.human_attribute_name("parent_id") %>
-      <%= f.select :parent_id, parent_pages_for_select(@pages, @page.parent) %>
+      <%= f.select :parent_id, parent_pages_for_select(@pages, @page.parent).html_safe %>
     </div>
     <div class="form-item">
       <%= f.label :url_name, Page.human_attribute_name("url_name") %>
