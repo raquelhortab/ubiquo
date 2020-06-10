@@ -128,7 +128,7 @@ module Ubiquo
       end
 
       def accent_insensitive_regexp(text)
-        pattern = /(\^|\$|\?|\+|\[|\]|\(|\)|\'|\"|\.|\*|\/|\-|\\|\|)/
+        pattern = /(%|_|\^|\$|\?|\+|\[|\]|\(|\)|\'|\"|\.|\*|\/|\-|\\|\|)/
         text = text.gsub(pattern){|match|"\\"  + match}
         regexps = ["(a|á|à|â|ã|A|Á|À|Â|Ã)", "(e|é|è|ê|E|É|È|Ê)", "(i|í|ì|I|Í|Ì)", "(o|ó|ò|ô|õ|O|Ó|Ò|Ô|Õ)", "(u|ú|ù|U|Ú|Ù)", "(c|ç|C|Ç)", "(ñ|Ñ)"]
         regexps.each { |exp| text.gsub! Regexp.new(exp), exp }
