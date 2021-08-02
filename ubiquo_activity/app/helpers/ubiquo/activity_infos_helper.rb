@@ -8,7 +8,7 @@ module Ubiquo::ActivityInfosHelper
       ) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_date_filter_enabled)
 
       f.links_or_select(:user, @users, {
-        :name_field => :full_name,
+        :name_field => :the_full_name,
         :id_field   => :ubiquo_user_id,
         :caption    => ActivityInfo.human_attribute_name(:user)
       }) if Ubiquo::Settings.context(:ubiquo_activity).get(:activities_user_filter_enabled)
