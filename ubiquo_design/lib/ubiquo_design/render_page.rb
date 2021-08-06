@@ -64,7 +64,7 @@ module UbiquoDesign
     end
 
     def include_expiration_headers
-      format = request.format.to_sym
+      format = request.format ? request.format.to_sym : :html
 
       if format == :rss
         client_cache 0
