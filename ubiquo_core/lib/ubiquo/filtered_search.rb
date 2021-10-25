@@ -100,7 +100,7 @@ module Ubiquo
         regexp_op = connection.adapter_name == "PostgreSQL" ? "~*" : "REGEXP"
         @enabled_scopes.concat [:text]
         scope :text, lambda { |value|
-          match = accent_insensitive_regexp(value.downcase.gsub(/[%_\?\(\)]/) { |x| "\\" + x })
+          match = accent_insensitive_regexp(value.downcase)
           matches = fields.inject([]) { |r, f| r << match }
           conditions = fields.map { |f| "lower(#{table_name}.#{f}) #{regexp_op} ?" }.join(" OR ")
           where(conditions, *matches)
