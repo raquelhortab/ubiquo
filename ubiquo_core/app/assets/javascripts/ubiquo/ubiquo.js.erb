@@ -121,7 +121,7 @@ document.observe("dom:loaded", function() {
   var first_form = $$('#inner-content form').first();
   if (first_form) {
     var first_input = first_form.select('input[type!=hidden]').first();
-    if (first_input) { //Ubiquo form
+    if (first_input && !first_form.hasAttribute('prevent-autofocus')) { //Ubiquo form
       first_input.focus();
     }
   }
