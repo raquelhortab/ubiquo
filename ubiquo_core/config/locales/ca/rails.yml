@@ -71,8 +71,8 @@ ca:
         one: "1 dia"
         other: "%{count} dies"
       about_x_months:
-        one: "al volant d'un mes"
-        other: "al volant de %{count} mesos"
+        one: "al voltant d'un mes"
+        other: "al voltant de %{count} mesos"
       x_months:
         one: "1 mes"
         other: "%{count} mesos"
