@@ -9,5 +9,5 @@ group :development, :test do
     gem "ubiquo_media"
   end
 
-  gem 'calendar_date_select', :git => 'git://github.com/gnuine/calendar_date_select'
+  gem 'calendar_date_select', :git => 'git://github.com/bfcapell/calendar_date_select'
 end
