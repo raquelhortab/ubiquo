@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/gnuine/calendar_date_select
+  remote: https://github.com/gnuine/calendar_date_select
   revision: 3922e1e477ef41c84b019dce1c1e2678ff8839a1
   specs:
     calendar_date_select (1.16.3)

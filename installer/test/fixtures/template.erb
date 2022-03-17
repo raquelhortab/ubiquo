@@ -44,7 +44,7 @@ def plugin(name, options)
 end
 
 def add_plugins(plugin_names, options={})
-  git_root = options[:devel] ? 'git@github.com:gnuine' : 'git://github.com/gnuine'
+  git_root = options[:devel] ? 'git@github.com:bfcapell' : 'https://github.com/bfcapell'
   plugin_names.each { |name| plugin name, :git => "#{git_root}/#{name}.git", :branch => options[:branch], :submodule => true }
 end
 # To ask needed settings when boostraping the app

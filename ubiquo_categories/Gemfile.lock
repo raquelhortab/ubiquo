@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/bfcapell/calendar_date_select
+  remote: https://github.com/bfcapell/calendar_date_select
   revision: bad9cfdae0403741335e7b024e9faf66e49097f9
   specs:
     calendar_date_select (1.16.3)

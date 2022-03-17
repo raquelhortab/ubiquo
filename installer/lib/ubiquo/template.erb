@@ -46,12 +46,12 @@ def rake(command, options={})
 end
 
 def add_plugins(plugin_names, options={})
-  git_root = options[:devel] ? 'git@github.com:gnuine' : 'git://github.com/gnuine'
+  git_root = options[:devel] ? 'git@github.com:bfcapell' : 'https://github.com/bfcapell'
   plugin_names.each { |name| plugin name, :git => "#{git_root}/#{name}.git", :branch => options[:branch], :submodule => true }
 end
 
 def plugin_repo(name, options={})
-  git_root = options[:devel] ? 'git@github.com:gnuine' : 'git://github.com/gnuine'
+  git_root = options[:devel] ? 'git@github.com:bfcapell' : 'https://github.com/bfcapell'
   "#{git_root}/#{name}.git"
 end
 
@@ -297,7 +297,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'linecache19', :git => 'git://github.com/mark-moseley/linecache'
+gem 'linecache19', :git => 'https://github.com/mark-moseley/linecache'
 gem 'ruby-debug-base19x', '~> 0.11.30.pre4'
 gem 'ruby-debug19'
 
@@ -317,7 +317,7 @@ end
 
 gem "paperclip", "~> 3.0"
 gem "exception_notification", "~> 2.5.2"
-gem 'calendar_date_select', :git => 'git://github.com/bfcapell/calendar_date_select'
+gem 'calendar_date_select', :git => 'https://github.com/bfcapell/calendar_date_select'
 
 platforms :jruby do
   #gem "activerecord-jdbc-adapter", "~> 1.1.1"
