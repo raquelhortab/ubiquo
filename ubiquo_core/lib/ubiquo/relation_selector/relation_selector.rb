@@ -248,7 +248,7 @@ module Ubiquo
             #{autocomplete_options[:options].to_json}
           )
         JS
-        js_code = if (request.format rescue nil) == :js
+        js_code = if (request.format rescue nil) == :js or options[:straightforward_js]
           js_autocomplete
         else
           "document.observe('dom:loaded', function() { %s })" % js_autocomplete
@@ -313,6 +313,7 @@ module ActionView
     class FormBuilder
       def relation_selector(key, options = {}, html_options = {})
         options = options.merge(:object => @object)
+        options[:straightforward_js] = (self.options[:straightforward_js] rescue nil) if options[:straightforward_js].nil?
         @template.relation_selector(@object_name, key, options, html_options)
       end
     end
