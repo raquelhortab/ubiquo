@@ -134,6 +134,14 @@ module Ubiquo
         regexps.each { |exp| text.gsub! Regexp.new(exp), exp }
         text
       end
+      
+      def accent_insensitive_regexp_lowercase(text)
+        pattern = /(\^|\$|\?|\+|\[|\]|\(|\)|\'|\"|\.|\*|\/|\-|\\|\|)/
+        text = text.gsub(pattern){|match|"\\"  + match}
+        regexps = ["(a|á|à|â|ã)", "(e|é|è|ê)", "(i|í|ì)", "(o|ó|ò|ô|õ)", "(u|ú|ù)", "(c|ç)"]
+        regexps.each { |exp| text.gsub! Regexp.new(exp), exp }
+        text
+      end
 
       # Returns an array of valid scopes filtering out invalid ones
       def select_scopes(params,restrict_scopes)
