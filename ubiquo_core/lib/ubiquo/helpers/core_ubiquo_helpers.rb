@@ -136,9 +136,8 @@ module Ubiquo
       end
 
       # converts symbol to ubiquo standard table head with order_by and sort_order strings
-      def ubiquo_table_headerfy(column, klass = nil)
+      def ubiquo_table_headerfy(column, klass=nil, options={})
         name = klass.nil? ? params[:controller].split("/").last.tableize : klass
-
         case column
           when Symbol
             link = params.clone
@@ -153,7 +152,9 @@ module Ubiquo
             #t("#{name.classify}|#{column.to_s.humanize}").humanize
 
             column_segments = column.to_s.split('.') # Example column: :"author.name"
-            column_header = if column_segments.size > 1
+            column_header = if options[:column_header]
+              options[:column_header]
+            elsif column_segments.size > 1
               begin
                 # Here we are dealing with relation columns
                 if column_segments.last[0] == '_'
@@ -179,6 +180,8 @@ module Ubiquo
                                 (params[:sort_order] == "asc" ? "order_desc" : "order_asc") : "order" )}
           when String
             column.humanize
+          when Hash
+            ubiquo_table_headerfy(column[:key].to_sym, klass, column_header: column[:column_header])
         end
       end
 
