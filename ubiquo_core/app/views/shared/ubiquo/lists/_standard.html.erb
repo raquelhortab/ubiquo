@@ -3,7 +3,10 @@
 
 parameters:
  :name         - The name of the model listed
- :headers      - A Hash. The key is the field name of the model listed(for sorting). The value is the string to show.
+ :headers      - An array. Each element corresponds to a column header.
+                 If the value is a symbol, it represents the field for sorting (and text is inferred).
+                 If the value is a string, it is the text to show (no sorting).
+                 If the value is a hash, :column_header is the text to show and :key is the field for sorting.
  :rows         - An Array with each row of the list. Each row is a Hash:
     :id        - The id of this element
     :columns   - An Array with the columns values of this element
