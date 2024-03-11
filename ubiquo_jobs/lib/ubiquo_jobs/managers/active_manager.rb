@@ -14,7 +14,7 @@ module UbiquoJobs
         job_class.transaction do
         candidate_jobs = job_class.where('planified_at <= ? AND state = ?',
                                          Time.now.utc,
-                                         UbiquoJobs::Jobs::Base::STATES[:waiting]).order('priority asc').lock(true)
+                                         UbiquoJobs::Jobs::Base::STATES[:waiting]).order(job_order).lock(true)
 
         job = first_without_dependencies(candidate_jobs)
           result = job.update_attributes({
@@ -111,6 +111,11 @@ module UbiquoJobs
         UbiquoJobs::Jobs::ActiveJob
       end
 
+      # Returns the sql order clause for sorting jobs.
+      def self.job_order
+        'priority asc'
+      end
+
       protected
 
       # Performs a cleanup (reset) of possible stalled jobs for the asked runner
@@ -121,7 +126,7 @@ module UbiquoJobs
 
       # Given a set of jobs, returns the first one that have all their dependencies satisfied
       def self.first_without_dependencies(candidates)
-        candidates.each do |candidate|
+        candidates.find_each(batch_size: 300) do |candidate|
           next if candidate.state != UbiquoJobs::Jobs::Base::STATES[:waiting]
           return candidate if candidate.dependencies.inject(true) do |satisfied, job|
             satisfied && job.state == UbiquoJobs::Jobs::Base::STATES[:finished]
