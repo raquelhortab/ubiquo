@@ -127,7 +127,7 @@ module UbiquoJobs
       # Given a set of jobs, returns the first one that have all their dependencies satisfied
       def self.first_without_dependencies(candidates)
         candidate_ids = candidates.pluck(:id)
-        candidate_ids.find_each(batch_size: 300) do |candidate|
+        job_class.where(id: candidate_ids).find_each(batch_size: 300) do |candidate|
           next if candidate.state != UbiquoJobs::Jobs::Base::STATES[:waiting]
           return candidate if candidate.dependencies.inject(true) do |satisfied, job|
             satisfied && job.state == UbiquoJobs::Jobs::Base::STATES[:finished]
