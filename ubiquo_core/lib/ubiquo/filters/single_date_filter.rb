@@ -3,7 +3,7 @@ module Ubiquo
     class SingleDateFilter < BaseFilter
 
       def configure(options = {})
-        options[:field] = add_filter_prefix_when_needed(options[:field]) if options[:field]
+        options[:field] = add_filter_prefix(options[:field]) if options[:field]
         @options = {
           :field => :filter_publish_end,
           :caption => @model.human_attribute_name("published_at")
@@ -21,7 +21,7 @@ module Ubiquo
             @context.form_tag(@options[:url_for_options], :method => :get, :id => "frm_calendar") do
               hidden_fields(keepable_params) + \
               @context.content_tag(:div, :class => 'form-item') do
-                @context.content_tag(:label, :for => "filter_" + date_field.to_s) { I18n.t('ubiquo.base.to') } + \
+                @context.content_tag(:label, :for => "filter_" + date_field.to_s) {  } + \
                 @context.calendar_date_select_tag(date_field, @context.params[date_field],
                                                   calendar_options.merge(:id => "filter_" + date_field.to_s))
               end + \

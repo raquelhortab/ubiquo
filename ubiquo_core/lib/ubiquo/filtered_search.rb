@@ -66,8 +66,8 @@ module Ubiquo
 
         options[:order] = "#{order_by} #{sort_order}"
 
-        ubiquo_paginate(:page => params[:page], :per_page => params[:per_page]) do
-          filtered_search params, options.except(:order_by, :sort_order)
+        ubiquo_paginate(:page => params[:page], :per_page => params[:per_page], :skip_count => options[:skip_count]) do
+          filtered_search params, options.except(:order_by, :sort_order, :skip_count)
         end
       end
 
@@ -100,7 +100,7 @@ module Ubiquo
         regexp_op = connection.adapter_name == "PostgreSQL" ? "~*" : "REGEXP"
         @enabled_scopes.concat [:text]
         scope :text, lambda { |value|
-          match = accent_insensitive_regexp(value.downcase.gsub(/[%_\?\(\)]/) { |x| "\\" + x })
+          match = accent_insensitive_regexp(value.downcase)
           matches = fields.inject([]) { |r, f| r << match }
           conditions = fields.map { |f| "lower(#{table_name}.#{f}) #{regexp_op} ?" }.join(" OR ")
           where(conditions, *matches)
@@ -128,9 +128,17 @@ module Ubiquo
       end
 
       def accent_insensitive_regexp(text)
-        pattern = /(\^|\$|\?|\+|\[|\]|\(|\)|\'|\"|\.|\*|\/|\-|\\|\|)/
+        pattern = /(%|_|\^|\$|\?|\+|\[|\]|\(|\)|\'|\"|\.|\*|\/|\-|\\|\|)/
         text = text.gsub(pattern){|match|"\\"  + match}
         regexps = ["(a|á|à|â|ã|A|Á|À|Â|Ã)", "(e|é|è|ê|E|É|È|Ê)", "(i|í|ì|I|Í|Ì)", "(o|ó|ò|ô|õ|O|Ó|Ò|Ô|Õ)", "(u|ú|ù|U|Ú|Ù)", "(c|ç|C|Ç)", "(ñ|Ñ)"]
+        regexps.each { |exp| text.gsub! Regexp.new(exp), exp }
+        text
+      end
+      
+      def accent_insensitive_regexp_lowercase(text)
+        pattern = /(\^|\$|\?|\+|\[|\]|\(|\)|\'|\"|\.|\*|\/|\-|\\|\|)/
+        text = text.gsub(pattern){|match|"\\"  + match}
+        regexps = ["(a|á|à|â|ã)", "(e|é|è|ê)", "(i|í|ì)", "(o|ó|ò|ô|õ)", "(u|ú|ù)", "(c|ç)"]
         regexps.each { |exp| text.gsub! Regexp.new(exp), exp }
         text
       end

@@ -1,13 +1,19 @@
 <div class="pagination">
+  <% if item_pages[:total_items].present? %>
   <span class="total">
     <%= t("ubiquo.paginator.total_items", :count => item_pages[:total_items]) %>
   </span>
+  <% end %>
   <% if item_pages %>
     <% %w(next cursor previous).each do |dir| %>
       <% if dir == "cursor" %>
+        <% if item_pages[:total_pages].present? %>
         <%= content_tag(:span,
                         t("ubiquo.paginator.cursor", :current_page => item_pages[:current_page],
                                                      :total_pages  => item_pages[:total_pages])) %>
+        <% else %>
+          <%= content_tag(:span, item_pages[:current_page]) %>
+        <% end %>
       <% else %>
         <% page = item_pages[dir.to_sym] %>
         <% html_options = { :class => "bot_pag_#{dir}#{' disabled' unless page}" } %>

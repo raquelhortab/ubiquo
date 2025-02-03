@@ -35,13 +35,13 @@ module Ubiquo
           yield
         end
 
-        total_items = yield.count
+        total_items = yield.count unless options[:skip_count]
 
         [
          {
            :current_page => (options[:page] || 1).to_i,
            :total_items  => total_items,
-           :total_pages  => (total_items / (options[:per_page] || Ubiquo::Settings.get(:elements_per_page)).to_f ).ceil,
+           :total_pages  => total_items ? (total_items / (options[:per_page] || Ubiquo::Settings.get(:elements_per_page)).to_f ).ceil : nil,
            :previous     => (options[:page].to_i > 1 ? options[:page].to_i - 1 : nil),
            :next         => (items.delete_at(options[:per_page].to_i).nil? ? nil : options[:page].to_i + 1)
          },
